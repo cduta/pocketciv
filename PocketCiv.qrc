@@ -1,0 +1,11 @@
+<RCC>
+    <qresource prefix="/">
+        <file alias="hex">res/hex_base.png</file>
+        <file alias="hex_disabled">res/hex_disabled.png</file>
+        <file alias="center">res/center_border.png</file>
+        <file alias="lower_left">res/lower_left_border.png</file>
+        <file alias="lower_right">res/lower_right_border.png</file>
+        <file alias="upper_left">res/upper_left_border.png</file>
+        <file alias="upper_right">res/upper_right_border.png</file>
+    </qresource>
+</RCC>

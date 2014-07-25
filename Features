@@ -1,0 +1,26 @@
+Screens:
+Main Screen: Map (Grey out unneeded thing, if input is needed by clicks,
+                  Right click for detailed information, Drag is moving of camera.),
+                  Create map by clicking on grid anywhere and then only adjacent.
+                  Continue, for next region.
+                  Put in numbers, then all the other things.
+             Output (Shows current things happenening with results),
+             Gold, Glory, Era.
+             Buttons: Build City, Build Farm, Expedition, Aquire Advances, Build Wonder
+                      Collect Taxes, Forrestation, Mining, Card Overview, End
+
+Dialogs: Choosing advances (with right click details and confirmation,
+                            grey if impossible, Tool Tip for reason(s).),
+         Decisions
+
+Advance Screen: See advances and dependencies, right click for details.
+                Indicate which one already exist, which are available,
+                which can be purchased and which are unavailable.
+
+Wonder Screen: See wonders and all that. Right click for details. Indicate
+               as in advance screen.
+
+Details Screen: Text + Ok.
+
+Choose Advance Screen: Advances + Choose Button (Can be single or multiple ones)
+Choose Wonders Screen: Wonders + Choose Button
