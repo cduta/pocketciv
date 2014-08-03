@@ -7,5 +7,6 @@
         <file alias="lower_right">res/lower_right_border.png</file>
         <file alias="upper_left">res/upper_left_border.png</file>
         <file alias="upper_right">res/upper_right_border.png</file>
+        <file alias="hex_generate">res/hex_base_generate.png</file>
     </qresource>
 </RCC>

@@ -3,6 +3,7 @@
 
 #include <QList>
 #include <QGraphicsPixmapItem>
+#include <QGraphicsSceneMouseEvent>
 
 #include "HexModel.hpp"
 
@@ -11,9 +12,6 @@ const QColor UNUSED_HEX_BORDER_COLOR = QColor(0x5f+0x40,0x5f+0x40,0x5f+0x40);
 
 class HexItem : public QGraphicsPixmapItem
 {
-signals:
-    void hexItemUpdated();
-
 public:
     static const int BOARD_BORDER = 30;
 
@@ -26,7 +24,7 @@ public:
 
 protected:
     virtual void mousePressEvent(QGraphicsSceneMouseEvent *event);
-    void drawHexItem(int visibleBorders = DRAW_NO_BORDER, bool enabled = true);
+    void drawHexBase();
 };
 
 #endif // HEXITEM_HPP

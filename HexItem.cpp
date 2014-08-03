@@ -1,20 +1,31 @@
 #include "HexItem.hpp"
 
 #include <QPainter>
+
 #include <iostream>
+
+#include <boost/assert.hpp>
 
 HexItem::HexItem(qreal xPos, qreal yPos, HexModel *hexModel, QGraphicsItem *parent)
     : QGraphicsPixmapItem(parent)
 {
     this->hexModel = hexModel;
-    this->updateHexItem();
     this->setPos(HexItem::BOARD_BORDER + xPos, HexItem::BOARD_BORDER + yPos);
     this->setShapeMode(HexItem::MaskShape);
+    this->updateHexItem();
 }
 
-void HexItem::drawHexItem(int visibleBorders, bool enabled)
+void HexItem::drawHexBase()
 {
-    QPixmap result(":/hex");
+    assert(this->hexModel != NULL);
+
+    int visibleBorders = this->hexModel->getVisibleBorders();
+    bool enabled = this->hexModel->isEnabled();
+    bool showRegionNumber = this->hexModel->showRegionNumber();
+    int region = this->hexModel->getRegion();
+
+    QPixmap result(":/hex_generate");
+
     QPainter painter(&result);
 
     this->setEnabled(enabled);
@@ -56,17 +67,30 @@ void HexItem::drawHexItem(int visibleBorders, bool enabled)
         painter.drawPixmap(0,0,QPixmap(":/hex_disabled"));
     }
 
+    if(showRegionNumber)
+    {
+        painter.setPen(QColor(0,0,0));
+        QFont font = painter.font();
+        font.setFamily("Sans");
+        font.setBold(true);
+        font.setPointSize(10);
+        painter.setFont(font);
+        painter.drawText(result.rect(),QString::number(region), QTextOption(Qt::AlignCenter));
+        painter.setPen(HEX_BORDER_COLOR);
+    }
+
     this->setPixmap(result);
 }
 
 void HexItem::updateHexItem()
 {
-    this->drawHexItem(this->hexModel->getVisibleBorders(), this->hexModel->isEnabled());
+    this->drawHexBase();
 }
 
 void HexItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-    Q_UNUSED(event);
-    this->hexModel->setVisibleBorders(DRAW_UPPER_LEFT_BORDER | DRAW_UPPER_CENTER_BORDER | DRAW_UPPER_RIGHT_BORDER |
-                                      DRAW_LOWER_LEFT_BORDER | DRAW_LOWER_CENTER_BORDER | DRAW_LOWER_RIGHT_BORDER);
+    this->hexModel->triggerHex(event->button());
+    return;
+//    this->hexModel->setVisibleBorders(DRAW_UPPER_LEFT_BORDER | DRAW_UPPER_CENTER_BORDER | DRAW_UPPER_RIGHT_BORDER |
+//                                      DRAW_LOWER_LEFT_BORDER | DRAW_LOWER_CENTER_BORDER | DRAW_LOWER_RIGHT_BORDER);
 }

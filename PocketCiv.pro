@@ -16,13 +16,19 @@ SOURCES += main.cpp\
         PocketCivMain.cpp \
     HexItem.cpp \
     HexModel.cpp \
-    BoardModel.cpp
+    BoardModel.cpp \
+    Instruction/Instruction.cpp \
+    Instruction/ChooseRegionInstruction.cpp \
+    Common.cpp
 
 HEADERS  += \
     PocketCivMain.hpp \
     HexItem.hpp \
     HexModel.hpp \
-    BoardModel.hpp
+    BoardModel.hpp \
+    Instruction/Instruction.hpp \
+    Instruction/ChooseRegionInstruction.hpp \
+    Common.hpp
 
 FORMS    +=
 
