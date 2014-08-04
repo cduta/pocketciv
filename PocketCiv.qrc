@@ -8,5 +8,7 @@
         <file alias="upper_left">res/upper_left_border.png</file>
         <file alias="upper_right">res/upper_right_border.png</file>
         <file alias="hex_generate">res/hex_base_generate.png</file>
+        <file alias="frontier">res/hex_frontier.png</file>
+        <file alias="sea">res/hex_sea.png</file>
     </qresource>
 </RCC>

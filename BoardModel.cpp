@@ -1,6 +1,7 @@
 #include "BoardModel.hpp"
 
 #include <QMap>
+#include <QDebug>
 
 BoardModel::BoardModel(int width, int height, QObject *parent)
     : QObject(parent)
@@ -81,22 +82,22 @@ void BoardModel::initializeBoard()
 
             if(x%2 != 0)
             {
-                if(x-1 > 0 && y-1 > 0)
+                if(x-1 >= 0 && y-1 >= 0)
                 {
                     adjacendHexes.insert(DRAW_UPPER_LEFT_BORDER, this->hexModels[x-1][y-1]);
                 }
 
-                if(y-1 > 0)
+                if(y-1 >= 0)
                 {
                     adjacendHexes.insert(DRAW_UPPER_CENTER_BORDER, this->hexModels[x][y-1]);
                 }
 
-                if(x+1 < this->hexModels.size() && y-1 > 0)
+                if(x+1 < this->hexModels.size() && y-1 >= 0)
                 {
                     adjacendHexes.insert(DRAW_UPPER_RIGHT_BORDER, this->hexModels[x+1][y-1]);
                 }
 
-                if(x-1 > 0)
+                if(x-1 >= 0)
                 {
                     adjacendHexes.insert(DRAW_LOWER_LEFT_BORDER, this->hexModels[x-1][y]);
                 }
@@ -113,12 +114,12 @@ void BoardModel::initializeBoard()
             }
             else
             {
-                if(x-1 > 0)
+                if(x-1 >= 0)
                 {
                     adjacendHexes.insert(DRAW_UPPER_LEFT_BORDER, this->hexModels[x-1][y]);
                 }
 
-                if(y-1 > 0)
+                if(y-1 >= 0)
                 {
                     adjacendHexes.insert(DRAW_UPPER_CENTER_BORDER, this->hexModels[x][y-1]);
                 }
@@ -128,7 +129,7 @@ void BoardModel::initializeBoard()
                     adjacendHexes.insert(DRAW_UPPER_RIGHT_BORDER, this->hexModels[x+1][y]);
                 }
 
-                if(x-1 > 0 && y+1 < this->hexModels[x].size())
+                if(x-1 >= 0 && y+1 < this->hexModels[x].size())
                 {
                     adjacendHexes.insert(DRAW_LOWER_LEFT_BORDER, this->hexModels[x-1][y+1]);
                 }
@@ -148,12 +149,12 @@ void BoardModel::initializeBoard()
         }
     }
 
-    this->enableAllAvailableHexes();
+    this->enableRegionSelectableHexes();
 
     return;
 }
 
-void BoardModel::enableAllAvailableHexes()
+void BoardModel::enableRegionSelectableHexes()
 {
     for(int x = 0; x < this->hexModels.size(); ++x)
     {
@@ -174,6 +175,87 @@ void BoardModel::enableAllAvailableHexes()
         for(int y = 1; y < this->hexModels[this->hexModels.size()-1].size()-1; ++y)
         {
             this->hexModels[this->hexModels.size()-1][y]->setEnable(false);
+        }
+    }
+
+    return;
+}
+
+void BoardModel::groupSeas()
+{
+    foreach(QList<HexModel *> hexes, this->hexModels)
+    {
+        foreach(HexModel *hex, hexes)
+        {
+            if(!hex->isSea())
+            {
+                continue;
+            }
+
+            bool grouped = false;
+            foreach(QSet<HexModel *> sea, this->seas)
+            {
+                grouped = grouped || sea.contains(hex);
+            }
+
+            if(!grouped)
+            {
+                QSet<HexModel *> seaGroup;
+                seaGroup.insert(hex);
+                QSet<HexModel *> next = hex->getAdjacentSeaHexes();
+
+                while(!next.isEmpty())
+                {
+                    HexModel *current = next.toList().first();
+                    next.remove(current);
+                    next = next.unite(current->getAdjacentSeaHexes().subtract(seaGroup).subtract(next));
+                    seaGroup.insert(current);
+                }
+
+                this->seas.append(seaGroup);
+            }
+        }
+    }
+
+    return;
+}
+
+void BoardModel::enableAllHexes()
+{
+    foreach(QList<HexModel *> hexes, this->hexModels)
+    {
+        foreach(HexModel *hex, hexes)
+        {
+            hex->setEnable(true);
+        }
+    }
+
+    return;
+}
+
+void BoardModel::setUnsetHexesToSea()
+{
+    foreach(QList<HexModel *> hexes, this->hexModels)
+    {
+        foreach(HexModel *hex, hexes)
+        {
+            if(hex->getRegion() == -1 && !hex->isFrontier())
+            {
+                hex->setSea(true);
+            }
+        }
+    }
+
+    return;
+}
+
+void BoardModel::setChoosingHexesDone()
+{
+    foreach(QList<HexModel *> hexes, this->hexModels)
+    {
+        foreach(HexModel *hex, hexes)
+        {
+            hex->setBasePixmap(":/hex");
         }
     }
 

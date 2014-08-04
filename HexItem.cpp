@@ -23,12 +23,23 @@ void HexItem::drawHexBase()
     bool enabled = this->hexModel->isEnabled();
     bool showRegionNumber = this->hexModel->showRegionNumber();
     int region = this->hexModel->getRegion();
+    bool isFrontier = this->hexModel->isFrontier();
+    bool isSea = this->hexModel->isSea();
 
-    QPixmap result(":/hex_generate");
+    QPixmap result(this->hexModel->getBasePixmap());
 
     QPainter painter(&result);
 
     this->setEnabled(enabled);
+
+    if(isSea)
+    {
+        painter.drawPixmap(0,0,QPixmap(":/sea"));
+    }
+    else if(isFrontier)
+    {
+        painter.drawPixmap(0,0,QPixmap(":/frontier"));
+    }
 
     painter.setPen(HEX_BORDER_COLOR);
 
@@ -62,11 +73,6 @@ void HexItem::drawHexBase()
         painter.drawPixmap(0,21,QPixmap(":/lower_left"));
     }
 
-    if(!this->isEnabled())
-    {
-        painter.drawPixmap(0,0,QPixmap(":/hex_disabled"));
-    }
-
     if(showRegionNumber)
     {
         painter.setPen(QColor(0,0,0));
@@ -77,6 +83,11 @@ void HexItem::drawHexBase()
         painter.setFont(font);
         painter.drawText(result.rect(),QString::number(region), QTextOption(Qt::AlignCenter));
         painter.setPen(HEX_BORDER_COLOR);
+    }
+
+    if(!this->isEnabled())
+    {
+        painter.drawPixmap(0,0,QPixmap(":/hex_disabled"));
     }
 
     this->setPixmap(result);

@@ -33,6 +33,11 @@ PocketCivMain::PocketCivMain(QWidget *parent) :
                                         &this->dockWidget);
     this->messages->setReadOnly(true);
 
+    this->goldCount =       new QLabel("Gold: 0", this);
+    this->gloryCount =      new QLabel("Glory: 0", this);
+    this->eraCount =        new QLabel("Era: 1", this);
+    this->eventCardsLeft =  new QLabel("Event Cards left: 16", this);
+
     this->buildCity =       new QPushButton("Build City", &this->dockWidget);
     this->buildCity->setEnabled(false);
     connect(this->buildCity, SIGNAL(clicked()), this, SLOT(buildCityTriggered()));
@@ -58,16 +63,20 @@ PocketCivMain::PocketCivMain(QWidget *parent) :
     connect(this->done, SIGNAL(clicked()), this, SLOT(doneTriggered()));
 
     this->dockLayout->addWidget(this->messages,  0, 0, 1, 5);
-    this->dockLayout->addWidget(this->buildCity, 1, 0, 1, 1);
-    this->dockLayout->addWidget(this->buildFarm, 1, 1, 1, 1);
-    this->dockLayout->addWidget(this->expedition, 1, 2, 1, 1);
-    this->dockLayout->addWidget(this->aquireAdvance, 1, 3, 1, 1);
-    this->dockLayout->addWidget(this->buildWonder, 1, 4, 1, 1);
-    this->dockLayout->addWidget(this->collectTaxes, 2, 0, 1, 1);
-    this->dockLayout->addWidget(this->forestation, 2, 1, 1, 1);
-    this->dockLayout->addWidget(this->mining, 2, 2, 1, 1);
-//    this->dockLayout->addWidget(this->undo, 2, 3, 1, 1);
-    this->dockLayout->addWidget(this->done, 2, 4, 1, 1);
+    this->dockLayout->addWidget(this->goldCount, 1, 0, 1, 1);
+    this->dockLayout->addWidget(this->gloryCount, 1, 1, 1, 1);
+    this->dockLayout->addWidget(this->eraCount, 1, 2, 1, 1);
+    this->dockLayout->addWidget(this->eventCardsLeft, 1, 3, 1, 2, Qt::AlignCenter);
+    this->dockLayout->addWidget(this->buildCity, 2, 0, 1, 1);
+    this->dockLayout->addWidget(this->buildFarm, 2, 1, 1, 1);
+    this->dockLayout->addWidget(this->expedition, 2, 2, 1, 1);
+    this->dockLayout->addWidget(this->aquireAdvance, 2, 3, 1, 1);
+    this->dockLayout->addWidget(this->buildWonder, 2, 4, 1, 1);
+    this->dockLayout->addWidget(this->collectTaxes, 3, 0, 1, 1);
+    this->dockLayout->addWidget(this->forestation, 3, 1, 1, 1);
+    this->dockLayout->addWidget(this->mining, 3, 2, 1, 1);
+//    this->dockLayout->addWidget(this->undo, 3, 3, 1, 1);
+    this->dockLayout->addWidget(this->done, 3, 4, 1, 1);
 
     this->dockWidget.setLayout(this->dockLayout);
     this->controlDockWidget.setFeatures(QDockWidget::DockWidgetFloatable);
@@ -273,7 +282,7 @@ void PocketCivMain::newGameTriggered()
     this->addMessage("World Generation:");
     this->addMessage(QString("Select two or more connected hexes on the board to form Region %1 out of %2.").
                                  arg(1).arg(8));
-    this->addMessage("When you are done, press Next...");
+    this->addMessage("When you are done, press Done...");
     this->addMessage("Region 1 out of 8.");
 
     this->instruction = new ChooseRegionInstruction(this->boardModel, 1, 8, this);
@@ -304,4 +313,12 @@ void PocketCivMain::updateBoard()
         }
     }
     return;
+}
+
+void PocketCivMain::keyPressEvent(QKeyEvent *event)
+{
+    if(event->key() == Qt::Key_Return)
+    {
+        this->doneTriggered();
+    }
 }

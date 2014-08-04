@@ -19,7 +19,8 @@ SOURCES += main.cpp\
     BoardModel.cpp \
     Instruction/Instruction.cpp \
     Instruction/ChooseRegionInstruction.cpp \
-    Common.cpp
+    Common.cpp \
+    Instruction/ChooseFrontierInstruction.cpp
 
 HEADERS  += \
     PocketCivMain.hpp \
@@ -28,7 +29,8 @@ HEADERS  += \
     BoardModel.hpp \
     Instruction/Instruction.hpp \
     Instruction/ChooseRegionInstruction.hpp \
-    Common.hpp
+    Common.hpp \
+    Instruction/ChooseFrontierInstruction.hpp
 
 FORMS    +=
 

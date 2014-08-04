@@ -20,17 +20,22 @@ signals:
 private:
     QList<QList<HexModel *> > hexModels;
     QMap<int, QSet<HexModel *> > regions;
+    QList<QSet<HexModel *> > seas;
 
 public:
     BoardModel(int width, int height, QObject *parent = 0);
     ~BoardModel();
 
     bool toggleHexToRegion(int region, int x, int y);
+    void enableAllHexes();
+    void setUnsetHexesToSea();
+    void setChoosingHexesDone();
+    void enableRegionSelectableHexes();
+    void groupSeas();
 
 private:
     void newBoard(int width, int height);
     void initializeBoard();
-    void enableAllAvailableHexes();
     bool checkRegionSet(const QSet<HexModel *> &regionSet);
 
 public:

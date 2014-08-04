@@ -29,12 +29,16 @@ private:
     int visibleBorders;
     QMap<int, HexModel *> adjacentHexes; // Int represents the border of this hex on which the hex borders on.
     bool regionNumberShown;
+    bool frontier;
+    bool sea;
+    QString basePixmap;
 
 public:
     HexModel(int xPos = -1, int yPos = -1, bool enable = true, int visibleBorders = DRAW_NO_BORDER, QObject *parent = 0);
 
     void addVisibleBorders(int visibleBorders);
     void removeVisibleBorders(int visibleBorders);
+    void toggleFrontier();
 
     void updateHex();
 
@@ -46,7 +50,11 @@ public:
     int y() const;
     int getRegion() const;
     QMap<int, HexModel *> getAdjacentHexes() const;
+    QSet<HexModel *> getAdjacentSeaHexes() const;
     bool showRegionNumber() const;
+    bool isFrontier() const;
+    bool isSea() const;
+    QString getBasePixmap() const;
 
     // Set-Methods
     void setEnable(bool enable);
@@ -57,6 +65,9 @@ public:
     void setRegion(int region);
     void unsetRegion();
     void setRegionNumberShown(bool show);
+    void setFrontier(bool frontier);
+    void setSea(bool sea);
+    void setBasePixmap(const QString &basePixmap);
 
 private:
     // Return the draw border constant of this hex. Remember: You can convert it to the opposite side with oppositeBorder().

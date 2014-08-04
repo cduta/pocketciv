@@ -11,6 +11,7 @@
 #include <QPushButton>
 #include <QMenuBar>
 #include <QAction>
+#include <QLabel>
 
 #include <iostream>
 
@@ -34,6 +35,10 @@ class PocketCivMain : public QMainWindow
     QWidget dockWidget;
     QGridLayout *dockLayout;
     QPlainTextEdit *messages;
+    QLabel *goldCount;
+    QLabel *gloryCount;
+    QLabel *eraCount;
+    QLabel *eventCardsLeft;
     QPushButton *buildCity;
     QPushButton *buildFarm;
     QPushButton *expedition;
@@ -74,6 +79,9 @@ private slots:
     void buildCityTriggered();
     void doneTriggered();
     void updateBoard();
+
+protected:
+    void keyPressEvent(QKeyEvent *event);
 };
 
 #endif // _POCKET_CIV_MAIN_HPP_

@@ -2,8 +2,19 @@
 
 #include <boost/assert.hpp>
 
+#include <QSet>
+
 HexModel::HexModel(int xPos, int yPos, bool enable, int visibleBorders, QObject *parent)
-    : QObject(parent), xPos(xPos), yPos(yPos), region(-1), enable(enable), visibleBorders(visibleBorders), regionNumberShown(false)
+    : QObject(parent),
+      xPos(xPos),
+      yPos(yPos),
+      region(-1),
+      enable(enable),
+      visibleBorders(visibleBorders),
+      regionNumberShown(false),
+      frontier(false),
+      sea(false),
+      basePixmap(":/hex_generate")
 {}
 
 void HexModel::addVisibleBorders(int visibleBorders)
@@ -16,6 +27,12 @@ void HexModel::removeVisibleBorders(int visibleBorders)
 {
     this->privateRemoveVisibleBorders(visibleBorders);
     this->updateHex();
+}
+
+void HexModel::toggleFrontier()
+{
+    this->frontier = !this->frontier;
+    return;
 }
 
 void HexModel::updateHex()
@@ -68,9 +85,37 @@ QMap<int, HexModel *> HexModel::getAdjacentHexes() const
     return this->adjacentHexes;
 }
 
+QSet<HexModel *> HexModel::getAdjacentSeaHexes() const
+{
+    QSet<HexModel *> result;
+    foreach(HexModel *hex, this->adjacentHexes.values())
+    {
+        if(hex->isSea())
+        {
+            result.insert(hex);
+        }
+    }
+    return result;
+}
+
 bool HexModel::showRegionNumber() const
 {
     return this->regionNumberShown;
+}
+
+bool HexModel::isFrontier() const
+{
+    return this->frontier;
+}
+
+bool HexModel::isSea() const
+{
+    return this->sea;
+}
+
+QString HexModel::getBasePixmap() const
+{
+    return this->basePixmap;
 }
 
 void HexModel::setEnable(bool enable)
@@ -145,6 +190,24 @@ void HexModel::unsetRegion()
 void HexModel::setRegionNumberShown(bool show)
 {
     this->regionNumberShown = show;
+    return;
+}
+
+void HexModel::setFrontier(bool frontier)
+{
+    this->frontier = frontier;
+    return;
+}
+
+void HexModel::setSea(bool sea)
+{
+    this->sea = sea;
+    return;
+}
+
+void HexModel::setBasePixmap(const QString &basePixmap)
+{
+    this->basePixmap = basePixmap;
     return;
 }
 

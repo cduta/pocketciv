@@ -1,6 +1,7 @@
 #include "ChooseRegionInstruction.hpp"
 
 #include "Common.hpp"
+#include "ChooseFrontierInstruction.hpp"
 
 ChooseRegionInstruction::ChooseRegionInstruction(BoardModel *boardModel, int currentRegion, int maxRegions, QObject *parent)
     : Instruction(boardModel, parent), currentRegion(currentRegion), maxRegions(maxRegions)
@@ -29,8 +30,13 @@ Instruction *ChooseRegionInstruction::triggerDone()
 
         if(currentRegion == maxRegions)
         {
-            this->boardModel->sendMessage("Done creating the world!");
-            return this; // TODO: Here go to next instruction.
+            this->boardModel->sendMessage(" ");
+            this->boardModel->sendMessage("Choose the frontier hexes.");
+            this->boardModel->sendMessage("The other hexes are considered sea hexes.");
+            this->boardModel->sendMessage("Seas seperated by regions or frontier are considered seperate seas.");
+            this->boardModel->sendMessage("When you are done, press Done...");
+            this->boardModel->enableAllHexes();
+            return new ChooseFrontierInstruction(this->boardModel);
         }
         else
         {
