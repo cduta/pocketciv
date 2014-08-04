@@ -189,6 +189,7 @@ void PocketCivMain::generateNewBoard(BoardModel *boardModel)
     connect(this->boardModel, SIGNAL(boardUpdated()), this, SLOT(updateBoard()));
     connect(this->boardModel, SIGNAL(boardCleared()), this, SLOT(clearBoard()));
     connect(this->boardModel, SIGNAL(sendMessage(const QString &)), this, SLOT(addMessage(const QString &)));
+    connect(this->boardModel, SIGNAL(clearMessages()), this, SLOT(clearMessages()));
 
     if(this->instruction != NULL)
     {
@@ -254,6 +255,12 @@ void PocketCivMain::hexTriggerAction(Qt::MouseButton button, int x, int y)
 void PocketCivMain::addMessage(const QString &message)
 {
     this->messages->appendPlainText(message);
+    return;
+}
+
+void PocketCivMain::clearMessages()
+{
+    this->messages->clear();
     return;
 }
 

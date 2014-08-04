@@ -1,6 +1,7 @@
 #include "InitialForestInstruction.hpp"
 
 #include "Instruction/SetInitialDesertInstruction.hpp"
+#include "PlaceInitialTribes.hpp"
 
 InitialForestInstruction::InitialForestInstruction(BoardModel *boardModel, QObject *parent)
     : Instruction(boardModel, parent)
@@ -59,7 +60,8 @@ Instruction *InitialForestInstruction::triggerDone()
             this->boardModel->sendMessage(" ");
             this->boardModel->sendMessage("Place 3 Tribes into any amount of regions.");
             this->boardModel->sendMessage("When you are done, press Done....");
-            return this;
+            this->deleteLater();
+            return new PlaceInitialTribes(this->boardModel);
         }
 
         return this;

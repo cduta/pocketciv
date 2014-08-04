@@ -17,6 +17,7 @@ signals:
     void boardUpdated();
     void boardCleared();
     void sendMessage(const QString &text);
+    void clearMessages();
 
 private:
     QList<QList<HexModel *> > hexModels;
@@ -52,6 +53,7 @@ public:
     int getMountainCount() const;
     int getForestCount() const;
     int getDesertCount() const;
+    int getTribeCount() const;
 
 // Ref-Models
     HexModel *refHexModel(int x, int y);

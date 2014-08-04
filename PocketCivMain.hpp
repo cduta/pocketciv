@@ -73,6 +73,7 @@ private slots:
     void updateHex(int x, int y);
     void hexTriggerAction(Qt::MouseButton button, int x, int y);
     void addMessage(const QString &message);
+    void clearMessages();
 
     void newGameTriggered();
 

@@ -46,6 +46,7 @@ void HexItem::drawHexBase()
         painter.drawPixmap(0,0,QPixmap(":/hex_representative"));
 
         RegionModel *regionModel = this->hexModel->refRegionModel();
+        int tribeCount = regionModel->getTribes();
 
         if(regionModel->hasMountain())
         {
@@ -60,6 +61,19 @@ void HexItem::drawHexBase()
         if(regionModel->hasDesert())
         {
             painter.drawPixmap(0,0,QPixmap(":/desert"));
+        }
+
+        if(tribeCount > 0)
+        {
+            painter.drawPixmap(0,0,QPixmap(":/tribe"));
+
+            painter.setPen(QColor(0,0,0));
+            QFont font = painter.font();
+            font.setFamily("Sans");
+            font.setPointSize(6);
+            painter.setFont(font);
+            painter.drawText(QRect(21,3,14,8),QString::number(tribeCount), QTextOption(Qt::AlignCenter));
+            painter.setPen(HEX_BORDER_COLOR);
         }
     }
 

@@ -1,5 +1,7 @@
 #include "SetInitialDesertInstruction.hpp"
 
+#include "Instruction/PlaceInitialTribes.hpp"
+
 SetInitialDesertInstruction::SetInitialDesertInstruction(BoardModel *boardModel, QObject *parent)
     : Instruction(boardModel, parent)
 {}
@@ -34,7 +36,8 @@ Instruction *SetInitialDesertInstruction::triggerDone()
         this->boardModel->sendMessage(" ");
         this->boardModel->sendMessage("Place 3 Tribes into any amount of regions.");
         this->boardModel->sendMessage("When you are done, press Done....");
-        return this;
+        this->deleteLater();
+        return new PlaceInitialTribes(this->boardModel);
     }
     else
     {

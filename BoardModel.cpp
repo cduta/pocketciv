@@ -410,6 +410,18 @@ int BoardModel::getDesertCount() const
     return result;
 }
 
+int BoardModel::getTribeCount() const
+{
+    int result = 0;
+
+    foreach(RegionModel *regionModel, this->regions.values())
+    {
+        result += regionModel->getTribes();
+    }
+
+    return result;
+}
+
 HexModel *BoardModel::refHexModel(int x, int y)
 {
     assert(x >= 0 && x < this->hexModels.size());

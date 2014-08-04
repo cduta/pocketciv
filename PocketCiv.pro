@@ -24,7 +24,8 @@ SOURCES += main.cpp\
     RegionModel.cpp \
     Instruction/InitialForestInstruction.cpp \
     Instruction/InitialMountainInstruction.cpp \
-    Instruction/SetInitialDesertInstruction.cpp
+    Instruction/SetInitialDesertInstruction.cpp \
+    Instruction/PlaceInitialTribes.cpp
 
 HEADERS  += \
     PocketCivMain.hpp \
@@ -38,7 +39,8 @@ HEADERS  += \
     RegionModel.hpp \
     Instruction/InitialForestInstruction.hpp \
     Instruction/InitialMountainInstruction.hpp \
-    Instruction/SetInitialDesertInstruction.hpp
+    Instruction/SetInitialDesertInstruction.hpp \
+    Instruction/PlaceInitialTribes.hpp
 
 FORMS    +=
 
