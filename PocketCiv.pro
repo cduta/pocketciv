@@ -20,7 +20,10 @@ SOURCES += main.cpp\
     Instruction/Instruction.cpp \
     Instruction/ChooseRegionInstruction.cpp \
     Common.cpp \
-    Instruction/ChooseFrontierInstruction.cpp
+    Instruction/ChooseFrontierInstruction.cpp \
+    RegionModel.cpp \
+    Instruction/InitialForestInstruction.cpp \
+    Instruction/InitialMountainInstruction.cpp
 
 HEADERS  += \
     PocketCivMain.hpp \
@@ -30,7 +33,10 @@ HEADERS  += \
     Instruction/Instruction.hpp \
     Instruction/ChooseRegionInstruction.hpp \
     Common.hpp \
-    Instruction/ChooseFrontierInstruction.hpp
+    Instruction/ChooseFrontierInstruction.hpp \
+    RegionModel.hpp \
+    Instruction/InitialForestInstruction.hpp \
+    Instruction/InitialMountainInstruction.hpp
 
 FORMS    +=
 

@@ -10,5 +10,9 @@
         <file alias="hex_generate">res/hex_base_generate.png</file>
         <file alias="frontier">res/hex_frontier.png</file>
         <file alias="sea">res/hex_sea.png</file>
+        <file alias="hex_representative">res/hex_representative.png</file>
+        <file alias="forest">res/forest.png</file>
+        <file alias="mountain">res/mountain.png</file>
+        <file alias="desert">res/desert.png</file>
     </qresource>
 </RCC>

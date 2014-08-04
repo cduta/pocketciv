@@ -25,6 +25,7 @@ void HexItem::drawHexBase()
     int region = this->hexModel->getRegion();
     bool isFrontier = this->hexModel->isFrontier();
     bool isSea = this->hexModel->isSea();
+    bool isRepresentative = this->hexModel->isRepresentativeHex();
 
     QPixmap result(this->hexModel->getBasePixmap());
 
@@ -39,6 +40,27 @@ void HexItem::drawHexBase()
     else if(isFrontier)
     {
         painter.drawPixmap(0,0,QPixmap(":/frontier"));
+    }
+    else if(isRepresentative)
+    {
+        painter.drawPixmap(0,0,QPixmap(":/hex_representative"));
+
+        RegionModel *regionModel = this->hexModel->refRegionModel();
+
+        if(regionModel->hasMountain())
+        {
+            painter.drawPixmap(0,0,QPixmap(":/mountain"));
+        }
+
+        if(regionModel->hasForest())
+        {
+            painter.drawPixmap(0,0,QPixmap(":/forest"));
+        }
+
+        if(regionModel->hasDesert())
+        {
+            painter.drawPixmap(0,0,QPixmap(":/desert"));
+        }
     }
 
     painter.setPen(HEX_BORDER_COLOR);
@@ -102,6 +124,4 @@ void HexItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     this->hexModel->triggerHex(event->button());
     return;
-//    this->hexModel->setVisibleBorders(DRAW_UPPER_LEFT_BORDER | DRAW_UPPER_CENTER_BORDER | DRAW_UPPER_RIGHT_BORDER |
-//                                      DRAW_LOWER_LEFT_BORDER | DRAW_LOWER_CENTER_BORDER | DRAW_LOWER_RIGHT_BORDER);
 }

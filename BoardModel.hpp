@@ -5,6 +5,7 @@
 #include <QSet>
 
 #include "HexModel.hpp"
+#include "RegionModel.hpp"
 
 #include <boost/assert.hpp>
 
@@ -19,8 +20,9 @@ signals:
 
 private:
     QList<QList<HexModel *> > hexModels;
-    QMap<int, QSet<HexModel *> > regions;
+    QMap<int, QSet<HexModel *> > regionHexes;
     QList<QSet<HexModel *> > seas;
+    QMap<int, RegionModel *> regions;
 
 public:
     BoardModel(int width, int height, QObject *parent = 0);
@@ -32,20 +34,28 @@ public:
     void setChoosingHexesDone();
     void enableRegionSelectableHexes();
     void groupSeas();
+    void initialRegionModels();
 
 private:
     void newBoard(int width, int height);
     void initializeBoard();
-    bool checkRegionSet(const QSet<HexModel *> &regionSet);
+    bool checkRegionHexSet(const QSet<HexModel *> &regionHexSet);
 
 public:
 // Get-Methods
     int getWidth() const;
     int getHeight() const;
-    QMap<int, QSet<HexModel *> > getRegions() const;
+    QMap<int, QSet<HexModel *> > getRegionHexes() const;
+    QMap<int, RegionModel *> getRegions() const;
+    QMap<int, RegionModel *> getMountainRegions() const;
+    QMap<int, RegionModel *> getForestRegions() const;
+    int getMountainCount() const;
+    int getForestCount() const;
 
 // Ref-Models
     HexModel *refHexModel(int x, int y);
+    RegionModel *refRegionModel(int x, int y);
+    RegionModel *refRegionModel(int region);
 
 private slots:
      void clearBoard();

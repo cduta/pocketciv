@@ -5,6 +5,8 @@
 #include <QPair>
 #include <QMap>
 
+#include "RegionModel.hpp"
+
 static const int DRAW_NO_BORDER           = 0;
 static const int DRAW_UPPER_LEFT_BORDER   = 1;
 static const int DRAW_UPPER_CENTER_BORDER = 2;
@@ -32,6 +34,8 @@ private:
     bool frontier;
     bool sea;
     QString basePixmap;
+    bool representativeHex;
+    RegionModel *regionModel;
 
 public:
     HexModel(int xPos = -1, int yPos = -1, bool enable = true, int visibleBorders = DRAW_NO_BORDER, QObject *parent = 0);
@@ -55,6 +59,7 @@ public:
     bool isFrontier() const;
     bool isSea() const;
     QString getBasePixmap() const;
+    bool isRepresentativeHex() const;
 
     // Set-Methods
     void setEnable(bool enable);
@@ -68,6 +73,10 @@ public:
     void setFrontier(bool frontier);
     void setSea(bool sea);
     void setBasePixmap(const QString &basePixmap);
+    void setRepresentativeHex(bool representative, RegionModel *regionModel);
+
+    // Ref-Methods
+    RegionModel *refRegionModel();
 
 private:
     // Return the draw border constant of this hex. Remember: You can convert it to the opposite side with oppositeBorder().

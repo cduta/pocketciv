@@ -11,27 +11,27 @@ inline int random()
     return qrand();
 }
 
-inline void randomSeed()
+inline void newTimeSeed()
 {
     QTime current = QTime::currentTime();
     qsrand(current.hour() * current.minute() * current.second() * current.msec());
 }
 
-inline void randomSeed(int seed)
+inline void newSeed(int seed)
 {
     qsrand(seed);
     return;
 }
 
-inline int randomWithSeed()
+inline int randomSeed()
 {
-    randomSeed();
+    newTimeSeed();
     return random();
 }
 
-inline int randomWithSeed(int seed)
+inline int randomSeed(int seed)
 {
-    randomSeed(seed);
+    newSeed(seed);
     return random();
 }
 }

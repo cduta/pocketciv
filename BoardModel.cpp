@@ -3,6 +3,8 @@
 #include <QMap>
 #include <QDebug>
 
+#include "Common.hpp"
+
 BoardModel::BoardModel(int width, int height, QObject *parent)
     : QObject(parent)
 {
@@ -19,9 +21,9 @@ bool BoardModel::toggleHexToRegion(int region, int x, int y)
     HexModel *hex = this->hexModels[x][y];
     QSet<HexModel *> regionSet;
 
-    if(this->regions.contains(region))
+    if(this->regionHexes.contains(region))
     {
-        regionSet = this->regions[region];
+        regionSet = this->regionHexes[region];
     }
 
     if(hex->getRegion() == region)
@@ -33,7 +35,7 @@ bool BoardModel::toggleHexToRegion(int region, int x, int y)
         regionSet.insert(hex);
     }
 
-    if(!this->checkRegionSet(regionSet))
+    if(!this->checkRegionHexSet(regionSet))
     {
         return false;
     }
@@ -47,7 +49,7 @@ bool BoardModel::toggleHexToRegion(int region, int x, int y)
         hex->setRegion(region);
     }
 
-    this->regions.insert(region, regionSet);
+    this->regionHexes.insert(region, regionSet);
 
     emit this->boardUpdated();
     return true;
@@ -220,6 +222,29 @@ void BoardModel::groupSeas()
     return;
 }
 
+void BoardModel::initialRegionModels()
+{
+    foreach(int region, this->regionHexes.keys())
+    {
+        QList<HexModel *> regionHexes;
+
+        foreach(HexModel *hex, this->regionHexes[region].toList())
+        {
+            if(!hex->showRegionNumber())
+            {
+                regionHexes.append(hex);
+            }
+        }
+
+        HexModel *hex = regionHexes[Common::randomSeed()%regionHexes.size()];
+        RegionModel *regionModel = new RegionModel(hex);
+        hex->setRepresentativeHex(true, regionModel);
+        this->regions.insert(region, regionModel);
+    }
+
+    return;
+}
+
 void BoardModel::enableAllHexes()
 {
     foreach(QList<HexModel *> hexes, this->hexModels)
@@ -262,27 +287,27 @@ void BoardModel::setChoosingHexesDone()
     return;
 }
 
-bool BoardModel::checkRegionSet(const QSet<HexModel *> &regionSet)
+bool BoardModel::checkRegionHexSet(const QSet<HexModel *> &regionHexSet)
 {
-    if(regionSet.isEmpty())
+    if(regionHexSet.isEmpty())
     {
         return true;
     }
 
-    HexModel *start = regionSet.values().first();
+    HexModel *start = regionHexSet.values().first();
     QSet<HexModel *> checkedSet;
     checkedSet.insert(start);
-    QSet<HexModel *> next = start->getAdjacentHexes().values().toSet().intersect(regionSet).subtract(checkedSet);
+    QSet<HexModel *> next = start->getAdjacentHexes().values().toSet().intersect(regionHexSet).subtract(checkedSet);
 
     while(!next.isEmpty())
     {
         HexModel *current = next.toList().first();
         next.remove(current);
-        next = next.unite(current->getAdjacentHexes().values().toSet().intersect(regionSet).subtract(checkedSet).subtract(next));
+        next = next.unite(current->getAdjacentHexes().values().toSet().intersect(regionHexSet).subtract(checkedSet).subtract(next));
         checkedSet.insert(current);
     }
 
-    return regionSet.size() == checkedSet.size();
+    return regionHexSet.size() == checkedSet.size();
 }
 
 int BoardModel::getWidth() const
@@ -300,9 +325,74 @@ int BoardModel::getHeight() const
     return this->hexModels.first().size();
 }
 
-QMap<int, QSet<HexModel *> > BoardModel::getRegions() const
+QMap<int, QSet<HexModel *> > BoardModel::getRegionHexes() const
+{
+    return this->regionHexes;
+}
+
+QMap<int, RegionModel *> BoardModel::getRegions() const
 {
     return this->regions;
+}
+
+QMap<int, RegionModel *> BoardModel::getMountainRegions() const
+{
+    QMap<int, RegionModel *> result;
+
+    foreach(int key, this->regions.keys())
+    {
+        if(this->regions[key]->hasMountain())
+        {
+            result.insert(key, this->regions[key]);
+        }
+    }
+
+    return result;
+}
+
+QMap<int, RegionModel *> BoardModel::getForestRegions() const
+{
+    QMap<int, RegionModel *> result;
+
+    foreach(int key, this->regions.keys())
+    {
+        if(this->regions[key]->hasForest())
+        {
+            result.insert(key, this->regions[key]);
+        }
+    }
+
+    return result;
+}
+
+int BoardModel::getMountainCount() const
+{
+    int result = 0;
+
+    foreach(RegionModel *regionModel, this->regions.values())
+    {
+        if(regionModel->hasMountain())
+        {
+            result++;
+        }
+    }
+
+    return result;
+}
+
+int BoardModel::getForestCount() const
+{
+    int result = 0;
+
+    foreach(RegionModel *regionModel, this->regions.values())
+    {
+        if(regionModel->hasForest())
+        {
+            result++;
+        }
+    }
+
+    return result;
 }
 
 HexModel *BoardModel::refHexModel(int x, int y)
@@ -313,9 +403,24 @@ HexModel *BoardModel::refHexModel(int x, int y)
     return this->hexModels[x][y];
 }
 
+RegionModel *BoardModel::refRegionModel(int x, int y)
+{
+    return this->refRegionModel(this->refHexModel(x,y)->getRegion());
+}
+
+RegionModel *BoardModel::refRegionModel(int region)
+{
+    if(region < 0)
+    {
+        return NULL;
+    }
+
+    return this->regions.value(region, NULL);
+}
+
 void BoardModel::clearBoard()
 {
-    this->regions.clear();
+    this->regionHexes.clear();
 
     foreach(QList<HexModel *> list, this->hexModels)
     {

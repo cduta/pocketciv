@@ -22,10 +22,10 @@ Instruction *ChooseRegionInstruction::triggerHex(Qt::MouseButton button, int x, 
 
 Instruction *ChooseRegionInstruction::triggerDone()
 {
-    QSet<HexModel *> region = this->boardModel->getRegions().value(this->currentRegion);
+    QSet<HexModel *> region = this->boardModel->getRegionHexes().value(this->currentRegion);
     if(region.size() > 1)
     {
-        int i = Common::randomWithSeed()%region.size();
+        int i = Common::randomSeed()%region.size();
         region.values().at(i)->setRegionNumberShown(true);
 
         if(currentRegion == maxRegions)
@@ -35,7 +35,9 @@ Instruction *ChooseRegionInstruction::triggerDone()
             this->boardModel->sendMessage("The other hexes are considered sea hexes.");
             this->boardModel->sendMessage("Seas seperated by regions or frontier are considered seperate seas.");
             this->boardModel->sendMessage("When you are done, press Done...");
+            this->boardModel->initialRegionModels();
             this->boardModel->enableAllHexes();
+            this->deleteLater();
             return new ChooseFrontierInstruction(this->boardModel);
         }
         else
@@ -45,6 +47,10 @@ Instruction *ChooseRegionInstruction::triggerDone()
             this->deleteLater();
             return new ChooseRegionInstruction(this->boardModel, currentRegion+1, maxRegions);
         }
+    }
+    else
+    {
+        this->boardModel->sendMessage("The current region you created is not 2 or more hexes in size.");
     }
 
     return this;

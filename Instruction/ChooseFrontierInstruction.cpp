@@ -1,5 +1,7 @@
 #include "ChooseFrontierInstruction.hpp"
 
+#include "Instruction/InitialMountainInstruction.hpp"
+
 ChooseFrontierInstruction::ChooseFrontierInstruction(BoardModel *boardModel, QObject *parent)
     : Instruction(boardModel, parent)
 {
@@ -24,5 +26,9 @@ Instruction *ChooseFrontierInstruction::triggerDone()
     this->boardModel->groupSeas();
     this->boardModel->setChoosingHexesDone();
     this->boardModel->enableRegionSelectableHexes();
-    return this;
+    this->boardModel->sendMessage(" ");
+    this->boardModel->sendMessage("Place 5 mountains on 5 different regions.");
+    this->boardModel->sendMessage("When you are done, press Done...");
+    this->deleteLater();
+    return new InitialMountainInstruction(this->boardModel);
 }

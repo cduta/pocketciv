@@ -14,7 +14,9 @@ HexModel::HexModel(int xPos, int yPos, bool enable, int visibleBorders, QObject 
       regionNumberShown(false),
       frontier(false),
       sea(false),
-      basePixmap(":/hex_generate")
+      basePixmap(":/hex_generate"),
+      representativeHex(false),
+      regionModel(NULL)
 {}
 
 void HexModel::addVisibleBorders(int visibleBorders)
@@ -118,6 +120,11 @@ QString HexModel::getBasePixmap() const
     return this->basePixmap;
 }
 
+bool HexModel::isRepresentativeHex() const
+{
+    return this->representativeHex;
+}
+
 void HexModel::setEnable(bool enable)
 {
     this->enable = enable;
@@ -209,6 +216,19 @@ void HexModel::setBasePixmap(const QString &basePixmap)
 {
     this->basePixmap = basePixmap;
     return;
+}
+
+void HexModel::setRepresentativeHex(bool representative, RegionModel *regionModel)
+{
+    this->representativeHex = representative;
+    this->regionModel = regionModel;
+    return;
+}
+
+RegionModel *HexModel::refRegionModel()
+{
+    assert(this->regionModel != NULL && this->representativeHex);
+    return this->regionModel;
 }
 
 void HexModel::triggerHex(Qt::MouseButton button)
