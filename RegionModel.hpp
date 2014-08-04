@@ -27,6 +27,7 @@ public:
     // Set-Methods
     void setTribes(int tribes);
     void setDesert();
+    void unsetDesert();
 };
 
 #endif // REGIONMODEL_HPP

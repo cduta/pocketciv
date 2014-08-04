@@ -23,7 +23,8 @@ SOURCES += main.cpp\
     Instruction/ChooseFrontierInstruction.cpp \
     RegionModel.cpp \
     Instruction/InitialForestInstruction.cpp \
-    Instruction/InitialMountainInstruction.cpp
+    Instruction/InitialMountainInstruction.cpp \
+    Instruction/SetInitialDesertInstruction.cpp
 
 HEADERS  += \
     PocketCivMain.hpp \
@@ -36,7 +37,8 @@ HEADERS  += \
     Instruction/ChooseFrontierInstruction.hpp \
     RegionModel.hpp \
     Instruction/InitialForestInstruction.hpp \
-    Instruction/InitialMountainInstruction.hpp
+    Instruction/InitialMountainInstruction.hpp \
+    Instruction/SetInitialDesertInstruction.hpp
 
 FORMS    +=
 

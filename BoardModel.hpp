@@ -51,6 +51,7 @@ public:
     QMap<int, RegionModel *> getForestRegions() const;
     int getMountainCount() const;
     int getForestCount() const;
+    int getDesertCount() const;
 
 // Ref-Models
     HexModel *refHexModel(int x, int y);

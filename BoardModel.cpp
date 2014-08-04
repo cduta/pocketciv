@@ -395,6 +395,21 @@ int BoardModel::getForestCount() const
     return result;
 }
 
+int BoardModel::getDesertCount() const
+{
+    int result = 0;
+
+    foreach(RegionModel *regionModel, this->regions.values())
+    {
+        if(regionModel->hasDesert())
+        {
+            result++;
+        }
+    }
+
+    return result;
+}
+
 HexModel *BoardModel::refHexModel(int x, int y)
 {
     assert(x >= 0 && x < this->hexModels.size());

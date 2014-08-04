@@ -49,4 +49,11 @@ void RegionModel::setTribes(int tribes)
 void RegionModel::setDesert()
 {
     this->desert = true;
+    return;
+}
+
+void RegionModel::unsetDesert()
+{
+    this->desert = false;
+    return;
 }

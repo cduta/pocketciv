@@ -1,5 +1,7 @@
 #include "InitialForestInstruction.hpp"
 
+#include "Instruction/SetInitialDesertInstruction.hpp"
+
 InitialForestInstruction::InitialForestInstruction(BoardModel *boardModel, QObject *parent)
     : Instruction(boardModel, parent)
 {}
@@ -40,9 +42,12 @@ Instruction *InitialForestInstruction::triggerDone()
 
         if(regions.isEmpty())
         {
+            this->boardModel->sendMessage(" ");
             this->boardModel->sendMessage("No regions without mountain and/or forest found to place a desert.");
             this->boardModel->sendMessage("Place ONE desert into one region without a forest.");
             this->boardModel->sendMessage("When you are done, press Done...");
+            this->deleteLater();
+            return new SetInitialDesertInstruction(this->boardModel);
         }
         else
         {
@@ -51,6 +56,10 @@ Instruction *InitialForestInstruction::triggerDone()
             {
                 regionModel->setDesert();
             }
+            this->boardModel->sendMessage(" ");
+            this->boardModel->sendMessage("Place 3 Tribes into any amount of regions.");
+            this->boardModel->sendMessage("When you are done, press Done....");
+            return this;
         }
 
         return this;
