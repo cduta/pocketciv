@@ -48,7 +48,7 @@ class PocketCivMain : public QMainWindow
     QPushButton *collectTaxes;
     QPushButton *forestation;
     QPushButton *mining;
-//    QPushButton *undo;
+    QPushButton *overview;
     QPushButton *done;       // May also show other things like continue, ...
 
     QMenuBar *pocketCivMenu;
@@ -74,6 +74,11 @@ private slots:
     void hexTriggerAction(Qt::MouseButton button, int x, int y);
     void addMessage(const QString &message);
     void clearMessages();
+
+    void setGoldCount(int goldCount);
+    void setGloryCount(int gloryCount);
+    void setEra(int era);
+    void setEventCardsLeft(int eventCardsLeft);
 
     void newGameTriggered();
 

@@ -25,7 +25,9 @@ SOURCES += main.cpp\
     Instruction/InitialForestInstruction.cpp \
     Instruction/InitialMountainInstruction.cpp \
     Instruction/SetInitialDesertInstruction.cpp \
-    Instruction/PlaceInitialTribes.cpp
+    Instruction/PlaceInitialTribes.cpp \
+    EventCard.cpp \
+    Instruction/MoveTribesInstruction.cpp
 
 HEADERS  += \
     PocketCivMain.hpp \
@@ -40,7 +42,9 @@ HEADERS  += \
     Instruction/InitialForestInstruction.hpp \
     Instruction/InitialMountainInstruction.hpp \
     Instruction/SetInitialDesertInstruction.hpp \
-    Instruction/PlaceInitialTribes.hpp
+    Instruction/PlaceInitialTribes.hpp \
+    EventCard.hpp \
+    Instruction/MoveTribesInstruction.hpp
 
 FORMS    +=
 

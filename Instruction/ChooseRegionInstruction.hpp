@@ -5,13 +5,11 @@
 
 class ChooseRegionInstruction : public Instruction
 {
-    Q_OBJECT
-
     int currentRegion;
     int maxRegions;
 
 public:
-    ChooseRegionInstruction(BoardModel *boardModel, int currentRegion, int maxRegions, QObject *parent = 0);
+    ChooseRegionInstruction(BoardModel *boardModel, int currentRegion, int maxRegions);
 
     virtual Instruction *triggerHex(Qt::MouseButton button, int x, int y);
     virtual Instruction *triggerDone();

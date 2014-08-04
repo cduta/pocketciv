@@ -5,10 +5,8 @@
 
 class ChooseFrontierInstruction : public Instruction
 {
-    Q_OBJECT
-
 public:
-    ChooseFrontierInstruction(BoardModel *boardModel, QObject *parent = 0);
+    ChooseFrontierInstruction(BoardModel *boardModel);
 
     virtual Instruction *triggerHex(Qt::MouseButton button, int x, int y);
     virtual Instruction *triggerDone();

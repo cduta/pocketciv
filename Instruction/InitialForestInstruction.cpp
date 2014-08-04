@@ -3,9 +3,13 @@
 #include "Instruction/SetInitialDesertInstruction.hpp"
 #include "PlaceInitialTribes.hpp"
 
-InitialForestInstruction::InitialForestInstruction(BoardModel *boardModel, QObject *parent)
-    : Instruction(boardModel, parent)
-{}
+InitialForestInstruction::InitialForestInstruction(BoardModel *boardModel)
+    : Instruction(boardModel)
+{
+    this->boardModel->sendMessage(" ");
+    this->boardModel->sendMessage("Place 5 forests on 5 different regions.");
+    this->boardModel->sendMessage("When you are done, press Done...");
+}
 
 Instruction *InitialForestInstruction::triggerHex(Qt::MouseButton button, int x, int y)
 {
@@ -15,7 +19,15 @@ Instruction *InitialForestInstruction::triggerHex(Qt::MouseButton button, int x,
 
         if(regionModel != NULL)
         {
-            regionModel->toggleForest();
+            int forestCount = this->boardModel->getForestCount();
+            if(forestCount < 5)
+            {
+                regionModel->toggleForest();
+            }
+            else if(forestCount == 5)
+            {
+                regionModel->unsetForest();
+            }
         }
     }
 
@@ -43,11 +55,6 @@ Instruction *InitialForestInstruction::triggerDone()
 
         if(regions.isEmpty())
         {
-            this->boardModel->sendMessage(" ");
-            this->boardModel->sendMessage("No regions without mountain and/or forest found to place a desert.");
-            this->boardModel->sendMessage("Place ONE desert into one region without a forest.");
-            this->boardModel->sendMessage("When you are done, press Done...");
-            this->deleteLater();
             return new SetInitialDesertInstruction(this->boardModel);
         }
         else
@@ -57,10 +64,6 @@ Instruction *InitialForestInstruction::triggerDone()
             {
                 regionModel->setDesert();
             }
-            this->boardModel->sendMessage(" ");
-            this->boardModel->sendMessage("Place 3 Tribes into any amount of regions.");
-            this->boardModel->sendMessage("When you are done, press Done....");
-            this->deleteLater();
             return new PlaceInitialTribes(this->boardModel);
         }
 
@@ -68,14 +71,7 @@ Instruction *InitialForestInstruction::triggerDone()
     }
     else
     {
-        if(this->boardModel->getForestCount() < 5)
-        {
-            this->boardModel->sendMessage("Not enough forest placed.");
-        }
-        else
-        {
-            this->boardModel->sendMessage("Too many forest placed.");
-        }
+        this->boardModel->sendMessage("Not enough forest placed.");
     }
 
     return this;

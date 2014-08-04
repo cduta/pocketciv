@@ -1,8 +1,10 @@
 #include "RegionModel.hpp"
 
-RegionModel::RegionModel(QObject *parent)
+RegionModel::RegionModel(int region, QObject *parent)
     : QObject(parent),
+      region(region),
       tribes(0),
+      movedTribes(0),
       mountain(false),
       forest(false),
       desert(false)
@@ -18,6 +20,24 @@ void RegionModel::toggleForest()
 {
     this->forest = !this->forest;
     return;
+}
+
+void RegionModel::addToMovedTribes(int movedTribes)
+{
+    this->movedTribes += movedTribes;
+    return;
+}
+
+void RegionModel::mergeMovedTribes()
+{
+    this->tribes += this->movedTribes;
+    this->movedTribes = 0;
+    return;
+}
+
+int RegionModel::getRegion() const
+{
+    return this->region;
 }
 
 int RegionModel::getTribes() const
@@ -43,6 +63,18 @@ bool RegionModel::hasDesert() const
 void RegionModel::setTribes(int tribes)
 {
     this->tribes = tribes;
+    return;
+}
+
+void RegionModel::unsetMountain()
+{
+    this->mountain = false;
+    return;
+}
+
+void RegionModel::unsetForest()
+{
+    this->forest = false;
     return;
 }
 

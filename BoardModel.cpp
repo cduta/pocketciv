@@ -9,6 +9,23 @@ BoardModel::BoardModel(int width, int height, QObject *parent)
     : QObject(parent)
 {
     this->newBoard(width, height);
+    this->eventCards.insert(new EventCard(this));
+    this->eventCards.insert(new EventCard(this));
+    this->eventCards.insert(new EventCard(this));
+    this->eventCards.insert(new EventCard(this));
+    this->eventCards.insert(new EventCard(this));
+    this->eventCards.insert(new EventCard(this));
+    this->eventCards.insert(new EventCard(this));
+    this->eventCards.insert(new EventCard(this));
+    this->eventCards.insert(new EventCard(this));
+    this->eventCards.insert(new EventCard(this));
+    this->eventCards.insert(new EventCard(this));
+    this->eventCards.insert(new EventCard(this));
+    this->eventCards.insert(new EventCard(this));
+    this->eventCards.insert(new EventCard(this));
+    this->eventCards.insert(new EventCard(this));
+    this->eventCards.insert(new EventCard(this));
+    this->eventCardsLeft = this->eventCards.toList();
 }
 
 BoardModel::~BoardModel()
@@ -237,12 +254,39 @@ void BoardModel::initialRegionModels()
         }
 
         HexModel *hex = regionHexes[Common::randomSeed()%regionHexes.size()];
-        RegionModel *regionModel = new RegionModel(hex);
+        RegionModel *regionModel = new RegionModel(region, hex);
         hex->setRepresentativeHex(true, regionModel);
         this->regions.insert(region, regionModel);
     }
 
     return;
+}
+
+void BoardModel::populationGrowth()
+{
+    foreach(RegionModel *region, this->regions.values())
+    {
+        if(region->getTribes() > 0)
+        {
+            region->setTribes(region->getTribes()+1);
+        }
+    }
+
+    return;
+}
+
+const EventCard *BoardModel::drawCard()
+{
+    const EventCard *card = this->eventCardsLeft.takeAt(Common::random() % this->eventCardsLeft.size());
+
+    if(this->eventCardsLeft.isEmpty())
+    {
+        this->eventCardsLeft = this->eventCards.toList();
+    }
+
+    emit this->sendCardsLeftCount(this->eventCardsLeft.size());
+
+    return card;
 }
 
 void BoardModel::enableAllHexes()

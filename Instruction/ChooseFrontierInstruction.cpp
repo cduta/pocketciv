@@ -2,9 +2,16 @@
 
 #include "Instruction/InitialMountainInstruction.hpp"
 
-ChooseFrontierInstruction::ChooseFrontierInstruction(BoardModel *boardModel, QObject *parent)
-    : Instruction(boardModel, parent)
+ChooseFrontierInstruction::ChooseFrontierInstruction(BoardModel *boardModel)
+    : Instruction(boardModel)
 {
+    this->boardModel->sendMessage(" ");
+    this->boardModel->sendMessage("Choose the frontier hexes.");
+    this->boardModel->sendMessage("The other hexes are considered sea hexes.");
+    this->boardModel->sendMessage("Seas seperated by regions or frontier are considered seperate seas.");
+    this->boardModel->sendMessage("When you are done, press Done...");
+    this->boardModel->initialRegionModels();
+    this->boardModel->enableAllHexes();
 }
 
 Instruction *ChooseFrontierInstruction::triggerHex(Qt::MouseButton button, int x, int y)
@@ -22,13 +29,5 @@ Instruction *ChooseFrontierInstruction::triggerHex(Qt::MouseButton button, int x
 
 Instruction *ChooseFrontierInstruction::triggerDone()
 {
-    this->boardModel->setUnsetHexesToSea();
-    this->boardModel->groupSeas();
-    this->boardModel->setChoosingHexesDone();
-    this->boardModel->enableRegionSelectableHexes();
-    this->boardModel->sendMessage(" ");
-    this->boardModel->sendMessage("Place 5 mountains on 5 different regions.");
-    this->boardModel->sendMessage("When you are done, press Done...");
-    this->deleteLater();
     return new InitialMountainInstruction(this->boardModel);
 }

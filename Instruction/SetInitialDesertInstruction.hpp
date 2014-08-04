@@ -5,10 +5,9 @@
 
 class SetInitialDesertInstruction : public Instruction
 {
-    Q_OBJECT
 
 public:
-    SetInitialDesertInstruction(BoardModel *boardModel, QObject *parent = 0);
+    SetInitialDesertInstruction(BoardModel *boardModel);
 
     virtual Instruction *triggerHex(Qt::MouseButton button, int x, int y);
     virtual Instruction *triggerDone();

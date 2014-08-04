@@ -5,14 +5,15 @@
 
 #include "BoardModel.hpp"
 
-class Instruction : public QObject
+class Instruction
 {
-    Q_OBJECT
+
 protected:
     BoardModel *boardModel;
 
 public:
-    Instruction(BoardModel *boardModel, QObject *parent = 0);
+    Instruction(BoardModel *boardModel);
+    virtual ~Instruction();
 
     virtual Instruction *triggerHex(Qt::MouseButton, int, int);
     virtual Instruction *triggerDone();
@@ -20,11 +21,10 @@ public:
 
 class NoInstruction : public Instruction
 {
-    Q_OBJECT
 
 public:
-    NoInstruction(BoardModel *boardModel, QObject *parent)
-        : Instruction(boardModel, parent)
+    NoInstruction(BoardModel *boardModel)
+        : Instruction(boardModel)
     {}
 };
 

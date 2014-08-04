@@ -2,9 +2,14 @@
 
 #include "Instruction/PlaceInitialTribes.hpp"
 
-SetInitialDesertInstruction::SetInitialDesertInstruction(BoardModel *boardModel, QObject *parent)
-    : Instruction(boardModel, parent)
-{}
+SetInitialDesertInstruction::SetInitialDesertInstruction(BoardModel *boardModel)
+    : Instruction(boardModel)
+{
+    this->boardModel->sendMessage(" ");
+    this->boardModel->sendMessage("No regions without mountain and/or forest found to place a desert.");
+    this->boardModel->sendMessage("Place ONE desert into one region without a forest.");
+    this->boardModel->sendMessage("When you are done, press Done...");
+}
 
 Instruction *SetInitialDesertInstruction::triggerHex(Qt::MouseButton button, int x, int y)
 {
@@ -33,10 +38,6 @@ Instruction *SetInitialDesertInstruction::triggerDone()
 {
     if(this->boardModel->getDesertCount() == 1)
     {
-        this->boardModel->sendMessage(" ");
-        this->boardModel->sendMessage("Place 3 Tribes into any amount of regions.");
-        this->boardModel->sendMessage("When you are done, press Done....");
-        this->deleteLater();
         return new PlaceInitialTribes(this->boardModel);
     }
     else

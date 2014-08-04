@@ -2,9 +2,17 @@
 
 #include "Instruction/InitialForestInstruction.hpp"
 
-InitialMountainInstruction::InitialMountainInstruction(BoardModel *boardModel, QObject *parent)
-    : Instruction(boardModel, parent)
-{}
+InitialMountainInstruction::InitialMountainInstruction(BoardModel *boardModel)
+    : Instruction(boardModel)
+{
+    this->boardModel->setUnsetHexesToSea();
+    this->boardModel->groupSeas();
+    this->boardModel->setChoosingHexesDone();
+    this->boardModel->enableRegionSelectableHexes();
+    this->boardModel->sendMessage(" ");
+    this->boardModel->sendMessage("Place 5 mountains on 5 different regions.");
+    this->boardModel->sendMessage("When you are done, press Done...");
+}
 
 Instruction *InitialMountainInstruction::triggerHex(Qt::MouseButton button, int x, int y)
 {
@@ -14,7 +22,15 @@ Instruction *InitialMountainInstruction::triggerHex(Qt::MouseButton button, int 
 
         if(regionModel != NULL)
         {
-            regionModel->toggleMountain();
+            int mountainCount = this->boardModel->getMountainCount();
+            if(mountainCount < 5)
+            {
+                regionModel->toggleMountain();
+            }
+            else if(mountainCount == 5)
+            {
+                regionModel->unsetMountain();
+            }
         }
     }
 
@@ -25,22 +41,11 @@ Instruction *InitialMountainInstruction::triggerDone()
 {
     if(this->boardModel->getMountainCount() == 5)
     {
-        this->boardModel->sendMessage(" ");
-        this->boardModel->sendMessage("Place 5 forests on 5 different regions.");
-        this->boardModel->sendMessage("When you are done, press Done...");
-        this->deleteLater();
         return new InitialForestInstruction(this->boardModel);
     }
     else
     {
-        if(this->boardModel->getMountainCount() < 5)
-        {
-            this->boardModel->sendMessage("Not enough mountains placed.");
-        }
-        else
-        {
-            this->boardModel->sendMessage("Too many mountains placed.");
-        }
+        this->boardModel->sendMessage("Not enough mountains placed.");
     }
 
     return this;

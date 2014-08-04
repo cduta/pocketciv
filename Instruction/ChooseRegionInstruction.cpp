@@ -3,9 +3,12 @@
 #include "Common.hpp"
 #include "ChooseFrontierInstruction.hpp"
 
-ChooseRegionInstruction::ChooseRegionInstruction(BoardModel *boardModel, int currentRegion, int maxRegions, QObject *parent)
-    : Instruction(boardModel, parent), currentRegion(currentRegion), maxRegions(maxRegions)
-{}
+ChooseRegionInstruction::ChooseRegionInstruction(BoardModel *boardModel, int currentRegion, int maxRegions)
+    : Instruction(boardModel), currentRegion(currentRegion), maxRegions(maxRegions)
+{
+    this->boardModel->sendMessage(QString("Region %1 out of %2.").
+                                 arg(currentRegion).arg(maxRegions));
+}
 
 Instruction *ChooseRegionInstruction::triggerHex(Qt::MouseButton button, int x, int y)
 {
@@ -30,21 +33,10 @@ Instruction *ChooseRegionInstruction::triggerDone()
 
         if(currentRegion == maxRegions)
         {
-            this->boardModel->sendMessage(" ");
-            this->boardModel->sendMessage("Choose the frontier hexes.");
-            this->boardModel->sendMessage("The other hexes are considered sea hexes.");
-            this->boardModel->sendMessage("Seas seperated by regions or frontier are considered seperate seas.");
-            this->boardModel->sendMessage("When you are done, press Done...");
-            this->boardModel->initialRegionModels();
-            this->boardModel->enableAllHexes();
-            this->deleteLater();
             return new ChooseFrontierInstruction(this->boardModel);
         }
         else
         {
-            this->boardModel->sendMessage(QString("Region %1 out of %2.").
-                                         arg(currentRegion+1).arg(maxRegions));
-            this->deleteLater();
             return new ChooseRegionInstruction(this->boardModel, currentRegion+1, maxRegions);
         }
     }

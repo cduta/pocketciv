@@ -1,8 +1,14 @@
 #include "PlaceInitialTribes.hpp"
 
-PlaceInitialTribes::PlaceInitialTribes(BoardModel *boardModel, QObject *parent)
-    : Instruction(boardModel, parent)
-{}
+#include "Instruction/MoveTribesInstruction.hpp"
+
+PlaceInitialTribes::PlaceInitialTribes(BoardModel *boardModel)
+    : Instruction(boardModel)
+{
+    this->boardModel->sendMessage(" ");
+    this->boardModel->sendMessage("Place 3 Tribes into any amount of regions.");
+    this->boardModel->sendMessage("When you are done, press Done....");
+}
 
 Instruction *PlaceInitialTribes::triggerHex(Qt::MouseButton button, int x, int y)
 {
@@ -33,11 +39,7 @@ Instruction *PlaceInitialTribes::triggerDone()
 {
     if(this->boardModel->getTribeCount() == 3)
     {
-        this->boardModel->sendMessage("Done creating the world!");
-        this->boardModel->clearMessages();
-        this->boardModel->sendMessage("Discarding 3 event cards...");
-        this->boardModel->sendMessage("The Game begins...");
-        return this;
+        return new MoveTribesInstruction(this->boardModel);
     }
     else
     {

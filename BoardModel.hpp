@@ -6,6 +6,7 @@
 
 #include "HexModel.hpp"
 #include "RegionModel.hpp"
+#include "EventCard.hpp"
 
 #include <boost/assert.hpp>
 
@@ -18,12 +19,15 @@ signals:
     void boardCleared();
     void sendMessage(const QString &text);
     void clearMessages();
+    void sendCardsLeftCount(int cardsLeftCount);
 
 private:
     QList<QList<HexModel *> > hexModels;
     QMap<int, QSet<HexModel *> > regionHexes;
     QList<QSet<HexModel *> > seas;
     QMap<int, RegionModel *> regions;
+    QSet<const EventCard *> eventCards;
+    QList<const EventCard *> eventCardsLeft;
 
 public:
     BoardModel(int width, int height, QObject *parent = 0);
@@ -36,6 +40,10 @@ public:
     void enableRegionSelectableHexes();
     void groupSeas();
     void initialRegionModels();
+
+    void populationGrowth();
+
+    const EventCard *drawCard();
 
 private:
     void newBoard(int width, int height);

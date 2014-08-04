@@ -2,8 +2,11 @@
 
 #include <iostream>
 
-Instruction::Instruction(BoardModel *boardModel, QObject *parent)
-    : QObject(parent), boardModel(boardModel)
+Instruction::Instruction(BoardModel *boardModel)
+    : boardModel(boardModel)
+{}
+
+Instruction::~Instruction()
 {}
 
 Instruction *Instruction::triggerHex(Qt::MouseButton, int, int)

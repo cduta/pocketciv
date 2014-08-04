@@ -56,16 +56,16 @@ PocketCivMain::PocketCivMain(QWidget *parent) :
     this->forestation->setEnabled(false);
     this->mining =          new QPushButton("Mining", &this->dockWidget);
     this->mining->setEnabled(false);
-//    this->undo =            new QPushButton("Undo", &this->dockWidget);
-//    this->undo->setEnabled(false);
+    this->overview =        new QPushButton("Overview", &this->dockWidget);
+    this->overview->setEnabled(false);
     this->done =            new QPushButton("Done", &this->dockWidget);
     this->done->setEnabled(false);
     connect(this->done, SIGNAL(clicked()), this, SLOT(doneTriggered()));
 
     this->dockLayout->addWidget(this->messages,  0, 0, 1, 5);
-    this->dockLayout->addWidget(this->goldCount, 1, 0, 1, 1);
-    this->dockLayout->addWidget(this->gloryCount, 1, 1, 1, 1);
-    this->dockLayout->addWidget(this->eraCount, 1, 2, 1, 1);
+    this->dockLayout->addWidget(this->goldCount, 1, 0, 1, 1, Qt::AlignCenter);
+    this->dockLayout->addWidget(this->gloryCount, 1, 1, 1, 1, Qt::AlignCenter);
+    this->dockLayout->addWidget(this->eraCount, 1, 2, 1, 1, Qt::AlignCenter);
     this->dockLayout->addWidget(this->eventCardsLeft, 1, 3, 1, 2, Qt::AlignCenter);
     this->dockLayout->addWidget(this->buildCity, 2, 0, 1, 1);
     this->dockLayout->addWidget(this->buildFarm, 2, 1, 1, 1);
@@ -75,7 +75,7 @@ PocketCivMain::PocketCivMain(QWidget *parent) :
     this->dockLayout->addWidget(this->collectTaxes, 3, 0, 1, 1);
     this->dockLayout->addWidget(this->forestation, 3, 1, 1, 1);
     this->dockLayout->addWidget(this->mining, 3, 2, 1, 1);
-//    this->dockLayout->addWidget(this->undo, 3, 3, 1, 1);
+    this->dockLayout->addWidget(this->overview, 3, 3, 1, 1);
     this->dockLayout->addWidget(this->done, 3, 4, 1, 1);
 
     this->dockWidget.setLayout(this->dockLayout);
@@ -190,13 +190,14 @@ void PocketCivMain::generateNewBoard(BoardModel *boardModel)
     connect(this->boardModel, SIGNAL(boardCleared()), this, SLOT(clearBoard()));
     connect(this->boardModel, SIGNAL(sendMessage(const QString &)), this, SLOT(addMessage(const QString &)));
     connect(this->boardModel, SIGNAL(clearMessages()), this, SLOT(clearMessages()));
+    connect(this->boardModel, SIGNAL(sendCardsLeftCount(int)), this, SLOT(setEventCardsLeft(int)));
 
     if(this->instruction != NULL)
     {
-        this->instruction->deleteLater();
+        delete this->instruction;
     }
 
-    this->instruction = new NoInstruction(this->boardModel, this);
+    this->instruction = new NoInstruction(this->boardModel);
     this->updateBoard();
 }
 
@@ -239,12 +240,13 @@ void PocketCivMain::hexTriggerAction(Qt::MouseButton button, int x, int y)
     if(nextInstruction == NULL)
     {
         std::cout << "Instruction failed." << std::endl;
+        this->instruction = new NoInstruction(this->boardModel);
         return;
     }
 
     if(this->instruction != nextInstruction)
     {
-        this->instruction->deleteLater();
+        delete this->instruction;
         this->instruction = nextInstruction;
     }
 
@@ -264,14 +266,43 @@ void PocketCivMain::clearMessages()
     return;
 }
 
+void PocketCivMain::setGoldCount(int goldCount)
+{
+    this->goldCount->setText(QString("Gold: %1").arg(QString::number(goldCount)));
+    return;
+}
+
+void PocketCivMain::setGloryCount(int gloryCount)
+{
+    this->gloryCount->setText(QString("Glory: %1").arg(QString::number(gloryCount)));
+    return;
+}
+
+void PocketCivMain::setEra(int era)
+{
+    this->eraCount->setText(QString("Era: %1").arg(QString::number(era)));
+    return;
+}
+
+void PocketCivMain::setEventCardsLeft(int eventCardsLeft)
+{
+    this->eventCardsLeft->setText(QString("Event Cards left: %1").arg(QString::number(eventCardsLeft)));
+    return;
+}
+
 void PocketCivMain::newGameTriggered()
 {
     this->generateNewBoard(new BoardModel(20,10,this));
 
     if(this->instruction != NULL)
     {
-        this->instruction->deleteLater();
+        delete this->instruction;
     }
+
+    this->setGoldCount(0);
+    this->setGloryCount(0);
+    this->setEra(1);
+    this->setEventCardsLeft(16);
 
     this->buildCity->setEnabled(false);
     this->buildFarm->setEnabled(false);
@@ -281,6 +312,7 @@ void PocketCivMain::newGameTriggered()
     this->collectTaxes->setEnabled(false);
     this->forestation->setEnabled(false);
     this->mining->setEnabled(false);
+    this->overview->setEnabled(true);
     this->done->setEnabled(true);
     this->done->setText("Done");
 
@@ -290,9 +322,8 @@ void PocketCivMain::newGameTriggered()
     this->addMessage(QString("Select two or more connected hexes on the board to form Region %1 out of %2.").
                                  arg(1).arg(8));
     this->addMessage("When you are done, press Done...");
-    this->addMessage("Region 1 out of 8.");
 
-    this->instruction = new ChooseRegionInstruction(this->boardModel, 1, 8, this);
+    this->instruction = new ChooseRegionInstruction(this->boardModel, 1, 8);
     this->updateBoard();
     return;
 }
