@@ -25,8 +25,6 @@ PocketCivMain::PocketCivMain(QWidget *parent) :
     boardModel(NULL),
     instruction(NULL)
 {
-    this->generateNewBoard(new BoardModel(20,10, this));
-
     this->dockLayout = new QGridLayout(&this->dockWidget);
 
     this->messages = new QPlainTextEdit("To start a new game: File -> New Game",
@@ -94,6 +92,8 @@ PocketCivMain::PocketCivMain(QWidget *parent) :
     QMenu *optionsMenu = new QMenu("Options", this);
     this->pocketCivMenu->addMenu(optionsMenu);
     this->setMenuBar(this->pocketCivMenu);
+
+    this->generateNewBoard(new BoardModel(20,10, this));
 }
 
 PocketCivMain::~PocketCivMain()
@@ -191,13 +191,15 @@ void PocketCivMain::generateNewBoard(BoardModel *boardModel)
     connect(this->boardModel, SIGNAL(sendMessage(const QString &)), this, SLOT(addMessage(const QString &)));
     connect(this->boardModel, SIGNAL(clearMessages()), this, SLOT(clearMessages()));
     connect(this->boardModel, SIGNAL(sendCardsLeftCount(int)), this, SLOT(setEventCardsLeft(int)));
+    connect(this->boardModel, SIGNAL(sendDoneText(const QString &)), this, SLOT(setDoneText(const QString &)));
+    connect(this->boardModel, SIGNAL(sendDialogClosed()), this, SLOT(continueWithPreviousInstruction()));
 
     if(this->instruction != NULL)
     {
-        delete this->instruction;
+        this->instruction->deleteLater();
     }
 
-    this->instruction = new NoInstruction(this->boardModel);
+    this->instruction = new NoInstruction();
     this->updateBoard();
 }
 
@@ -240,16 +242,37 @@ void PocketCivMain::hexTriggerAction(Qt::MouseButton button, int x, int y)
     if(nextInstruction == NULL)
     {
         std::cout << "Instruction failed." << std::endl;
-        this->instruction = new NoInstruction(this->boardModel);
+        this->instruction = new NoInstruction();
         return;
     }
 
-    if(this->instruction != nextInstruction)
+    if(this->instruction != nextInstruction && !this->instruction->keepInstruction())
     {
-        delete this->instruction;
-        this->instruction = nextInstruction;
+        this->instruction->deleteLater();
     }
 
+    this->instruction = nextInstruction;
+    this->updateBoard();
+    return;
+}
+
+void PocketCivMain::continueWithPreviousInstruction()
+{
+    Instruction *nextInstruction = this->instruction->getPreviousInstruction();
+
+    if(nextInstruction == NULL)
+    {
+        std::cout << "Instruction failed." << std::endl;
+        this->instruction = new NoInstruction();
+        return;
+    }
+
+    if(this->instruction != nextInstruction && !this->instruction->keepInstruction())
+    {
+        this->instruction->deleteLater();
+    }
+
+    this->instruction = nextInstruction;
     this->updateBoard();
     return;
 }
@@ -263,6 +286,12 @@ void PocketCivMain::addMessage(const QString &message)
 void PocketCivMain::clearMessages()
 {
     this->messages->clear();
+    return;
+}
+
+void PocketCivMain::setDoneText(const QString &text)
+{
+    this->done->setText(text);
     return;
 }
 
@@ -296,7 +325,7 @@ void PocketCivMain::newGameTriggered()
 
     if(this->instruction != NULL)
     {
-        delete this->instruction;
+        this->instruction->deleteLater();
     }
 
     this->setGoldCount(0);
@@ -304,16 +333,9 @@ void PocketCivMain::newGameTriggered()
     this->setEra(1);
     this->setEventCardsLeft(16);
 
-    this->buildCity->setEnabled(false);
-    this->buildFarm->setEnabled(false);
-    this->expedition->setEnabled(false);
-    this->aquireAdvance->setEnabled(false);
-    this->buildWonder->setEnabled(false);
-    this->collectTaxes->setEnabled(false);
-    this->forestation->setEnabled(false);
-    this->mining->setEnabled(false);
     this->overview->setEnabled(true);
-    this->done->setEnabled(true);
+    this->boardModel->disableButtons();
+    this->boardModel->enableButtons();
     this->done->setText("Done");
 
     this->messages->clear();
@@ -324,6 +346,7 @@ void PocketCivMain::newGameTriggered()
     this->addMessage("When you are done, press Done...");
 
     this->instruction = new ChooseRegionInstruction(this->boardModel, 1, 8);
+    this->instruction->initInstruction();
     this->updateBoard();
     return;
 }
@@ -350,6 +373,17 @@ void PocketCivMain::updateBoard()
             this->updateHex(item);
         }
     }
+
+    this->buildCity->setEnabled(this->boardModel->canBuildCity());
+    this->buildFarm->setEnabled(this->boardModel->canBuildFarm());
+    this->expedition->setEnabled(this->boardModel->canDoExpedition());
+    this->aquireAdvance->setEnabled(this->boardModel->canAquireAdvance());
+    this->buildWonder->setEnabled(this->boardModel->canBuildWonder());
+    this->collectTaxes->setEnabled(this->boardModel->canCollectTaxes());
+    this->forestation->setEnabled(this->boardModel->canDoForestation());
+    this->mining->setEnabled(this->boardModel->canDoMining());
+    this->done->setEnabled(this->boardModel->isDoneEnabled());
+
     return;
 }
 

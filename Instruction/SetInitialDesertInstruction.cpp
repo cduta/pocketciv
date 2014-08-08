@@ -3,7 +3,10 @@
 #include "Instruction/PlaceInitialTribes.hpp"
 
 SetInitialDesertInstruction::SetInitialDesertInstruction(BoardModel *boardModel)
-    : Instruction(boardModel)
+    : Instruction(), boardModel(boardModel)
+{}
+
+void SetInitialDesertInstruction::initInstruction()
 {
     this->boardModel->sendMessage(" ");
     this->boardModel->sendMessage("No regions without mountain and/or forest found to place a desert.");
@@ -38,7 +41,9 @@ Instruction *SetInitialDesertInstruction::triggerDone()
 {
     if(this->boardModel->getDesertCount() == 1)
     {
-        return new PlaceInitialTribes(this->boardModel);
+        Instruction *next = new PlaceInitialTribes(this->boardModel);
+        next->initInstruction();
+        return next;
     }
     else
     {

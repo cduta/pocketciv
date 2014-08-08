@@ -4,27 +4,41 @@
 #include <QDebug>
 
 #include "Common.hpp"
+#include "Event/EpidemicEvent.hpp"
 
 BoardModel::BoardModel(int width, int height, QObject *parent)
-    : QObject(parent)
+    : QObject(parent),
+      buildCity(false),
+      buildFarm(false),
+      expedition(false),
+      aquireAdvances(false),
+      buildWonder(false),
+      collectTaxes(false),
+      forestation(false),
+      mining(false),
+      doneEnabled(true),
+      era(1),
+      lastEra(8)
 {
     this->newBoard(width, height);
-    this->eventCards.insert(new EventCard(this));
-    this->eventCards.insert(new EventCard(this));
-    this->eventCards.insert(new EventCard(this));
-    this->eventCards.insert(new EventCard(this));
-    this->eventCards.insert(new EventCard(this));
-    this->eventCards.insert(new EventCard(this));
-    this->eventCards.insert(new EventCard(this));
-    this->eventCards.insert(new EventCard(this));
-    this->eventCards.insert(new EventCard(this));
-    this->eventCards.insert(new EventCard(this));
-    this->eventCards.insert(new EventCard(this));
-    this->eventCards.insert(new EventCard(this));
-    this->eventCards.insert(new EventCard(this));
-    this->eventCards.insert(new EventCard(this));
-    this->eventCards.insert(new EventCard(this));
-    this->eventCards.insert(new EventCard(this));
+    QMap<int, Event *> events;
+    events.insert(1, new EpidemicEvent(this));
+    this->eventCards.insert(new EventCard(events, this));
+    this->eventCards.insert(new EventCard(events, this));
+    this->eventCards.insert(new EventCard(events, this));
+    this->eventCards.insert(new EventCard(events, this));
+    this->eventCards.insert(new EventCard(events, this));
+    this->eventCards.insert(new EventCard(events, this));
+    this->eventCards.insert(new EventCard(events, this));
+    this->eventCards.insert(new EventCard(events, this));
+    this->eventCards.insert(new EventCard(events, this));
+    this->eventCards.insert(new EventCard(events, this));
+    this->eventCards.insert(new EventCard(events, this));
+    this->eventCards.insert(new EventCard(events, this));
+    this->eventCards.insert(new EventCard(events, this));
+    this->eventCards.insert(new EventCard(events, this));
+    this->eventCards.insert(new EventCard(events, this));
+    this->eventCards.insert(new EventCard(events, this));
     this->eventCardsLeft = this->eventCards.toList();
 }
 
@@ -262,6 +276,33 @@ void BoardModel::initialRegionModels()
     return;
 }
 
+bool BoardModel::canMoveTribes(int fromRegion, int toRegion)
+{
+    // Is Adjacent region?
+    foreach(HexModel *hex, this->regionHexes[fromRegion])
+    {
+        foreach(HexModel *adjacent, hex->getAdjacentHexes().values())
+        {
+            if(adjacent->getRegion() == toRegion)
+            {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
+void BoardModel::mergeTribesAllRegions()
+{
+    foreach(RegionModel *regionModel, this->regions.values())
+    {
+        regionModel->mergeMovedTribes();
+    }
+
+    return;
+}
+
 void BoardModel::populationGrowth()
 {
     foreach(RegionModel *region, this->regions.values())
@@ -271,6 +312,14 @@ void BoardModel::populationGrowth()
             region->setTribes(region->getTribes()+1);
         }
     }
+
+    return;
+}
+
+void BoardModel::moveTribes(int fromRegion, int toRegion, int howMany)
+{
+    this->regions[fromRegion]->setTribes(this->regions[fromRegion]->getTribes() - howMany);
+    this->regions[toRegion]->addToMovedTribes(howMany);
 
     return;
 }
@@ -287,6 +336,50 @@ const EventCard *BoardModel::drawCard()
     emit this->sendCardsLeftCount(this->eventCardsLeft.size());
 
     return card;
+}
+
+void BoardModel::setSelectRegion(int region, bool select)
+{
+    assert(this->regions.contains(region) && this->regionHexes.contains(region));
+
+    this->regions[region]->setSelected(select);
+
+    foreach(HexModel *hex, this->regionHexes[region])
+    {
+        hex->setSelected(select);
+    }
+
+    return;
+}
+
+void BoardModel::unselectAllRegions()
+{
+    foreach(int region, this->regions.keys())
+    {
+        this->setSelectRegion(region, false);
+    }
+
+    return;
+}
+
+void BoardModel::disableButtons()
+{
+    this->buildCity = false;
+    this->buildFarm = false;
+    this->expedition = false;
+    this->aquireAdvances = false;
+    this->buildWonder = false;
+    this->collectTaxes = false;
+    this->forestation = false;
+    this->mining = false;
+    this->doneEnabled = false;
+    return;
+}
+
+void BoardModel::enableButtons()
+{
+    this->doneEnabled = true;
+    return;
 }
 
 void BoardModel::enableAllHexes()
@@ -464,6 +557,76 @@ int BoardModel::getTribeCount() const
     }
 
     return result;
+}
+
+QMap<int, RegionModel *> BoardModel::getSelectedRegions() const
+{
+    QMap<int, RegionModel *> result;
+
+    foreach(int key, this->regions.keys())
+    {
+        if(this->regions[key]->isSelected())
+        {
+            result.insert(key, this->regions[key]);
+        }
+    }
+
+    return result;
+}
+
+bool BoardModel::canBuildCity() const
+{
+    return this->buildCity;
+}
+
+bool BoardModel::canBuildFarm() const
+{
+    return this->buildFarm;
+}
+
+bool BoardModel::canDoExpedition() const
+{
+    return this->expedition;
+}
+
+bool BoardModel::canAquireAdvance() const
+{
+    return this->aquireAdvances;
+}
+
+bool BoardModel::canBuildWonder() const
+{
+    return this->buildWonder;
+}
+
+bool BoardModel::canCollectTaxes() const
+{
+    return this->collectTaxes;
+}
+
+bool BoardModel::canDoForestation() const
+{
+    return this->forestation;
+}
+
+bool BoardModel::canDoMining() const
+{
+    return this->mining;
+}
+
+bool BoardModel::isDoneEnabled() const
+{
+    return this->doneEnabled;
+}
+
+int BoardModel::getEra()
+{
+    return this->era;
+}
+
+int BoardModel::getLastEra()
+{
+    return this->lastEra;
 }
 
 HexModel *BoardModel::refHexModel(int x, int y)

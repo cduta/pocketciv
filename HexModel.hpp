@@ -28,6 +28,7 @@ private:
     int yPos;
     int region; // -1, if it isn't associated with any region.
     bool enable;
+    bool selected;
     int visibleBorders;
     QMap<int, HexModel *> adjacentHexes; // Int represents the border of this hex on which the hex borders on.
     bool regionNumberShown;
@@ -60,6 +61,7 @@ public:
     bool isSea() const;
     QString getBasePixmap() const;
     bool isRepresentativeHex() const;
+    bool isSelected() const;
 
     // Set-Methods
     void setEnable(bool enable);
@@ -74,6 +76,7 @@ public:
     void setSea(bool sea);
     void setBasePixmap(const QString &basePixmap);
     void setRepresentativeHex(bool representative, RegionModel *regionModel);
+    void setSelected(bool selected);
 
     // Ref-Methods
     RegionModel *refRegionModel();

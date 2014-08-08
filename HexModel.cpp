@@ -10,6 +10,7 @@ HexModel::HexModel(int xPos, int yPos, bool enable, int visibleBorders, QObject 
       yPos(yPos),
       region(-1),
       enable(enable),
+      selected(false),
       visibleBorders(visibleBorders),
       regionNumberShown(false),
       frontier(false),
@@ -125,6 +126,11 @@ bool HexModel::isRepresentativeHex() const
     return this->representativeHex;
 }
 
+bool HexModel::isSelected() const
+{
+    return this->selected;
+}
+
 void HexModel::setEnable(bool enable)
 {
     this->enable = enable;
@@ -222,6 +228,12 @@ void HexModel::setRepresentativeHex(bool representative, RegionModel *regionMode
 {
     this->representativeHex = representative;
     this->regionModel = regionModel;
+    return;
+}
+
+void HexModel::setSelected(bool selected)
+{
+    this->selected = selected;
     return;
 }
 

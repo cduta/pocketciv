@@ -3,7 +3,10 @@
 #include "Instruction/InitialForestInstruction.hpp"
 
 InitialMountainInstruction::InitialMountainInstruction(BoardModel *boardModel)
-    : Instruction(boardModel)
+    : Instruction(), boardModel(boardModel)
+{}
+
+void InitialMountainInstruction::initInstruction()
 {
     this->boardModel->setUnsetHexesToSea();
     this->boardModel->groupSeas();
@@ -41,7 +44,9 @@ Instruction *InitialMountainInstruction::triggerDone()
 {
     if(this->boardModel->getMountainCount() == 5)
     {
-        return new InitialForestInstruction(this->boardModel);
+        Instruction *next = new InitialForestInstruction(this->boardModel);
+        next->initInstruction();
+        return next;
     }
     else
     {

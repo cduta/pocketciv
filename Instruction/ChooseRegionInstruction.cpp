@@ -4,7 +4,10 @@
 #include "ChooseFrontierInstruction.hpp"
 
 ChooseRegionInstruction::ChooseRegionInstruction(BoardModel *boardModel, int currentRegion, int maxRegions)
-    : Instruction(boardModel), currentRegion(currentRegion), maxRegions(maxRegions)
+    : Instruction(), boardModel(boardModel), currentRegion(currentRegion), maxRegions(maxRegions)
+{}
+
+void ChooseRegionInstruction::initInstruction()
 {
     this->boardModel->sendMessage(QString("Region %1 out of %2.").
                                  arg(currentRegion).arg(maxRegions));
@@ -33,11 +36,15 @@ Instruction *ChooseRegionInstruction::triggerDone()
 
         if(currentRegion == maxRegions)
         {
-            return new ChooseFrontierInstruction(this->boardModel);
+            Instruction *next = new ChooseFrontierInstruction(this->boardModel);
+            next->initInstruction();
+            return next;
         }
         else
         {
-            return new ChooseRegionInstruction(this->boardModel, currentRegion+1, maxRegions);
+            Instruction *next = new ChooseRegionInstruction(this->boardModel, currentRegion+1, maxRegions);
+            next->initInstruction();
+            return next;
         }
     }
     else

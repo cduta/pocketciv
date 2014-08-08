@@ -72,8 +72,10 @@ private slots:
     void updateHex(HexItem *hexItem);
     void updateHex(int x, int y);
     void hexTriggerAction(Qt::MouseButton button, int x, int y);
+    void continueWithPreviousInstruction();
     void addMessage(const QString &message);
     void clearMessages();
+    void setDoneText(const QString &text);
 
     void setGoldCount(int goldCount);
     void setGloryCount(int gloryCount);

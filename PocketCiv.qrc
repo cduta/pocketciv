@@ -15,5 +15,6 @@
         <file alias="mountain">res/mountain.png</file>
         <file alias="desert">res/desert.png</file>
         <file alias="tribe">res/tribe.png</file>
+        <file alias="hex_selected">res/hex_selected.png</file>
     </qresource>
 </RCC>

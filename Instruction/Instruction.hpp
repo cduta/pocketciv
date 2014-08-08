@@ -2,29 +2,36 @@
 #define INSTRUCTION_HPP
 
 #include <QObject>
+#include <QDialog>
 
-#include "BoardModel.hpp"
-
-class Instruction
+class Instruction : public QObject
 {
+    Q_OBJECT
 
 protected:
-    BoardModel *boardModel;
+    bool keep;
 
 public:
-    Instruction(BoardModel *boardModel);
+    Instruction(QObject *parent = 0);
     virtual ~Instruction();
+
+    virtual void initInstruction();
 
     virtual Instruction *triggerHex(Qt::MouseButton, int, int);
     virtual Instruction *triggerDone();
+    virtual Instruction *getPreviousInstruction();
+
+    bool keepInstruction();
+
+    void setKeepInstruction(bool keep);
 };
 
 class NoInstruction : public Instruction
 {
 
 public:
-    NoInstruction(BoardModel *boardModel)
-        : Instruction(boardModel)
+    NoInstruction()
+        : Instruction()
     {}
 };
 

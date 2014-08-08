@@ -4,7 +4,10 @@
 #include "PlaceInitialTribes.hpp"
 
 InitialForestInstruction::InitialForestInstruction(BoardModel *boardModel)
-    : Instruction(boardModel)
+    : Instruction(), boardModel(boardModel)
+{}
+
+void InitialForestInstruction::initInstruction()
 {
     this->boardModel->sendMessage(" ");
     this->boardModel->sendMessage("Place 5 forests on 5 different regions.");
@@ -55,7 +58,9 @@ Instruction *InitialForestInstruction::triggerDone()
 
         if(regions.isEmpty())
         {
-            return new SetInitialDesertInstruction(this->boardModel);
+            Instruction *next = new SetInitialDesertInstruction(this->boardModel);
+            next->initInstruction();
+            return next;
         }
         else
         {
@@ -64,7 +69,10 @@ Instruction *InitialForestInstruction::triggerDone()
             {
                 regionModel->setDesert();
             }
-            return new PlaceInitialTribes(this->boardModel);
+
+            Instruction *next = new PlaceInitialTribes(this->boardModel);
+            next->initInstruction();
+            return next;
         }
 
         return this;

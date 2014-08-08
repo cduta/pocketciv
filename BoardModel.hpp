@@ -20,14 +20,28 @@ signals:
     void sendMessage(const QString &text);
     void clearMessages();
     void sendCardsLeftCount(int cardsLeftCount);
+    void sendDoneText(const QString &text);
+    void sendDialogClosed();
 
 private:
     QList<QList<HexModel *> > hexModels;
-    QMap<int, QSet<HexModel *> > regionHexes;
     QList<QSet<HexModel *> > seas;
+    QMap<int, QSet<HexModel *> > regionHexes;
     QMap<int, RegionModel *> regions;
     QSet<const EventCard *> eventCards;
     QList<const EventCard *> eventCardsLeft;
+    bool buildCity;
+    bool buildFarm;
+    bool expedition;
+    bool aquireAdvances;
+    bool buildWonder;
+    bool collectTaxes;
+    bool forestation;
+    bool mining;
+    bool doneEnabled;
+
+    int era;
+    int lastEra;
 
 public:
     BoardModel(int width, int height, QObject *parent = 0);
@@ -41,9 +55,19 @@ public:
     void groupSeas();
     void initialRegionModels();
 
+    bool canMoveTribes(int fromRegion, int toRegion);
+
+    void mergeTribesAllRegions();
+
     void populationGrowth();
+    void moveTribes(int fromRegion, int toRegion, int howMany);
 
     const EventCard *drawCard();
+    const EventCard *drawEventCard();
+    void setSelectRegion(int region, bool select);
+    void unselectAllRegions();
+    void disableButtons();
+    void enableButtons();
 
 private:
     void newBoard(int width, int height);
@@ -62,8 +86,20 @@ public:
     int getForestCount() const;
     int getDesertCount() const;
     int getTribeCount() const;
+    QMap<int, RegionModel *> getSelectedRegions() const;
+    bool canBuildCity() const;
+    bool canBuildFarm() const;
+    bool canDoExpedition() const;
+    bool canAquireAdvance() const;
+    bool canBuildWonder() const;
+    bool canCollectTaxes() const;
+    bool canDoForestation() const;
+    bool canDoMining() const;
+    bool isDoneEnabled() const;
+    int getEra();
+    int getLastEra();
 
-// Ref-Models
+// Ref-Methods
     HexModel *refHexModel(int x, int y);
     RegionModel *refRegionModel(int x, int y);
     RegionModel *refRegionModel(int region);

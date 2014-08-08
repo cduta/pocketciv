@@ -12,6 +12,7 @@ class RegionModel : public QObject
     bool mountain;
     bool forest;
     bool desert;
+    bool selected;
 
 public:
     RegionModel(int region = -1, QObject *parent = 0);
@@ -26,9 +27,11 @@ public:
     // Get-Methods
     int getRegion() const;
     int getTribes() const;
+    int getMovedTribes() const;
     bool hasMountain() const;
     bool hasForest() const;
     bool hasDesert() const;
+    bool isSelected() const;
 
     // Set-Methods
     void setTribes(int tribes);
@@ -36,6 +39,7 @@ public:
     void unsetForest();
     void setDesert();
     void unsetDesert();
+    void setSelected(bool selected);
 };
 
 #endif // REGIONMODEL_HPP

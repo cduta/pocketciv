@@ -3,7 +3,10 @@
 #include "Instruction/InitialMountainInstruction.hpp"
 
 ChooseFrontierInstruction::ChooseFrontierInstruction(BoardModel *boardModel)
-    : Instruction(boardModel)
+    : Instruction(), boardModel(boardModel)
+{}
+
+void ChooseFrontierInstruction::initInstruction()
 {
     this->boardModel->sendMessage(" ");
     this->boardModel->sendMessage("Choose the frontier hexes.");
@@ -29,5 +32,7 @@ Instruction *ChooseFrontierInstruction::triggerHex(Qt::MouseButton button, int x
 
 Instruction *ChooseFrontierInstruction::triggerDone()
 {
-    return new InitialMountainInstruction(this->boardModel);
+    Instruction *next = new InitialMountainInstruction(this->boardModel);
+    next->initInstruction();
+    return next;
 }

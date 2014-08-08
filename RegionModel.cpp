@@ -7,7 +7,8 @@ RegionModel::RegionModel(int region, QObject *parent)
       movedTribes(0),
       mountain(false),
       forest(false),
-      desert(false)
+      desert(false),
+      selected(false)
 {}
 
 void RegionModel::toggleMountain()
@@ -45,6 +46,11 @@ int RegionModel::getTribes() const
     return this->tribes;
 }
 
+int RegionModel::getMovedTribes() const
+{
+    return this->movedTribes;
+}
+
 bool RegionModel::hasMountain() const
 {
     return this->mountain;
@@ -58,6 +64,11 @@ bool RegionModel::hasForest() const
 bool RegionModel::hasDesert() const
 {
     return this->desert;
+}
+
+bool RegionModel::isSelected() const
+{
+    return this->selected;
 }
 
 void RegionModel::setTribes(int tribes)
@@ -88,4 +99,9 @@ void RegionModel::unsetDesert()
 {
     this->desert = false;
     return;
+}
+
+void RegionModel::setSelected(bool selected)
+{
+    this->selected = selected;
 }

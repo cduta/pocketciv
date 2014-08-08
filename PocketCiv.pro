@@ -27,7 +27,13 @@ SOURCES += main.cpp\
     Instruction/SetInitialDesertInstruction.cpp \
     Instruction/PlaceInitialTribes.cpp \
     EventCard.cpp \
-    Instruction/MoveTribesInstruction.cpp
+    Instruction/MoveTribesInstruction.cpp \
+    HowManyDialog.cpp \
+    Instruction/MainPhaseInstruction.cpp \
+    Instruction/DrawEventCardInstruction.cpp \
+    Event/Event.cpp \
+    Event/EpidemicEvent.cpp \
+    Instruction/DialogInstruction.cpp
 
 HEADERS  += \
     PocketCivMain.hpp \
@@ -44,7 +50,13 @@ HEADERS  += \
     Instruction/SetInitialDesertInstruction.hpp \
     Instruction/PlaceInitialTribes.hpp \
     EventCard.hpp \
-    Instruction/MoveTribesInstruction.hpp
+    Instruction/MoveTribesInstruction.hpp \
+    HowManyDialog.hpp \
+    Instruction/MainPhaseInstruction.hpp \
+    Instruction/DrawEventCardInstruction.hpp \
+    Event/Event.hpp \
+    Event/EpidemicEvent.hpp \
+    Instruction/DialogInstruction.hpp
 
 FORMS    +=
 

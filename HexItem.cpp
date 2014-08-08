@@ -26,6 +26,7 @@ void HexItem::drawHexBase()
     bool isFrontier = this->hexModel->isFrontier();
     bool isSea = this->hexModel->isSea();
     bool isRepresentative = this->hexModel->isRepresentativeHex();
+    bool isSelected = this->hexModel->isSelected();
 
     QPixmap result(this->hexModel->getBasePixmap());
 
@@ -47,6 +48,7 @@ void HexItem::drawHexBase()
 
         RegionModel *regionModel = this->hexModel->refRegionModel();
         int tribeCount = regionModel->getTribes();
+        int tribesMovedCount = regionModel->getMovedTribes();
 
         if(regionModel->hasMountain())
         {
@@ -63,18 +65,27 @@ void HexItem::drawHexBase()
             painter.drawPixmap(0,0,QPixmap(":/desert"));
         }
 
-        if(tribeCount > 0)
+        if(tribeCount+tribesMovedCount > 0)
         {
             painter.drawPixmap(0,0,QPixmap(":/tribe"));
 
-            painter.setPen(QColor(0,0,0));
+            if(tribeCount == 0)
+            {
+                painter.setPen(QColor(255,0,0));
+            }
+            else
+            {
+                painter.setPen(QColor(0,0,0));
+            }
             QFont font = painter.font();
             font.setFamily("Sans");
             font.setPointSize(6);
             painter.setFont(font);
-            painter.drawText(QRect(21,3,14,8),QString::number(tribeCount), QTextOption(Qt::AlignCenter));
+            painter.drawText(QRect(21,3,14,8),QString::number(tribeCount+tribesMovedCount), QTextOption(Qt::AlignCenter));
             painter.setPen(HEX_BORDER_COLOR);
         }
+
+        // TODO: Put in some borders for the representative.
     }
 
     painter.setPen(HEX_BORDER_COLOR);
@@ -124,6 +135,11 @@ void HexItem::drawHexBase()
     if(!this->isEnabled())
     {
         painter.drawPixmap(0,0,QPixmap(":/hex_disabled"));
+    }
+
+    if(isSelected)
+    {
+        painter.drawPixmap(0,0,QPixmap(":/hex_selected"));
     }
 
     this->setPixmap(result);
