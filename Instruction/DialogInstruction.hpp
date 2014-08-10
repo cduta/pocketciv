@@ -10,14 +10,14 @@ class DialogInstruction : public Instruction
 
 private:
     BoardModel *boardModel;
-    Instruction *previousInstruction;
+    Instruction *interruptedInstruction;
     QDialog *instructionDialog;
 
 public:
-    DialogInstruction(BoardModel *boardModel, Instruction *previousInstruction, QDialog *instructionDialog, QObject *parent = 0);
+    DialogInstruction(BoardModel *boardModel, Instruction *interruptedInstruction, QDialog *instructionDialog, QObject *parent = 0);
     ~DialogInstruction();
 
-    virtual Instruction *getPreviousInstruction();
+    virtual Instruction *getFollowingInstruction();
 
 private slots:
     void closeDialog();

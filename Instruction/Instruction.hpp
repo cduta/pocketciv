@@ -19,7 +19,7 @@ public:
 
     virtual Instruction *triggerHex(Qt::MouseButton, int, int);
     virtual Instruction *triggerDone();
-    virtual Instruction *getPreviousInstruction();
+    virtual Instruction *getFollowingInstruction();
 
     bool keepInstruction();
 

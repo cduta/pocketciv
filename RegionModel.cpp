@@ -6,10 +6,43 @@ RegionModel::RegionModel(int region, QObject *parent)
       tribes(0),
       movedTribes(0),
       mountain(false),
+      volcano(false),
       forest(false),
+      farm(false),
       desert(false),
-      selected(false)
+      selected(false),
+      city(false),
+      cityAV(0)
 {}
+
+int RegionModel::getTribeSupportCount() const
+{
+    int result = 0;
+
+    if(this->mountain)
+    {
+        result++;
+    }
+
+    if(this->volcano)
+    {
+        result++;
+    }
+
+    if(this->forest)
+    {
+        result++;
+    }
+
+    if(this->farm)
+    {
+        result++;
+    }
+
+    result += this->cityAV;
+
+    return result;
+}
 
 void RegionModel::toggleMountain()
 {
@@ -56,9 +89,19 @@ bool RegionModel::hasMountain() const
     return this->mountain;
 }
 
+bool RegionModel::hasVolcano() const
+{
+    return this->volcano;
+}
+
 bool RegionModel::hasForest() const
 {
     return this->forest;
+}
+
+bool RegionModel::hasFarm() const
+{
+    return this->farm;
 }
 
 bool RegionModel::hasDesert() const
@@ -69,6 +112,16 @@ bool RegionModel::hasDesert() const
 bool RegionModel::isSelected() const
 {
     return this->selected;
+}
+
+bool RegionModel::hasCity() const
+{
+    return this->city;
+}
+
+int RegionModel::getCityAV() const
+{
+    return this->cityAV;
 }
 
 void RegionModel::setTribes(int tribes)

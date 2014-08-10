@@ -29,6 +29,7 @@ private:
     int region; // -1, if it isn't associated with any region.
     bool enable;
     bool selected;
+    bool active;
     int visibleBorders;
     QMap<int, HexModel *> adjacentHexes; // Int represents the border of this hex on which the hex borders on.
     bool regionNumberShown;
@@ -62,6 +63,7 @@ public:
     QString getBasePixmap() const;
     bool isRepresentativeHex() const;
     bool isSelected() const;
+    bool isActive() const;
 
     // Set-Methods
     void setEnable(bool enable);
@@ -77,6 +79,7 @@ public:
     void setBasePixmap(const QString &basePixmap);
     void setRepresentativeHex(bool representative, RegionModel *regionModel);
     void setSelected(bool selected);
+    void setActive(bool active);
 
     // Ref-Methods
     RegionModel *refRegionModel();

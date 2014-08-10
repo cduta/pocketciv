@@ -193,6 +193,7 @@ void PocketCivMain::generateNewBoard(BoardModel *boardModel)
     connect(this->boardModel, SIGNAL(sendCardsLeftCount(int)), this, SLOT(setEventCardsLeft(int)));
     connect(this->boardModel, SIGNAL(sendDoneText(const QString &)), this, SLOT(setDoneText(const QString &)));
     connect(this->boardModel, SIGNAL(sendDialogClosed()), this, SLOT(continueWithPreviousInstruction()));
+    connect(this->boardModel, SIGNAL(goldChanged(int)), this, SLOT(changeGoldCount(int)));
 
     if(this->instruction != NULL)
     {
@@ -258,7 +259,7 @@ void PocketCivMain::hexTriggerAction(Qt::MouseButton button, int x, int y)
 
 void PocketCivMain::continueWithPreviousInstruction()
 {
-    Instruction *nextInstruction = this->instruction->getPreviousInstruction();
+    Instruction *nextInstruction = this->instruction->getFollowingInstruction();
 
     if(nextInstruction == NULL)
     {
@@ -335,7 +336,7 @@ void PocketCivMain::newGameTriggered()
 
     this->overview->setEnabled(true);
     this->boardModel->disableButtons();
-    this->boardModel->enableButtons();
+    this->boardModel->enableDoneButton();
     this->done->setText("Done");
 
     this->messages->clear();

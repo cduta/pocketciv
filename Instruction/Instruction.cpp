@@ -24,7 +24,7 @@ Instruction *Instruction::triggerDone()
     return this;
 }
 
-Instruction *Instruction::getPreviousInstruction()
+Instruction *Instruction::getFollowingInstruction()
 {
     // Ignored, since there is no previous instruction usually.
     return this;

@@ -1,9 +1,9 @@
 #include "MoveTribesInstruction.hpp"
 
 #include "HowManyDialog.hpp"
-#include "Instruction/DrawEventCardInstruction.hpp"
 #include "Instruction/MainPhaseInstruction.hpp"
 #include "Instruction/DialogInstruction.hpp"
+#include "Instruction/EndOfEraInstruction.hpp"
 
 MoveTribesInstruction::MoveTribesInstruction(BoardModel *boardModel)
     : Instruction(), boardModel(boardModel)
@@ -14,9 +14,9 @@ void MoveTribesInstruction::initInstruction()
     this->boardModel->sendMessage("Done creating the world!");
     this->boardModel->clearMessages();
     this->boardModel->sendMessage("Discarding 3 event cards...");
-    this->boardModel->drawCard();
-    this->boardModel->drawCard();
-    this->boardModel->drawCard();
+    this->boardModel->drawCard(false);
+    this->boardModel->drawCard(false);
+    this->boardModel->drawCard(false);
     this->boardModel->sendMessage("The Game begins...");
     this->boardModel->sendMessage("Population Growth:");
     this->boardModel->sendMessage("Added 1 tribe to any region with at least 1 Tribe on it.");
@@ -84,10 +84,32 @@ Instruction *MoveTribesInstruction::triggerHex(Qt::MouseButton button, int x, in
 
 Instruction *MoveTribesInstruction::triggerDone()
 {
+    const Event *event = this->boardModel->drawOriginalCard()->getEvent(this->boardModel->getEra());
+    Instruction *main = new MainPhaseInstruction(this->boardModel);
+
+    if(event == NULL)
+    {
+        this->boardModel->sendMessage("Nothing occured...");
+        this->boardModel->sendMessage(" ");
+        main->initInstruction();
+        return main;
+    }
+
     this->boardModel->mergeTribesAllRegions();
     this->boardModel->unselectAllRegions();
+    this->boardModel->clearMessages();
+    Instruction *eventInstruction = event->happen(main);
+    Instruction *next;
 
-    Instruction *next = new DrawEventCardInstruction(this->boardModel, new MainPhaseInstruction(this->boardModel), this->boardModel->drawCard());
+    if(this->boardModel->isEndOfEra())
+    {
+        next = new EndOfEraInstruction(this->boardModel, eventInstruction);
+    }
+    else
+    {
+        next = eventInstruction;
+    }
+
     next->initInstruction();
     return next;
 }

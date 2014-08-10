@@ -16,5 +16,6 @@
         <file alias="desert">res/desert.png</file>
         <file alias="tribe">res/tribe.png</file>
         <file alias="hex_selected">res/hex_selected.png</file>
+        <file alias="hex_active">res/hex_active.png</file>
     </qresource>
 </RCC>

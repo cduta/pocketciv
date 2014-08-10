@@ -8,6 +8,7 @@
 
 BoardModel::BoardModel(int width, int height, QObject *parent)
     : QObject(parent),
+      activeRegion(NULL),
       buildCity(false),
       buildFarm(false),
       expedition(false),
@@ -17,28 +18,30 @@ BoardModel::BoardModel(int width, int height, QObject *parent)
       forestation(false),
       mining(false),
       doneEnabled(true),
+      gold(0),
       era(1),
-      lastEra(8)
+      lastEra(8),
+      originalCard(NULL)
 {
     this->newBoard(width, height);
     QMap<int, Event *> events;
-    events.insert(1, new EpidemicEvent(this));
-    this->eventCards.insert(new EventCard(events, this));
-    this->eventCards.insert(new EventCard(events, this));
-    this->eventCards.insert(new EventCard(events, this));
-    this->eventCards.insert(new EventCard(events, this));
-    this->eventCards.insert(new EventCard(events, this));
-    this->eventCards.insert(new EventCard(events, this));
-    this->eventCards.insert(new EventCard(events, this));
-    this->eventCards.insert(new EventCard(events, this));
-    this->eventCards.insert(new EventCard(events, this));
-    this->eventCards.insert(new EventCard(events, this));
-    this->eventCards.insert(new EventCard(events, this));
-    this->eventCards.insert(new EventCard(events, this));
-    this->eventCards.insert(new EventCard(events, this));
-    this->eventCards.insert(new EventCard(events, this));
-    this->eventCards.insert(new EventCard(events, this));
-    this->eventCards.insert(new EventCard(events, this));
+    events.insert(1, new EpidemicEvent(0,1,0,this));
+    this->eventCards.insert(new EventCard(1,7,6, events, this));
+    this->eventCards.insert(new EventCard(2,4,7, events, this));
+    this->eventCards.insert(new EventCard(3,5,8, events, this));
+    this->eventCards.insert(new EventCard(4,6,7, events, this));
+    this->eventCards.insert(new EventCard(5,3,9, events, this));
+    this->eventCards.insert(new EventCard(6,4,6, events, this));
+    this->eventCards.insert(new EventCard(7,5,7, events, this));
+    this->eventCards.insert(new EventCard(8,6,8, events, this));
+    this->eventCards.insert(new EventCard(1,7,9, events, this));
+    this->eventCards.insert(new EventCard(2,4,10, events, this));
+    this->eventCards.insert(new EventCard(3,5,7, events, this));
+    this->eventCards.insert(new EventCard(4,6,8, events, this));
+    this->eventCards.insert(new EventCard(5,3,9, events, this));
+    this->eventCards.insert(new EventCard(6,4,7, events, this));
+    this->eventCards.insert(new EventCard(7,5,8, events, this));
+    this->eventCards.insert(new EventCard(8,6,6, events, this));
     this->eventCardsLeft = this->eventCards.toList();
 }
 
@@ -279,14 +282,13 @@ void BoardModel::initialRegionModels()
 bool BoardModel::canMoveTribes(int fromRegion, int toRegion)
 {
     // Is Adjacent region?
-    foreach(HexModel *hex, this->regionHexes[fromRegion])
+    QMap<int, RegionModel *> adjacentRegions = this->getAdjacentRegions(fromRegion);
+
+    foreach(int adjacentRegion, adjacentRegions.keys())
     {
-        foreach(HexModel *adjacent, hex->getAdjacentHexes().values())
+        if(adjacentRegion == toRegion)
         {
-            if(adjacent->getRegion() == toRegion)
-            {
-                return true;
-            }
+            return true;
         }
     }
 
@@ -300,6 +302,12 @@ void BoardModel::mergeTribesAllRegions()
         regionModel->mergeMovedTribes();
     }
 
+    return;
+}
+
+void BoardModel::increaseEra()
+{
+    this->era++;
     return;
 }
 
@@ -324,18 +332,48 @@ void BoardModel::moveTribes(int fromRegion, int toRegion, int howMany)
     return;
 }
 
-const EventCard *BoardModel::drawCard()
+void BoardModel::decimateUnsupportedTribes()
+{
+    foreach(RegionModel *regionModel, this->regions)
+    {
+        int tribes = regionModel->getTribes();
+        int supportCount = regionModel->getTribeSupportCount();
+        int unsupportedTribes = tribes - supportCount;
+
+        if(unsupportedTribes > 0)
+        {
+            regionModel->setTribes(regionModel->getTribes() - unsupportedTribes);
+        }
+    }
+
+    return;
+}
+
+const EventCard *BoardModel::drawCard(bool tell)
 {
     const EventCard *card = this->eventCardsLeft.takeAt(Common::random() % this->eventCardsLeft.size());
 
-    if(this->eventCardsLeft.isEmpty())
-    {
-        this->eventCardsLeft = this->eventCards.toList();
-    }
-
     emit this->sendCardsLeftCount(this->eventCardsLeft.size());
 
+    if(tell)
+    {
+        this->sendMessage("Drawing a card...");
+        this->sendMessage(" ");
+    }
+
     return card;
+}
+
+const EventCard *BoardModel::drawOriginalCard(bool tell)
+{
+    this->originalCard = this->drawCard(tell);
+    return this->originalCard;
+}
+
+void BoardModel::reshuffleCards()
+{
+    this->eventCardsLeft = this->eventCards.toList();
+    return;
 }
 
 void BoardModel::setSelectRegion(int region, bool select)
@@ -376,9 +414,20 @@ void BoardModel::disableButtons()
     return;
 }
 
-void BoardModel::enableButtons()
+void BoardModel::enableDoneButton()
 {
     this->doneEnabled = true;
+    return;
+}
+
+void BoardModel::enableMainPhaseButtons()
+{
+    this->doneEnabled = true;
+    this->buildCity = true;
+    this->buildFarm = true;
+    this->expedition = true;
+    this->aquireAdvances = true;
+    this->buildWonder = true;
     return;
 }
 
@@ -470,6 +519,25 @@ QMap<int, QSet<HexModel *> > BoardModel::getRegionHexes() const
 QMap<int, RegionModel *> BoardModel::getRegions() const
 {
     return this->regions;
+}
+
+QMap<int, RegionModel *> BoardModel::getAdjacentRegions(int fromRegion) const
+{
+    QMap<int, RegionModel *> result;
+
+    foreach(HexModel *hex, this->regionHexes[fromRegion])
+    {
+        foreach(HexModel *adjacent, hex->getAdjacentHexes().values())
+        {
+            int region = adjacent->getRegion();
+            if(region >= 0 && !result.contains(region) && fromRegion != region)
+            {
+                result.insert(region, this->refRegionModel(region));
+            }
+        }
+    }
+
+    return result;
 }
 
 QMap<int, RegionModel *> BoardModel::getMountainRegions() const
@@ -619,14 +687,60 @@ bool BoardModel::isDoneEnabled() const
     return this->doneEnabled;
 }
 
-int BoardModel::getEra()
+int BoardModel::getEra() const
 {
     return this->era;
 }
 
-int BoardModel::getLastEra()
+int BoardModel::getLastEra() const
 {
     return this->lastEra;
+}
+
+bool BoardModel::isEndOfEra() const
+{
+    return this->eventCardsLeft.isEmpty();
+}
+
+void BoardModel::setActiveRegion(int region)
+{
+    this->unsetActiveRegion();
+    this->activeRegion = this->regions.value(region, NULL);
+
+    if(this->activeRegion != NULL)
+    {
+        QSet<HexModel *> selectedHexes = this->getRegionHexes().value(this->activeRegion->getRegion());
+
+        foreach(HexModel *regionModel, selectedHexes)
+        {
+            regionModel->setActive(true);
+        }
+    }
+
+    return;
+}
+
+void BoardModel::unsetActiveRegion()
+{
+    if(this->activeRegion != NULL)
+    {
+        QSet<HexModel *> selectedHexes = this->getRegionHexes().value(this->activeRegion->getRegion());
+
+        foreach(HexModel *regionModel, selectedHexes)
+        {
+            regionModel->setActive(false);
+        }
+    }
+
+    this->activeRegion = NULL;
+    return;
+}
+
+void BoardModel::setGold(int gold)
+{
+    this->gold = gold;
+    emit goldChanged(this->gold);
+    return;
 }
 
 HexModel *BoardModel::refHexModel(int x, int y)
@@ -642,7 +756,7 @@ RegionModel *BoardModel::refRegionModel(int x, int y)
     return this->refRegionModel(this->refHexModel(x,y)->getRegion());
 }
 
-RegionModel *BoardModel::refRegionModel(int region)
+RegionModel *BoardModel::refRegionModel(int region) const
 {
     if(region < 0)
     {
@@ -650,6 +764,16 @@ RegionModel *BoardModel::refRegionModel(int region)
     }
 
     return this->regions.value(region, NULL);
+}
+
+RegionModel *BoardModel::refActiveRegion() const
+{
+    return this->activeRegion;
+}
+
+const EventCard *BoardModel::refOriginalCard() const
+{
+    return this->originalCard;
 }
 
 void BoardModel::clearBoard()

@@ -30,10 +30,12 @@ SOURCES += main.cpp\
     Instruction/MoveTribesInstruction.cpp \
     HowManyDialog.cpp \
     Instruction/MainPhaseInstruction.cpp \
-    Instruction/DrawEventCardInstruction.cpp \
     Event/Event.cpp \
     Event/EpidemicEvent.cpp \
-    Instruction/DialogInstruction.cpp
+    Instruction/DialogInstruction.cpp \
+    Instruction/EndOfEraInstruction.cpp \
+    Instruction/Event/EpidemicEventInstruction.cpp \
+    Instruction/UpkeepInstruction.cpp
 
 HEADERS  += \
     PocketCivMain.hpp \
@@ -53,10 +55,12 @@ HEADERS  += \
     Instruction/MoveTribesInstruction.hpp \
     HowManyDialog.hpp \
     Instruction/MainPhaseInstruction.hpp \
-    Instruction/DrawEventCardInstruction.hpp \
     Event/Event.hpp \
     Event/EpidemicEvent.hpp \
-    Instruction/DialogInstruction.hpp
+    Instruction/DialogInstruction.hpp \
+    Instruction/EndOfEraInstruction.hpp \
+    Instruction/Event/EpidemicEventInstruction.hpp \
+    Instruction/UpkeepInstruction.hpp
 
 FORMS    +=
 

@@ -11,6 +11,7 @@ HexModel::HexModel(int xPos, int yPos, bool enable, int visibleBorders, QObject 
       region(-1),
       enable(enable),
       selected(false),
+      active(false),
       visibleBorders(visibleBorders),
       regionNumberShown(false),
       frontier(false),
@@ -131,6 +132,11 @@ bool HexModel::isSelected() const
     return this->selected;
 }
 
+bool HexModel::isActive() const
+{
+    return this->active;
+}
+
 void HexModel::setEnable(bool enable)
 {
     this->enable = enable;
@@ -234,6 +240,12 @@ void HexModel::setRepresentativeHex(bool representative, RegionModel *regionMode
 void HexModel::setSelected(bool selected)
 {
     this->selected = selected;
+    return;
+}
+
+void HexModel::setActive(bool active)
+{
+    this->active = active;
     return;
 }
 

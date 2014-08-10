@@ -27,6 +27,7 @@ void HexItem::drawHexBase()
     bool isSea = this->hexModel->isSea();
     bool isRepresentative = this->hexModel->isRepresentativeHex();
     bool isSelected = this->hexModel->isSelected();
+    bool isActive = this->hexModel->isActive();
 
     QPixmap result(this->hexModel->getBasePixmap());
 
@@ -140,6 +141,10 @@ void HexItem::drawHexBase()
     if(isSelected)
     {
         painter.drawPixmap(0,0,QPixmap(":/hex_selected"));
+    }
+    else if(isActive)
+    {
+        painter.drawPixmap(0,0,QPixmap(":/hex_active"));
     }
 
     this->setPixmap(result);

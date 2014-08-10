@@ -22,12 +22,14 @@ signals:
     void sendCardsLeftCount(int cardsLeftCount);
     void sendDoneText(const QString &text);
     void sendDialogClosed();
+    void goldChanged(int gold);
 
 private:
     QList<QList<HexModel *> > hexModels;
     QList<QSet<HexModel *> > seas;
     QMap<int, QSet<HexModel *> > regionHexes;
     QMap<int, RegionModel *> regions;
+    RegionModel *activeRegion;
     QSet<const EventCard *> eventCards;
     QList<const EventCard *> eventCardsLeft;
     bool buildCity;
@@ -40,8 +42,12 @@ private:
     bool mining;
     bool doneEnabled;
 
+    int gold;
+
     int era;
     int lastEra;
+
+    const EventCard *originalCard;
 
 public:
     BoardModel(int width, int height, QObject *parent = 0);
@@ -59,15 +65,21 @@ public:
 
     void mergeTribesAllRegions();
 
+    void increaseEra();
     void populationGrowth();
     void moveTribes(int fromRegion, int toRegion, int howMany);
+    void decimateUnsupportedTribes();
+    void decimateGold();
 
-    const EventCard *drawCard();
-    const EventCard *drawEventCard();
+    const EventCard *drawCard(bool tell = true);
+    const EventCard *drawOriginalCard(bool tell = true);
+    void discardDrawnCards();
+    void reshuffleCards();
     void setSelectRegion(int region, bool select);
     void unselectAllRegions();
     void disableButtons();
-    void enableButtons();
+    void enableDoneButton();
+    void enableMainPhaseButtons();
 
 private:
     void newBoard(int width, int height);
@@ -80,6 +92,7 @@ public:
     int getHeight() const;
     QMap<int, QSet<HexModel *> > getRegionHexes() const;
     QMap<int, RegionModel *> getRegions() const;
+    QMap<int, RegionModel *> getAdjacentRegions(int fromRegion) const;
     QMap<int, RegionModel *> getMountainRegions() const;
     QMap<int, RegionModel *> getForestRegions() const;
     int getMountainCount() const;
@@ -96,13 +109,21 @@ public:
     bool canDoForestation() const;
     bool canDoMining() const;
     bool isDoneEnabled() const;
-    int getEra();
-    int getLastEra();
+    int getEra() const;
+    int getLastEra() const;
+    bool isEndOfEra() const;
+
+// Set-Methods
+    void setActiveRegion(int region);
+    void unsetActiveRegion();
+    void setGold(int gold);
 
 // Ref-Methods
     HexModel *refHexModel(int x, int y);
     RegionModel *refRegionModel(int x, int y);
-    RegionModel *refRegionModel(int region);
+    RegionModel *refRegionModel(int region) const;
+    RegionModel *refActiveRegion() const;
+    const EventCard *refOriginalCard() const;
 
 private slots:
      void clearBoard();

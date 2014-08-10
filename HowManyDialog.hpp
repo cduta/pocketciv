@@ -28,7 +28,7 @@ public:
                   QWidget *parent = 0)
         : QDialog(parent),
           boardModel(boardModel),
-          howMany(0)
+          howMany(1)
     {
         QWidget *howManyWidget = new QWidget(this);
         QGridLayout *howManyLayout = new QGridLayout(howManyWidget);
