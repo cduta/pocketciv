@@ -295,7 +295,7 @@ bool BoardModel::canMoveTribes(int fromRegion, int toRegion)
     return false;
 }
 
-void BoardModel::mergeTribesAllRegions()
+void BoardModel::mergeAllMovedTribes()
 {
     foreach(RegionModel *regionModel, this->regions.values())
     {
@@ -346,6 +346,27 @@ void BoardModel::decimateUnsupportedTribes()
         }
     }
 
+    return;
+}
+
+void BoardModel::checkCitySupport()
+{
+    foreach(RegionModel *regionModel, this->regions.values())
+    {
+        if(regionModel->hasCity() && !regionModel->hasFarm())
+        {
+            regionModel->addCityAV(1);
+        }
+    }
+    return;
+}
+
+void BoardModel::decimateZeroAVCities()
+{
+    foreach(RegionModel *regionModel, this->regions.values())
+    {
+        regionModel->decimateZeroAVCity();
+    }
     return;
 }
 
@@ -428,6 +449,24 @@ void BoardModel::enableMainPhaseButtons()
     this->expedition = true;
     this->aquireAdvances = true;
     this->buildWonder = true;
+    return;
+}
+
+void BoardModel::decimateAllSelectedTribes()
+{
+    foreach(RegionModel *regionModel, this->regions.values())
+    {
+        regionModel->decimateSelectedTribes();
+    }
+    return;
+}
+
+void BoardModel::unselectAllSelectedTribes()
+{
+    foreach(RegionModel *regionModel, this->regions.values())
+    {
+        regionModel->setSelectedTribes(0);
+    }
     return;
 }
 
@@ -700,6 +739,30 @@ int BoardModel::getLastEra() const
 bool BoardModel::isEndOfEra() const
 {
     return this->eventCardsLeft.isEmpty();
+}
+
+int BoardModel::getAllMovedTribes() const
+{
+    int result = 0;
+
+    foreach(RegionModel *regionModel, this->regions.values())
+    {
+        result += regionModel->getMovedTribes();
+    }
+
+    return result;
+}
+
+int BoardModel::getAllSelectedTribes() const
+{
+    int result = 0;
+
+    foreach(RegionModel *regionModel, this->regions.values())
+    {
+        result += regionModel->getSelectedTribes();
+    }
+
+    return result;
 }
 
 void BoardModel::setActiveRegion(int region)

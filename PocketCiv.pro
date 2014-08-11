@@ -35,7 +35,8 @@ SOURCES += main.cpp\
     Instruction/DialogInstruction.cpp \
     Instruction/EndOfEraInstruction.cpp \
     Instruction/Event/EpidemicEventInstruction.cpp \
-    Instruction/UpkeepInstruction.cpp
+    Instruction/UpkeepInstruction.cpp \
+    Instruction/PopulationGrowthInstruction.cpp
 
 HEADERS  += \
     PocketCivMain.hpp \
@@ -60,7 +61,8 @@ HEADERS  += \
     Instruction/DialogInstruction.hpp \
     Instruction/EndOfEraInstruction.hpp \
     Instruction/Event/EpidemicEventInstruction.hpp \
-    Instruction/UpkeepInstruction.hpp
+    Instruction/UpkeepInstruction.hpp \
+    Instruction/PopulationGrowthInstruction.hpp
 
 FORMS    +=
 

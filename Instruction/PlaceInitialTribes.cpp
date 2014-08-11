@@ -45,6 +45,17 @@ Instruction *PlaceInitialTribes::triggerDone()
 {
     if(this->boardModel->getTribeCount() == 3)
     {
+        this->boardModel->sendMessage("Done creating the world!");
+        this->boardModel->clearMessages();
+        this->boardModel->sendMessage("Discarding 3 event cards...");
+        this->boardModel->drawCard(false);
+        this->boardModel->drawCard(false);
+        this->boardModel->drawCard(false);
+        this->boardModel->sendMessage("The Game begins...");
+        this->boardModel->sendMessage("Population Growth:");
+        this->boardModel->sendMessage("Added 1 tribe to any region with at least 1 Tribe on it.");
+        this->boardModel->populationGrowth();
+        this->boardModel->sendMessage(" ");
         Instruction *next = new MoveTribesInstruction(this->boardModel);
         next->initInstruction();
         return next;

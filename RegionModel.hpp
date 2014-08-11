@@ -9,6 +9,7 @@ class RegionModel : public QObject
     int region;
     int tribes;
     int movedTribes;
+    int selectedTribes;
     bool mountain;
     bool volcano;
     bool forest;
@@ -17,7 +18,6 @@ class RegionModel : public QObject
     bool selected;
     bool city;
     int cityAV;
-
 public:
     RegionModel(int region = -1, QObject *parent = 0);
 
@@ -28,12 +28,20 @@ public:
     void toggleForest();
 
     void addToMovedTribes(int movedTribes);
+    void removeFromMovedTribes(int movedTribes);
     void mergeMovedTribes();
+
+    void decimateSelectedTribes();
+
+    void addCityAV(int cityAV);
+    void decreaseCityAV(int cityAV);
+    void decimateZeroAVCity();
 
     // Get-Methods
     int getRegion() const;
     int getTribes() const;
     int getMovedTribes() const;
+    int getSelectedTribes() const;
     bool hasMountain() const;
     bool hasVolcano() const;
     bool hasForest() const;
@@ -45,6 +53,7 @@ public:
 
     // Set-Methods
     void setTribes(int tribes);
+    void setSelectedTribes(int selectedTribes);
     void unsetMountain();
     void unsetForest();
     void setDesert();

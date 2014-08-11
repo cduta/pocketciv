@@ -1,10 +1,13 @@
 #include "RegionModel.hpp"
 
+#include <boost/assert.hpp>
+
 RegionModel::RegionModel(int region, QObject *parent)
     : QObject(parent),
       region(region),
       tribes(0),
       movedTribes(0),
+      selectedTribes(0),
       mountain(false),
       volcano(false),
       forest(false),
@@ -62,10 +65,57 @@ void RegionModel::addToMovedTribes(int movedTribes)
     return;
 }
 
+void RegionModel::removeFromMovedTribes(int movedTribes)
+{
+    this->movedTribes -= movedTribes;
+    return;
+}
+
 void RegionModel::mergeMovedTribes()
 {
     this->tribes += this->movedTribes;
     this->movedTribes = 0;
+    return;
+}
+
+void RegionModel::decimateSelectedTribes()
+{
+    this->setTribes(this->tribes - this->selectedTribes);
+    this->setSelectedTribes(0);
+    return;
+}
+
+void RegionModel::addCityAV(int cityAV)
+{
+    this->cityAV += cityAV;
+
+    if(this->cityAV < 0)
+    {
+        this->cityAV = 0;
+    }
+
+    return;
+}
+
+void RegionModel::decreaseCityAV(int cityAV)
+{
+    this->cityAV -= cityAV;
+
+    if(this->cityAV < 0)
+    {
+        this->cityAV = 0;
+    }
+
+    return;
+}
+
+void RegionModel::decimateZeroAVCity()
+{
+    if(this->cityAV <= 0)
+    {
+        this->cityAV = 0;
+        this->city = false;
+    }
     return;
 }
 
@@ -82,6 +132,11 @@ int RegionModel::getTribes() const
 int RegionModel::getMovedTribes() const
 {
     return this->movedTribes;
+}
+
+int RegionModel::getSelectedTribes() const
+{
+    return this->selectedTribes;
 }
 
 bool RegionModel::hasMountain() const
@@ -127,6 +182,13 @@ int RegionModel::getCityAV() const
 void RegionModel::setTribes(int tribes)
 {
     this->tribes = tribes;
+    return;
+}
+
+void RegionModel::setSelectedTribes(int selectedTribes)
+{
+    assert(selectedTribes <= this->tribes);
+    this->selectedTribes = selectedTribes;
     return;
 }
 

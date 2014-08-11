@@ -50,6 +50,7 @@ void HexItem::drawHexBase()
         RegionModel *regionModel = this->hexModel->refRegionModel();
         int tribeCount = regionModel->getTribes();
         int tribesMovedCount = regionModel->getMovedTribes();
+        int tribesSelectedCount = regionModel->getSelectedTribes();
 
         if(regionModel->hasMountain())
         {
@@ -70,7 +71,7 @@ void HexItem::drawHexBase()
         {
             painter.drawPixmap(0,0,QPixmap(":/tribe"));
 
-            if(tribeCount == 0)
+            if(tribeCount == 0 || tribesSelectedCount > 0)
             {
                 painter.setPen(QColor(255,0,0));
             }
@@ -82,7 +83,7 @@ void HexItem::drawHexBase()
             font.setFamily("Sans");
             font.setPointSize(6);
             painter.setFont(font);
-            painter.drawText(QRect(21,3,14,8),QString::number(tribeCount+tribesMovedCount), QTextOption(Qt::AlignCenter));
+            painter.drawText(QRect(21,3,14,8),QString::number(tribeCount+tribesMovedCount-tribesSelectedCount), QTextOption(Qt::AlignCenter));
             painter.setPen(HEX_BORDER_COLOR);
         }
 

@@ -63,13 +63,15 @@ public:
 
     bool canMoveTribes(int fromRegion, int toRegion);
 
-    void mergeTribesAllRegions();
+    void mergeAllMovedTribes();
 
     void increaseEra();
     void populationGrowth();
     void moveTribes(int fromRegion, int toRegion, int howMany);
     void decimateUnsupportedTribes();
     void decimateGold();
+    void checkCitySupport();
+    void decimateZeroAVCities();
 
     const EventCard *drawCard(bool tell = true);
     const EventCard *drawOriginalCard(bool tell = true);
@@ -80,6 +82,8 @@ public:
     void disableButtons();
     void enableDoneButton();
     void enableMainPhaseButtons();
+    void decimateAllSelectedTribes();
+    void unselectAllSelectedTribes();
 
 private:
     void newBoard(int width, int height);
@@ -112,6 +116,8 @@ public:
     int getEra() const;
     int getLastEra() const;
     bool isEndOfEra() const;
+    int getAllMovedTribes() const;
+    int getAllSelectedTribes() const;
 
 // Set-Methods
     void setActiveRegion(int region);

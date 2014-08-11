@@ -11,17 +11,6 @@ MoveTribesInstruction::MoveTribesInstruction(BoardModel *boardModel)
 
 void MoveTribesInstruction::initInstruction()
 {
-    this->boardModel->sendMessage("Done creating the world!");
-    this->boardModel->clearMessages();
-    this->boardModel->sendMessage("Discarding 3 event cards...");
-    this->boardModel->drawCard(false);
-    this->boardModel->drawCard(false);
-    this->boardModel->drawCard(false);
-    this->boardModel->sendMessage("The Game begins...");
-    this->boardModel->sendMessage("Population Growth:");
-    this->boardModel->sendMessage("Added 1 tribe to any region with at least 1 Tribe on it.");
-    this->boardModel->populationGrowth();
-    this->boardModel->sendMessage(" ");
     this->boardModel->sendMessage("Population Movement:");
     this->boardModel->sendMessage("Move tribes from one to another region. Every tribe can be moved once.");
     this->boardModel->sendMessage("When you are done, press Done...");
@@ -95,7 +84,7 @@ Instruction *MoveTribesInstruction::triggerDone()
         return main;
     }
 
-    this->boardModel->mergeTribesAllRegions();
+    this->boardModel->mergeAllMovedTribes();
     this->boardModel->unselectAllRegions();
     this->boardModel->clearMessages();
     Instruction *eventInstruction = event->happen(main);

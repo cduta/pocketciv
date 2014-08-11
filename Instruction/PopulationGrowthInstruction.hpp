@@ -1,16 +1,15 @@
-#ifndef UPKEEPINSTRUCTION_HPP
-#define UPKEEPINSTRUCTION_HPP
+#ifndef POPULATIONGROWTHINSTRUCTION_HPP
+#define POPULATIONGROWTHINSTRUCTION_HPP
 
 #include "Instruction/Instruction.hpp"
 #include "BoardModel.hpp"
 
-class UpkeepInstruction : public Instruction
+class PopulationGrowthInstruction : public Instruction
 {
     BoardModel *boardModel;
-    bool done;
 
 public:
-    UpkeepInstruction(BoardModel *boardModel);
+    PopulationGrowthInstruction(BoardModel *boardModel);
 
     virtual void initInstruction();
 
@@ -18,4 +17,4 @@ public:
     virtual Instruction *triggerDone();
 };
 
-#endif // UPKEEPINSTRUCTION_HPP
+#endif // POPULATIONGROWTHINSTRUCTION_HPP
