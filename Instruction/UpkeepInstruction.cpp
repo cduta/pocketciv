@@ -1,6 +1,7 @@
 #include "UpkeepInstruction.hpp"
 
 #include "Instruction/PopulationGrowthInstruction.hpp"
+#include "Instruction/EndGameInstruction.hpp"
 
 UpkeepInstruction::UpkeepInstruction(BoardModel *boardModel)
     : Instruction(), boardModel(boardModel), done(false)
@@ -118,6 +119,7 @@ Instruction *UpkeepInstruction::triggerDone()
         this->boardModel->sendMessage("Any city in a region without a farm has its AV reduced by 1.");
         this->boardModel->sendMessage("Any city with 0 AV will be decimated.");
         this->boardModel->sendMessage(" ");
+        this->boardModel->sendMessage("This rounds up the Upkeep.");
         this->boardModel->sendMessage("Press done to continue.");
         this->boardModel->sendMessage(" ");
         this->boardModel->checkCitySupport();
@@ -127,7 +129,17 @@ Instruction *UpkeepInstruction::triggerDone()
 
     if(this->done)
     {
-        Instruction *next = new PopulationGrowthInstruction(this->boardModel);
+        Instruction *next;
+        if(this->boardModel->getTribeCount() == 0 && !this->boardModel->hasCity())
+        {
+            this->boardModel->clearMessages();
+            this->boardModel->sendMessage("The EMPIRE had no more tribes and cities left.");
+            next = new EndGameInstruction(this->boardModel);
+        }
+        else
+        {
+            next = new PopulationGrowthInstruction(this->boardModel);
+        }
         next->initInstruction();
         return next;
     }

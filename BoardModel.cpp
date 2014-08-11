@@ -21,6 +21,7 @@ BoardModel::BoardModel(int width, int height, QObject *parent)
       gold(0),
       era(1),
       lastEra(8),
+      gloryScore(0),
       originalCard(NULL)
 {
     this->newBoard(width, height);
@@ -686,6 +687,19 @@ bool BoardModel::canBuildCity() const
     return this->buildCity;
 }
 
+bool BoardModel::hasCity() const
+{
+    foreach(RegionModel *regionModel, this->regions.values())
+    {
+        if(regionModel->hasCity())
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 bool BoardModel::canBuildFarm() const
 {
     return this->buildFarm;
@@ -765,6 +779,11 @@ int BoardModel::getAllSelectedTribes() const
     return result;
 }
 
+int BoardModel::getGloryScore() const
+{
+    return this->gloryScore;
+}
+
 void BoardModel::setActiveRegion(int region)
 {
     this->unsetActiveRegion();
@@ -803,6 +822,13 @@ void BoardModel::setGold(int gold)
 {
     this->gold = gold;
     emit goldChanged(this->gold);
+    return;
+}
+
+void BoardModel::setGloryScore(int gloryScore)
+{
+    this->gloryScore = gloryScore;
+    emit this->gloryScoreChanged(this->gloryScore);
     return;
 }
 

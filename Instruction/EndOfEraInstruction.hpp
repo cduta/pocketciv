@@ -8,6 +8,7 @@ class EndOfEraInstruction : public Instruction
 {
     BoardModel *boardModel;
     Instruction *interruptedInstruction;
+    bool endGame;
 
 public:
     EndOfEraInstruction(BoardModel *boardModel, Instruction *interruptedInstruction);

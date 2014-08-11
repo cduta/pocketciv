@@ -23,6 +23,7 @@ signals:
     void sendDoneText(const QString &text);
     void sendDialogClosed();
     void goldChanged(int gold);
+    void gloryScoreChanged(int gloryScore);
 
 private:
     QList<QList<HexModel *> > hexModels;
@@ -46,6 +47,8 @@ private:
 
     int era;
     int lastEra;
+
+    int gloryScore;
 
     const EventCard *originalCard;
 
@@ -105,6 +108,7 @@ public:
     int getTribeCount() const;
     QMap<int, RegionModel *> getSelectedRegions() const;
     bool canBuildCity() const;
+    bool hasCity() const;
     bool canBuildFarm() const;
     bool canDoExpedition() const;
     bool canAquireAdvance() const;
@@ -118,11 +122,13 @@ public:
     bool isEndOfEra() const;
     int getAllMovedTribes() const;
     int getAllSelectedTribes() const;
+    int getGloryScore() const;
 
 // Set-Methods
     void setActiveRegion(int region);
     void unsetActiveRegion();
     void setGold(int gold);
+    void setGloryScore(int gloryScore);
 
 // Ref-Methods
     HexModel *refHexModel(int x, int y);

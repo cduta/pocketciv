@@ -1,7 +1,10 @@
 #include "EndOfEraInstruction.hpp"
 
+#include "DecisionDialog.hpp"
+#include "Instruction/EndGameInstruction.hpp"
+
 EndOfEraInstruction::EndOfEraInstruction(BoardModel *boardModel, Instruction *interruptedInstruction)
-    : Instruction(), boardModel(boardModel), interruptedInstruction(interruptedInstruction)
+    : Instruction(), boardModel(boardModel), interruptedInstruction(interruptedInstruction), endGame(false)
 {
     this->interruptedInstruction->setKeepInstruction(true);
 }
@@ -13,19 +16,33 @@ void EndOfEraInstruction::initInstruction()
     // Check if city amount is >= current era.
     // Choose as many advances, as there are tribes in the empire (new instruction and return).
     // otherwise continue:
-    // Choose if you want to end the game.
-    this->boardModel->sendMessage("When you are done, press Done...");
+    DecisionDialog decisionDialog("End Game?", "Do you really want to end the game and receive your final score?", "Yes", "No", true);
+    int result = decisionDialog.exec();
+    if(result == QDialog::Accepted)
+    {
+        this->endGame = true;
+        this->boardModel->sendMessage("You chose to end the game.");
+    }
+
+    this->boardModel->sendMessage("Press Done to continue...");
     return;
 }
 
 Instruction *EndOfEraInstruction::triggerDone()
 {
-    if(this->boardModel->getEra() == this->boardModel->getLastEra())
+    if(this->boardModel->getEra() == this->boardModel->getLastEra() || this->endGame)
     {
-        this->boardModel->sendMessage("The last era is over...");
-        this->boardModel->sendMessage("The game ends...");
-        //this->nextInstruction->deleteLater();
-        //set end of game instruction.
+        this->boardModel->clearMessages();
+
+        if(this->boardModel->getEra() == this->boardModel->getLastEra())
+        {
+            this->boardModel->sendMessage("The last era is over.");
+        }
+
+        this->interruptedInstruction->deleteLater();
+        Instruction *next = new EndGameInstruction(this->boardModel);
+        next->initInstruction();
+        return next;
     }
     else
     {
