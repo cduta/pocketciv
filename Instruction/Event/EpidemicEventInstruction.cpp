@@ -131,8 +131,6 @@ Instruction *EpidemicEventInstruction::setActiveRegion()
         this->boardModel->sendMessage("The EPIDEMIC will not spread.");
         this->boardModel->sendMessage("The event ends...");
         this->boardModel->sendMessage(" ");
-        this->boardModel->sendMessage("Press Done to continue.");
-        this->boardModel->sendMessage(" ");
         this->boardModel->unsetActiveRegion();
         this->nextInstruction->setKeepInstruction(false);
         this->nextInstruction->initInstruction();
@@ -173,8 +171,6 @@ Instruction *EpidemicEventInstruction::continueEpidemic()
         this->boardModel->sendMessage(QString("The Population loss is 0."));
         this->boardModel->sendMessage("The event ends...");
         this->boardModel->sendMessage(" ");
-        this->boardModel->sendMessage("Press Done to continue.");
-        this->boardModel->sendMessage(" ");
         this->boardModel->unsetActiveRegion();
         this->nextInstruction->setKeepInstruction(false);
         this->nextInstruction->initInstruction();
@@ -188,8 +184,6 @@ Instruction *EpidemicEventInstruction::continueEpidemic()
         this->boardModel->sendMessage(" ");
         this->boardModel->sendMessage(QString("The EPIDEMIC cannot spread with 2 or less tribes left in the empire."));
         this->boardModel->sendMessage("The event ends...");
-        this->boardModel->sendMessage(" ");
-        this->boardModel->sendMessage("Press Done to continue.");
         this->boardModel->sendMessage(" ");
         this->boardModel->unsetActiveRegion();
         this->nextInstruction->setKeepInstruction(false);
@@ -212,8 +206,6 @@ Instruction *EpidemicEventInstruction::continueEpidemic()
     {
         this->boardModel->sendMessage(QString("No adjacent regions has any tribes and the EPIDEMIC is stopped."));
         this->boardModel->sendMessage("The event ends...");
-        this->boardModel->sendMessage(" ");
-        this->boardModel->sendMessage("Press Done to continue.");
         this->boardModel->sendMessage(" ");
         this->boardModel->unsetActiveRegion();
         this->nextInstruction->setKeepInstruction(false);

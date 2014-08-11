@@ -12,6 +12,7 @@ HexModel::HexModel(int xPos, int yPos, bool enable, int visibleBorders, QObject 
       enable(enable),
       selected(false),
       active(false),
+      bad(false),
       visibleBorders(visibleBorders),
       regionNumberShown(false),
       frontier(false),
@@ -137,6 +138,11 @@ bool HexModel::isActive() const
     return this->active;
 }
 
+bool HexModel::activeIsBad() const
+{
+    return this->bad;
+}
+
 void HexModel::setEnable(bool enable)
 {
     this->enable = enable;
@@ -243,8 +249,9 @@ void HexModel::setSelected(bool selected)
     return;
 }
 
-void HexModel::setActive(bool active)
+void HexModel::setActive(bool active, bool isBad)
 {
+    this->bad = isBad;
     this->active = active;
     return;
 }

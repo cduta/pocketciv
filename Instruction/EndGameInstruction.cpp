@@ -18,10 +18,10 @@ void EndGameInstruction::initInstruction()
 
 Instruction *EndGameInstruction::triggerDone()
 {
-    // Choose your advances.
+    // TODO: Choose your advances.
     this->boardModel->sendMessage(" ");
     this->boardModel->sendMessage("Adding all VPs of the Wonders to the final Glory Score.");
-    // Add the Wonders to the final glory score.
+    // TODO: Add the Wonders to the final glory score.
     this->boardModel->sendMessage(" ");
     this->boardModel->sendMessage(QString("Your final Glory Score is: %1 !").arg(this->boardModel->getGloryScore()));
     this->boardModel->sendMessage(" ");

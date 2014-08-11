@@ -28,6 +28,7 @@ void HexItem::drawHexBase()
     bool isRepresentative = this->hexModel->isRepresentativeHex();
     bool isSelected = this->hexModel->isSelected();
     bool isActive = this->hexModel->isActive();
+    bool isBad = this->hexModel->activeIsBad();
 
     QPixmap result(this->hexModel->getBasePixmap());
 
@@ -145,7 +146,14 @@ void HexItem::drawHexBase()
     }
     else if(isActive)
     {
-        painter.drawPixmap(0,0,QPixmap(":/hex_active"));
+        if(isBad)
+        {
+            painter.drawPixmap(0,0,QPixmap(":/hex_active_bad"));
+        }
+        else
+        {
+            painter.drawPixmap(0,0,QPixmap(":/hex_active_good"));
+        }
     }
 
     this->setPixmap(result);

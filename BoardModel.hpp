@@ -125,7 +125,7 @@ public:
     int getGloryScore() const;
 
 // Set-Methods
-    void setActiveRegion(int region);
+    void setActiveRegion(int region, bool isBad = true);
     void unsetActiveRegion();
     void setGold(int gold);
     void setGloryScore(int gloryScore);

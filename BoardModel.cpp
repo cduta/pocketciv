@@ -784,7 +784,7 @@ int BoardModel::getGloryScore() const
     return this->gloryScore;
 }
 
-void BoardModel::setActiveRegion(int region)
+void BoardModel::setActiveRegion(int region, bool isBad)
 {
     this->unsetActiveRegion();
     this->activeRegion = this->regions.value(region, NULL);
@@ -795,7 +795,7 @@ void BoardModel::setActiveRegion(int region)
 
         foreach(HexModel *regionModel, selectedHexes)
         {
-            regionModel->setActive(true);
+            regionModel->setActive(true, isBad);
         }
     }
 

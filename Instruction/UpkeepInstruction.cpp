@@ -38,10 +38,13 @@ Instruction *UpkeepInstruction::triggerHex(Qt::MouseButton button, int x, int y)
     {
         if(activeRegion == NULL)
         {
-            this->boardModel->setActiveRegion(regionModel->getRegion());
-            this->boardModel->sendDoneText("Cancel");
+            if(regionModel->hasCity())
+            {
+                this->boardModel->setActiveRegion(regionModel->getRegion(), true);
+                this->boardModel->sendDoneText("Cancel");
+            }
         }
-        else if(activeRegion != NULL && regionModel->getTribes() - regionModel->getSelectedTribes() > 0)
+        else if(activeRegion != NULL && (regionModel->getTribes() - regionModel->getSelectedTribes()) > 0)
         {
             int selectedTribes = this->boardModel->getAllSelectedTribes();
             int toBePaid = activeRegion->getCityAV()+1;
