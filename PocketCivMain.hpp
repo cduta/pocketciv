@@ -66,6 +66,7 @@ public:
 
 private:
     void generateNewBoard(BoardModel *boardModel);
+    void processInstruction(Instruction *nextInstruction);
 
 private slots:
     void clearBoard();
@@ -85,6 +86,11 @@ private slots:
     void newGameTriggered();
 
     void buildCityTriggered();
+    void buildFarmTriggered();
+    void expeditionTriggered();
+    void aquireAdvanceTriggered();
+    void buildWonderTriggered();
+
     void doneTriggered();
     void updateBoard();
 

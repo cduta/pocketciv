@@ -21,6 +21,9 @@ public:
     virtual Instruction *triggerDone();
     virtual Instruction *getFollowingInstruction();
 
+    virtual Instruction *triggerBuildCity();
+    virtual Instruction *triggerBuildFarm();
+
     bool keepInstruction();
 
     void setKeepInstruction(bool keep);

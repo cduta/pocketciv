@@ -185,6 +185,18 @@ void RegionModel::setTribes(int tribes)
     return;
 }
 
+void RegionModel::setCity(bool city)
+{
+    this->city = city;
+    return;
+}
+
+void RegionModel::setCityAV(int cityAV)
+{
+    this->cityAV = cityAV;
+    return;
+}
+
 void RegionModel::setSelectedTribes(int selectedTribes)
 {
     assert(selectedTribes <= this->tribes);
@@ -192,27 +204,27 @@ void RegionModel::setSelectedTribes(int selectedTribes)
     return;
 }
 
-void RegionModel::unsetMountain()
+void RegionModel::setMountain(bool mountain)
 {
-    this->mountain = false;
+    this->mountain = mountain;
     return;
 }
 
-void RegionModel::unsetForest()
+void RegionModel::setForest(bool forest)
 {
-    this->forest = false;
+    this->forest = forest;
     return;
 }
 
-void RegionModel::setDesert()
+void RegionModel::setFarm(bool farm)
 {
-    this->desert = true;
+    this->farm = farm;
     return;
 }
 
-void RegionModel::unsetDesert()
+void RegionModel::setDesert(bool desert)
 {
-    this->desert = false;
+    this->desert = desert;
     return;
 }
 

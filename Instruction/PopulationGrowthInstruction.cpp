@@ -31,6 +31,12 @@ void PopulationGrowthInstruction::initInstruction()
 Instruction *PopulationGrowthInstruction::triggerHex(Qt::MouseButton button, int x, int y)
 {
     RegionModel *regionModel = this->boardModel->refRegionModel(x,y);
+
+    if(regionModel == NULL)
+    {
+        return this;
+    }
+
     int tribesMoved = this->boardModel->getAllMovedTribes();
     int tribes = this->boardModel->getTribeCount();
 

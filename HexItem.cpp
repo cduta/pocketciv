@@ -52,6 +52,9 @@ void HexItem::drawHexBase()
         int tribeCount = regionModel->getTribes();
         int tribesMovedCount = regionModel->getMovedTribes();
         int tribesSelectedCount = regionModel->getSelectedTribes();
+        bool hasCity = regionModel->hasCity();
+        int cityAV = regionModel->getCityAV();
+        bool hasFarm = regionModel->hasFarm();
 
         if(regionModel->hasMountain())
         {
@@ -86,6 +89,22 @@ void HexItem::drawHexBase()
             painter.setFont(font);
             painter.drawText(QRect(21,3,14,8),QString::number(tribeCount+tribesMovedCount-tribesSelectedCount), QTextOption(Qt::AlignCenter));
             painter.setPen(HEX_BORDER_COLOR);
+        }
+
+        if(hasCity)
+        {
+            painter.drawPixmap(0,0,QPixmap(":/city"));
+            QFont font = painter.font();
+            font.setFamily("Sans");
+            font.setPointSize(5);
+            painter.setFont(font);
+            painter.drawText(QRect(18,22,13,7),QString::number(cityAV), QTextOption(Qt::AlignCenter));
+            painter.setPen(HEX_BORDER_COLOR);
+        }
+
+        if(hasFarm)
+        {
+            painter.drawPixmap(0,0,QPixmap(":/farm"));
         }
 
         // TODO: Put in some borders for the representative.

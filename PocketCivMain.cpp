@@ -41,12 +41,16 @@ PocketCivMain::PocketCivMain(QWidget *parent) :
     connect(this->buildCity, SIGNAL(clicked()), this, SLOT(buildCityTriggered()));
     this->buildFarm =       new QPushButton("Build Farm", &this->dockWidget);
     this->buildFarm->setEnabled(false);
+    connect(this->buildFarm, SIGNAL(clicked()), this, SLOT(buildFarmTriggered()));
     this->expedition =      new QPushButton("Expedition", &this->dockWidget);
     this->expedition->setEnabled(false);
+    connect(this->expedition, SIGNAL(clicked()), this, SLOT(expeditionTriggered()));
     this->aquireAdvance =   new QPushButton("Aquire Advance", &this->dockWidget);
     this->aquireAdvance->setEnabled(false);
+    connect(this->aquireAdvance, SIGNAL(clicked()), this, SLOT(aquireAdvanceTriggered()));
     this->buildWonder =     new QPushButton("Build Wonder", &this->dockWidget);
     this->buildWonder->setEnabled(false);
+    connect(this->buildWonder, SIGNAL(clicked()), this, SLOT(buildWonderTriggered()));
 
     this->collectTaxes =    new QPushButton("Collect Taxes", &this->dockWidget);
     this->collectTaxes->setEnabled(false);
@@ -205,6 +209,26 @@ void PocketCivMain::generateNewBoard(BoardModel *boardModel)
     this->updateBoard();
 }
 
+void PocketCivMain::processInstruction(Instruction *nextInstruction)
+{
+    if(nextInstruction == NULL)
+    {
+        std::cout << "Instruction failed." << std::endl;
+        this->instruction = new NoInstruction();
+        return;
+    }
+
+    if(this->instruction != nextInstruction && !this->instruction->keepInstruction())
+    {
+        this->instruction->deleteLater();
+    }
+
+    this->instruction = nextInstruction;
+
+    this->updateBoard();
+    return;
+}
+
 void PocketCivMain::clearBoard()
 {
     foreach(QList<HexItem *> list, this->hexItems)
@@ -237,45 +261,17 @@ void PocketCivMain::updateHex(int x, int y)
     return;
 }
 
+
+
 void PocketCivMain::hexTriggerAction(Qt::MouseButton button, int x, int y)
 {
-    Instruction *nextInstruction = this->instruction->triggerHex(button, x, y);
-
-    if(nextInstruction == NULL)
-    {
-        std::cout << "Instruction failed." << std::endl;
-        this->instruction = new NoInstruction();
-        return;
-    }
-
-    if(this->instruction != nextInstruction && !this->instruction->keepInstruction())
-    {
-        this->instruction->deleteLater();
-    }
-
-    this->instruction = nextInstruction;
-    this->updateBoard();
+    this->processInstruction(this->instruction->triggerHex(button, x, y));
     return;
 }
 
 void PocketCivMain::continueWithPreviousInstruction()
 {
-    Instruction *nextInstruction = this->instruction->getFollowingInstruction();
-
-    if(nextInstruction == NULL)
-    {
-        std::cout << "Instruction failed." << std::endl;
-        this->instruction = new NoInstruction();
-        return;
-    }
-
-    if(this->instruction != nextInstruction && !this->instruction->keepInstruction())
-    {
-        this->instruction->deleteLater();
-    }
-
-    this->instruction = nextInstruction;
-    this->updateBoard();
+    this->processInstruction(this->instruction->getFollowingInstruction());
     return;
 }
 
@@ -355,14 +351,34 @@ void PocketCivMain::newGameTriggered()
 
 void PocketCivMain::buildCityTriggered()
 {
-    // TODO: Trigger to process build city instruction to build city.
+    this->processInstruction(this->instruction->triggerBuildCity());
+    return;
+}
+
+void PocketCivMain::buildFarmTriggered()
+{
+    this->processInstruction(this->instruction->triggerBuildFarm());
+    return;
+}
+
+void PocketCivMain::expeditionTriggered()
+{
+    return;
+}
+
+void PocketCivMain::aquireAdvanceTriggered()
+{
+    return;
+}
+
+void PocketCivMain::buildWonderTriggered()
+{
     return;
 }
 
 void PocketCivMain::doneTriggered()
 {
-    this->instruction = this->instruction->triggerDone();
-    this->updateBoard();
+    this->processInstruction(this->instruction->triggerDone());
     return;
 }
 

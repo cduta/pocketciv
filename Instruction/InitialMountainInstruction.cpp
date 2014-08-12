@@ -32,7 +32,7 @@ Instruction *InitialMountainInstruction::triggerHex(Qt::MouseButton button, int 
             }
             else if(mountainCount == 5)
             {
-                regionModel->unsetMountain();
+                regionModel->setMountain(false);
             }
         }
     }

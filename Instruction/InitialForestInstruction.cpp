@@ -29,7 +29,7 @@ Instruction *InitialForestInstruction::triggerHex(Qt::MouseButton button, int x,
             }
             else if(forestCount == 5)
             {
-                regionModel->unsetForest();
+                regionModel->setForest(false);
             }
         }
     }
@@ -67,7 +67,7 @@ Instruction *InitialForestInstruction::triggerDone()
             this->boardModel->sendMessage("Placing deserts into regions where there are no Mountain and no Forest...");
             foreach(RegionModel *regionModel, regions)
             {
-                regionModel->setDesert();
+                regionModel->setDesert(true);
             }
 
             Instruction *next = new PlaceInitialTribes(this->boardModel);

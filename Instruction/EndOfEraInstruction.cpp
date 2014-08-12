@@ -16,7 +16,7 @@ void EndOfEraInstruction::initInstruction()
     // Check if city amount is >= current era.
     // Choose as many advances, as there are tribes in the empire (new instruction and return).
     // otherwise continue:
-    DecisionDialog decisionDialog("End Game?", "Do you really want to end the game and receive your final score?", "Yes", "No", true);
+    DecisionDialog decisionDialog("End Game?", "Do you want to end the game and receive your final score?", "Yes", "No", true);
     int result = decisionDialog.exec();
     if(result == QDialog::Accepted)
     {

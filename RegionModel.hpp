@@ -53,11 +53,13 @@ public:
 
     // Set-Methods
     void setTribes(int tribes);
+    void setCity(bool city);
+    void setCityAV(int cityAV);
     void setSelectedTribes(int selectedTribes);
-    void unsetMountain();
-    void unsetForest();
-    void setDesert();
-    void unsetDesert();
+    void setMountain(bool mountain);
+    void setForest(bool forest);
+    void setFarm(bool farm);
+    void setDesert(bool desert);
     void setSelected(bool selected);
 };
 

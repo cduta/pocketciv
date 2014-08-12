@@ -32,6 +32,12 @@ void UpkeepInstruction::initInstruction()
 Instruction *UpkeepInstruction::triggerHex(Qt::MouseButton button, int x, int y)
 {
     RegionModel *regionModel = this->boardModel->refRegionModel(x,y);
+
+    if(regionModel == NULL)
+    {
+        return this;
+    }
+
     RegionModel *activeRegion = this->boardModel->refActiveRegion();
 
     if(button == Qt::LeftButton)
@@ -123,11 +129,13 @@ Instruction *UpkeepInstruction::triggerDone()
         this->boardModel->sendMessage("Any city with 0 AV will be decimated.");
         this->boardModel->sendMessage(" ");
         this->boardModel->sendMessage("This rounds up the Upkeep.");
-        this->boardModel->sendMessage("Press done to continue.");
+        this->boardModel->sendMessage(" ");
+        this->boardModel->sendMessage("Press done to end the turn.");
         this->boardModel->sendMessage(" ");
         this->boardModel->checkCitySupport();
         this->boardModel->decimateZeroAVCities();
         this->done = true;
+        return this;
     }
 
     if(this->done)

@@ -17,10 +17,15 @@ void EpidemicEventInstruction::initInstruction()
 
 Instruction *EpidemicEventInstruction::triggerHex(Qt::MouseButton button, int x, int y)
 {
+    RegionModel *regionModel = this->boardModel->refRegionModel(x,y);
+
+    if(regionModel == NULL)
+    {
+        return this;
+    }
+
     if(button == Qt::LeftButton)
     {
-        RegionModel *regionModel = this->boardModel->refRegionModel(x,y);
-
         if(this->boardModel->refActiveRegion() == regionModel)
         {
             return this;
@@ -113,7 +118,9 @@ Instruction *EpidemicEventInstruction::drawFirstCard()
 
     if(this->boardModel->isEndOfEra())
     {
-        return new EndOfEraInstruction(this->boardModel, this);
+        Instruction *next = new EndOfEraInstruction(this->boardModel, this);
+        next->initInstruction();
+        return next;
     }
 
     return NULL;
@@ -182,7 +189,7 @@ Instruction *EpidemicEventInstruction::continueEpidemic()
     if(overallTribes <= 2)
     {
         this->boardModel->sendMessage(" ");
-        this->boardModel->sendMessage(QString("The EPIDEMIC cannot spread with 2 or less tribes left in the empire."));
+        this->boardModel->sendMessage(QString("The EPIDEMIC cannot spread further with 2 or less tribes left in the EMPIRE."));
         this->boardModel->sendMessage("The event ends...");
         this->boardModel->sendMessage(" ");
         this->boardModel->unsetActiveRegion();

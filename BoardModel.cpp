@@ -356,7 +356,7 @@ void BoardModel::checkCitySupport()
     {
         if(regionModel->hasCity() && !regionModel->hasFarm())
         {
-            regionModel->addCityAV(1);
+            regionModel->decreaseCityAV(1);
         }
     }
     return;
@@ -395,6 +395,7 @@ const EventCard *BoardModel::drawOriginalCard(bool tell)
 void BoardModel::reshuffleCards()
 {
     this->eventCardsLeft = this->eventCards.toList();
+    emit this->sendCardsLeftCount(this->eventCardsLeft.size());
     return;
 }
 

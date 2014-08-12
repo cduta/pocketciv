@@ -24,12 +24,12 @@ Instruction *SetInitialDesertInstruction::triggerHex(Qt::MouseButton button, int
         {
             foreach(RegionModel *regionModel, this->boardModel->getRegions().values())
             {
-                regionModel->unsetDesert();
+                regionModel->setDesert(false);
             }
 
             if(regionModel != NULL)
             {
-                regionModel->setDesert();
+                regionModel->setDesert(true);
             }
         }
     }

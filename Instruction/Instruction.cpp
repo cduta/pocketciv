@@ -26,7 +26,17 @@ Instruction *Instruction::triggerDone()
 
 Instruction *Instruction::getFollowingInstruction()
 {
-    // Ignored, since there is no previous instruction usually.
+    // Ignored, since there is no previous instruction in most instructions.
+    return this;
+}
+
+Instruction *Instruction::triggerBuildCity()
+{
+    return this;
+}
+
+Instruction *Instruction::triggerBuildFarm()
+{
     return this;
 }
 
