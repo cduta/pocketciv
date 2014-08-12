@@ -33,6 +33,8 @@ Instruction *MainPhaseInstruction::triggerDone()
 
     if(this->initialized)
     {
+        this->boardModel->disableButtons();
+        this->boardModel->enableDoneButton();
         Instruction *next = new UpkeepInstruction(this->boardModel);
         next->initInstruction();
         return next;
