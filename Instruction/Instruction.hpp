@@ -23,6 +23,7 @@ public:
 
     virtual Instruction *triggerBuildCity();
     virtual Instruction *triggerBuildFarm();
+    virtual Instruction *triggerExpedition();
 
     bool keepInstruction();
 

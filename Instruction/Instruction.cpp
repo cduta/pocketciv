@@ -40,6 +40,11 @@ Instruction *Instruction::triggerBuildFarm()
     return this;
 }
 
+Instruction *Instruction::triggerExpedition()
+{
+    return this;
+}
+
 bool Instruction::keepInstruction()
 {
     return this->keep;

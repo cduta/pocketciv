@@ -10,6 +10,9 @@ class MainPhaseInstruction : public Instruction
     bool initialized;
     bool buildCity;
     bool buildFarm;
+    bool expedition;
+    bool expeditionCardDrawn;
+    int gainGold;
 
 public:
     MainPhaseInstruction(BoardModel *boardModel);
@@ -21,6 +24,7 @@ public:
 
     virtual Instruction *triggerBuildCity();
     virtual Instruction *triggerBuildFarm();
+    virtual Instruction *triggerExpedition();
 };
 
 #endif // MAINPHASEINSTRUCTION_HPP

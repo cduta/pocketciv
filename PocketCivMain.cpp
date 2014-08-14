@@ -197,7 +197,7 @@ void PocketCivMain::generateNewBoard(BoardModel *boardModel)
     connect(this->boardModel, SIGNAL(sendCardsLeftCount(int)), this, SLOT(setEventCardsLeft(int)));
     connect(this->boardModel, SIGNAL(sendDoneText(const QString &)), this, SLOT(setDoneText(const QString &)));
     connect(this->boardModel, SIGNAL(sendDialogClosed()), this, SLOT(continueWithPreviousInstruction()));
-    connect(this->boardModel, SIGNAL(goldChanged(int)), this, SLOT(changeGoldCount(int)));
+    connect(this->boardModel, SIGNAL(goldChanged(int)), this, SLOT(setGoldCount(int)));
     connect(this->boardModel, SIGNAL(gloryScoreChanged(int)), this, SLOT(setGloryCount(int)));
 
     if(this->instruction != NULL)
@@ -363,6 +363,7 @@ void PocketCivMain::buildFarmTriggered()
 
 void PocketCivMain::expeditionTriggered()
 {
+    this->processInstruction(this->instruction->triggerExpedition());
     return;
 }
 

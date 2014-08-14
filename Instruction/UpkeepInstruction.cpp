@@ -20,11 +20,20 @@ void UpkeepInstruction::initInstruction()
     this->boardModel->sendMessage("Decimate all Gold.");
     this->boardModel->setGold(0);
     this->boardModel->sendMessage(" ");
-    this->boardModel->sendMessage("Advance City AV.");
-    this->boardModel->sendMessage("To increase a city's AV, choose a city and decimate");
-    this->boardModel->sendMessage("as much tribes from anywhere in the EMPIRE until the amount");
-    this->boardModel->sendMessage("of decimated tribes is equal the chosen City AV plus 1.");
-    this->boardModel->sendMessage(" ");
+
+    // TODO: Check for Advances that let you advance City AV.
+    if(false)
+    {
+        this->boardModel->sendMessage("Advance City AV.");
+        this->boardModel->sendMessage("To increase a city's AV, choose a city and decimate");
+        this->boardModel->sendMessage("as much tribes from anywhere in the EMPIRE until the amount");
+        this->boardModel->sendMessage("of decimated tribes is equal the chosen City AV plus 1.");
+        this->boardModel->sendMessage(" ");
+    }
+    else
+    {
+        this->endTurn();
+    }
     this->boardModel->sendMessage("When you are done, press done.");
     this->boardModel->sendMessage(" ");
 }
@@ -33,7 +42,7 @@ Instruction *UpkeepInstruction::triggerHex(Qt::MouseButton button, int x, int y)
 {
     RegionModel *regionModel = this->boardModel->refRegionModel(x,y);
 
-    if(regionModel == NULL)
+    if(regionModel == NULL || this->done)
     {
         return this;
     }
@@ -124,17 +133,7 @@ Instruction *UpkeepInstruction::triggerDone()
 
     if(!this->done)
     {
-        this->boardModel->sendMessage("Reduce City AV:");
-        this->boardModel->sendMessage("Any city in a region without a farm has its AV reduced by 1.");
-        this->boardModel->sendMessage("Any city with 0 AV will be decimated.");
-        this->boardModel->sendMessage(" ");
-        this->boardModel->sendMessage("This rounds up the Upkeep.");
-        this->boardModel->sendMessage(" ");
-        this->boardModel->sendMessage("Press done to end the turn.");
-        this->boardModel->sendMessage(" ");
-        this->boardModel->checkCitySupport();
-        this->boardModel->decimateZeroAVCities();
-        this->done = true;
+        this->endTurn();
         return this;
     }
 
@@ -156,4 +155,19 @@ Instruction *UpkeepInstruction::triggerDone()
     }
 
     return this;
+}
+
+void UpkeepInstruction::endTurn()
+{
+    this->boardModel->sendMessage("Reduce City AV:");
+    this->boardModel->sendMessage("Any city in a region without a farm has its AV reduced by 1.");
+    this->boardModel->sendMessage("Any city with 0 AV will be decimated.");
+    this->boardModel->sendMessage(" ");
+    this->boardModel->sendMessage("This rounds up the Upkeep.");
+    this->boardModel->sendMessage(" ");
+    this->boardModel->sendMessage("Press done to end the turn.");
+    this->boardModel->sendMessage(" ");
+    this->boardModel->checkCitySupport();
+    this->boardModel->decimateZeroAVCities();
+    this->done = true;
 }

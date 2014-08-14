@@ -333,6 +333,22 @@ void BoardModel::moveTribes(int fromRegion, int toRegion, int howMany)
     return;
 }
 
+bool BoardModel::bordersOnFrontier(int region)
+{
+    foreach(HexModel *hexModel, this->regionHexes[region])
+    {
+        foreach(HexModel *adjacentHex, hexModel->getAdjacentHexes().values())
+        {
+            if(adjacentHex->isFrontier())
+            {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
 void BoardModel::decimateUnsupportedTribes()
 {
     foreach(RegionModel *regionModel, this->regions)
@@ -780,6 +796,11 @@ int BoardModel::getAllSelectedTribes() const
     return result;
 }
 
+int BoardModel::getGold() const
+{
+    return this->gold;
+}
+
 int BoardModel::getGloryScore() const
 {
     return this->gloryScore;
@@ -822,7 +843,7 @@ void BoardModel::unsetActiveRegion()
 void BoardModel::setGold(int gold)
 {
     this->gold = gold;
-    emit goldChanged(this->gold);
+    emit this->goldChanged(this->gold);
     return;
 }
 

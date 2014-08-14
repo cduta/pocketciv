@@ -71,6 +71,9 @@ public:
     void increaseEra();
     void populationGrowth();
     void moveTribes(int fromRegion, int toRegion, int howMany);
+
+    bool bordersOnFrontier(int region);
+
     void decimateUnsupportedTribes();
     void decimateGold();
     void checkCitySupport();
@@ -122,6 +125,7 @@ public:
     bool isEndOfEra() const;
     int getAllMovedTribes() const;
     int getAllSelectedTribes() const;
+    int getGold() const;
     int getGloryScore() const;
 
 // Set-Methods
