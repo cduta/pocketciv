@@ -20,6 +20,7 @@ void HexItem::drawHexBase()
     assert(this->hexModel != NULL);
 
     int visibleBorders = this->hexModel->getVisibleBorders();
+    int representativeBorders = this->hexModel->getRepresentativeBorders();
     bool enabled = this->hexModel->isEnabled();
     bool showRegionNumber = this->hexModel->showRegionNumber();
     int region = this->hexModel->getRegion();
@@ -106,11 +107,35 @@ void HexItem::drawHexBase()
         {
             painter.drawPixmap(0,0,QPixmap(":/farm"));
         }
-
-        // TODO: Put in some borders for the representative.
     }
 
     painter.setPen(HEX_BORDER_COLOR);
+
+    if((representativeBorders & DRAW_UPPER_LEFT_BORDER) != 0)
+    {
+        painter.drawPixmap(0,0,QPixmap(":/rep_upper_left"));
+    }
+
+    if((representativeBorders & DRAW_UPPER_CENTER_BORDER) != 0)
+    {
+        painter.drawPixmap(14,0,QPixmap(":/rep_upper_center"));
+    }
+
+    if((representativeBorders & DRAW_UPPER_RIGHT_BORDER) != 0)
+    {
+        painter.drawPixmap(35,0,QPixmap(":/rep_upper_right"));
+    }
+
+    if((representativeBorders & DRAW_LOWER_RIGHT_BORDER) != 0)
+    {
+        painter.drawPixmap(35,21,QPixmap(":/rep_lower_right"));
+    }
+
+    if((representativeBorders & DRAW_LOWER_LEFT_BORDER)!= 0)
+    {
+        painter.drawPixmap(0,21,QPixmap(":/rep_lower_left"));
+    }
+
 
     if((visibleBorders & DRAW_UPPER_LEFT_BORDER) != 0)
     {

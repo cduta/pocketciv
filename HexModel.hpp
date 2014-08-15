@@ -32,6 +32,7 @@ private:
     bool active;
     bool bad;
     int visibleBorders;
+    int representativeBorders;
     QMap<int, HexModel *> adjacentHexes; // Int represents the border of this hex on which the hex borders on.
     bool regionNumberShown;
     bool frontier;
@@ -53,6 +54,7 @@ public:
     // Get-Methods
     bool isEnabled() const;
     int getVisibleBorders() const;
+    int getRepresentativeBorders() const;
     int x() const;
     int y() const;
     int getRegion() const;

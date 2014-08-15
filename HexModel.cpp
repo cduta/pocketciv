@@ -14,6 +14,7 @@ HexModel::HexModel(int xPos, int yPos, bool enable, int visibleBorders, QObject 
       active(false),
       bad(false),
       visibleBorders(visibleBorders),
+      representativeBorders(DRAW_NO_BORDER),
       regionNumberShown(false),
       frontier(false),
       sea(false),
@@ -68,6 +69,11 @@ bool HexModel::isEnabled() const
 int HexModel::getVisibleBorders() const
 {
     return this->visibleBorders;
+}
+
+int HexModel::getRepresentativeBorders() const
+{
+    return this->representativeBorders;
 }
 
 int HexModel::x() const
@@ -240,6 +246,20 @@ void HexModel::setRepresentativeHex(bool representative, RegionModel *regionMode
 {
     this->representativeHex = representative;
     this->regionModel = regionModel;
+
+    foreach(int border, this->adjacentHexes.keys())
+    {
+        HexModel *adjacent = this->adjacentHexes[border];
+        if(this->getRegion() == adjacent->getRegion() &&
+           ((border & DRAW_UPPER_LEFT_BORDER) != 0 ||
+           (border & DRAW_UPPER_RIGHT_BORDER) != 0 ||
+           (border & DRAW_UPPER_CENTER_BORDER) != 0))
+        {
+            this->representativeBorders = this->representativeBorders | border;
+            adjacent->representativeBorders = adjacent->representativeBorders | oppositeBorder(border);
+        }
+    }
+
     return;
 }
 

@@ -20,5 +20,11 @@
         <file alias="hex_active_good">res/hex_active_good.png</file>
         <file alias="city">res/city.png</file>
         <file alias="farm">res/farm.png</file>
+        <file alias="rep_lower_left">res/rep_lower_left_border.png</file>
+        <file alias="rep_lower_right">res/rep_lower_right_border.png</file>
+        <file alias="rep_upper_left">res/rep_upper_left_border.png</file>
+        <file alias="rep_upper_right">res/rep_upper_right_border.png</file>
+        <file alias="rep_lower_center">res/rep_lower_center_border.png</file>
+        <file alias="rep_upper_center">res/rep_upper_center_border.png</file>
     </qresource>
 </RCC>
