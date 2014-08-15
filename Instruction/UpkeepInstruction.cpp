@@ -29,13 +29,16 @@ void UpkeepInstruction::initInstruction()
         this->boardModel->sendMessage("as much tribes from anywhere in the EMPIRE until the amount");
         this->boardModel->sendMessage("of decimated tribes is equal the chosen City AV plus 1.");
         this->boardModel->sendMessage(" ");
+        this->boardModel->sendMessage("When you are done, press done.");
+        this->boardModel->sendMessage(" ");
     }
     else
     {
         this->endTurn();
+        this->boardModel->sendMessage(" ");
+        this->boardModel->sendMessage("Press done to end the turn.");
+        this->boardModel->sendMessage(" ");
     }
-    this->boardModel->sendMessage("When you are done, press done.");
-    this->boardModel->sendMessage(" ");
 }
 
 Instruction *UpkeepInstruction::triggerHex(Qt::MouseButton button, int x, int y)
@@ -134,6 +137,8 @@ Instruction *UpkeepInstruction::triggerDone()
     if(!this->done)
     {
         this->endTurn();
+        this->boardModel->sendMessage(" ");
+        this->boardModel->sendMessage("Press done to end the turn.");
         return this;
     }
 
@@ -164,8 +169,6 @@ void UpkeepInstruction::endTurn()
     this->boardModel->sendMessage("Any city with 0 AV will be decimated.");
     this->boardModel->sendMessage(" ");
     this->boardModel->sendMessage("This rounds up the Upkeep.");
-    this->boardModel->sendMessage(" ");
-    this->boardModel->sendMessage("Press done to end the turn.");
     this->boardModel->sendMessage(" ");
     this->boardModel->checkCitySupport();
     this->boardModel->decimateZeroAVCities();

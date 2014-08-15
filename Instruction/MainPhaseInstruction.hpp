@@ -25,6 +25,8 @@ public:
     virtual Instruction *triggerBuildCity();
     virtual Instruction *triggerBuildFarm();
     virtual Instruction *triggerExpedition();
+    virtual Instruction *triggerAquireAdvance();
+    virtual Instruction *triggerBuildWonder();
 };
 
 #endif // MAINPHASEINSTRUCTION_HPP

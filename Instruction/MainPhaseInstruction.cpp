@@ -224,3 +224,17 @@ Instruction *MainPhaseInstruction::triggerExpedition()
 
     return this;
 }
+
+Instruction *MainPhaseInstruction::triggerAquireAdvance()
+{
+    // TODO: Aquire Advance
+
+    return this;
+}
+
+Instruction *MainPhaseInstruction::triggerBuildWonder()
+{
+    // TODO: Aquire Wonder
+
+    return this;
+}

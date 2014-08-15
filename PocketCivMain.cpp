@@ -369,11 +369,13 @@ void PocketCivMain::expeditionTriggered()
 
 void PocketCivMain::aquireAdvanceTriggered()
 {
+    this->processInstruction(this->instruction->triggerAquireAdvance());
     return;
 }
 
 void PocketCivMain::buildWonderTriggered()
 {
+    this->processInstruction(this->instruction->triggerBuildWonder());
     return;
 }
 

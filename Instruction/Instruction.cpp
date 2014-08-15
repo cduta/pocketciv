@@ -45,6 +45,16 @@ Instruction *Instruction::triggerExpedition()
     return this;
 }
 
+Instruction *Instruction::triggerAquireAdvance()
+{
+    return this;
+}
+
+Instruction *Instruction::triggerBuildWonder()
+{
+    return this;
+}
+
 bool Instruction::keepInstruction()
 {
     return this->keep;
