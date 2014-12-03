@@ -4,6 +4,8 @@
 #include <QDebug>
 
 #include "Common.hpp"
+#include "Event/AnarchyEvent.hpp"
+#include "Event/BanditsEvent.hpp"
 #include "Event/EpidemicEvent.hpp"
 
 BoardModel::BoardModel(int width, int height, QObject *parent)
@@ -25,24 +27,72 @@ BoardModel::BoardModel(int width, int height, QObject *parent)
       originalCard(NULL)
 {
     this->newBoard(width, height);
-    QMap<int, Event *> events;
-    events.insert(1, new EpidemicEvent(0,1,0,this));
-    this->eventCards.insert(new EventCard(1,7,6, events, this));
-    this->eventCards.insert(new EventCard(2,4,7, events, this));
-    this->eventCards.insert(new EventCard(3,5,8, events, this));
-    this->eventCards.insert(new EventCard(4,6,7, events, this));
-    this->eventCards.insert(new EventCard(5,3,9, events, this));
-    this->eventCards.insert(new EventCard(6,4,6, events, this));
-    this->eventCards.insert(new EventCard(7,5,7, events, this));
-    this->eventCards.insert(new EventCard(8,6,8, events, this));
-    this->eventCards.insert(new EventCard(1,7,9, events, this));
-    this->eventCards.insert(new EventCard(2,4,10, events, this));
-    this->eventCards.insert(new EventCard(3,5,7, events, this));
-    this->eventCards.insert(new EventCard(4,6,8, events, this));
-    this->eventCards.insert(new EventCard(5,3,9, events, this));
-    this->eventCards.insert(new EventCard(6,4,7, events, this));
-    this->eventCards.insert(new EventCard(7,5,8, events, this));
-    this->eventCards.insert(new EventCard(8,6,6, events, this));
+    QMap<int, Event *> events1;
+    events1.insert(2, new EpidemicEvent(0,0,1,this));
+    QMap<int, Event *> events2;
+    QMap<int, Event *> events3;
+    events3.insert(2, new BanditsEvent(0,1,1,this));
+    events3.insert(4, new EpidemicEvent(1,1,1,this));
+    QMap<int, Event *> events4;
+    QMap<int, Event *> events5;
+    events5.insert(3, new EpidemicEvent(0,0,1,this));
+    QMap<int, Event *> events6;
+    events6.insert(6, new EpidemicEvent(1,0,1,this));
+    QMap<int, Event *> events7;
+    events7.insert(6, new AnarchyEvent(this));
+    events7.insert(7, new BanditsEvent(0,0,2,this));
+    QMap<int, Event *> events8;
+    QMap<int, Event *> events9;
+    QMap<int, Event *> events10;
+    events10.insert(8, new BanditsEvent(1,1,1,this));
+    QMap<int, Event *> events11;
+    events11.insert(4, new BanditsEvent(0,0,2,this));
+    events11.insert(6, new BanditsEvent(0,1,2,this));
+    QMap<int, Event *> events12;
+    events12.insert(4, new AnarchyEvent(this));
+    QMap<int, Event *> events13;
+    events13.insert(5, new BanditsEvent(0,0,2,this));
+    QMap<int, Event *> events14;
+    events14.insert(8, new AnarchyEvent(this));
+    QMap<int, Event *> events15;
+    QMap<int, Event *> events16;
+    events16.insert(1, new EpidemicEvent(0,1,0,this));
+    events16.insert(7, new AnarchyEvent(this));
+
+    // FIXME: Is only testing.
+    events1.insert(1, new BanditsEvent(0,1,0,this));
+    events2.insert(1, new BanditsEvent(0,1,0,this));
+    events3.insert(1, new BanditsEvent(0,1,0,this));
+    events4.insert(1, new BanditsEvent(0,1,0,this));
+    events5.insert(1, new BanditsEvent(0,1,0,this));
+    events6.insert(1, new BanditsEvent(0,1,0,this));
+    events7.insert(1, new BanditsEvent(0,1,0,this));
+    events8.insert(1, new BanditsEvent(0,1,0,this));
+    events9.insert(1, new BanditsEvent(0,1,0,this));
+    events10.insert(1, new BanditsEvent(0,1,0,this));
+    events11.insert(1, new BanditsEvent(0,1,0,this));
+    events12.insert(1, new BanditsEvent(0,1,0,this));
+    events13.insert(1, new BanditsEvent(0,1,0,this));
+    events14.insert(1, new BanditsEvent(0,1,0,this));
+    events15.insert(1, new BanditsEvent(0,1,0,this));
+    events16.insert(1, new BanditsEvent(0,1,0,this));
+
+    this->eventCards.insert(new EventCard(1,7,6, events1, this));
+    this->eventCards.insert(new EventCard(2,4,7, events2, this));
+    this->eventCards.insert(new EventCard(3,5,8, events3, this));
+    this->eventCards.insert(new EventCard(4,6,7, events4, this));
+    this->eventCards.insert(new EventCard(5,3,9, events5, this));
+    this->eventCards.insert(new EventCard(6,4,6, events6, this));
+    this->eventCards.insert(new EventCard(7,5,7, events7, this));
+    this->eventCards.insert(new EventCard(8,6,8, events8, this));
+    this->eventCards.insert(new EventCard(1,7,9, events9, this));
+    this->eventCards.insert(new EventCard(2,4,10, events10, this));
+    this->eventCards.insert(new EventCard(3,5,7, events11, this));
+    this->eventCards.insert(new EventCard(4,6,8, events12, this));
+    this->eventCards.insert(new EventCard(5,3,9, events13, this));
+    this->eventCards.insert(new EventCard(6,4,7, events14, this));
+    this->eventCards.insert(new EventCard(7,5,8, events15, this));
+    this->eventCards.insert(new EventCard(8,6,6, events16, this));
     this->eventCardsLeft = this->eventCards.toList();
 }
 
@@ -340,6 +390,24 @@ bool BoardModel::bordersOnFrontier(int region)
         foreach(HexModel *adjacentHex, hexModel->getAdjacentHexes().values())
         {
             if(adjacentHex->isFrontier())
+            {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
+bool BoardModel::bordersOnDesert(int region)
+{
+    foreach(HexModel *hexModel, this->regionHexes[region])
+    {
+        foreach(HexModel *adjacentHex, hexModel->getAdjacentHexes().values())
+        {
+            RegionModel *regionModel = this->refRegionModel(adjacentHex->getRegion());
+
+            if(regionModel != NULL && regionModel->hasDesert())
             {
                 return true;
             }

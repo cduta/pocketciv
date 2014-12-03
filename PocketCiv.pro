@@ -38,7 +38,12 @@ SOURCES += main.cpp\
     Instruction/UpkeepInstruction.cpp \
     Instruction/PopulationGrowthInstruction.cpp \
     DecisionDialog.cpp \
-    Instruction/EndGameInstruction.cpp
+    Instruction/EndGameInstruction.cpp \
+    Event/AnarchyEvent.cpp \
+    Instruction/Event/AnarchyEventInstruction.cpp \
+    Event/BanditsEvent.cpp \
+    Instruction/Event/BanditsEventInstruction.cpp \
+    Instruction/AttackInstruction.cpp
 
 HEADERS  += \
     PocketCivMain.hpp \
@@ -66,7 +71,12 @@ HEADERS  += \
     Instruction/UpkeepInstruction.hpp \
     Instruction/PopulationGrowthInstruction.hpp \
     DecisionDialog.hpp \
-    Instruction/EndGameInstruction.hpp
+    Instruction/EndGameInstruction.hpp \
+    Event/AnarchyEvent.hpp \
+    Instruction/Event/AnarchyEventInstruction.hpp \
+    Event/BanditsEvent.hpp \
+    Instruction/Event/BanditsEventInstruction.hpp \
+    Instruction/AttackInstruction.hpp
 
 FORMS    +=
 

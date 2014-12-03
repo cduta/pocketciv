@@ -24,7 +24,6 @@
         <file alias="rep_lower_right">res/rep_lower_right_border.png</file>
         <file alias="rep_upper_left">res/rep_upper_left_border.png</file>
         <file alias="rep_upper_right">res/rep_upper_right_border.png</file>
-        <file alias="rep_lower_center">res/rep_lower_center_border.png</file>
         <file alias="rep_upper_center">res/rep_upper_center_border.png</file>
     </qresource>
 </RCC>

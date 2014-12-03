@@ -24,7 +24,7 @@ int EventCard::getShapeNumberSum(const QMap<Event::NumberShapes, int> &shapeNumb
 
     foreach(Event::NumberShapes shape, shapeNumberAmounts.keys())
     {
-        result += shapeNumbers.value(shape, 0)*shapeNumberAmounts.value(shape, 0);
+        result += this->shapeNumbers.value(shape, 0)*shapeNumberAmounts.value(shape, 0);
     }
 
     return result;

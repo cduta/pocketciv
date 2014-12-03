@@ -182,6 +182,11 @@ int RegionModel::getCityAV() const
 void RegionModel::setTribes(int tribes)
 {
     this->tribes = tribes;
+
+    if(this->tribes < 0)
+    {
+        this->tribes = 0;
+    }
     return;
 }
 
@@ -194,6 +199,11 @@ void RegionModel::setCity(bool city)
 void RegionModel::setCityAV(int cityAV)
 {
     this->cityAV = cityAV;
+
+    if(this->cityAV < 0)
+    {
+        this->cityAV = 0;
+    }
     return;
 }
 

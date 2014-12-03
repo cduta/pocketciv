@@ -16,7 +16,7 @@ protected:
     QMap<NumberShapes, int> shapeNumberAmounts;
 
 public:
-    Event(const QMap<NumberShapes, int> &shapeNumberAmounts = QMap<NumberShapes, int>());
+    Event(int redCircles = 0, int greenSquares = 0, int blueHexagons = 0);
 
     virtual QString getEventName() const;
     virtual Instruction *happen(Instruction *next) const;

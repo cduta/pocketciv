@@ -1,12 +1,15 @@
 #include "Event.hpp"
 
-Event::Event(const QMap<NumberShapes, int> &shapeNumberAmounts)
-    : shapeNumberAmounts(shapeNumberAmounts)
-{}
+Event::Event(int redCircles, int greenSquares, int blueHexagons)
+{
+    this->shapeNumberAmounts.insert(Event::RED_CIRCLE, redCircles);
+    this->shapeNumberAmounts.insert(Event::GREEN_SQUARE, greenSquares);
+    this->shapeNumberAmounts.insert(Event::BLUE_HEXAGON, blueHexagons);
+}
 
 QString Event::getEventName() const
 {
-    return "Generic Event";
+    return "GENERIC EVENT";
 }
 
 Instruction *Event::happen(Instruction *next) const
