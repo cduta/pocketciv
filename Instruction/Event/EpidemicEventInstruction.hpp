@@ -11,7 +11,6 @@ class EpidemicEventInstruction : public EventInstruction
     int populationLoss;
     int oldTribes;
 
-    const EventCard *originalCard;
     const EventCard *first;
 
 public:

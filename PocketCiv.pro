@@ -46,7 +46,9 @@ SOURCES += main.cpp\
     Instruction/AttackInstruction.cpp \
     Instruction/Event/CivilWarEventInstruction.cpp \
     Instruction/Event/EventInstruction.cpp \
-    Event/CivilWarEvent.cpp
+    Event/CivilWarEvent.cpp \
+    Event/CorruptionEvent.cpp \
+    Instruction/Event/CorruptionEventInstruction.cpp
 
 HEADERS  += \
     PocketCivMain.hpp \
@@ -82,7 +84,9 @@ HEADERS  += \
     Instruction/AttackInstruction.hpp \
     Instruction/Event/CivilWarEventInstruction.hpp \
     Instruction/Event/EventInstruction.hpp \
-    Event/CivilWarEvent.hpp
+    Event/CivilWarEvent.hpp \
+    Event/CorruptionEvent.hpp \
+    Instruction/Event/CorruptionEventInstruction.hpp
 
 FORMS    +=
 

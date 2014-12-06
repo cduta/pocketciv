@@ -4,6 +4,14 @@
 #include <QObject>
 #include <QDialog>
 
+#define POKET_CIV_END_OF_ERA_CHECK \
+    if(this->boardModel->isEndOfEra()) \
+    { \
+        Instruction *next = new EndOfEraInstruction(this->boardModel, this); \
+        next->initInstruction(); \
+        return next; \
+    }
+
 class Instruction : public QObject
 {
     Q_OBJECT

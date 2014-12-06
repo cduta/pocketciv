@@ -88,17 +88,18 @@ Instruction *MoveTribesInstruction::triggerDone()
     this->boardModel->unselectAllRegions();
     this->boardModel->clearMessages();
     Instruction *eventInstruction = event->happen(main);
+    eventInstruction->initInstruction();
     Instruction *next;
 
     if(this->boardModel->isEndOfEra())
     {
         next = new EndOfEraInstruction(this->boardModel, eventInstruction);
+        next->initInstruction();
     }
     else
     {
         next = eventInstruction;
     }
 
-    next->initInstruction();
     return next;
 }

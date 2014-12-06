@@ -10,8 +10,8 @@ EpidemicEventInstruction::EpidemicEventInstruction(BoardModel *boardModel, Instr
 
 void EpidemicEventInstruction::initInstruction()
 {
-    this->originalCard = this->boardModel->refOriginalCard();
-    this->boardModel->sendMessage(QString("Event: EPIDEMIC"));
+    this->boardModel->sendMessage("EPIDEMIC:");
+    this->boardModel->sendMessage(" ");
     this->boardModel->sendMessage("Press done to continue.");
     return;
 }
@@ -117,12 +117,7 @@ Instruction *EpidemicEventInstruction::setActiveRegion()
     this->step = 1;
     this->drawActiveRegion();
 
-    if(this->boardModel->isEndOfEra())
-    {
-        Instruction *next = new EndOfEraInstruction(this->boardModel, this);
-        next->initInstruction();
-        return next;
-    }
+    POKET_CIV_END_OF_ERA_CHECK
 
     return NULL;
 }

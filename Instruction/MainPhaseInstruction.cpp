@@ -110,12 +110,7 @@ Instruction *MainPhaseInstruction::triggerDone()
             }
 
             this->boardModel->unsetActiveRegion();
-            if(this->boardModel->isEndOfEra())
-            {
-                 Instruction *instruction = new EndOfEraInstruction(this->boardModel, this);
-                 instruction->initInstruction();
-                 return instruction;
-            }
+            POKET_CIV_END_OF_ERA_CHECK
         }
 
         if(this->gainGold == 0)

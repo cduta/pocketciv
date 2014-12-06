@@ -15,6 +15,10 @@ CivilWarEventInstruction::CivilWarEventInstruction(BoardModel *boardModel, Instr
 void CivilWarEventInstruction::initInstruction()
 {
     this->boardModel->sendMessage("CIVIL WAR:");
+    this->boardModel->sendMessage(" ");
+    this->boardModel->sendMessage("The city AV of the active region and bordering regions are reduced by 2.");
+    this->boardModel->sendMessage("Any regions of those with a city are thereby affected regions.");
+    this->boardModel->sendMessage(" ");
     this->boardModel->sendMessage("Press done to continue.");
     this->boardModel->sendMessage(" ");
     return;
@@ -24,7 +28,7 @@ Instruction *CivilWarEventInstruction::triggerHex(Qt::MouseButton button, int x,
 {
     RegionModel *regionModel = this->boardModel->refRegionModel(x,y);
 
-    if(regionModel == NULL)
+    if(regionModel == NULL || this->step != -1)
     {
         return this;
     }
@@ -36,9 +40,18 @@ Instruction *CivilWarEventInstruction::triggerHex(Qt::MouseButton button, int x,
     {
         regionModel->setTribes(regionModel->getTribes()-1);
         this->colleteralDamage--;
-        this->boardModel->sendMessage(QString("Decimated one Tribe in Region %1. Colleteral damage left: %2")
-                                      .arg(regionModel->getRegion())
-                                      .arg(this->colleteralDamage));
+
+        if(this->colleteralDamage == 0)
+        {
+            this->boardModel->sendMessage("All colleteral damage has been distributed.");
+            return this->endEvent();
+        }
+        else
+        {
+            this->boardModel->sendMessage(QString("Decimated one Tribe in Region %1. Colleteral damage left: %2")
+                                          .arg(regionModel->getRegion())
+                                          .arg(this->colleteralDamage));
+        }
     }
 
     return this;
@@ -67,9 +80,6 @@ Instruction *CivilWarEventInstruction::triggerDone()
             }
         }
 
-        this->boardModel->sendMessage("The city AV of the active region and bordering regions are reduced by 2.");
-        this->boardModel->sendMessage("Any regions of those with a city are thereby affected regions.");
-
         if(this->affectedRegions.isEmpty())
         {
             this->boardModel->sendMessage("But, none of the regions had a city.");
@@ -83,12 +93,7 @@ Instruction *CivilWarEventInstruction::triggerDone()
             this->boardModel->sendMessage(" ");
         }
 
-        if(this->boardModel->isEndOfEra())
-        {
-            Instruction *next = new EndOfEraInstruction(this->boardModel, this);
-            next->initInstruction();
-            return next;
-        }
+        POKET_CIV_END_OF_ERA_CHECK
     }
 
     if(this->step == 1)
@@ -106,12 +111,7 @@ Instruction *CivilWarEventInstruction::triggerDone()
         this->boardModel->sendMessage(QString("The colleteral damage is %1.").arg(this->colleteralDamage));
         this->boardModel->sendMessage(" ");
 
-        if(this->boardModel->isEndOfEra())
-        {
-            Instruction *next = new EndOfEraInstruction(this->boardModel, this);
-            next->initInstruction();
-            return next;
-        }
+        POKET_CIV_END_OF_ERA_CHECK
     }
 
     if(this->step == 2)
@@ -122,7 +122,7 @@ Instruction *CivilWarEventInstruction::triggerDone()
         {
             this->boardModel->sendMessage("The colleteral damage is less than the total tribes in the affected regions.");
             this->boardModel->sendMessage("Distribute all the colleteral damage in the affected regions.");
-            this->boardModel->sendMessage("Decrease colleteral damage for each tribe reduced in the affected regions.");
+            this->boardModel->sendMessage("Reduce a tribe for each colleteral damage distributed in the affected regions.");
             this->boardModel->sendMessage(" ");
             this->boardModel->sendMessage("Press Done to continue.");
 
@@ -141,7 +141,7 @@ Instruction *CivilWarEventInstruction::triggerDone()
         }
     }
 
-    if(this->step == -1 && this->colleteralDamage != 0)
+    if(this->step == -1 && this->colleteralDamage > 0)
     {
         return this;
     }
