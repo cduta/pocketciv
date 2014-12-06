@@ -1,5 +1,7 @@
 #include "AttackInstruction.hpp"
 
+#include "Common.hpp"
+
 AttackInstruction::AttackInstruction(BoardModel *boardModel, Instruction *nextInstruction, QString what, int attackingForce)
     : Instruction(), boardModel(boardModel), nextInstruction(nextInstruction), what(what), attackingForce(attackingForce)
 {
@@ -117,19 +119,12 @@ Instruction *AttackInstruction::triggerDone()
         }
         else if(current.size() > 1)
         {
-            this->possibleRegions = current.toSet();
             this->boardModel->sendMessage("There are multiple regions possible to move the attacking forces into.");
-            QString possibleRegionsText = QString("Those regions are");
 
-            for(int i = 0; i < current.size() - 2; ++i)
-            {
-                possibleRegionsText.append(QString(" %1,").arg(current[i]->getRegion()));
-            }
+            this->boardModel->sendMessage(QString("Those regions are %1.")
+                                          .arg(Common::listUpRegions(current)));
 
-            this->boardModel->sendMessage(QString("%1 %2 and %3")
-                                          .arg(possibleRegionsText)
-                                          .arg(current[current.size()-2]->getRegion())
-                                          .arg(current[current.size()-1]->getRegion()));
+            this->possibleRegions = current.toSet();
             this->boardModel->sendMessage(" ");
             this->boardModel->sendMessage("Choose one and press Done to continue.");
             return this;

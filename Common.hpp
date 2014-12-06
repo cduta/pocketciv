@@ -3,9 +3,38 @@
 
 #include <QObject>
 #include <QTime>
+#include <QString>
+#include <QList>
+
+#include <RegionModel.hpp>
 
 namespace Common
 {
+inline QString listUpRegions(const QList<RegionModel *> &list)
+{
+    if(list.size() == 0)
+    {
+        return QString();
+    }
+
+    if(list.size() == 1)
+    {
+        return QString::number(list[0]->getRegion());
+    }
+
+    QString result;
+
+    for(int i = 0; i < list.size() - 2; ++i)
+    {
+        result.append(QString("%1, ").arg(list[i]->getRegion()));
+    }
+
+    return(QString("%1%2 and %3")
+           .arg(result)
+           .arg(list[list.size()-2]->getRegion())
+           .arg(list[list.size()-1]->getRegion()));
+}
+
 inline int random()
 {
     return qrand();

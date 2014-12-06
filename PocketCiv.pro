@@ -43,7 +43,10 @@ SOURCES += main.cpp\
     Instruction/Event/AnarchyEventInstruction.cpp \
     Event/BanditsEvent.cpp \
     Instruction/Event/BanditsEventInstruction.cpp \
-    Instruction/AttackInstruction.cpp
+    Instruction/AttackInstruction.cpp \
+    Instruction/Event/CivilWarEventInstruction.cpp \
+    Instruction/Event/EventInstruction.cpp \
+    Event/CivilWarEvent.cpp
 
 HEADERS  += \
     PocketCivMain.hpp \
@@ -76,7 +79,10 @@ HEADERS  += \
     Instruction/Event/AnarchyEventInstruction.hpp \
     Event/BanditsEvent.hpp \
     Instruction/Event/BanditsEventInstruction.hpp \
-    Instruction/AttackInstruction.hpp
+    Instruction/AttackInstruction.hpp \
+    Instruction/Event/CivilWarEventInstruction.hpp \
+    Instruction/Event/EventInstruction.hpp \
+    Event/CivilWarEvent.hpp
 
 FORMS    +=
 

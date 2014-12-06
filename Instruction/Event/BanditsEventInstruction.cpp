@@ -4,7 +4,7 @@
 #include "Instruction/EndOfEraInstruction.hpp"
 
 BanditsEventInstruction::BanditsEventInstruction(BoardModel *boardModel, Instruction *nextInstruction, const Event *event)
-    : boardModel(boardModel), nextInstruction(nextInstruction), event(event), attackingForce(0), step(0)
+    : EventInstruction(boardModel, nextInstruction, event), attackingForce(0), step(0)
 {
     this->nextInstruction->setKeepInstruction(true);
 }
@@ -22,10 +22,7 @@ Instruction *BanditsEventInstruction::triggerDone()
     if(this->step == 0)
     {
         this->step = 1;
-        this->boardModel->setActiveRegion(this->boardModel->drawCard()->getShapeNumbers().value(Event::RED_CIRCLE, 0), true);
-        this->boardModel->sendMessage(QString("The active region is %1.").arg(this->boardModel->refActiveRegion()->getRegion()));
-        this->boardModel->sendMessage(" ");
-
+        this->drawActiveRegion();
         if(this->boardModel->isEndOfEra())
         {
             Instruction *next = new EndOfEraInstruction(this->boardModel, this);
@@ -55,8 +52,6 @@ Instruction *BanditsEventInstruction::triggerDone()
         else
         {
             this->boardModel->sendMessage(QString("The active region has no adjacent desert.").arg(this->attackingForce));
-            this->boardModel->sendMessage("The event ends...");
-            this->boardModel->sendMessage(" ");
         }
     }
 
@@ -72,7 +67,5 @@ Instruction *BanditsEventInstruction::triggerDone()
         return next;
     }
 
-    this->nextInstruction->setKeepInstruction(false);
-    this->nextInstruction->initInstruction();
-    return this->nextInstruction;
+    return this->endEvent();
 }

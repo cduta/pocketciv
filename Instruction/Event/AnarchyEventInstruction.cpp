@@ -1,7 +1,7 @@
 #include "AnarchyEventInstruction.hpp"
 
 AnarchyEventInstruction::AnarchyEventInstruction(BoardModel *boardModel, Instruction *nextInstruction, const Event *event)
-    : boardModel(boardModel), nextInstruction(nextInstruction), event(event)
+    : EventInstruction(boardModel, nextInstruction, event)
 {
     this->nextInstruction->setKeepInstruction(true);
 }
@@ -44,9 +44,6 @@ Instruction *AnarchyEventInstruction::triggerDone()
         }
     }
 
-    this->boardModel->sendMessage(" ");
-    this->nextInstruction->setKeepInstruction(false);
-    this->nextInstruction->initInstruction();
-    return this->nextInstruction;
+    return this->endEvent();
 }
 

@@ -85,7 +85,7 @@ void RegionModel::decimateSelectedTribes()
     return;
 }
 
-void RegionModel::addCityAV(int cityAV)
+void RegionModel::increaseCityAV(int cityAV)
 {
     this->cityAV += cityAV;
 
@@ -111,9 +111,8 @@ void RegionModel::decreaseCityAV(int cityAV)
 
 void RegionModel::decimateZeroAVCity()
 {
-    if(this->cityAV <= 0)
+    if(this->cityAV == 0)
     {
-        this->cityAV = 0;
         this->city = false;
     }
     return;

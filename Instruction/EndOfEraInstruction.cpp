@@ -57,6 +57,8 @@ Instruction *EndOfEraInstruction::triggerDone()
     }
 
     this->boardModel->sendMessage(" ");
+    this->boardModel->sendMessage("END OF ERA DONE");
+    this->boardModel->sendMessage(" ");
     this->interruptedInstruction->setKeepInstruction(false);
     return this->interruptedInstruction;
 }

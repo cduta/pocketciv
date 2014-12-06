@@ -14,7 +14,7 @@ void UpkeepInstruction::initInstruction()
     this->boardModel->sendMessage(" ");
     this->boardModel->sendMessage("Decimate unsupported tribes.");
     this->boardModel->sendMessage("A region can support as much tribes as there are Mountains,");
-    this->boardModel->sendMessage("Volcanoes, Farms, Forests and and City AV in that region added up.");
+    this->boardModel->sendMessage("Volcanoes, Farms, Forests and City AV in that region added up.");
     this->boardModel->decimateUnsupportedTribes();
     this->boardModel->sendMessage(" ");
     this->boardModel->sendMessage("Decimate all Gold.");
@@ -137,8 +137,7 @@ Instruction *UpkeepInstruction::triggerDone()
     if(!this->done)
     {
         this->endTurn();
-        this->boardModel->sendMessage(" ");
-        this->boardModel->sendMessage("Press done to end the turn.");
+        this->boardModel->sendMessage("Press Done to start the next turn...");
         return this;
     }
 

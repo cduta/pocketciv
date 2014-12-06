@@ -1,21 +1,17 @@
 #ifndef EPIDEMICEVENTINSTRUCTION_HPP
 #define EPIDEMICEVENTINSTRUCTION_HPP
 
-#include "Instruction/Instruction.hpp"
+#include "Instruction/Event/EventInstruction.hpp"
 #include "BoardModel.hpp"
 
-class EpidemicEventInstruction : public Instruction
+class EpidemicEventInstruction : public EventInstruction
 {
-    BoardModel *boardModel;
-    Instruction *nextInstruction;
     int step;
 
     int populationLoss;
     int oldTribes;
 
-    const Event *event;
     const EventCard *originalCard;
-
     const EventCard *first;
 
 public:
@@ -28,8 +24,8 @@ public:
 
 private:
     // Preperation steps.
-    Instruction *drawFirstCard();
     Instruction *setActiveRegion();
+    Instruction *checkActiveRegion();
     Instruction *initializePopulationLoss();
     Instruction *continueEpidemic();
 };

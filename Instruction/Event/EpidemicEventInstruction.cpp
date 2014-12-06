@@ -3,7 +3,7 @@
 #include "Instruction/EndOfEraInstruction.hpp"
 
 EpidemicEventInstruction::EpidemicEventInstruction(BoardModel *boardModel, Instruction *nextInstruction, const Event *event)
-    : Instruction(), boardModel(boardModel), nextInstruction(nextInstruction), step(0), event(event)
+    : EventInstruction(boardModel, nextInstruction, event), step(0)
 {
     this->nextInstruction->setKeepInstruction(false);
 }
@@ -13,6 +13,7 @@ void EpidemicEventInstruction::initInstruction()
     this->originalCard = this->boardModel->refOriginalCard();
     this->boardModel->sendMessage(QString("Event: EPIDEMIC"));
     this->boardModel->sendMessage("Press done to continue.");
+    return;
 }
 
 Instruction *EpidemicEventInstruction::triggerHex(Qt::MouseButton button, int x, int y)
@@ -53,7 +54,7 @@ Instruction *EpidemicEventInstruction::triggerDone()
 
     if(this->step == 0)
     {
-        next = this->drawFirstCard();
+        next = this->setActiveRegion();
 
         if(next != NULL)
         {
@@ -63,7 +64,7 @@ Instruction *EpidemicEventInstruction::triggerDone()
 
     if(this->step == 1)
     {
-        next = this->setActiveRegion();
+        next = this->checkActiveRegion();
 
         if(next != NULL)
         {
@@ -111,10 +112,10 @@ Instruction *EpidemicEventInstruction::triggerDone()
     return this;
 }
 
-Instruction *EpidemicEventInstruction::drawFirstCard()
+Instruction *EpidemicEventInstruction::setActiveRegion()
 {
     this->step = 1;
-    this->first = this->boardModel->drawCard();
+    this->drawActiveRegion();
 
     if(this->boardModel->isEndOfEra())
     {
@@ -126,22 +127,15 @@ Instruction *EpidemicEventInstruction::drawFirstCard()
     return NULL;
 }
 
-Instruction *EpidemicEventInstruction::setActiveRegion()
+Instruction *EpidemicEventInstruction::checkActiveRegion()
 {
     this->step = 2;
-    this->boardModel->setActiveRegion(this->first->getShapeNumbers().value(Event::RED_CIRCLE));
-    this->boardModel->sendMessage(QString("The active region is %1.").arg(this->boardModel->refActiveRegion()->getRegion()));
-
     if(this->boardModel->refActiveRegion()->getTribes() == 0)
     {
         this->boardModel->sendMessage("But the active region has no tribes.");
         this->boardModel->sendMessage("The EPIDEMIC will not spread.");
-        this->boardModel->sendMessage("The event ends...");
-        this->boardModel->sendMessage(" ");
         this->boardModel->unsetActiveRegion();
-        this->nextInstruction->setKeepInstruction(false);
-        this->nextInstruction->initInstruction();
-        return this->nextInstruction;
+        return this->endEvent();
     }
 
     return NULL;
@@ -176,12 +170,8 @@ Instruction *EpidemicEventInstruction::continueEpidemic()
     if(this->populationLoss <= 0)
     {
         this->boardModel->sendMessage(QString("The Population loss is 0."));
-        this->boardModel->sendMessage("The event ends...");
-        this->boardModel->sendMessage(" ");
         this->boardModel->unsetActiveRegion();
-        this->nextInstruction->setKeepInstruction(false);
-        this->nextInstruction->initInstruction();
-        return this->nextInstruction;
+        return this->endEvent();
     }
 
     this->boardModel->sendMessage(QString("Population Loss left: %1").arg(this->populationLoss));
@@ -190,12 +180,8 @@ Instruction *EpidemicEventInstruction::continueEpidemic()
     {
         this->boardModel->sendMessage(" ");
         this->boardModel->sendMessage(QString("The EPIDEMIC cannot spread further with 2 or less tribes left in the EMPIRE."));
-        this->boardModel->sendMessage("The event ends...");
-        this->boardModel->sendMessage(" ");
         this->boardModel->unsetActiveRegion();
-        this->nextInstruction->setKeepInstruction(false);
-        this->nextInstruction->initInstruction();
-        return this->nextInstruction;
+        return this->endEvent();
     }
 
     QMap<int, RegionModel *> adjacentRegions = this->boardModel->getAdjacentRegions(this->boardModel->refActiveRegion()->getRegion());
@@ -212,12 +198,8 @@ Instruction *EpidemicEventInstruction::continueEpidemic()
     if(adjacentRegionsWithTribes.size() == 0)
     {
         this->boardModel->sendMessage(QString("No adjacent regions has any tribes and the EPIDEMIC is stopped."));
-        this->boardModel->sendMessage("The event ends...");
-        this->boardModel->sendMessage(" ");
         this->boardModel->unsetActiveRegion();
-        this->nextInstruction->setKeepInstruction(false);
-        this->nextInstruction->initInstruction();
-        return this->nextInstruction;
+        return this->endEvent();
     }
     else
     {

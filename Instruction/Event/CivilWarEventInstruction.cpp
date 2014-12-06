@@ -1,0 +1,151 @@
+#include "CivilWarEventInstruction.hpp"
+
+#include "Instruction/EndOfEraInstruction.hpp"
+#include "Common.hpp"
+
+CivilWarEventInstruction::CivilWarEventInstruction(BoardModel *boardModel, Instruction *nextInstruction, const Event *event)
+    : EventInstruction(boardModel, nextInstruction, event)
+{
+    this->nextInstruction->setKeepInstruction(true);
+    this->colleteralDamage = 0;
+    this->totalTribes = 0;
+    this->step = 0;
+}
+
+void CivilWarEventInstruction::initInstruction()
+{
+    this->boardModel->sendMessage("CIVIL WAR:");
+    this->boardModel->sendMessage("Press done to continue.");
+    this->boardModel->sendMessage(" ");
+    return;
+}
+
+Instruction *CivilWarEventInstruction::triggerHex(Qt::MouseButton button, int x, int y)
+{
+    RegionModel *regionModel = this->boardModel->refRegionModel(x,y);
+
+    if(regionModel == NULL)
+    {
+        return this;
+    }
+
+    if(button == Qt::LeftButton &&
+       this->colleteralDamage > 0 &&
+       regionModel->getTribes() > 0 &&
+       affectedRegions.contains(regionModel->getRegion()))
+    {
+        regionModel->setTribes(regionModel->getTribes()-1);
+        this->colleteralDamage--;
+        this->boardModel->sendMessage(QString("Decimated one Tribe in Region %1. Colleteral damage left: %2")
+                                      .arg(regionModel->getRegion())
+                                      .arg(this->colleteralDamage));
+    }
+
+    return this;
+}
+
+Instruction *CivilWarEventInstruction::triggerDone()
+{
+    if(this->step == 0)
+    {
+        this->step = 1;
+        this->drawActiveRegion();
+
+        RegionModel *activeRegion = this->boardModel->refActiveRegion();
+        QMap<int, RegionModel *> possibleRegions;
+        possibleRegions = this->boardModel->getAdjacentRegions(activeRegion->getRegion());
+        possibleRegions.insert(activeRegion->getRegion(), activeRegion);
+
+        foreach(int region, possibleRegions.keys())
+        {
+            RegionModel *regionModel = possibleRegions.value(region);
+            if(regionModel->hasCity())
+            {
+                regionModel->decreaseCityAV(2);
+                regionModel->decimateZeroAVCity();
+                this->affectedRegions.insert(region, regionModel);
+            }
+        }
+
+        this->boardModel->sendMessage("The city AV of the active region and bordering regions are reduced by 2.");
+        this->boardModel->sendMessage("Any regions of those with a city are thereby affected regions.");
+
+        if(this->affectedRegions.isEmpty())
+        {
+            this->boardModel->sendMessage("But, none of the regions had a city.");
+            this->boardModel->unsetActiveRegion();
+            return this->endEvent();
+        }
+        else
+        {
+            this->boardModel->sendMessage(QString("The affected regions are %1.")
+                                          .arg(Common::listUpRegions(this->affectedRegions.values())));
+            this->boardModel->sendMessage(" ");
+        }
+
+        if(this->boardModel->isEndOfEra())
+        {
+            Instruction *next = new EndOfEraInstruction(this->boardModel, this);
+            next->initInstruction();
+            return next;
+        }
+    }
+
+    if(this->step == 1)
+    {
+        this->step = 2;
+        this->colleteralDamage = this->boardModel->drawCard()->getShapeNumbers().value(Event::BLUE_HEXAGON, 0);
+
+        foreach(RegionModel *regionModel, this->affectedRegions.values())
+        {
+            this->totalTribes += regionModel->getTribes();
+        }
+
+        this->boardModel->sendMessage("The affected regions have their tribes reduced.");
+        this->boardModel->sendMessage(QString("The total amount of tribes to be reduced is the colleteral damage."));
+        this->boardModel->sendMessage(QString("The colleteral damage is %1.").arg(this->colleteralDamage));
+        this->boardModel->sendMessage(" ");
+
+        if(this->boardModel->isEndOfEra())
+        {
+            Instruction *next = new EndOfEraInstruction(this->boardModel, this);
+            next->initInstruction();
+            return next;
+        }
+    }
+
+    if(this->step == 2)
+    {
+        this->step = -1;
+
+        if(this->totalTribes > this->colleteralDamage)
+        {
+            this->boardModel->sendMessage("The colleteral damage is less than the total tribes in the affected regions.");
+            this->boardModel->sendMessage("Distribute all the colleteral damage in the affected regions.");
+            this->boardModel->sendMessage("Decrease colleteral damage for each tribe reduced in the affected regions.");
+            this->boardModel->sendMessage(" ");
+            this->boardModel->sendMessage("Press Done to continue.");
+
+            return this;
+        }
+        else
+        {
+            foreach(RegionModel *RegionModel, this->affectedRegions.values())
+            {
+                RegionModel->setTribes(0);
+            }
+            this->colleteralDamage = 0;
+
+            this->boardModel->sendMessage("The total amount of tribes are less or equal than the colleteral damage.");
+            this->boardModel->sendMessage("Therefore, ALL tribes are reduced.");
+        }
+    }
+
+    if(this->step == -1 && this->colleteralDamage != 0)
+    {
+        return this;
+    }
+
+    this->boardModel->unsetActiveRegion();
+    return this->endEvent();
+}

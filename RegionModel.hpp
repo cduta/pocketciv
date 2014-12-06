@@ -33,7 +33,7 @@ public:
 
     void decimateSelectedTribes();
 
-    void addCityAV(int cityAV);
+    void increaseCityAV(int cityAV);
     void decreaseCityAV(int cityAV);
     void decimateZeroAVCity();
 

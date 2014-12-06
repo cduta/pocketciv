@@ -1,14 +1,11 @@
 #ifndef ANARCHYEVENTINSTRUCTION_HPP
 #define ANARCHYEVENTINSTRUCTION_HPP
 
-#include "Instruction/Instruction.hpp"
+#include "Instruction/Event/EventInstruction.hpp"
 #include "BoardModel.hpp"
 
-class AnarchyEventInstruction : public Instruction
+class AnarchyEventInstruction : public EventInstruction
 {
-    BoardModel *boardModel;
-    Instruction *nextInstruction;
-    const Event *event;
 
 public:
     AnarchyEventInstruction(BoardModel *boardModel, Instruction *nextInstruction, const Event *event);
