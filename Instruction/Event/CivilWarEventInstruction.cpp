@@ -93,7 +93,7 @@ Instruction *CivilWarEventInstruction::triggerDone()
             this->boardModel->sendMessage(" ");
         }
 
-        POKET_CIV_END_OF_ERA_CHECK
+        POCKET_CIV_END_OF_ERA_CHECK
     }
 
     if(this->step == 1)
@@ -111,20 +111,18 @@ Instruction *CivilWarEventInstruction::triggerDone()
         this->boardModel->sendMessage(QString("The colleteral damage is %1.").arg(this->colleteralDamage));
         this->boardModel->sendMessage(" ");
 
-        POKET_CIV_END_OF_ERA_CHECK
+        POCKET_CIV_END_OF_ERA_CHECK
     }
 
-    if(this->step == 2)
+    if(this->step == 2 && this->colleteralDamage > 0)
     {
         this->step = -1;
 
         if(this->totalTribes > this->colleteralDamage)
         {
-            this->boardModel->sendMessage("The colleteral damage is less than the total tribes in the affected regions.");
-            this->boardModel->sendMessage("Distribute all the colleteral damage in the affected regions.");
+            this->boardModel->sendMessage("Distribute all the colleteral damage in the affected regions with tribes.");
             this->boardModel->sendMessage("Reduce a tribe for each colleteral damage distributed in the affected regions.");
             this->boardModel->sendMessage(" ");
-            this->boardModel->sendMessage("Press Done to continue.");
 
             return this;
         }
@@ -141,11 +139,11 @@ Instruction *CivilWarEventInstruction::triggerDone()
         }
     }
 
-    if(this->step == -1 && this->colleteralDamage > 0)
+    if(this->step == -1 && this->colleteralDamage == 0)
     {
-        return this;
+        this->boardModel->unsetActiveRegion();
+        return this->endEvent();
     }
 
-    this->boardModel->unsetActiveRegion();
-    return this->endEvent();
+    return this;
 }

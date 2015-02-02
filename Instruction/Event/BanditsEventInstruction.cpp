@@ -23,7 +23,7 @@ Instruction *BanditsEventInstruction::triggerDone()
     {
         this->step = 1;
         this->drawActiveRegion();
-        POKET_CIV_END_OF_ERA_CHECK
+        POCKET_CIV_END_OF_ERA_CHECK
     }
 
     if(this->step == 1)
@@ -37,7 +37,7 @@ Instruction *BanditsEventInstruction::triggerDone()
             this->boardModel->sendMessage(QString("The attacking force of the bandits is %1.").arg(this->attackingForce));
             this->boardModel->sendMessage(" ");
 
-            POKET_CIV_END_OF_ERA_CHECK
+            POCKET_CIV_END_OF_ERA_CHECK
         }
         else
         {

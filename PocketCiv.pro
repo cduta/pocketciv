@@ -48,7 +48,20 @@ SOURCES += main.cpp\
     Instruction/Event/EventInstruction.cpp \
     Event/CivilWarEvent.cpp \
     Event/CorruptionEvent.cpp \
-    Instruction/Event/CorruptionEventInstruction.cpp
+    Instruction/Event/CorruptionEventInstruction.cpp \
+    Event/EarthquakeEvent.cpp \
+    Instruction/Event/EarthquakeEventInstruction.cpp \
+    Event/FamineEvent.cpp \
+    Instruction/Event/FamineEventInstruction.cpp \
+    Event/FloodEvent.cpp \
+    Instruction/Event/FloodEventInstruction.cpp \
+    Instruction/TsunamiInstruction.cpp \
+    Event/SandstormEvent.cpp \
+    Instruction/Event/SandstormEventInstruction.cpp \
+    Event/SuperstitionEvent.cpp \
+    Instruction/Event/SuperstitionEventInstruction.cpp \
+    Event/TribalWarEvent.cpp \
+    Instruction/Event/TribalWarEventInstruction.cpp
 
 HEADERS  += \
     PocketCivMain.hpp \
@@ -86,7 +99,20 @@ HEADERS  += \
     Instruction/Event/EventInstruction.hpp \
     Event/CivilWarEvent.hpp \
     Event/CorruptionEvent.hpp \
-    Instruction/Event/CorruptionEventInstruction.hpp
+    Instruction/Event/CorruptionEventInstruction.hpp \
+    Event/EarthquakeEvent.hpp \
+    Instruction/Event/EarthquakeEventInstruction.hpp \
+    Event/FamineEvent.hpp \
+    Instruction/Event/FamineEventInstruction.hpp \
+    Event/FloodEvent.hpp \
+    Instruction/Event/FloodEventInstruction.hpp \
+    Instruction/TsunamiInstruction.hpp \
+    Event/SandstormEvent.hpp \
+    Instruction/Event/SandstormEventInstruction.hpp \
+    Event/SuperstitionEvent.hpp \
+    Instruction/Event/SuperstitionEventInstruction.hpp \
+    Event/TribalWarEvent.hpp \
+    Instruction/Event/TribalWarEventInstruction.hpp
 
 FORMS    +=
 

@@ -72,7 +72,7 @@ Instruction *CorruptionEventInstruction::triggerDone()
         this->corruption = this->boardModel->drawCard()->getShapeNumberSum(this->event->getShapeNumberAmounts());
         this->boardModel->sendMessage(QString("The corruption is %1.").arg(this->corruption));
 
-        POKET_CIV_END_OF_ERA_CHECK
+        POCKET_CIV_END_OF_ERA_CHECK
     }
 
     if(this->step == 1)

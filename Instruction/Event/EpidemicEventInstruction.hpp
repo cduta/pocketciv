@@ -2,7 +2,6 @@
 #define EPIDEMICEVENTINSTRUCTION_HPP
 
 #include "Instruction/Event/EventInstruction.hpp"
-#include "BoardModel.hpp"
 
 class EpidemicEventInstruction : public EventInstruction
 {

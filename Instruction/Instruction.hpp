@@ -4,7 +4,8 @@
 #include <QObject>
 #include <QDialog>
 
-#define POKET_CIV_END_OF_ERA_CHECK \
+// FIXME: Remove macro and replace its usage.
+#define POCKET_CIV_END_OF_ERA_CHECK \
     if(this->boardModel->isEndOfEra()) \
     { \
         Instruction *next = new EndOfEraInstruction(this->boardModel, this); \

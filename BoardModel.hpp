@@ -73,6 +73,7 @@ public:
     void moveTribes(int fromRegion, int toRegion, int howMany);
 
     bool bordersOnFrontier(int region);
+    bool bordersOnSea(int region);
     bool bordersOnDesert(int region);
 
     void decimateUnsupportedTribes();

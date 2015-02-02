@@ -9,6 +9,11 @@
 #include "Event/CivilWarEvent.hpp"
 #include "Event/CorruptionEvent.hpp"
 #include "Event/EpidemicEvent.hpp"
+#include "Event/FamineEvent.hpp"
+#include "Event/FloodEvent.hpp"
+#include "Event/SandstormEvent.hpp"
+#include "Event/SuperstitionEvent.hpp"
+#include "Event/TribalWarEvent.hpp"
 
 BoardModel::BoardModel(int width, int height, QObject *parent)
     : QObject(parent),
@@ -30,9 +35,12 @@ BoardModel::BoardModel(int width, int height, QObject *parent)
 {
     this->newBoard(width, height);
     QMap<int, Event *> events1;
+    events1.insert(1, new TribalWarEvent(this));
     events1.insert(2, new EpidemicEvent(0,0,1,this));
+    events1.insert(3, new FamineEvent(this));
     events1.insert(8, new CorruptionEvent(0,0,1,this));
     QMap<int, Event *> events2;
+    events2.insert(2, new TribalWarEvent(this));
     events2.insert(3, new CorruptionEvent(1,0,0,this));
     events2.insert(5, new CivilWarEvent(this));
     QMap<int, Event *> events3;
@@ -40,19 +48,34 @@ BoardModel::BoardModel(int width, int height, QObject *parent)
     events3.insert(4, new EpidemicEvent(1,1,1,this));
     events3.insert(8, new CivilWarEvent(this));
     QMap<int, Event *> events4;
+    events4.insert(4, new SuperstitionEvent(1,0,0,this));
+    events4.insert(6, new FamineEvent(this));
     QMap<int, Event *> events5;
     events5.insert(3, new EpidemicEvent(0,0,1,this));
+    events5.insert(5, new CorruptionEvent(0,1,0,this));
+    events5.insert(6, new TribalWarEvent(this));
     events5.insert(7, new CorruptionEvent(0,1,0,this));
+    events5.insert(8, new FloodEvent(0,2,0,this));
     QMap<int, Event *> events6;
+    events6.insert(1, new FloodEvent(1,0,0,this));
     events6.insert(4, new CivilWarEvent(this));
+    events6.insert(5, new SandstormEvent(this));
     events6.insert(6, new EpidemicEvent(1,0,1,this));
     QMap<int, Event *> events7;
     events7.insert(6, new AnarchyEvent(this));
     events7.insert(7, new BanditsEvent(0,0,2,this));
     QMap<int, Event *> events8;
+    events8.insert(1, new SandstormEvent(this));
+    events8.insert(2, new TribalWarEvent(this));
+    events8.insert(4, new FloodEvent(1,1,0,this));
     QMap<int, Event *> events9;
     events9.insert(6, new CorruptionEvent(0,1,0,this));
+    events9.insert(7, new SuperstitionEvent(0,0,1,this));
+    events9.insert(8, new SuperstitionEvent(0,0,1,this));
     QMap<int, Event *> events10;
+    events10.insert(1, new FamineEvent(this));
+    events10.insert(2, new FamineEvent(this));
+    events10.insert(3, new SandstormEvent(this));
     events10.insert(8, new BanditsEvent(1,1,1,this));
     QMap<int, Event *> events11;
     events11.insert(4, new BanditsEvent(0,0,2,this));
@@ -61,14 +84,23 @@ BoardModel::BoardModel(int width, int height, QObject *parent)
     events11.insert(8, new CorruptionEvent(0,1,0,this));
     QMap<int, Event *> events12;
     events12.insert(4, new AnarchyEvent(this));
+    events12.insert(5, new FloodEvent(1,2,0,this));
     QMap<int, Event *> events13;
+    events13.insert(3, new TribalWarEvent(this));
     events13.insert(5, new BanditsEvent(0,0,2,this));
     events13.insert(6, new CivilWarEvent(this));
+    events13.insert(8, new SuperstitionEvent(0,1,0,this));
     QMap<int, Event *> events14;
+    events14.insert(7, new FamineEvent(this));
     events14.insert(8, new AnarchyEvent(this));
     QMap<int, Event *> events15;
+    events15.insert(2, new SandstormEvent(this));
+    events15.insert(3, new FloodEvent(0,2,0,this));
+    events15.insert(4, new SandstormEvent(this));
     QMap<int, Event *> events16;
     events16.insert(1, new EpidemicEvent(0,1,0,this));
+    events16.insert(2, new FloodEvent(0,1,0,this));
+    events13.insert(4, new SuperstitionEvent(1,0,0,this));
     events16.insert(7, new AnarchyEvent(this));
 
     // FIXME: Is only testing.
@@ -402,6 +434,22 @@ bool BoardModel::bordersOnFrontier(int region)
         foreach(HexModel *adjacentHex, hexModel->getAdjacentHexes().values())
         {
             if(adjacentHex->isFrontier())
+            {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
+bool BoardModel::bordersOnSea(int region)
+{
+    foreach(HexModel *hexModel, this->regionHexes[region])
+    {
+        foreach(HexModel *adjacentHex, hexModel->getAdjacentHexes().values())
+        {
+            if(adjacentHex->isSea())
             {
                 return true;
             }
@@ -973,9 +1021,13 @@ void BoardModel::clearBoard()
 
     foreach(QList<HexModel *> list, this->hexModels)
     {
-        foreach(HexModel *hexModel, list)
+        for(int i = 0; i < list.size(); ++i)
         {
-            hexModel->deleteLater();
+            HexModel *hexModel = list.at(i);
+            if(hexModel != NULL)
+            {
+                hexModel->deleteLater();
+            }
         }
     }
 

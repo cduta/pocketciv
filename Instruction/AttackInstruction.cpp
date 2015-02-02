@@ -11,6 +11,7 @@ AttackInstruction::AttackInstruction(BoardModel *boardModel, Instruction *nextIn
 void AttackInstruction::initInstruction()
 {
     this->boardModel->sendMessage(QString("%1 ATTACK:").arg(this->what));
+    this->boardModel->sendMessage(" ");
     this->boardModel->sendMessage(QString("The attacking force is %1 in region %2.")
                                   .arg(this->attackingForce)
                                   .arg(this->boardModel->refActiveRegion()->getRegion()));

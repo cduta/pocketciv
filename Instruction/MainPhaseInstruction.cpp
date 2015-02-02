@@ -110,7 +110,7 @@ Instruction *MainPhaseInstruction::triggerDone()
             }
 
             this->boardModel->unsetActiveRegion();
-            POKET_CIV_END_OF_ERA_CHECK
+            POCKET_CIV_END_OF_ERA_CHECK
         }
 
         if(this->gainGold == 0)

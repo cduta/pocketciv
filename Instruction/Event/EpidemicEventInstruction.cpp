@@ -20,7 +20,7 @@ Instruction *EpidemicEventInstruction::triggerHex(Qt::MouseButton button, int x,
 {
     RegionModel *regionModel = this->boardModel->refRegionModel(x,y);
 
-    if(regionModel == NULL)
+    if(regionModel == NULL || this->step != -1)
     {
         return this;
     }
@@ -117,7 +117,7 @@ Instruction *EpidemicEventInstruction::setActiveRegion()
     this->step = 1;
     this->drawActiveRegion();
 
-    POKET_CIV_END_OF_ERA_CHECK
+    POCKET_CIV_END_OF_ERA_CHECK
 
     return NULL;
 }

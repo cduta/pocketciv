@@ -13,6 +13,7 @@ RegionModel::RegionModel(int region, QObject *parent)
       forest(false),
       farm(false),
       desert(false),
+      faultLine(false),
       selected(false),
       city(false),
       cityAV(0)
@@ -78,6 +79,23 @@ void RegionModel::mergeMovedTribes()
     return;
 }
 
+void RegionModel::decimateTribes(int tribes)
+{
+    if(tribes < 0)
+    {
+        return;
+    }
+
+    this->tribes -= tribes;
+
+    if(this->tribes < 0)
+    {
+        this->tribes = 0;
+    }
+
+    return;
+}
+
 void RegionModel::decimateSelectedTribes()
 {
     this->setTribes(this->tribes - this->selectedTribes);
@@ -118,6 +136,13 @@ void RegionModel::decimateZeroAVCity()
     return;
 }
 
+void RegionModel::decimateWonders()
+{
+    // TODO: Decimate Wonders once they are implemented.
+
+    return;
+}
+
 int RegionModel::getRegion() const
 {
     return this->region;
@@ -126,6 +151,11 @@ int RegionModel::getRegion() const
 int RegionModel::getTribes() const
 {
     return this->tribes;
+}
+
+bool RegionModel::hasTribes() const
+{
+    return this->tribes > 0;
 }
 
 int RegionModel::getMovedTribes() const
@@ -161,6 +191,11 @@ bool RegionModel::hasFarm() const
 bool RegionModel::hasDesert() const
 {
     return this->desert;
+}
+
+bool RegionModel::hasFaultLine() const
+{
+    return this->faultLine;
 }
 
 bool RegionModel::isSelected() const
@@ -234,6 +269,12 @@ void RegionModel::setFarm(bool farm)
 void RegionModel::setDesert(bool desert)
 {
     this->desert = desert;
+    return;
+}
+
+void RegionModel::setFaultLine(bool faultLine)
+{
+    this->faultLine = faultLine;
     return;
 }
 

@@ -6,6 +6,7 @@
 class RegionModel : public QObject
 {
     Q_OBJECT
+
     int region;
     int tribes;
     int movedTribes;
@@ -15,9 +16,11 @@ class RegionModel : public QObject
     bool forest;
     bool farm;
     bool desert;
+    bool faultLine;
     bool selected;
     bool city;
     int cityAV;
+
 public:
     RegionModel(int region = -1, QObject *parent = 0);
 
@@ -31,15 +34,19 @@ public:
     void removeFromMovedTribes(int movedTribes);
     void mergeMovedTribes();
 
+    void decimateTribes(int tribes);
     void decimateSelectedTribes();
 
     void increaseCityAV(int cityAV);
     void decreaseCityAV(int cityAV);
     void decimateZeroAVCity();
 
+    void decimateWonders();
+
     // Get-Methods
     int getRegion() const;
     int getTribes() const;
+    bool hasTribes() const;
     int getMovedTribes() const;
     int getSelectedTribes() const;
     bool hasMountain() const;
@@ -47,6 +54,7 @@ public:
     bool hasForest() const;
     bool hasFarm() const;
     bool hasDesert() const;
+    bool hasFaultLine() const;
     bool isSelected() const;
     bool hasCity() const;
     int getCityAV() const;
@@ -60,6 +68,7 @@ public:
     void setForest(bool forest);
     void setFarm(bool farm);
     void setDesert(bool desert);
+    void setFaultLine(bool faultLine);
     void setSelected(bool selected);
 };
 
