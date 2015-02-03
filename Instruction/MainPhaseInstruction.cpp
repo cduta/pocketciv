@@ -146,7 +146,8 @@ Instruction *MainPhaseInstruction::triggerDone()
 
     if(!this->initialized)
     {
-        this->boardModel->clearMessages();
+        this->boardModel->sendMessage(" ");
+        this->boardModel->sendMessage(" ");
         this->boardModel->sendMessage("Main Phase:");
         this->boardModel->sendMessage(" ");
         this->boardModel->sendMessage("You can do any amount of actions by clicking on any of the buttons.");

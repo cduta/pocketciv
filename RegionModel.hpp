@@ -65,6 +65,7 @@ public:
     void setCityAV(int cityAV);
     void setSelectedTribes(int selectedTribes);
     void setMountain(bool mountain);
+    void setVolcano(bool volcano);
     void setForest(bool forest);
     void setFarm(bool farm);
     void setDesert(bool desert);

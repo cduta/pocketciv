@@ -14,6 +14,9 @@ class BoardModel : public QObject
 {
     Q_OBJECT
 
+public:
+    enum Empire {ATLANTEA = 0, FLOREN, GILDA, NORDIG};
+
 signals:
     void boardUpdated();
     void boardCleared();
@@ -92,6 +95,8 @@ public:
     void enableMainPhaseButtons();
     void decimateAllSelectedTribes();
     void unselectAllSelectedTribes();
+    void addGold(int gold);
+    void removeGold(int gold);
 
 private:
     void newBoard(int width, int height);
@@ -129,6 +134,7 @@ public:
     int getAllSelectedTribes() const;
     int getGold() const;
     int getGloryScore() const;
+    QString getEmpireName(BoardModel::Empire empire) const;
 
 // Set-Methods
     void setActiveRegion(int region, bool isBad = true);

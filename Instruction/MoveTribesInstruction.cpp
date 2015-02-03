@@ -86,7 +86,7 @@ Instruction *MoveTribesInstruction::triggerDone()
 
     this->boardModel->mergeAllMovedTribes();
     this->boardModel->unselectAllRegions();
-    this->boardModel->clearMessages();
+    this->boardModel->sendMessage(" ");
     Instruction *eventInstruction = event->happen(main);
     eventInstruction->initInstruction();
     Instruction *next;

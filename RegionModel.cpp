@@ -227,6 +227,10 @@ void RegionModel::setTribes(int tribes)
 void RegionModel::setCity(bool city)
 {
     this->city = city;
+    if(!this->city)
+    {
+        this->setCityAV(0);
+    }
     return;
 }
 
@@ -251,12 +255,30 @@ void RegionModel::setSelectedTribes(int selectedTribes)
 void RegionModel::setMountain(bool mountain)
 {
     this->mountain = mountain;
+    if(this->mountain)
+    {
+        this->volcano = false;
+    }
+    return;
+}
+
+void RegionModel::setVolcano(bool volcano)
+{
+    this->volcano = volcano;
+    if(this->volcano)
+    {
+        this->mountain = false;
+    }
     return;
 }
 
 void RegionModel::setForest(bool forest)
 {
     this->forest = forest;
+    if(this->forest)
+    {
+        this->desert = false;
+    }
     return;
 }
 
@@ -269,6 +291,10 @@ void RegionModel::setFarm(bool farm)
 void RegionModel::setDesert(bool desert)
 {
     this->desert = desert;
+    if(this->desert)
+    {
+        this->mountain = false;
+    }
     return;
 }
 

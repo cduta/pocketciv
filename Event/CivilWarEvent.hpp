@@ -9,7 +9,7 @@ class CivilWarEvent : public Event
     BoardModel *boardModel;
 
 public:
-    CivilWarEvent(BoardModel *boardModel);
+    CivilWarEvent(int redCircles, int greenSquares, int blueHexagons, BoardModel *boardModel);
 
     virtual QString getEventName() const;
     virtual Instruction *happen(Instruction *next) const;

@@ -32,7 +32,7 @@ Instruction *EndOfEraInstruction::triggerDone()
 {
     if(this->boardModel->getEra() == this->boardModel->getLastEra() || this->endGame)
     {
-        this->boardModel->clearMessages();
+        this->boardModel->sendMessage(" ");
 
         if(this->boardModel->getEra() == this->boardModel->getLastEra())
         {

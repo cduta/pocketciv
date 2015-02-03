@@ -2,8 +2,8 @@
 
 #include "Instruction/Event/CivilWarEventInstruction.hpp"
 
-CivilWarEvent::CivilWarEvent(BoardModel *boardModel)
-    : Event(), boardModel(boardModel)
+CivilWarEvent::CivilWarEvent(int redCircles, int greenSquares, int blueHexagons, BoardModel *boardModel)
+    : Event(redCircles, greenSquares, blueHexagons), boardModel(boardModel)
 {}
 
 QString CivilWarEvent::getEventName() const

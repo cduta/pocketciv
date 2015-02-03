@@ -1,7 +1,7 @@
 #include "EventCard.hpp"
 
-EventCard::EventCard(int redCircleNumber, int greenSquareNumber, int blueHexagonNumber, const QMap<int, Event *> &events, QObject *parent)
-    : QObject(parent), events(events)
+EventCard::EventCard(int redCircleNumber, int greenSquareNumber, int blueHexagonNumber, bool handshake, int goldNuggets, const QMap<int, Event *> &events, QObject *parent)
+    : QObject(parent), handshake(handshake), goldNuggets(goldNuggets), events(events)
 {
     this->shapeNumbers.insert(Event::RED_CIRCLE, redCircleNumber);
     this->shapeNumbers.insert(Event::GREEN_SQUARE, greenSquareNumber);
@@ -28,4 +28,14 @@ int EventCard::getShapeNumberSum(const QMap<Event::NumberShapes, int> &shapeNumb
     }
 
     return result;
+}
+
+bool EventCard::hasHandshake() const
+{
+    return this->handshake;
+}
+
+int EventCard::getGoldNuggets() const
+{
+    return this->goldNuggets;
 }

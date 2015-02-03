@@ -4,9 +4,9 @@ EventInstruction::EventInstruction(BoardModel *boardModel, Instruction *nextInst
     : Instruction(parent), boardModel(boardModel), nextInstruction(nextInstruction), event(event)
 {}
 
-void EventInstruction::drawActiveRegion()
+void EventInstruction::drawActiveRegion(bool isBad)
 {
-    this->boardModel->setActiveRegion(this->boardModel->drawCard()->getShapeNumbers().value(Event::RED_CIRCLE, 0), true);
+    this->boardModel->setActiveRegion(this->boardModel->drawCard()->getShapeNumbers().value(Event::RED_CIRCLE, 0), isBad);
     this->boardModel->sendMessage(QString("The active region is %1.").arg(this->boardModel->refActiveRegion()->getRegion()));
     this->boardModel->sendMessage(" ");
     return;

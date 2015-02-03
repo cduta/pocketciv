@@ -19,7 +19,7 @@ protected:
 public:
     EventInstruction(BoardModel *boardModel, Instruction *nextInstruction, const Event *event, QObject * parent = 0);
 
-    void drawActiveRegion();
+    void drawActiveRegion(bool isBad = true);
     Instruction *endEvent();
 };
 

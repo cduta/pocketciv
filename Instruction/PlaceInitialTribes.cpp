@@ -46,7 +46,7 @@ Instruction *PlaceInitialTribes::triggerDone()
     if(this->boardModel->getTribeCount() == 3)
     {
         this->boardModel->sendMessage("Done creating the world!");
-        this->boardModel->clearMessages();
+        this->boardModel->sendMessage(" ");
         this->boardModel->sendMessage("Discarding 3 event cards...");
         this->boardModel->drawCard(false);
         this->boardModel->drawCard(false);

@@ -61,7 +61,14 @@ SOURCES += main.cpp\
     Event/SuperstitionEvent.cpp \
     Instruction/Event/SuperstitionEventInstruction.cpp \
     Event/TribalWarEvent.cpp \
-    Instruction/Event/TribalWarEventInstruction.cpp
+    Instruction/Event/TribalWarEventInstruction.cpp \
+    Event/UprisingEvent.cpp \
+    Instruction/Event/UprisingEventInstruction.cpp \
+    Event/VolcanoEvent.cpp \
+    Instruction/Event/VolcanoEventInstruction.cpp \
+    Event/VisitationEvent.cpp \
+    Instruction/Event/VisitationEventInstruction.cpp \
+    Instruction/TradeInstruction.cpp
 
 HEADERS  += \
     PocketCivMain.hpp \
@@ -112,7 +119,14 @@ HEADERS  += \
     Event/SuperstitionEvent.hpp \
     Instruction/Event/SuperstitionEventInstruction.hpp \
     Event/TribalWarEvent.hpp \
-    Instruction/Event/TribalWarEventInstruction.hpp
+    Instruction/Event/TribalWarEventInstruction.hpp \
+    Event/UprisingEvent.hpp \
+    Instruction/Event/UprisingEventInstruction.hpp \
+    Event/VolcanoEvent.hpp \
+    Instruction/Event/VolcanoEventInstruction.hpp \
+    Event/VisitationEvent.hpp \
+    Instruction/Event/VisitationEventInstruction.hpp \
+    Instruction/TradeInstruction.hpp
 
 FORMS    +=
 

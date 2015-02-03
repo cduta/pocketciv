@@ -9,7 +9,7 @@ UpkeepInstruction::UpkeepInstruction(BoardModel *boardModel)
 
 void UpkeepInstruction::initInstruction()
 {
-    this->boardModel->clearMessages();
+    this->boardModel->sendMessage(" ");
     this->boardModel->sendMessage("Upkeep:");
     this->boardModel->sendMessage(" ");
     this->boardModel->sendMessage("Decimate unsupported tribes.");
@@ -146,7 +146,7 @@ Instruction *UpkeepInstruction::triggerDone()
         Instruction *next;
         if(this->boardModel->getTribeCount() == 0 && !this->boardModel->hasCity())
         {
-            this->boardModel->clearMessages();
+            this->boardModel->sendMessage(" ");
             this->boardModel->sendMessage("The EMPIRE had no more tribes and cities left.");
             next = new EndGameInstruction(this->boardModel);
         }
