@@ -151,7 +151,7 @@ BoardModel::BoardModel(int width, int height, QObject *parent)
     events16.insert(7, new AnarchyEvent(this));
     events16.insert(8, new VisitationEvent(0,1,2,BoardModel::ATLANTEA, this));
 
-    // FIXME: Is only testing.
+    // NOTE: Is only testing.
 //    events1.insert(1, new CorruptionEvent(0,0,1,this));
 //    events2.insert(1, new CorruptionEvent(0,0,1,this));
 //    events3.insert(1, new CorruptionEvent(0,0,1,this));

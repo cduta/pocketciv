@@ -338,7 +338,7 @@ void PocketCivMain::newGameTriggered()
 
     this->messages->clear();
     this->addMessage("Started a new game!!");
-    this->addMessage("World Generation:");
+    this->addMessage("WORLD GENERATION:");
     this->addMessage(QString("Select two or more connected hexes on the board to form Region %1 out of %2.").
                                  arg(1).arg(8));
     this->addMessage("When you are done, press Done...");

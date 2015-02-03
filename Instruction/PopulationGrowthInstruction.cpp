@@ -9,7 +9,7 @@ PopulationGrowthInstruction::PopulationGrowthInstruction(BoardModel *boardModel)
 void PopulationGrowthInstruction::initInstruction()
 {
     this->boardModel->sendMessage(" ");
-    this->boardModel->sendMessage("Population Growth:");
+    this->boardModel->sendMessage("POPULATION GROWTH:");
     this->boardModel->sendMessage("Added 1 tribe to any region with at least 1 Tribe on it.");
     this->boardModel->populationGrowth();
     this->boardModel->sendMessage(" ");

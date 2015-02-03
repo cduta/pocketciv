@@ -11,7 +11,7 @@ MoveTribesInstruction::MoveTribesInstruction(BoardModel *boardModel)
 
 void MoveTribesInstruction::initInstruction()
 {
-    this->boardModel->sendMessage("Population Movement:");
+    this->boardModel->sendMessage("POPULATION MOVEMENT:");
     this->boardModel->sendMessage("Move tribes from one to another region. Every tribe can be moved once.");
     this->boardModel->sendMessage("When you are done, press Done...");
 }

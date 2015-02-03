@@ -15,7 +15,7 @@ MainPhaseInstruction::MainPhaseInstruction(BoardModel *boardModel)
 
 void MainPhaseInstruction::initInstruction()
 {
-    this->boardModel->sendMessage("Main Phase:");
+    this->boardModel->sendMessage("MAIN PHASE:");
     this->boardModel->sendMessage(" ");
     this->boardModel->sendMessage("Press Done, to begin.");
     return;
@@ -165,7 +165,7 @@ Instruction *MainPhaseInstruction::triggerDone()
     {
         this->boardModel->sendMessage(" ");
         this->boardModel->sendMessage(" ");
-        this->boardModel->sendMessage("Main Phase:");
+        this->boardModel->sendMessage("MAIN PHASE:");
         this->boardModel->sendMessage(" ");
         this->boardModel->sendMessage("You can do any amount of actions by clicking on any of the buttons.");
         this->boardModel->sendMessage("After applying any actions to a region, at least 1 tribe has to remain.");
@@ -192,7 +192,7 @@ Instruction *MainPhaseInstruction::triggerDone()
 Instruction *MainPhaseInstruction::triggerBuildCity()
 {
     this->buildCity = true;
-    this->boardModel->sendMessage("Build City:");
+    this->boardModel->sendMessage("BUILD CITY:");
     this->boardModel->sendMessage("Choose a region without a city.");
     this->boardModel->sendMessage("Decimate 4 tribes on it to build a city with 1 AV.");
     this->boardModel->sendMessage("At least 1 tribe has to remain in the region.");
@@ -208,7 +208,7 @@ Instruction *MainPhaseInstruction::triggerBuildCity()
 Instruction *MainPhaseInstruction::triggerBuildFarm()
 {
     this->buildFarm = true;
-    this->boardModel->sendMessage("Build Farm:");
+    this->boardModel->sendMessage("BUILD FARM:");
     this->boardModel->sendMessage("Choose a region without a farm and with a forest.");
     this->boardModel->sendMessage("Decimate 2 tribes and the forest to build a farm.");
     this->boardModel->sendMessage("At least 1 tribe has to remain in the region.");
@@ -224,7 +224,7 @@ Instruction *MainPhaseInstruction::triggerBuildFarm()
 Instruction *MainPhaseInstruction::triggerExpedition()
 {
     this->expedition = true;
-    this->boardModel->sendMessage("Expedition:");
+    this->boardModel->sendMessage("EXPEDITION:");
     this->boardModel->sendMessage("Choose a region bordering on the frontier.");
     this->boardModel->sendMessage("Decimate any amount of tribes, then draw a card.");
     this->boardModel->sendMessage("Gain Gold equal to the decimated tribes minus the BLUE HEX number.");

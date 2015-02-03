@@ -52,7 +52,7 @@ Instruction *PlaceInitialTribes::triggerDone()
         this->boardModel->drawCard(false);
         this->boardModel->drawCard(false);
         this->boardModel->sendMessage("The Game begins...");
-        this->boardModel->sendMessage("Population Growth:");
+        this->boardModel->sendMessage("POPULATION GROWTH:");
         this->boardModel->sendMessage("Added 1 tribe to any region with at least 1 Tribe on it.");
         this->boardModel->populationGrowth();
         this->boardModel->sendMessage(" ");

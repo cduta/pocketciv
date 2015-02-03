@@ -10,7 +10,7 @@ UpkeepInstruction::UpkeepInstruction(BoardModel *boardModel)
 void UpkeepInstruction::initInstruction()
 {
     this->boardModel->sendMessage(" ");
-    this->boardModel->sendMessage("Upkeep:");
+    this->boardModel->sendMessage("UPKEEP:");
     this->boardModel->sendMessage(" ");
     this->boardModel->sendMessage("Decimate unsupported tribes.");
     this->boardModel->sendMessage("A region can support as much tribes as there are Mountains,");
@@ -163,7 +163,7 @@ Instruction *UpkeepInstruction::triggerDone()
 
 void UpkeepInstruction::endTurn()
 {
-    this->boardModel->sendMessage("Reduce City AV:");
+    this->boardModel->sendMessage("REDUCE CITY AV:");
     this->boardModel->sendMessage("Any city in a region without a farm has its AV reduced by 1.");
     this->boardModel->sendMessage("Any city with 0 AV will be decimated.");
     this->boardModel->sendMessage(" ");
