@@ -36,5 +36,6 @@ Instruction *FamineEventInstruction::triggerDone()
     activeRegion->decreaseCityAV(2);
     activeRegion->decimateZeroAVCity();
 
+    this->boardModel->unsetActiveRegion();
     return this->endEvent();
 }

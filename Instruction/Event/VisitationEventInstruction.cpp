@@ -63,6 +63,7 @@ Instruction *VisitationEventInstruction::triggerDone()
             this->boardModel->sendMessage(QString("The active region does NOT border on a sea or frontier,"));
             this->boardModel->sendMessage(QString("which means they could not have landed there."));
             this->boardModel->sendMessage(QString("Therefore, the %1 empire retreated again.").arg(this->boardModel->getEmpireName(this->empire)));
+            this->boardModel->sendMessage(" ");
             this->boardModel->unsetActiveRegion();
             return this->endEvent();
         }
@@ -71,6 +72,7 @@ Instruction *VisitationEventInstruction::triggerDone()
             this->boardModel->sendMessage(QString("The active region borders on a sea or frontier,"));
             this->boardModel->sendMessage(QString("which means the military forces landed there."));
             this->boardModel->sendMessage(QString("The %1 empire are here to pillage your empire.").arg(this->boardModel->getEmpireName(this->empire)));
+            this->boardModel->sendMessage(" ");
         }
 
         this->attackingForce = this->boardModel->refOriginalCard()->getShapeNumberSum(this->event->getShapeNumberAmounts());

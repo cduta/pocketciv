@@ -109,7 +109,8 @@ Instruction *TsunamiInstruction::triggerDone()
         return this;
     }
 
-    this->boardModel->sendMessage("The Tsunami has subsided and the event ends...");
+    this->boardModel->unsetActiveRegion();
+    this->boardModel->sendMessage("The Tsunami has subsided and the event ends.");
     this->boardModel->sendMessage(" ");
     this->nextInstruction->setKeepInstruction(false);
     this->nextInstruction->initInstruction();

@@ -57,7 +57,7 @@ Instruction *MainPhaseInstruction::triggerHex(Qt::MouseButton button, int x, int
                 if(this->boardModel->refActiveRegion() == NULL &&
                    this->boardModel->bordersOnFrontier(regionModel->getRegion()))
                 {
-                    this->boardModel->setActiveRegion(regionModel->getRegion());
+                    this->boardModel->setActiveRegion(regionModel->getRegion(), false);
                 }
 
                 if(this->boardModel->refActiveRegion() == regionModel)
@@ -92,46 +92,63 @@ Instruction *MainPhaseInstruction::triggerDone()
 {
     if(this->expedition)
     {
-        int selectedTribes = this->boardModel->refActiveRegion()->getSelectedTribes();
-
-        if(!this->expeditionCardDrawn && selectedTribes > 0)
+        if(this->boardModel->refActiveRegion())
         {
-            this->expeditionCardDrawn = true;
-            this->boardModel->sendMessage(QString("Sending %1 tribes on an expedition into the frontier...").arg(selectedTribes));
-            this->boardModel->sendMessage(" ");
-            this->boardModel->decimateAllSelectedTribes();
-            const EventCard * card = this->boardModel->drawCard();
-            int blueHexNumber = card->getShapeNumbers().value(Event::BLUE_HEXAGON, 0);
-            this->gainGold = selectedTribes - blueHexNumber;
+            int selectedTribes = this->boardModel->refActiveRegion()->getSelectedTribes();
 
-            if(this->gainGold < 0)
+            if(!this->expeditionCardDrawn && selectedTribes > 0)
             {
-                this->gainGold = 0;
+                this->expeditionCardDrawn = true;
+                this->boardModel->sendMessage(QString("Sending %1 tribes on an expedition into the frontier...").arg(selectedTribes));
+                this->boardModel->sendMessage(" ");
+                this->boardModel->decimateAllSelectedTribes();
+                const EventCard * card = this->boardModel->drawCard();
+                int blueHexNumber = card->getShapeNumbers().value(Event::BLUE_HEXAGON, 0);
+                this->gainGold = selectedTribes - blueHexNumber;
+
+                if(this->gainGold < 0)
+                {
+                    this->gainGold = 0;
+                }
+
+                this->boardModel->sendMessage(" ");
+                this->boardModel->sendMessage(QString("You gain gold equal to the sent Tribes minus %1 (At least 0).").arg(blueHexNumber));
+                this->boardModel->sendMessage(" ");
+
+                this->boardModel->unsetActiveRegion();
+                POCKET_CIV_END_OF_ERA_CHECK
             }
 
-            this->boardModel->unsetActiveRegion();
-            POCKET_CIV_END_OF_ERA_CHECK
-        }
+            if(this->gainGold == 0)
+            {
+                this->boardModel->sendMessage(QString("The expedition was a failure and you gain no gold."));
+            }
+            else
+            {
+                this->boardModel->sendMessage(QString("The expedition was a success and you gain %1 gold.").arg(this->gainGold));
+            }
 
-        if(this->gainGold == 0)
-        {
-            this->boardModel->sendMessage(QString("The expedition was a failure and you gain no gold."));
+            this->boardModel->sendMessage(" ");
+            this->boardModel->setGold(this->boardModel->getGold() + this->gainGold);
+            this->boardModel->disableButtons();
+            this->boardModel->enableMainPhaseButtons();
+            this->boardModel->decimateAllSelectedTribes();
+            this->gainGold = 0;
+            this->expedition = false;
+            this->expeditionCardDrawn = false;
+            this->boardModel->unselectAllSelectedTribes();
+            this->boardModel->unsetActiveRegion();
         }
         else
         {
-            this->boardModel->sendMessage(QString("The expedition was a success and you gain %1 gold.").arg(this->gainGold));
+            this->gainGold = 0;
+            this->expedition = false;
+            this->expeditionCardDrawn = false;
+            this->boardModel->unselectAllSelectedTribes();
+            this->boardModel->unsetActiveRegion();
+            this->boardModel->disableButtons();
+            this->boardModel->enableMainPhaseButtons();
         }
-
-        this->boardModel->sendMessage(" ");
-        this->boardModel->setGold(this->boardModel->getGold() + this->gainGold);
-        this->boardModel->disableButtons();
-        this->boardModel->enableMainPhaseButtons();
-        this->boardModel->decimateAllSelectedTribes();
-        this->gainGold = 0;
-        this->expedition = false;
-        this->expeditionCardDrawn = false;
-        this->boardModel->unselectAllSelectedTribes();
-        this->boardModel->unsetActiveRegion();
         return this;
     }
 

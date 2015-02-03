@@ -57,5 +57,6 @@ Instruction *BanditsEventInstruction::triggerDone()
         return next;
     }
 
+    this->boardModel->unsetActiveRegion();
     return this->endEvent();
 }

@@ -14,7 +14,7 @@ inline QString listUpRegions(const QList<RegionModel *> &list)
 {
     if(list.size() == 0)
     {
-        return QString("None.");
+        return QString("None");
     }
 
     if(list.size() == 1)

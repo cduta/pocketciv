@@ -225,6 +225,7 @@ Instruction *EarthquakeEventInstruction::triggerDone()
 
     if(this->step == -1 && this->populationLoss == 0)
     {
+        this->boardModel->unsetActiveRegion();
         return this->endEvent();
     }
 

@@ -47,6 +47,7 @@ Instruction *AttackInstruction::triggerDone()
     int newTribes = tribes;
     int cityAV = this->boardModel->refActiveRegion()->getCityAV();
     int newCityAV = cityAV;
+    int goldLost = 0;
 
     while(newTribes > 0 && this->attackingForce > 0)
     {
@@ -61,6 +62,7 @@ Instruction *AttackInstruction::triggerDone()
         if(this->attackingForce >= 0)
         {
             newCityAV--;
+            goldLost += 2;
         }
         else
         {
@@ -76,13 +78,15 @@ Instruction *AttackInstruction::triggerDone()
     this->boardModel->refActiveRegion()->setTribes(newTribes);
     this->boardModel->refActiveRegion()->setCityAV(newCityAV);
     this->boardModel->refActiveRegion()->decimateZeroAVCity();
+    this->boardModel->removeGold(goldLost);
 
-    this->boardModel->sendMessage(QString("Reduced %1 of %2 tribes and %3 of %4 city AV in region %5.")
+    this->boardModel->sendMessage(QString("Reduced %1 of %2 tribes and %3 of %4 city AV in region %5 as well as %6 gold.")
                                   .arg(tribes-newTribes)
                                   .arg(tribes)
                                   .arg(cityAV-newCityAV)
                                   .arg(cityAV)
-                                  .arg(this->boardModel->refActiveRegion()->getRegion()));
+                                  .arg(this->boardModel->refActiveRegion()->getRegion())
+                                  .arg(goldLost));
     this->boardModel->sendMessage(QString("There is %1 attacking force left.")
                                   .arg(this->attackingForce));
 

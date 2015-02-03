@@ -57,6 +57,7 @@ Instruction *FloodEventInstruction::triggerDone()
         }
     }
 
+    this->boardModel->unsetActiveRegion();
     return this->endEvent();
 }
 

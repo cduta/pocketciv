@@ -152,22 +152,22 @@ BoardModel::BoardModel(int width, int height, QObject *parent)
     events16.insert(8, new VisitationEvent(0,1,2,BoardModel::ATLANTEA, this));
 
     // FIXME: Is only testing.
-    events1.insert(1, new CorruptionEvent(0,0,1,this));
-    events2.insert(1, new CorruptionEvent(0,0,1,this));
-    events3.insert(1, new CorruptionEvent(0,0,1,this));
-    events4.insert(1, new CorruptionEvent(0,0,1,this));
-    events5.insert(1, new CorruptionEvent(0,0,1,this));
-    events6.insert(1, new CorruptionEvent(0,0,1,this));
-    events7.insert(1, new CorruptionEvent(0,0,1,this));
-    events8.insert(1, new CorruptionEvent(0,0,1,this));
-    events9.insert(1, new CorruptionEvent(0,0,1,this));
-    events10.insert(1, new CorruptionEvent(0,0,1,this));
-    events11.insert(1, new CorruptionEvent(0,0,1,this));
-    events12.insert(1, new CorruptionEvent(0,0,1,this));
-    events13.insert(1, new CorruptionEvent(0,0,1,this));
-    events14.insert(1, new CorruptionEvent(0,0,1,this));
-    events15.insert(1, new CorruptionEvent(0,0,1,this));
-    events16.insert(1, new CorruptionEvent(0,0,1,this));
+//    events1.insert(1, new CorruptionEvent(0,0,1,this));
+//    events2.insert(1, new CorruptionEvent(0,0,1,this));
+//    events3.insert(1, new CorruptionEvent(0,0,1,this));
+//    events4.insert(1, new CorruptionEvent(0,0,1,this));
+//    events5.insert(1, new CorruptionEvent(0,0,1,this));
+//    events6.insert(1, new CorruptionEvent(0,0,1,this));
+//    events7.insert(1, new CorruptionEvent(0,0,1,this));
+//    events8.insert(1, new CorruptionEvent(0,0,1,this));
+//    events9.insert(1, new CorruptionEvent(0,0,1,this));
+//    events10.insert(1, new CorruptionEvent(0,0,1,this));
+//    events11.insert(1, new CorruptionEvent(0,0,1,this));
+//    events12.insert(1, new CorruptionEvent(0,0,1,this));
+//    events13.insert(1, new CorruptionEvent(0,0,1,this));
+//    events14.insert(1, new CorruptionEvent(0,0,1,this));
+//    events15.insert(1, new CorruptionEvent(0,0,1,this));
+//    events16.insert(1, new CorruptionEvent(0,0,1,this));
 
     this->eventCards.insert(new EventCard(1,7,6, true , 0, events1, this));
     this->eventCards.insert(new EventCard(2,4,7, false, 2, events2, this));

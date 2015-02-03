@@ -122,6 +122,7 @@ Instruction *SandstormEventInstruction::triggerDone()
         return this;
     }
 
+    this->boardModel->unsetActiveRegion();
     return this->endEvent();
 }
 
