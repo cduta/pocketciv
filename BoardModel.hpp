@@ -3,6 +3,7 @@
 
 #include <QList>
 #include <QSet>
+#include <QDataStream>
 
 #include "HexModel.hpp"
 #include "RegionModel.hpp"
@@ -25,17 +26,22 @@ signals:
     void sendCardsLeftCount(int cardsLeftCount);
     void sendDoneText(const QString &text);
     void sendDialogClosed();
+    void eraChanged(int era);
     void goldChanged(int gold);
     void gloryScoreChanged(int gloryScore);
 
 private:
-    QList<QList<HexModel *> > hexModels;
-    QList<QSet<HexModel *> > seas;
-    QMap<int, QSet<HexModel *> > regionHexes;
-    QMap<int, RegionModel *> regions;
-    RegionModel *activeRegion;
-    QSet<const EventCard *> eventCards;
-    QList<const EventCard *> eventCardsLeft;
+    QList<QList<HexModel *> > hexModels;        // Saved, Initialize with newBoard(width,height)
+
+    QList<QSet<HexModel *> > seas;              // Derived from hexModels after loading (groupSeas())
+    QMap<int, QSet<HexModel *> > regionHexes;   // Derived from hexModels after loading (deriveRegionHexes())
+    QMap<int, RegionModel *> regions;           // Saved
+    QList<const EventCard *> eventCardsLeft;    // Saved, content derived from eventCards
+
+    RegionModel *activeRegion;                  // Initialized
+    QList<const EventCard *> eventCards;        // Initialized
+
+    // Save
     bool buildCity;
     bool buildFarm;
     bool expedition;
@@ -53,10 +59,11 @@ private:
 
     int gloryScore;
 
+    // Initialized
     const EventCard *originalCard;
 
 public:
-    BoardModel(int width, int height, QObject *parent = 0);
+    BoardModel(int width = 20, int height = 10, QObject *parent = 0);
     ~BoardModel();
 
     bool toggleHexToRegion(int region, int x, int y);
@@ -102,6 +109,8 @@ private:
     void newBoard(int width, int height);
     void initializeBoard();
     bool checkRegionHexSet(const QSet<HexModel *> &regionHexSet);
+    void deriveRegionHexes();
+    void initializeCards();
 
 public:
 // Get-Methods
@@ -139,6 +148,7 @@ public:
 // Set-Methods
     void setActiveRegion(int region, bool isBad = true);
     void unsetActiveRegion();
+    void setEra(int era);
     void setGold(int gold);
     void setGloryScore(int gloryScore);
 
@@ -151,6 +161,11 @@ public:
 
 private slots:
      void clearBoard();
+
+public:
+     // Serialization
+     void serialize(QDataStream &writer) const;
+     void deserialize(QDataStream &reader);
 };
 
 #endif // BOARDMODEL_HPP

@@ -2,6 +2,8 @@
 
 #include <iostream>
 
+#include <QMessageBox>
+
 Instruction::Instruction(QObject *parent)
     : QObject(parent), keep(false)
 {}
@@ -52,6 +54,15 @@ Instruction *Instruction::triggerAquireAdvance()
 
 Instruction *Instruction::triggerBuildWonder()
 {
+    return this;
+}
+
+Instruction *Instruction::triggerSaveGame()
+{
+    QMessageBox::information(NULL,
+                             "Saving the game not possible.",
+                             "The game can only be saved in the main phase.",
+                             QMessageBox::Ok);
     return this;
 }
 

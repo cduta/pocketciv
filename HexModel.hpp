@@ -7,6 +7,7 @@
 
 #include "RegionModel.hpp"
 
+// Hex borders.
 static const int DRAW_NO_BORDER           = 0;
 static const int DRAW_UPPER_LEFT_BORDER   = 1;
 static const int DRAW_UPPER_CENTER_BORDER = 2;
@@ -24,6 +25,7 @@ signals:
     void hexTriggered(Qt::MouseButton button, int x, int y);
 
 private:
+    // Save
     int xPos;
     int yPos;
     int region; // -1, if it isn't associated with any region.
@@ -33,13 +35,19 @@ private:
     bool bad;
     int visibleBorders;
     int representativeBorders;
+
+    // Initilized
     QMap<int, HexModel *> adjacentHexes; // Int represents the border of this hex on which the hex borders on.
+
+    // Save
     bool regionNumberShown;
     bool frontier;
     bool sea;
     QString basePixmap;
     bool representativeHex;
-    RegionModel *regionModel;
+
+    // Derive later.
+    RegionModel *regionModel; // Set, only if representativeHex = true.
 
 public:
     HexModel(int xPos = -1, int yPos = -1, bool enable = true, int visibleBorders = DRAW_NO_BORDER, QObject *parent = 0);
@@ -77,6 +85,8 @@ public:
     void triggerHex(Qt::MouseButton button);
     void setRegion(int region);
     void unsetRegion();
+    void setRegionModel(RegionModel *regionModel);
+    void unsetRegionModel();
     void setRegionNumberShown(bool show);
     void setFrontier(bool frontier);
     void setSea(bool sea);
@@ -94,6 +104,11 @@ private:
 
     void privateAddVisibleBorders(int visibleBorders);
     void privateRemoveVisibleBorders(int visibleBorders);
+
+public:
+     // Serialization
+     void serialize(QDataStream &writer) const;
+     void deserialize(QDataStream &reader);
 };
 
 inline int oppositeBorder(int visibleBorder)

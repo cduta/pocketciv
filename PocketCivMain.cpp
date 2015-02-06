@@ -7,12 +7,14 @@
 #include <QDebug>
 #include <QPainter>
 #include <QGraphicsSceneMouseEvent>
+#include <QFileDialog>
 
 #include <iostream>
 
 #include <boost/assert.hpp>
 
 #include "Instruction/ChooseRegionInstruction.hpp"
+#include "Instruction/MainPhaseInstruction.hpp"
 
 PocketCivMain::PocketCivMain(QWidget *parent) :
     QMainWindow(parent),
@@ -91,7 +93,15 @@ PocketCivMain::PocketCivMain(QWidget *parent) :
     QMenu *fileMenu = new QMenu("File", this);
     this->newGame = new QAction("New Game", fileMenu);
     connect(this->newGame, SIGNAL(triggered()), this, SLOT(newGameTriggered()));
+    this->saveGame = new QAction("Save Game", fileMenu);
+    connect(this->saveGame, SIGNAL(triggered()), this, SLOT(saveGameTriggered()));
+    this->loadGame = new QAction("Load Game", fileMenu);
+    connect(this->loadGame, SIGNAL(triggered()), this, SLOT(loadGameTriggered()));
+
     fileMenu->addAction(this->newGame);
+    fileMenu->addSeparator();
+    fileMenu->addAction(this->saveGame);
+    fileMenu->addAction(this->loadGame);
     this->pocketCivMenu->addMenu(fileMenu);
     QMenu *optionsMenu = new QMenu("Options", this);
     this->pocketCivMenu->addMenu(optionsMenu);
@@ -197,6 +207,7 @@ void PocketCivMain::generateNewBoard(BoardModel *boardModel)
     connect(this->boardModel, SIGNAL(sendCardsLeftCount(int)), this, SLOT(setEventCardsLeft(int)));
     connect(this->boardModel, SIGNAL(sendDoneText(const QString &)), this, SLOT(setDoneText(const QString &)));
     connect(this->boardModel, SIGNAL(sendDialogClosed()), this, SLOT(continueWithPreviousInstruction()));
+    connect(this->boardModel, SIGNAL(eraChanged(int)), this, SLOT(setEra(int)));
     connect(this->boardModel, SIGNAL(goldChanged(int)), this, SLOT(setGoldCount(int)));
     connect(this->boardModel, SIGNAL(gloryScoreChanged(int)), this, SLOT(setGloryCount(int)));
 
@@ -278,6 +289,7 @@ void PocketCivMain::continueWithPreviousInstruction()
 void PocketCivMain::addMessage(const QString &message)
 {
     this->messages->appendPlainText(message);
+    this->messages->verticalScrollBar()->setSliderPosition(this->messages->verticalScrollBar()->maximum());
     return;
 }
 
@@ -326,10 +338,10 @@ void PocketCivMain::newGameTriggered()
         this->instruction->deleteLater();
     }
 
-    this->setGoldCount(0);
-    this->setGloryCount(0);
-    this->setEra(1);
-    this->setEventCardsLeft(16);
+    this->boardModel->setGold(0);
+    this->boardModel->setGloryScore(0);
+    this->boardModel->setEra(1);
+    this->boardModel->reshuffleCards();
 
     this->overview->setEnabled(true);
     this->boardModel->disableButtons();
@@ -338,6 +350,7 @@ void PocketCivMain::newGameTriggered()
 
     this->messages->clear();
     this->addMessage("Started a new game!!");
+    this->addMessage(" ");
     this->addMessage("WORLD GENERATION:");
     this->addMessage(QString("Select two or more connected hexes on the board to form Region %1 out of %2.").
                                  arg(1).arg(8));
@@ -346,6 +359,50 @@ void PocketCivMain::newGameTriggered()
     this->instruction = new ChooseRegionInstruction(this->boardModel, 1, 8);
     this->instruction->initInstruction();
     this->updateBoard();
+    return;
+}
+
+void PocketCivMain::saveGameTriggered()
+{
+    this->processInstruction(this->instruction->triggerSaveGame());
+    return;
+}
+
+void PocketCivMain::loadGameTriggered()
+{
+    QString loadFile =
+    QFileDialog::getOpenFileName(NULL,
+                                 "Open Game...",
+                                 QDir::current().path(),
+                                 "PocketCiv Saves (*.pcsave)");
+
+    QFile file(loadFile);
+    file.open(QFile::ReadOnly);
+    QDataStream reader(&file);
+
+    BoardModel *boardModel = new BoardModel(20,10,this);
+    boardModel->deserialize(reader);
+
+    this->generateNewBoard(boardModel);
+
+    this->overview->setEnabled(true);
+    this->boardModel->disableButtons();
+    this->boardModel->enableDoneButton();
+    this->done->setText("Done");
+
+    this->messages->clear();
+    this->addMessage("Loaded a game!!");
+    this->addMessage(" ");
+
+    if(this->instruction != NULL)
+    {
+        this->instruction->deleteLater();
+    }
+
+    this->instruction = new MainPhaseInstruction(this->boardModel);
+    this->instruction->initInstruction();
+    this->updateBoard();
+
     return;
 }
 

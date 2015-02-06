@@ -36,6 +36,8 @@ public:
     virtual Instruction *triggerAquireAdvance();
     virtual Instruction *triggerBuildWonder();
 
+    virtual Instruction *triggerSaveGame();
+
     bool keepInstruction();
 
     void setKeepInstruction(bool keep);

@@ -7,6 +7,7 @@ class RegionModel : public QObject
 {
     Q_OBJECT
 
+    // Save
     int region;
     int tribes;
     int movedTribes;
@@ -71,6 +72,11 @@ public:
     void setDesert(bool desert);
     void setFaultLine(bool faultLine);
     void setSelected(bool selected);
+
+public:
+     // Serialization
+     void serialize(QDataStream &writer) const;
+     void deserialize(QDataStream &reader);
 };
 
 #endif // REGIONMODEL_HPP

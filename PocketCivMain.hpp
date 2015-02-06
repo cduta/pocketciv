@@ -53,6 +53,8 @@ class PocketCivMain : public QMainWindow
 
     QMenuBar *pocketCivMenu;
     QAction *newGame;
+    QAction *saveGame;
+    QAction *loadGame;
 
     QList<QList<HexItem *> > hexItems;
     QGraphicsRectItem *boardBackground;
@@ -84,6 +86,8 @@ private slots:
     void setEventCardsLeft(int eventCardsLeft);
 
     void newGameTriggered();
+    void saveGameTriggered();
+    void loadGameTriggered();
 
     void buildCityTriggered();
     void buildFarmTriggered();

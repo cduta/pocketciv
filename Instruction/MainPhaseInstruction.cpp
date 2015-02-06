@@ -3,6 +3,9 @@
 #include "UpkeepInstruction.hpp"
 #include "Instruction/EndOfEraInstruction.hpp"
 
+#include <QFileDialog>
+#include <QDebug>
+
 MainPhaseInstruction::MainPhaseInstruction(BoardModel *boardModel)
     : Instruction(),
       boardModel(boardModel),
@@ -164,9 +167,6 @@ Instruction *MainPhaseInstruction::triggerDone()
     if(!this->initialized)
     {
         this->boardModel->sendMessage(" ");
-        this->boardModel->sendMessage(" ");
-        this->boardModel->sendMessage("MAIN PHASE:");
-        this->boardModel->sendMessage(" ");
         this->boardModel->sendMessage("You can do any amount of actions by clicking on any of the buttons.");
         this->boardModel->sendMessage("After applying any actions to a region, at least 1 tribe has to remain.");
         this->boardModel->sendMessage(" ");
@@ -248,6 +248,40 @@ Instruction *MainPhaseInstruction::triggerAquireAdvance()
 Instruction *MainPhaseInstruction::triggerBuildWonder()
 {
     // TODO: Aquire Wonder
+
+    return this;
+}
+
+Instruction *MainPhaseInstruction::triggerSaveGame()
+{
+    if(this->initialized &&
+       !this->buildCity &&
+       !this->buildFarm &&
+       !this->expedition &&
+       !this->expeditionCardDrawn)
+    {
+        QString saveFile =
+        QFileDialog::getSaveFileName(NULL,
+                                     "Save game",
+                                     QDir::current().path(),
+                                     "PocketCiv Saves (*.pcsave)");
+
+        if(saveFile.isEmpty())
+        {
+            return this;
+        }
+
+        if(!saveFile.endsWith(".pcsave"))
+        {
+            saveFile.append(".pcsave");
+        }
+
+        QFile file(saveFile);
+        file.open(QFile::WriteOnly);
+        QDataStream writer(&file);
+
+        this->boardModel->serialize(writer);
+    }
 
     return this;
 }

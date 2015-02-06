@@ -2,6 +2,8 @@
 
 #include <boost/assert.hpp>
 
+#include <QDataStream>
+
 RegionModel::RegionModel(int region, QObject *parent)
     : QObject(parent),
       region(region),
@@ -293,7 +295,7 @@ void RegionModel::setDesert(bool desert)
     this->desert = desert;
     if(this->desert)
     {
-        this->mountain = false;
+        this->forest = false;
     }
     return;
 }
@@ -307,4 +309,40 @@ void RegionModel::setFaultLine(bool faultLine)
 void RegionModel::setSelected(bool selected)
 {
     this->selected = selected;
+}
+
+void RegionModel::serialize(QDataStream &writer) const
+{
+    writer << this->region;
+    writer << this->tribes;
+    writer << this->movedTribes;
+    writer << this->selectedTribes;
+    writer << this->mountain;
+    writer << this->volcano;
+    writer << this->forest;
+    writer << this->farm;
+    writer << this->desert;
+    writer << this->faultLine;
+    writer << this->selected;
+    writer << this->city;
+    writer << this->cityAV;
+    return;
+}
+
+void RegionModel::deserialize(QDataStream &reader)
+{
+    reader >> this->region;
+    reader >> this->tribes;
+    reader >> this->movedTribes;
+    reader >> this->selectedTribes;
+    reader >> this->mountain;
+    reader >> this->volcano;
+    reader >> this->forest;
+    reader >> this->farm;
+    reader >> this->desert;
+    reader >> this->faultLine;
+    reader >> this->selected;
+    reader >> this->city;
+    reader >> this->cityAV;
+    return;
 }

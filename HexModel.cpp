@@ -3,6 +3,7 @@
 #include <boost/assert.hpp>
 
 #include <QSet>
+#include <QDataStream>
 
 HexModel::HexModel(int xPos, int yPos, bool enable, int visibleBorders, QObject *parent)
     : QObject(parent),
@@ -218,6 +219,20 @@ void HexModel::unsetRegion()
     return;
 }
 
+void HexModel::setRegionModel(RegionModel *regionModel)
+{
+    this->regionModel = regionModel;
+    this->updateHex();
+    return;
+}
+
+void HexModel::unsetRegionModel()
+{
+    this->regionModel = NULL;
+    this->updateHex();
+    return;
+}
+
 void HexModel::setRegionNumberShown(bool show)
 {
     this->regionNumberShown = show;
@@ -297,5 +312,43 @@ void HexModel::privateAddVisibleBorders(int visibleBorders)
 void HexModel::privateRemoveVisibleBorders(int visibleBorders)
 {
     this->visibleBorders = this->visibleBorders & ~visibleBorders;
+    return;
+}
+
+void HexModel::serialize(QDataStream &writer) const
+{
+    writer << this->xPos;
+    writer << this->yPos;
+    writer << this->region;
+    writer << this->enable;
+    writer << this->selected;
+    writer << this->active;
+    writer << this->bad;
+    writer << this->visibleBorders;
+    writer << this->representativeBorders;
+    writer << this->regionNumberShown;
+    writer << this->frontier;
+    writer << this->sea;
+    writer << this->basePixmap;
+    writer << this->representativeHex;
+    return;
+}
+
+void HexModel::deserialize(QDataStream &reader)
+{
+    reader >> this->xPos;
+    reader >> this->yPos;
+    reader >> this->region;
+    reader >> this->enable;
+    reader >> this->selected;
+    reader >> this->active;
+    reader >> this->bad;
+    reader >> this->visibleBorders;
+    reader >> this->representativeBorders;
+    reader >> this->regionNumberShown;
+    reader >> this->frontier;
+    reader >> this->sea;
+    reader >> this->basePixmap;
+    reader >> this->representativeHex;
     return;
 }

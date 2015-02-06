@@ -27,6 +27,8 @@ public:
     virtual Instruction *triggerExpedition();
     virtual Instruction *triggerAquireAdvance();
     virtual Instruction *triggerBuildWonder();
+
+    virtual Instruction *triggerSaveGame();
 };
 
 #endif // MAINPHASEINSTRUCTION_HPP
