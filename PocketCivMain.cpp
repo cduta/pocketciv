@@ -409,19 +409,22 @@ void PocketCivMain::loadGameTriggered()
 
 void PocketCivMain::buildCityTriggered()
 {
-    this->processInstruction(this->instruction->triggerBuildCity());
+    // TODO: Do it.
+    //this->processInstruction(...);
     return;
 }
 
 void PocketCivMain::buildFarmTriggered()
 {
-    this->processInstruction(this->instruction->triggerBuildFarm());
+    // TODO: Do it.
+    //this->processInstruction(...);
     return;
 }
 
 void PocketCivMain::expeditionTriggered()
 {
-    this->processInstruction(this->instruction->triggerExpedition());
+    // TODO: Do it.
+    //this->processInstruction(...);
     return;
 }
 

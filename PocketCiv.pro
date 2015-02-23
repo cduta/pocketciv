@@ -68,7 +68,10 @@ SOURCES += main.cpp\
     Instruction/Event/VolcanoEventInstruction.cpp \
     Event/VisitationEvent.cpp \
     Instruction/Event/VisitationEventInstruction.cpp \
-    Instruction/TradeInstruction.cpp
+    Instruction/TradeInstruction.cpp \
+    Instruction/BuildCityInstruction.cpp \
+    Instruction/BuildFarmInstruction.cpp \
+    Instruction/ExpeditionInstruction.cpp
 
 HEADERS  += \
     PocketCivMain.hpp \
@@ -126,7 +129,10 @@ HEADERS  += \
     Instruction/Event/VolcanoEventInstruction.hpp \
     Event/VisitationEvent.hpp \
     Instruction/Event/VisitationEventInstruction.hpp \
-    Instruction/TradeInstruction.hpp
+    Instruction/TradeInstruction.hpp \
+    Instruction/BuildCityInstruction.hpp \
+    Instruction/BuildFarmInstruction.hpp \
+    Instruction/ExpeditionInstruction.hpp
 
 FORMS    +=
 
