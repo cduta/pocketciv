@@ -2,7 +2,9 @@
 
 BuildFarmInstruction::BuildFarmInstruction(BoardModel *boardModel, Instruction *nextInstruction)
     : Instruction(), boardModel(boardModel), nextInstruction(nextInstruction)
-{}
+{
+    this->nextInstruction->setKeepInstruction(true);
+}
 
 void BuildFarmInstruction::initInstruction()
 {
@@ -45,6 +47,7 @@ Instruction *BuildFarmInstruction::triggerDone()
     this->boardModel->disableButtons();
     this->boardModel->enableMainPhaseButtons();
 
+    this->nextInstruction->setKeepInstruction(false);
     this->nextInstruction->initInstruction();
     return this->nextInstruction;
 }

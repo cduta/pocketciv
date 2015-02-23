@@ -16,6 +16,10 @@
 #include "Instruction/ChooseRegionInstruction.hpp"
 #include "Instruction/MainPhaseInstruction.hpp"
 
+#include "Instruction/BuildCityInstruction.hpp"
+#include "Instruction/BuildFarmInstruction.hpp"
+#include "Instruction/ExpeditionInstruction.hpp"
+
 PocketCivMain::PocketCivMain(QWidget *parent) :
     QMainWindow(parent),
     graphicsScene(NULL),
@@ -409,22 +413,22 @@ void PocketCivMain::loadGameTriggered()
 
 void PocketCivMain::buildCityTriggered()
 {
-    // TODO: Do it.
-    //this->processInstruction(...);
+    Instruction *buildCityInstruction = new BuildCityInstruction(this->boardModel, this->instruction);
+    this->processInstruction(buildCityInstruction);
     return;
 }
 
 void PocketCivMain::buildFarmTriggered()
 {
-    // TODO: Do it.
-    //this->processInstruction(...);
+    Instruction *buildFarmInstruction = new BuildFarmInstruction(this->boardModel, this->instruction);
+    this->processInstruction(buildFarmInstruction);
     return;
 }
 
 void PocketCivMain::expeditionTriggered()
 {
-    // TODO: Do it.
-    //this->processInstruction(...);
+    Instruction *expeditionInstruction = new ExpeditionInstruction(this->boardModel, this->instruction);
+    this->processInstruction(expeditionInstruction);
     return;
 }
 

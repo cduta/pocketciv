@@ -71,7 +71,8 @@ SOURCES += main.cpp\
     Instruction/TradeInstruction.cpp \
     Instruction/BuildCityInstruction.cpp \
     Instruction/BuildFarmInstruction.cpp \
-    Instruction/ExpeditionInstruction.cpp
+    Instruction/ExpeditionInstruction.cpp \
+    OverviewDialog.cpp
 
 HEADERS  += \
     PocketCivMain.hpp \
@@ -132,7 +133,8 @@ HEADERS  += \
     Instruction/TradeInstruction.hpp \
     Instruction/BuildCityInstruction.hpp \
     Instruction/BuildFarmInstruction.hpp \
-    Instruction/ExpeditionInstruction.hpp
+    Instruction/ExpeditionInstruction.hpp \
+    OverviewDialog.hpp
 
 FORMS    +=
 

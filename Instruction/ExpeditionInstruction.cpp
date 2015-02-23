@@ -4,7 +4,9 @@
 
 ExpeditionInstruction::ExpeditionInstruction(BoardModel *boardModel, Instruction *nextInstruction)
     : Instruction(), boardModel(boardModel), nextInstruction(nextInstruction), gainGold(0), expeditionCardDrawn(false)
-{}
+{
+    this->nextInstruction->setKeepInstruction(true);
+}
 
 void ExpeditionInstruction::initInstruction()
 {
@@ -123,9 +125,6 @@ Instruction *ExpeditionInstruction::triggerDone()
         this->expeditionCardDrawn = false;
         this->boardModel->unselectAllSelectedTribes();
         this->boardModel->unsetActiveRegion();
-
-        this->nextInstruction->initInstruction();
-        return this->nextInstruction;
     }
     else
     {
@@ -135,8 +134,9 @@ Instruction *ExpeditionInstruction::triggerDone()
         this->boardModel->unsetActiveRegion();
         this->boardModel->disableButtons();
         this->boardModel->enableMainPhaseButtons();
-
-        this->nextInstruction->initInstruction();
-        return this->nextInstruction;
     }
+
+    this->nextInstruction->setKeepInstruction(false);
+    this->nextInstruction->initInstruction();
+    return this->nextInstruction;
 }

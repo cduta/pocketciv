@@ -2,7 +2,9 @@
 
 BuildCityInstruction::BuildCityInstruction(BoardModel *boardModel, Instruction *nextInstruction)
     : Instruction(), boardModel(boardModel), nextInstruction(nextInstruction)
-{}
+{
+    this->nextInstruction->setKeepInstruction(true);
+}
 
 void BuildCityInstruction::initInstruction()
 {
@@ -45,6 +47,7 @@ Instruction *BuildCityInstruction::triggerDone()
     this->boardModel->disableButtons();
     this->boardModel->enableMainPhaseButtons();
 
+    this->nextInstruction->setKeepInstruction(false);
     this->nextInstruction->initInstruction();
     return this->nextInstruction;
 }
