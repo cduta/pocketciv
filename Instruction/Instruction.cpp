@@ -47,16 +47,6 @@ Instruction *Instruction::triggerExpedition()
     return this;
 }
 
-Instruction *Instruction::triggerAquireAdvance()
-{
-    return this;
-}
-
-Instruction *Instruction::triggerBuildWonder()
-{
-    return this;
-}
-
 Instruction *Instruction::triggerSaveGame()
 {
     QMessageBox::information(NULL,

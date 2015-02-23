@@ -95,6 +95,7 @@ private slots:
     void aquireAdvanceTriggered();
     void buildWonderTriggered();
 
+    void overviewTriggered();
     void doneTriggered();
     void updateBoard();
 

@@ -62,6 +62,7 @@ PocketCivMain::PocketCivMain(QWidget *parent) :
     this->mining->setEnabled(false);
     this->overview =        new QPushButton("Overview", &this->dockWidget);
     this->overview->setEnabled(false);
+    connect(this->overview, SIGNAL(clicked()), this, SLOT(overviewTriggered()));
     this->done =            new QPushButton("Done", &this->dockWidget);
     this->done->setEnabled(false);
     connect(this->done, SIGNAL(clicked()), this, SLOT(doneTriggered()));
@@ -426,13 +427,22 @@ void PocketCivMain::expeditionTriggered()
 
 void PocketCivMain::aquireAdvanceTriggered()
 {
-    this->processInstruction(this->instruction->triggerAquireAdvance());
+    // TODO: Do it.
+    //this->processInstruction(...);
     return;
 }
 
 void PocketCivMain::buildWonderTriggered()
 {
-    this->processInstruction(this->instruction->triggerBuildWonder());
+    // TODO: Do it.
+    //this->processInstruction(...);
+    return;
+}
+
+void PocketCivMain::overviewTriggered()
+{
+    // TODO: Do it.
+    //this->processInstruction(...);
     return;
 }
 
