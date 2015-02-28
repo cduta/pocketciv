@@ -13,36 +13,53 @@ void EndOfEraInstruction::initInstruction()
 {
     this->boardModel->sendMessage("END OF ERA");
     this->boardModel->sendMessage(" ");
-    // Check if city amount is >= current era.
-    // Choose as many advances, as there are tribes in the empire (new instruction and return).
-    // otherwise continue:
-    DecisionDialog decisionDialog("End Game?", "Do you want to end the game and receive your final score?", "Yes", "No", true);
-    int result = decisionDialog.exec();
-    if(result == QDialog::Accepted)
-    {
-        this->endGame = true;
-        this->boardModel->sendMessage("You chose to end the game.");
-    }
-
     this->boardModel->sendMessage("Press Done to continue...");
     return;
 }
 
 Instruction *EndOfEraInstruction::triggerDone()
 {
+    if(this->boardModel->getEra() < this->boardModel->getLastEra() &&
+       this->boardModel->getCityCount() >= this->boardModel->getEra())
+    {
+       // TODO: Set this to: choose at most as many advances, as there are tribes in the empire.
+    }
+
+    if(this->boardModel->getEra() == this->boardModel->getLastEra())
+    {
+        this->boardModel->sendMessage("The last era is over.");
+    }
+    else
+    {
+        DecisionDialog decisionDialog("End Game?", "Do you want to end the game and receive your final score?", "Yes", "No", true);
+        int result = decisionDialog.exec();
+        if(result == QDialog::Accepted)
+        {
+            this->endGame = true;
+            this->boardModel->sendMessage("You chose to end the game.");
+        }
+    }
+
     if(this->boardModel->getEra() == this->boardModel->getLastEra() || this->endGame)
     {
         this->boardModel->sendMessage(" ");
 
         if(this->boardModel->getEra() == this->boardModel->getLastEra())
         {
-            this->boardModel->sendMessage("The last era is over.");
+            this->interruptedInstruction->deleteLater();
+            Instruction *next = new EndGameInstruction(this->boardModel);
+            next->initInstruction();
+            return next;
         }
-
-        this->interruptedInstruction->deleteLater();
-        Instruction *next = new EndGameInstruction(this->boardModel);
-        next->initInstruction();
-        return next;
+        else
+        {
+            this->boardModel->sendMessage(" ");
+            this->boardModel->sendMessage(QString("Your final Glory Score is: %1 !").arg(this->boardModel->getGloryScore()));
+            this->boardModel->sendMessage(" ");
+            this->boardModel->sendMessage("The game is over.");
+            this->boardModel->disableButtons();
+            return new NoInstruction();
+        }
     }
     else
     {

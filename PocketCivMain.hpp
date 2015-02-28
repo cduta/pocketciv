@@ -18,6 +18,7 @@
 #include "BoardModel.hpp"
 #include "HexItem.hpp"
 #include "HexModel.hpp"
+#include "OverviewDialog.hpp"
 #include "Instruction/Instruction.hpp"
 
 #include <boost/assert.hpp>
@@ -58,6 +59,8 @@ class PocketCivMain : public QMainWindow
 
     QList<QList<HexItem *> > hexItems;
     QGraphicsRectItem *boardBackground;
+
+    OverviewDialog *overviewDialog;
 
     BoardModel *boardModel;
     Instruction *instruction;

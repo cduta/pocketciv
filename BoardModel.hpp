@@ -17,6 +17,10 @@ class BoardModel : public QObject
 
 public:
     enum Empire {ATLANTEA = 0, FLOREN, GILDA, NORDIG};
+    enum Advance
+    {
+        AGRICULTURE = 0
+    };
 
 signals:
     void boardUpdated();
@@ -125,6 +129,7 @@ public:
     int getForestCount() const;
     int getDesertCount() const;
     int getTribeCount() const;
+    int getCityCount() const;
     QMap<int, RegionModel *> getSelectedRegions() const;
     bool canBuildCity() const;
     bool hasCity() const;

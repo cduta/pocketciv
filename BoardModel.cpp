@@ -908,6 +908,21 @@ int BoardModel::getTribeCount() const
     return result;
 }
 
+int BoardModel::getCityCount() const
+{
+    int result = 0;
+
+    foreach(RegionModel *regionModel, this->regions.values())
+    {
+        if(regionModel->hasCity())
+        {
+            result++;
+        }
+    }
+
+    return result;
+}
+
 QMap<int, RegionModel *> BoardModel::getSelectedRegions() const
 {
     QMap<int, RegionModel *> result;

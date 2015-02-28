@@ -28,6 +28,7 @@ PocketCivMain::PocketCivMain(QWidget *parent) :
     dockWidget(parent),
     dockLayout(NULL),
     boardBackground(NULL),
+    overviewDialog(NULL),
     boardModel(NULL),
     instruction(NULL)
 {
@@ -215,6 +216,12 @@ void PocketCivMain::generateNewBoard(BoardModel *boardModel)
     connect(this->boardModel, SIGNAL(eraChanged(int)), this, SLOT(setEra(int)));
     connect(this->boardModel, SIGNAL(goldChanged(int)), this, SLOT(setGoldCount(int)));
     connect(this->boardModel, SIGNAL(gloryScoreChanged(int)), this, SLOT(setGloryCount(int)));
+
+    if(this->overviewDialog)
+    {
+        this->overviewDialog->deleteLater();
+    }
+    this->overviewDialog = new OverviewDialog(this->boardModel, this);
 
     if(this->instruction != NULL)
     {
@@ -448,8 +455,7 @@ void PocketCivMain::buildWonderTriggered()
 
 void PocketCivMain::overviewTriggered()
 {
-    // TODO: Do it.
-    //this->processInstruction(...);
+    this->overviewDialog->show();
     return;
 }
 
