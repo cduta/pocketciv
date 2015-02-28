@@ -9,8 +9,10 @@ AdvanceModel::AdvanceModel(Advance advance,
                            bool requiresStone,
                            bool requiresFood,
                            const QList<QString> &positiveEffects,
-                           const QList<QString> &negativeEffects)
-    : advance(advance),
+                           const QList<QString> &negativeEffects,
+                           QObject *parent)
+    : QObject(parent),
+      advance(advance),
       name(name),
       victoryPoints(victoryPoints),
       tribesCost(tribesCost),
@@ -21,3 +23,53 @@ AdvanceModel::AdvanceModel(Advance advance,
       positiveEffects(positiveEffects),
       negativeEffects(negativeEffects)
 {}
+
+AdvanceModel::Advance AdvanceModel::getAdvance() const
+{
+    return this->advance;
+}
+
+QString AdvanceModel::getName() const
+{
+    return this->name;
+}
+
+int AdvanceModel::getVictoryPoints() const
+{
+    return this->victoryPoints;
+}
+
+int AdvanceModel::getTribesCost() const
+{
+    return this->tribesCost;
+}
+
+int AdvanceModel::getGoldCost() const
+{
+    return this->goldCost;
+}
+
+bool AdvanceModel::getRequiresWood() const
+{
+    return this->requiresWood;
+}
+
+bool AdvanceModel::getRequiresStone() const
+{
+    return this->requiresStone;
+}
+
+bool AdvanceModel::getRequiresFood() const
+{
+    return this->requiresFood;
+}
+
+QList<QString> AdvanceModel::getPositiveEffects() const
+{
+    return this->positiveEffects;
+}
+
+QList<QString> AdvanceModel::getNegativeEffects() const
+{
+    return this->negativeEffects;
+}

@@ -775,6 +775,74 @@ void BoardModel::initializeCards()
     this->eventCards.append(new EventCard(8,6,6, false, 2, events16, this));
     this->eventCardsLeft = this->eventCards;
 
+    QList<QString> positive;
+    QList<QString> negative;
+
+    positive.clear();
+    negative.clear();
+    positive.append("Advance (Build Farm)"
+                    "   Once per Round, don't decimate a FOREST when creating a Farm.");
+    advances.insert(AdvanceModel::AGRICULTURE,
+                    new AdvanceModel(AdvanceModel::AGRICULTURE,
+                                     "Agriculture",
+                                     3,2,0,
+                                     false, true, false,
+                                     positive, negative));
+
+    positive.clear();
+    negative.clear();
+    positive.append("Stub");
+    negative.append("Stub");
+    advances.insert(AdvanceModel::ARCHITECTURE,
+                    new AdvanceModel(AdvanceModel::ARCHITECTURE,
+                                     "Architecture",
+                                     6,6,6,
+                                     true, true, false,
+                                     positive, negative));
+
+    positive.clear();
+    negative.clear();
+    positive.append("Stub");
+    negative.append("Stub");
+    advances.insert(AdvanceModel::ARTS,
+                    new AdvanceModel(AdvanceModel::ARTS,
+                                     "Arts",
+                                     6,6,6,
+                                     true, false, false,
+                                     positive, negative));
+
+    positive.clear();
+    negative.clear();
+    positive.append("Stub");
+    negative.append("Stub");
+    advances.insert(AdvanceModel::ASTRONOMY,
+                    new AdvanceModel(AdvanceModel::ASTRONOMY,
+                                     "Astronomy",
+                                     3,4,0,
+                                     false, true, false,
+                                     positive, negative));
+
+    positive.clear();
+    negative.clear();
+    positive.append("Stub");
+    negative.append("Stub");
+    advances.insert(AdvanceModel::BANKING,
+                    new AdvanceModel(AdvanceModel::BANKING,
+                                     "Banking",
+                                     5,4,6,
+                                     false, true, false,
+                                     positive, negative));
+
+    positive.clear();
+    negative.clear();
+    positive.append("Stub");
+    negative.append("Stub");
+    advances.insert(AdvanceModel::BASIC_TOOLS,
+                    new AdvanceModel(AdvanceModel::BASIC_TOOLS,
+                                     "Basic Tools",
+                                     1,0,0,
+                                     false, false, false,
+                                     positive, negative));
     return;
 }
 
