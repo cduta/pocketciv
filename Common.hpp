@@ -6,10 +6,27 @@
 #include <QString>
 #include <QList>
 
-#include <RegionModel.hpp>
+#include "AdvanceModel.hpp"
+#include "BoardModel.hpp"
+#include "RegionModel.hpp"
 
 namespace Common
 {
+
+inline QString getEmpireName(BoardModel::Empire empire)
+{
+    switch(empire)
+    {
+        case BoardModel::ATLANTEA: return "ATLANTEA"; break;
+        case BoardModel::FLOREN  : return "FLOREN";   break;
+        case BoardModel::GILDA   : return "GILDA";    break;
+        case BoardModel::NORDIG  : return "NORDIG";   break;
+        default: break;
+    }
+
+    return "NONE";
+}
+
 inline QString listUpRegions(const QList<RegionModel *> &list)
 {
     if(list.size() == 0)

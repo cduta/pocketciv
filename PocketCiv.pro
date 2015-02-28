@@ -73,7 +73,9 @@ SOURCES += main.cpp\
     Instruction/BuildFarmInstruction.cpp \
     Instruction/ExpeditionInstruction.cpp \
     OverviewDialog.cpp \
-    AdvancesDialog.cpp
+    AdvancesDialog.cpp \
+    AdvanceItem.cpp \
+    AdvanceModel.cpp
 
 HEADERS  += \
     PocketCivMain.hpp \
@@ -136,7 +138,9 @@ HEADERS  += \
     Instruction/BuildFarmInstruction.hpp \
     Instruction/ExpeditionInstruction.hpp \
     OverviewDialog.hpp \
-    AdvancesDialog.hpp
+    AdvancesDialog.hpp \
+    AdvanceItem.hpp \
+    AdvanceModel.hpp
 
 FORMS    +=
 

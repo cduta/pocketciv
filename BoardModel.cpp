@@ -774,6 +774,7 @@ void BoardModel::initializeCards()
     this->eventCards.append(new EventCard(7,5,8, false, 2, events15, this));
     this->eventCards.append(new EventCard(8,6,6, false, 2, events16, this));
     this->eventCardsLeft = this->eventCards;
+
     return;
 }
 
@@ -1045,18 +1046,14 @@ int BoardModel::getGloryScore() const
     return this->gloryScore;
 }
 
-QString BoardModel::getEmpireName(BoardModel::Empire empire) const
+bool BoardModel::hasAdvanceAquired(AdvanceModel::Advance advance) const
 {
-    switch(empire)
-    {
-        case BoardModel::ATLANTEA: return "ATLANTEA"; break;
-        case BoardModel::FLOREN  : return "FLOREN";   break;
-        case BoardModel::GILDA   : return "GILDA";    break;
-        case BoardModel::NORDIG  : return "NORDIG";   break;
-        default: break;
-    }
+    return this->advancesAquired.contains(advance);
+}
 
-    return "NONE";
+QSet<AdvanceModel::Advance> BoardModel::getAdvancesAquired() const
+{
+    return this->advancesAquired;
 }
 
 void BoardModel::setActiveRegion(int region, bool isBad)
@@ -1113,6 +1110,13 @@ void BoardModel::setGloryScore(int gloryScore)
     return;
 }
 
+void BoardModel::setAdvanceAquired(AdvanceModel::Advance advance)
+{
+    this->advancesAquired.insert(advance);
+    emit this->advanceAquired(advance);
+    return;
+}
+
 HexModel *BoardModel::refHexModel(int x, int y)
 {
     assert(x >= 0 && x < this->hexModels.size());
@@ -1144,6 +1148,12 @@ RegionModel *BoardModel::refActiveRegion() const
 const EventCard *BoardModel::refOriginalCard() const
 {
     return this->originalCard;
+}
+
+const AdvanceModel *BoardModel::refAdvanceModel(AdvanceModel::Advance advance) const
+{
+    assert(this->advances.contains(advance));
+    return this->advances[advance];
 }
 
 void BoardModel::clearBoard()
@@ -1202,6 +1212,16 @@ void BoardModel::serialize(QDataStream &writer) const
     for(int i = 0; i < eventCardsLeftCount; ++i)
     {
         writer << this->eventCards.indexOf(this->eventCardsLeft[i]);
+    }
+
+    int advancesAquiredCount = this->advancesAquired.size();
+    writer << advancesAquiredCount;
+
+    QList<AdvanceModel::Advance> advanceList = this->advancesAquired.toList();
+
+    for(int i = 0; i < advancesAquiredCount; ++i)
+    {
+        writer << (int) advanceList[i];
     }
 
     writer << this->buildCity;
@@ -1265,6 +1285,18 @@ void BoardModel::deserialize(QDataStream &reader)
     {
         reader >> index;
         this->eventCardsLeft.append(this->eventCards[index]);
+    }
+
+    int advancesAquiredCount;
+    reader >> advancesAquiredCount;
+
+    int advanceID;
+    this->advancesAquired.clear();
+
+    for(int i = 0; i < advancesAquiredCount; ++i)
+    {
+        reader >> advanceID;
+        this->advancesAquired.insert(AdvanceModel::Advance(advanceID));
     }
 
     reader >> this->buildCity;

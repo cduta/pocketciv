@@ -25,5 +25,6 @@
         <file alias="rep_upper_left">res/rep_upper_left_border.png</file>
         <file alias="rep_upper_right">res/rep_upper_right_border.png</file>
         <file alias="rep_upper_center">res/rep_upper_center_border.png</file>
+        <file alias="advance_base">res/advance_base.png</file>
     </qresource>
 </RCC>

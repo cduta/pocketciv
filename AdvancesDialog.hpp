@@ -2,6 +2,9 @@
 #define ADVANCESDIALOG_H
 
 #include <QDialog>
+#include <QGridLayout>
+#include <QGraphicsView>
+#include <QGraphicsScene>
 
 #include "BoardModel.hpp"
 
@@ -17,12 +20,16 @@ signals:
     void advanceIDRightClicked(int id);
 
 private:
-    BoardModel *boardModel;
-    int activeRegion;
-    AdvanceDialogType dialogType;
+    BoardModel *        boardModel;
+    int                 activeRegion;
+    AdvanceDialogType   dialogType;
+
+    QGridLayout *       layout;
+    QGraphicsView *     graphicsView;
+    QGraphicsScene *    graphicsScene;
 
 public:
-    // Constructor for the other types of advance dialog.
+    // Constructor for the other types of advance dialog. Cannot be AQUIRE_ADVANCE since it needs an active region specified.
     AdvancesDialog(BoardModel *boardModel, AdvanceDialogType dialogType = OVERVIEW, QWidget *parent = 0);
     // Constructor to aquire advances.
     AdvancesDialog(BoardModel *boardModel, int activeRegion, QWidget *parent = 0);

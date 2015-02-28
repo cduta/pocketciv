@@ -8,6 +8,7 @@
 #include "HexModel.hpp"
 #include "RegionModel.hpp"
 #include "EventCard.hpp"
+#include "AdvanceModel.hpp"
 
 #include <boost/assert.hpp>
 
@@ -17,10 +18,6 @@ class BoardModel : public QObject
 
 public:
     enum Empire {ATLANTEA = 0, FLOREN, GILDA, NORDIG};
-    enum Advance
-    {
-        AGRICULTURE = 0
-    };
 
 signals:
     void boardUpdated();
@@ -33,17 +30,21 @@ signals:
     void eraChanged(int era);
     void goldChanged(int gold);
     void gloryScoreChanged(int gloryScore);
+    void advanceAquired(AdvanceModel::Advance advance);
 
 private:
-    QList<QList<HexModel *> > hexModels;        // Saved, Initialize with newBoard(width,height)
+    QList<QList<HexModel *> > hexModels;            // Saved, Initialize with newBoard(width,height)
 
-    QList<QSet<HexModel *> > seas;              // Derived from hexModels after loading (groupSeas())
-    QMap<int, QSet<HexModel *> > regionHexes;   // Derived from hexModels after loading (deriveRegionHexes())
-    QMap<int, RegionModel *> regions;           // Saved
-    QList<const EventCard *> eventCardsLeft;    // Saved, content derived from eventCards
+    QList<QSet<HexModel *> > seas;                  // Derived from hexModels after loading (groupSeas())
+    QMap<int, QSet<HexModel *> > regionHexes;       // Derived from hexModels after loading (deriveRegionHexes())
+    QMap<int, RegionModel *> regions;               // Saved
+    QList<const EventCard *> eventCardsLeft;        // Saved, content derived from eventCards
 
-    RegionModel *activeRegion;                  // Initialized
-    QList<const EventCard *> eventCards;        // Initialized
+    RegionModel *activeRegion;                      // Initialized
+    QList<const EventCard *> eventCards;            // Initialized
+
+    QMap<AdvanceModel::Advance, const AdvanceModel *> advances;   // Initialized
+    QSet<AdvanceModel::Advance> advancesAquired;                  // Saved
 
     // Save
     bool buildCity;
@@ -109,6 +110,8 @@ public:
     void addGold(int gold);
     void removeGold(int gold);
 
+
+
 private:
     void newBoard(int width, int height);
     void initializeBoard();
@@ -148,7 +151,8 @@ public:
     int getAllSelectedTribes() const;
     int getGold() const;
     int getGloryScore() const;
-    QString getEmpireName(BoardModel::Empire empire) const;
+    bool hasAdvanceAquired(AdvanceModel::Advance advance) const;
+    QSet<AdvanceModel::Advance> getAdvancesAquired() const;
 
 // Set-Methods
     void setActiveRegion(int region, bool isBad = true);
@@ -156,6 +160,7 @@ public:
     void setEra(int era);
     void setGold(int gold);
     void setGloryScore(int gloryScore);
+    void setAdvanceAquired(AdvanceModel::Advance advance);
 
 // Ref-Methods
     HexModel *refHexModel(int x, int y);
@@ -163,6 +168,7 @@ public:
     RegionModel *refRegionModel(int region) const;
     RegionModel *refActiveRegion() const;
     const EventCard *refOriginalCard() const;
+    const AdvanceModel *refAdvanceModel(AdvanceModel::Advance advance) const;
 
 private slots:
      void clearBoard();
