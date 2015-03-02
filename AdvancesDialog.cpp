@@ -29,6 +29,9 @@ AdvancesDialog::~AdvancesDialog()
         delete advanceItem;
     }
     this->advanceItemMap.clear();
+
+    delete this->advanceBackground;
+    delete this->advanceTitle;
 }
 
 void AdvancesDialog::init()
@@ -41,6 +44,9 @@ void AdvancesDialog::init()
     this->layout->addWidget(this->graphicsView, 0,0);
     this->setLayout(this->layout);
     this->resize(650,450);
+
+    this->advanceBackground = new QGraphicsPixmapItem(QPixmap(":/advance_background"));
+    this->advanceBackground->setPos(0,0);
 
     this->advanceTitle = new QGraphicsPixmapItem(QPixmap(":/advance_title"));
     this->advanceTitle->setPos(0,0);
@@ -93,7 +99,7 @@ void AdvancesDialog::init()
     this->advanceItemMap.insert(AdvanceModel::ORGANIZED_RELIGION,
                               new AdvanceItem(10+168*2,63+25*23,this->boardModel,AdvanceModel::ORGANIZED_RELIGION));
     this->advanceItemMap.insert(AdvanceModel::SAILS_AND_RIGGINGS,
-                              new AdvanceItem(10+168*2,63+25*29,this->boardModel,AdvanceModel::SAILS_AND_RIGGINGS));
+                              new AdvanceItem(10+168*2,63+25*29+13,this->boardModel,AdvanceModel::SAILS_AND_RIGGINGS));
     this->advanceItemMap.insert(AdvanceModel::SHIPPING,
                               new AdvanceItem(10+168*2,63+25*33,this->boardModel,AdvanceModel::SHIPPING));
     this->advanceItemMap.insert(AdvanceModel::ENGINEERING,
@@ -136,7 +142,7 @@ void AdvancesDialog::init()
     this->advanceItemMap.insert(AdvanceModel::MAGNETICS,
                               new AdvanceItem(10+168*4,63+25*45,this->boardModel,AdvanceModel::MAGNETICS));
     this->advanceItemMap.insert(AdvanceModel::PATRONAGE,
-                              new AdvanceItem(10+168*4,63+25*58,this->boardModel,AdvanceModel::PATRONAGE));
+                              new AdvanceItem(10+168*4,63+25*57+13,this->boardModel,AdvanceModel::PATRONAGE));
 
     this->advanceItemMap.insert(AdvanceModel::CENTRALIZED_GOVERNMENT,
                               new AdvanceItem(10+168*6,63+25*8,this->boardModel,AdvanceModel::CENTRALIZED_GOVERNMENT));
@@ -147,7 +153,8 @@ void AdvancesDialog::init()
     this->advanceItemMap.insert(AdvanceModel::COMMON_TONGUE,
                               new AdvanceItem(10+168*6,63+25*69,this->boardModel,AdvanceModel::COMMON_TONGUE));
 
-    this->graphicsView->setBackgroundBrush(QBrush(QColor(0,0,0)));
+    //this->graphicsView->setBackgroundBrush(QBrush(QColor(0,0,0)));
+    this->graphicsScene->addItem(this->advanceBackground);
     this->graphicsScene->addItem(this->advanceTitle);
     foreach(AdvanceItem *advanceItem, this->advanceItemMap.values())
     {
@@ -157,6 +164,10 @@ void AdvancesDialog::init()
     this->graphicsView->move(10,10);
 
     this->updateDialog();
+
+    connect(this->boardModel, SIGNAL(advanceAquired(AdvanceModel::Advance)), this, SLOT(updateDialog()));
+    connect(this->boardModel, SIGNAL(goldChanged(int)), this, SLOT(updateDialog()));
+
     return;
 }
 
@@ -173,6 +184,11 @@ AdvancesDialog::AdvanceDialogType AdvancesDialog::getAdvanceDialogType() const
 
 void AdvancesDialog::updateDialog()
 {
+    foreach(AdvanceItem *item, this->advanceItemMap.values())
+    {
+        item->updateAdvanceItem();
+    }
+
     return;
 }
 

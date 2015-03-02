@@ -36,6 +36,8 @@ PocketCivMain::PocketCivMain(QWidget *parent) :
 
     this->messages = new QPlainTextEdit("To start a new game: File -> New Game",
                                         &this->dockWidget);
+    QFont font("monospace");
+    this->messages->setFont(font);
     this->messages->setReadOnly(true);
 
     this->goldCount =       new QLabel("Gold: 0", this);

@@ -2,6 +2,10 @@
 #define ADVANCEITEM_H
 
 #include <QGraphicsPixmapItem>
+#include <QDialog>
+#include <QGridLayout>
+#include <QPlainTextEdit>
+#include <QGraphicsSceneMouseEvent>
 
 #include "BoardModel.hpp"
 #include "AdvanceModel.hpp"
@@ -12,6 +16,10 @@ class AdvanceItem : public QGraphicsPixmapItem
     BoardModel *boardModel;
     bool selected;
 
+    QDialog descriptionDialog;
+    QGridLayout *layout;
+    QPlainTextEdit *description;
+
 public:
     AdvanceItem(qreal xPos,
                 qreal yPos,
@@ -20,9 +28,11 @@ public:
                 QGraphicsItem *parent = 0);
 
 private:
-    void updateAdvanceItem();
+    void updateDesription();
 
 public:
+    void updateAdvanceItem();
+
     void toggleSelected();
 
     // Set-Methods
@@ -30,6 +40,9 @@ public:
 
     // Get-Methods
     bool isSelected() const;
+
+protected:
+    virtual void mousePressEvent(QGraphicsSceneMouseEvent *event);
 };
 
 #endif // ADVANCEITEM_H

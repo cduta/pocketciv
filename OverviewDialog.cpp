@@ -13,6 +13,8 @@ OverviewDialog::OverviewDialog(BoardModel *boardModel, QWidget *parent)
     this->layout->addWidget(this->showGlory,1,0);
     connect(this->showGlory, SIGNAL(clicked()), this, SLOT(showGloryTriggered()));
 
+    this->advancesDialog = new AdvancesDialog(this->boardModel, AdvancesDialog::OVERVIEW, this);
+
     this->setLayout(this->layout);
 }
 
@@ -23,9 +25,7 @@ OverviewDialog::~OverviewDialog()
 
 void OverviewDialog::showAdvancesTriggered()
 {
-    AdvancesDialog *advancesDialog = new AdvancesDialog(this->boardModel, AdvancesDialog::OVERVIEW, this);
-    advancesDialog->exec();
-    advancesDialog->deleteLater();
+    this->advancesDialog->show();
     return;
 }
 

@@ -100,6 +100,7 @@ public:
     QList<QList<Advance> > getPrequisites() const;
     QList<QString> getPositiveEffects() const;
     QList<QString> getNegativeEffects() const;
+    QString getEffects() const;
 };
 
 #endif // ADVANCEMODEL_H

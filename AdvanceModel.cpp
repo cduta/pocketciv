@@ -80,3 +80,20 @@ QList<QString> AdvanceModel::getNegativeEffects() const
 {
     return this->negativeEffects;
 }
+
+QString AdvanceModel::getEffects() const
+{
+    QString result;
+
+    foreach(QString positive, this->positiveEffects)
+    {
+        result.append(positive).append("\n");
+    }
+
+    foreach(QString negative, this->negativeEffects)
+    {
+        result.append(negative).append("\n");
+    }
+
+    return result;
+}

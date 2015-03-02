@@ -782,8 +782,8 @@ void BoardModel::initializeCards()
     prequisites.clear();
     positive.clear();
     negative.clear();
-    positive.append("+ Build Farm"
-                    "    Once per Round, don't decimate a Forest when creating a Farm.");
+    positive.append("+ Build Farm\n"
+                    "Once per Round, don't decimate a Forest when creating a Farm.\n");
     advances.insert(AdvanceModel::AGRICULTURE,
                     new AdvanceModel(AdvanceModel::AGRICULTURE,
                                      "Agriculture",
@@ -797,12 +797,12 @@ void BoardModel::initializeCards()
     negative.clear();
     prequisites.append(QList<AdvanceModel::Advance>());
     prequisites[0].append(AdvanceModel::ENGINEERING);
-    positive.append("+ Upkeep (Advance City AV)"
-                    "    Maximum City AV is 4.");
-    positive.append("+ Event (CIVIL WAR)"
-                    "    Reduction of the City AV is reduced by 1.");
-    positive.append("+ Event (ATTACK)"
-                    "    Instead of reducing 1 City AV to reduce 5 Attacking Force, reduce 1 City AV to reduce 8 Attacking Force.");
+    positive.append("+ Upkeep (Advance City AV)\n"
+                    "Maximum City AV is 4.\n");
+    positive.append("+ Event (CIVIL WAR)\n"
+                    "Reduction of the City AV is reduced by 1.\n");
+    positive.append("+ Event (ATTACK)\n"
+                    "Instead of reducing 1 City AV to reduce 5 Attacking Force, reduce 1 City AV to reduce 8 Attacking Force.\n");
     advances.insert(AdvanceModel::ARCHITECTURE,
                     new AdvanceModel(AdvanceModel::ARCHITECTURE,
                                      " Architecture",
@@ -818,8 +818,8 @@ void BoardModel::initializeCards()
     prequisites[0].append(AdvanceModel::LITERACY);
     prequisites.append(QList<AdvanceModel::Advance>());
     prequisites[1].append(AdvanceModel::MUSIC);
-    positive.append("+ Event (CIVIL WAR)");
-    positive.append("    Before applying the Colleteral Damage, sbstract 2 from Colleteral Damage. This is applied before Meditation is applied.");
+    positive.append("+ Event (CIVIL WAR)\n");
+    positive.append("Before applying the Colleteral Damage, sbstract 2 from Colleteral Damage. This is applied before Meditation is applied.\n");
     advances.insert(AdvanceModel::ARTS,
                     new AdvanceModel(AdvanceModel::ARTS,
                                      "Arts",
@@ -831,8 +831,8 @@ void BoardModel::initializeCards()
     prequisites.clear();
     positive.clear();
     negative.clear();
-    negative.append("- Event (SUPERSTITION)"
-                    "    When adding up the amount of Event Cards to discard, add 2 to the GREEN SQUARE Number.");
+    negative.append("- Event (SUPERSTITION)\n"
+                    "When adding up the amount of Event Cards to discard, add 2 to the GREEN SQUARE Number.\n");
     advances.insert(AdvanceModel::ASTRONOMY,
                     new AdvanceModel(AdvanceModel::ASTRONOMY,
                                      "Astronomy",
@@ -844,8 +844,8 @@ void BoardModel::initializeCards()
     prequisites.clear();
     positive.clear();
     negative.clear();
-    positive.append("+ Upkeep (After Advance City AV)"
-                    "    If you have 3 Gold, gain 1 Gold.");
+    positive.append("+ Upkeep (After Advance City AV)\n"
+                    "If you have 3 Gold, gain 1 Gold.\n");
     advances.insert(AdvanceModel::BANKING,
                     new AdvanceModel(AdvanceModel::BANKING,
                                      "Banking",
@@ -857,8 +857,8 @@ void BoardModel::initializeCards()
     prequisites.clear();
     positive.clear();
     negative.clear();
-    positive.append("+ Upkeep (Advance City AV)"
-                    "    Reduce the decimation of Tribes by 1, when increasing the AV of a City.");
+    positive.append("+ Upkeep (Advance City AV)\n"
+                    "Reduce the decimation of Tribes by 1, when increasing the AV of a City.\n");
     advances.insert(AdvanceModel::BASIC_TOOLS,
                     new AdvanceModel(AdvanceModel::BASIC_TOOLS,
                                      "Basic Tools",
@@ -870,15 +870,15 @@ void BoardModel::initializeCards()
     prequisites.clear();
     positive.clear();
     negative.clear();
-    positive.append("+ New Main Action (Collect Taxes)"
-                    "    Try to collect taxes."
-                    "    1. Draw Event Card."
-                    "    2. Add amount of Gold Nuggets shown."
-                    "    3. If the Event Card has Handshaking on it, decimate your Gold by 1 and repeat from step 1. Otherwise, end the action. If you can't decimate 1 Gold, start an Anarchy Event.");
-    positive.append("+ Aquire Advances"
-                    "    If you aquire the Black Market, you get 5 Gold one time only.");
-    negative.append("- Upkeep (Decimate Gold)"
-                    "    When decimating all Coins, you must decimate at least 1 Gold or an Anarchy Event starts.");
+    positive.append("+ New Main Action (Collect Taxes)\n"
+                    "Try to collect taxes.\n"
+                    "1. Draw Event Card.\n"
+                    "2. Add amount of Gold Nuggets on this Event Card.\n"
+                    "3. If the Event Card has Handshake, decimate your Gold by 1 and repeat from step 1. Otherwise, end the action. If you can't decimate 1 Gold, start an Anarchy Event.\n");
+    positive.append("+ Aquire Advances\n"
+                    "If you aquire the Black Market, you get 5 Gold one time only.\n");
+    negative.append("- Upkeep (Decimate Gold)\n"
+                    "When decimating all Coins, you must decimate at least 1 Gold or an ANARCHY Event starts.\n");
     prequisites.append(QList<AdvanceModel::Advance>());
     prequisites[0].append(AdvanceModel::CULTURE_OF_THIEVES);
     advances.insert(AdvanceModel::BLACK_MARKET,
@@ -892,8 +892,8 @@ void BoardModel::initializeCards()
     prequisites.clear();
     positive.clear();
     negative.clear();
-    positive.append("+ Upkeep (Reduce City AV)"
-                    "    Use Farms in the EMPIRE to support Cities anywhere and not only in the Region the Farm is in. A Farm can still only support one City.");
+    positive.append("+ Upkeep (Reduce City AV)\n"
+                    "Use Farms in the EMPIRE to support Cities anywhere and not only in the Region the Farm is in. A Farm can still only support one City.\n");
     advances.insert(AdvanceModel::CARTAGE,
                     new AdvanceModel(AdvanceModel::CARTAGE,
                                      "Cartage",
@@ -905,8 +905,8 @@ void BoardModel::initializeCards()
     prequisites.clear();
     positive.clear();
     negative.clear();
-    positive.append("+ Expedition"
-                    "   Every tribe sent to an Expedition, counts as two tribes.");
+    positive.append("+ Expedition\n"
+                    "Every tribe sent to an Expedition, counts as two tribes.\n");
     advances.insert(AdvanceModel::CAVALRY,
                     new AdvanceModel(AdvanceModel::CAVALRY,
                                      "Cavalry",
@@ -920,14 +920,14 @@ void BoardModel::initializeCards()
     negative.clear();
     prequisites.append(QList<AdvanceModel::Advance>());
     prequisites[0].append(AdvanceModel::MILITARY);
-    positive.append("When aquiring this Advance, denote any City as the Capitol."
-                    "If this city is decimated, choose another City as your Capitol."
-                    "+ Upkeep (Advance City AV)"
-                    "    A Capitol can have its AV increased to 10 AV."
-                    "    Only Tribes in the Region of the Capitol can be decimated to pay for the advance of the Capitol."
-                    "    Any increase higher than 4 AV additionally decimates a Forest, Mountain or Farm in the Region of the Capitol."
-                    "    A Capitol can only be advanced once per Upkeep."
-                    "    Basic Tools, Simple Tools and Machining don't apply for the Capitol.");
+    positive.append("When aquiring this Advance, denote any City as the Capitol.\n"
+                    "If this city is decimated, choose another City as your Capitol.\n"
+                    "+ Upkeep (Advance City AV)\n"
+                    "A Capitol can have its AV increased to 10 AV.\n"
+                    "Only Tribes in the Region of the Capitol can be decimated to pay for the advance of the Capitol.\n"
+                    "Any increase higher than 4 AV additionally decimates a Forest, Mountain or Farm in the Region of the Capitol.\n"
+                    "A Capitol can only be advanced once per Upkeep.\n"
+                    "Basic Tools, Simple Tools and Machining don't apply for the Capitol.\n");
     advances.insert(AdvanceModel::CENTRALIZED_GOVERNMENT,
                     new AdvanceModel(AdvanceModel::CENTRALIZED_GOVERNMENT,
                                      "Centralized Government",
@@ -941,13 +941,13 @@ void BoardModel::initializeCards()
     negative.clear();
     prequisites.append(QList<AdvanceModel::Advance>());
     prequisites[0].append(AdvanceModel::DEMOCRACY);
-    positive.append("+ Upkeep (Advance City AV)"
-                    "    Increase the AV of one City this turn, without decimating Tribes."
-                    "    This stacks with Masonry and Slave Labor.");
-    positive.append("+ Event (CIVIL WAR)"
-                    "    When reducing City AV, a City AV can't be reduced below 1.");
-    positive.append("+ Event (TSUNAMI)"
-                    "    Instead of decimating 1 Tribe per 1 Damage and reducing 1 City AV per 2 Damage, decimate 1 Tribe per 3 Damage and reduce 1 City AV per 5 Damage.");
+    positive.append("+ Upkeep (Advance City AV)\n"
+                    "Increase the AV of one City this turn, without decimating Tribes.\n"
+                    "This stacks with Masonry and Slave Labor.\n");
+    positive.append("+ Event (CIVIL WAR)\n"
+                    "When reducing City AV, a City AV can't be reduced below 1.\n");
+    positive.append("+ Event (TSUNAMI)\n"
+                    "Instead of decimating 1 Tribe per 1 Damage and reducing 1 City AV per 2 Damage, decimate 1 Tribe per 3 Damage and reduce 1 City AV per 5 Damage.\n");
     advances.insert(AdvanceModel::CIVIL_SERVICE,
                     new AdvanceModel(AdvanceModel::CIVIL_SERVICE,
                                      "Civil Service",
@@ -961,8 +961,8 @@ void BoardModel::initializeCards()
     negative.clear();
     prequisites.append(QList<AdvanceModel::Advance>());
     prequisites[0].append(AdvanceModel::ROADBUILDING);
-    positive.append("+ Build City"
-                    "    Only need 2 Tribes to build a city.");
+    positive.append("+ Build City\n"
+                    "Only need 2 Tribes to build a city.\n");
     advances.insert(AdvanceModel::COMMON_TONGUE,
                     new AdvanceModel(AdvanceModel::COMMON_TONGUE,
                                      "Common Tongue",
@@ -974,8 +974,8 @@ void BoardModel::initializeCards()
     prequisites.clear();
     positive.clear();
     negative.clear();
-    positive.append("+ Upkeep (Decimate Gold)"
-                    "    Don't decimate any Gold but does not cancel Black Market.");
+    positive.append("+ Upkeep (Decimate Gold)\n"
+                    "Don't decimate any Gold. This does not cancel Black Market.\n");
     advances.insert(AdvanceModel::COINAGE,
                     new AdvanceModel(AdvanceModel::COINAGE,
                                      "Coinage",
@@ -987,25 +987,27 @@ void BoardModel::initializeCards()
     prequisites.clear();
     positive.clear();
     negative.clear();
-    positive.append("+ Upkeep (After Decimate Gold)"
-                    "    1. Draw Event Card."
-                    "    2. The RED CIRCLE Number is the Active Region."
-                    "    3. If the Active Region has at least 1 Tribe, decimate 1 Tribe, Draw an Event Card and gain the amount of Gold Nuggets as Gold. "
-                    "       Otherwise, nothing happens.");
-    positive.append("+ Event (TRADE)"
-                    "    After the trading is done, you may decide to steal from the visiting Empire."
-                    "    1. Draw Event Card"
-                    "    2. If any amount of Gold Nuggets are shown on this Event Card, add them to the Stash. Continue with 3."
-                    "       Otherwise, if no Gold Nuggets are shown on this Event Card, the Event is over."
-                    "    3. You can now either stop the event and collect the Gold in the Stash or steal some more and go to 4."
-                    "    4. Draw Event Card."
-                    "    5. If any amount of Gold Nuggets are shown on this Event Card, add them to the Stash. Continue with 3."
-                    "       Otherwise, if no Gold Nuggets are shown continue to 6."
-                    "    6. Lose half of the collected Gold in the Stash (Round Down)."
-                    "    7. Draw Event Card."
-                    "    8. The RED CIRCLE Number is the Active Region."
-                    "    9. Draw Event Card"
-                    "   10. Add up the GREEN SQUARE Number and BLUE HEX Number. This is the Attacking Force. Follow Up with ATTACK.");
+    positive.append("+ Upkeep (After Decimate Gold)\n"
+                    "1. Draw Event Card.\n"
+                    "2. The RED CIRCLE Number is the Active Region.\n"
+                    "3. If the Active Region has at least 1 Tribe, decimate 1 Tribe. "
+                    "4. Draw an Event Card "
+                    "5. Gain the amount of Gold Nuggets on this Event Card in gold.\n"
+                    "Otherwise, nothing happens.\n");
+    positive.append("+ Event (TRADE)\n"
+                    "After the trading is done, you may decide to steal from the visiting Empire.\n"
+                    "1. Draw Event Card.\n"
+                    "2. If there is at least one Gold Nugget on this Event Card, add the amount of gold to the Stash. Continue with 3.\n"
+                    "Otherwise, if no Gold Nuggets on this Event Card, the Event is over.\n"
+                    "3. You can now either stop the event and collect the Gold in the Stash or steal some more and go to 4.\n"
+                    "4. Draw Event Card.\n"
+                    "5. If any amount of Gold Nuggets on this Event Card, add them to the Stash. Continue with 3.\n"
+                    "Otherwise, if no Gold Nuggets are on this Event Card continue to 6.\n"
+                    "6. Lose half of the collected Gold in the Stash (Round Down).\n"
+                    "7. Draw Event Card.\n"
+                    "8. The RED CIRCLE Number is the Active Region.\n"
+                    "9. Draw Event Card.\n"
+                    "10. Add up the GREEN SQUARE Number and BLUE HEX Number. This is the Attacking Force. Follow Up with ATTACK.\n");
     advances.insert(AdvanceModel::CULTURE_OF_THIEVES,
                     new AdvanceModel(AdvanceModel::CULTURE_OF_THIEVES,
                                      "Culture of Thieves",
@@ -1019,8 +1021,8 @@ void BoardModel::initializeCards()
     negative.clear();
     prequisites.append(QList<AdvanceModel::Advance>());
     prequisites[0].append(AdvanceModel::GOVERNMENT);
-    positive.append("+ Event (BANDITS)"
-                    "    After determening the Attacking Force, substract from it the BLUE HEX Number of the BANDITS Event Card.");
+    positive.append("+ Event (BANDITS)\n"
+                    "After determening the Attacking Force, substract from it the BLUE HEX Number of the BANDITS Event Card.\n");
     advances.insert(AdvanceModel::DEMOCRACY,
                     new AdvanceModel(AdvanceModel::DEMOCRACY,
                                      "Democracy",
@@ -1034,13 +1036,13 @@ void BoardModel::initializeCards()
     negative.clear();
     prequisites.append(QList<AdvanceModel::Advance>());
     prequisites[0].append(AdvanceModel::GOVERNMENT);
-    positive.append("+ Event (VISITATION)"
-                    "    Before VISITATION begins, you may attempt to make the visiting Empire a Trading Partner."
-                    "    1. Decimate any amount of Tribes and Gold. The total decimated amount is the Diplomatic Offer."
-                    "    2. Draw Event Card."
-                    "    3. If Diplomatic Offer >= RED CIRCLE Number, you are Trading Partners with the Visiting Empire. This is permanent for the rest of the game."
-                    "    4. If this empire has become your trading partner, follow up every VISITATION of this empire with TRADE (including now)."
-                    "       Otherwise, continue VISITATION normally.");
+    positive.append("+ Event (VISITATION)\n"
+                    "Before VISITATION begins, you may attempt to make the visiting Empire a Trading Partner.\n"
+                    "1. Decimate any amount of Tribes and Gold. The total decimated amount is the Diplomatic Offer.\n"
+                    "2. Draw Event Card.\n"
+                    "3. If Diplomatic Offer >= RED CIRCLE Number, you are Trading Partners with the Visiting Empire. This is permanent for the rest of the game.\n"
+                    "4. If this empire has become your trading partner, follow up every VISITATION of this empire with TRADE (including now).\n"
+                    "Otherwise, continue VISITATION normally.\n");
     advances.insert(AdvanceModel::DIPLOMACY,
                     new AdvanceModel(AdvanceModel::DIPLOMACY,
                                      "Diplomacy",
@@ -1056,14 +1058,14 @@ void BoardModel::initializeCards()
     prequisites[0].append(AdvanceModel::AGRICULTURE);
     prequisites.append(QList<AdvanceModel::Advance>());
     prequisites[1].append(AdvanceModel::HORTICULTURE);
-    positive.append("+ Population Growth and Movement"
-                    "    Move any Tribes to any Region. But not through frontiers or across seas.");
-    positive.append("+ Event (ATTACK)"
-                    "    Whenever the Attacking Force moves to a new Region with Tribes, reduce the Attacking Force by 2.");
-    negative.append("- Event (BANDITS)"
-                    "    After determening the Attacking Force, add to it the BLUE HEX Number of the BANDITS event card.");
-    negative.append("- Event (EPIDEMIC)"
-                    "    The Epidemic moves directly to any Region with tribes, instead of only moving to bordering regions with tribes.");
+    positive.append("+ Population Growth and Movement\n"
+                    "Move any Tribes to any Region. But not through frontiers or across seas.\n");
+    positive.append("+ Event (ATTACK)\n"
+                    "Whenever the Attacking Force moves to a new Region with Tribes, reduce the Attacking Force by 2.\n");
+    negative.append("- Event (BANDITS)\n"
+                    "After determening the Attacking Force, add to it the BLUE HEX Number of the BANDITS event card.\n");
+    negative.append("- Event (EPIDEMIC)\n"
+                    "The Epidemic moves directly to any Region with tribes, instead of only moving to bordering regions with tribes.\n");
     advances.insert(AdvanceModel::EQUESTRIAN,
                     new AdvanceModel(AdvanceModel::EQUESTRIAN,
                                      "Equestrian",
@@ -1077,14 +1079,14 @@ void BoardModel::initializeCards()
     negative.clear();
     prequisites.append(QList<AdvanceModel::Advance>());
     prequisites[0].append(AdvanceModel::MASONRY);
-    positive.append("+ Upkeep (Advance City AV)"
-                    "    Maximum City AV is now 3.");
-    positive.append("+ Event (EARTHQUAKE)"
-                    "    Cities hit by the earthquake and about to be decimated, have their City AV set to 1.");
-    positive.append("+ Event (VOLCANO)"
-                    "    Cities hit by anything from this event can't be reduced below a City AV of 1 and any decimated Cities become Cities with City AV 1.");
-    positive.append("+ Event (TSUNAMI)"
-                    "    Instead of decimating 1 Wonder per 3 damage, decimate 1 Wonder per 10 damage.");
+    positive.append("+ Upkeep (Advance City AV)\n"
+                    "Maximum City AV is now 3.\n");
+    positive.append("+ Event (EARTHQUAKE)\n"
+                    "Cities hit by the earthquake and about to be decimated, have their City AV set to 1.\n");
+    positive.append("+ Event (VOLCANO)\n"
+                    "Cities hit by anything from this event can't be reduced below a City AV of 1 and any decimated Cities become Cities with City AV 1.\n");
+    positive.append("+ Event (TSUNAMI)\n"
+                    "Instead of decimating 1 Wonder per 3 damage, decimate 1 Wonder per 10 damage.\n");
     advances.insert(AdvanceModel::ENGINEERING,
                     new AdvanceModel(AdvanceModel::ENGINEERING,
                                      "Engineering",
@@ -1096,10 +1098,10 @@ void BoardModel::initializeCards()
     prequisites.clear();
     positive.clear();
     negative.clear();
-    positive.append("+ Population Growth and Movement"
-                    "    Move any amount of tribes from one region to another bordering on the same sea. Reduce the group of moved tribes by 1.");
-    positive.append("+ Upkeep (Reduce City AV)"
-                    "    Cities in Regions bordering on SEA don't need Farms to support them.");
+    positive.append("+ Population Growth and Movement\n"
+                    "Move any amount of tribes from one region to another bordering on the same sea. Reduce the group of moved tribes by 1.\n");
+    positive.append("+ Upkeep (Reduce City AV)\n"
+                    "Cities in Regions bordering on SEA don't need Farms to support them.\n");
     advances.insert(AdvanceModel::FISHING,
                     new AdvanceModel(AdvanceModel::FISHING,
                                      "Fishing",
@@ -1113,10 +1115,10 @@ void BoardModel::initializeCards()
     negative.clear();
     prequisites.append(QList<AdvanceModel::Advance>());
     prequisites[0].append(AdvanceModel::SENSE_OF_COMMUNITY);
-    positive.append("+ Event (TRIBAL WAR)"
-                    "    Skip this event.");
-    negative.append("- Event (CORRUPTION)"
-                    "    Before applying the Corruption, add 3 to the Corruption. This is applied before the Literacy advance is applied.");
+    positive.append("+ Event (TRIBAL WAR)\n"
+                    "Skip this event.\n");
+    negative.append("- Event (CORRUPTION)\n"
+                    "Before applying the Corruption, add 3 to the Corruption. This is applied before the Literacy advance is applied.\n");
     advances.insert(AdvanceModel::GOVERNMENT,
                     new AdvanceModel(AdvanceModel::GOVERNMENT,
                                      "Government",
@@ -1128,9 +1130,9 @@ void BoardModel::initializeCards()
     prequisites.clear();
     positive.clear();
     negative.clear();
-    positive.append("+ New Main Action (Forestation)"
-                    "    Grow a Forest in a Region."
-                    "    Decimate 4 Tribes in a Region to create a Forest there. The amount of tribes left after Forestation have to be at least 1.");
+    positive.append("+ New Main Action (Forestation)\n"
+                    "Grow a Forest in a Region.\n"
+                    "Decimate 4 Tribes in a Region to create a Forest there. The amount of tribes left after Forestation have to be at least 1.\n");
     advances.insert(AdvanceModel::HORTICULTURE,
                     new AdvanceModel(AdvanceModel::HORTICULTURE,
                                      "Horticulture",
@@ -1146,12 +1148,12 @@ void BoardModel::initializeCards()
     prequisites[0].append(AdvanceModel::AGRICULTURE);
     prequisites.append(QList<AdvanceModel::Advance>());
     prequisites[1].append(AdvanceModel::HORTICULTURE);
-    positive.append("+ Event (FAMINE)"
-                    "    Instead of decimating the Farm and reducing the City AV by 2, don't decimate the Farm and reduce the City AV by 1.");
-    positive.append("+ Event (FLOOD)"
-                    "    Instead of decimating the Farm and reducing the City AV by 1, don't decimate the Farm and don't reduce the City AV. Still place a Forest in that Region, if there is none.");
-    positive.append("+ Event (SANDSTORM)"
-                    "    Do not decimate any Farms in this event.");
+    positive.append("+ Event (FAMINE)\n"
+                    "Instead of decimating the Farm and reducing the City AV by 2, don't decimate the Farm and reduce the City AV by 1.\n");
+    positive.append("+ Event (FLOOD)\n"
+                    "Instead of decimating the Farm and reducing the City AV by 1, don't decimate the Farm and don't reduce the City AV. Still place a Forest in that Region, if there is none.\n");
+    positive.append("+ Event (SANDSTORM)\n"
+                    "Do not decimate any Farms in this event.\n");
     advances.insert(AdvanceModel::IRRIGATION,
                     new AdvanceModel(AdvanceModel::IRRIGATION,
                                      "Irrigation",
@@ -1167,16 +1169,16 @@ void BoardModel::initializeCards()
     prequisites[0].append(AdvanceModel::GOVERNMENT);
     prequisites[0].append(AdvanceModel::PHILOSOPHY);
     positive.append("+ Event (ANARCHY)"
-                    "    Instead of reducing City AV, reduce the Tribes in every Region by the CityAV in that region."
-                    "    This cancels the effect of Machining.");
-    positive.append("+ Event (BANDITS)"
-                    "    After determening the Attacking Force, substract from it the BLUE HEX Number of the BANDITS event card.");
-    positive.append("+ Event (CIVIL WAR)"
-                    "    Instead of using the BLUE HEX Number to determine the Collateral Damage, use the GREEN SQUARE Number.");
-    positive.append("+ Event (CORRUPTION)"
-                    "    Don't decimate any gold in this event.");
-    positive.append("+ Event (UPRISING)"
-                    "    Decrease the amount of City AV to be reduced by 1.");
+                    "Instead of reducing City AV, reduce the Tribes in every Region by the CityAV in that region.\n"
+                    "This cancels the effect of Machining.\n");
+    positive.append("+ Event (BANDITS)\n"
+                    "After determening the Attacking Force, substract from it the BLUE HEX Number of the BANDITS event card.\n");
+    positive.append("+ Event (CIVIL WAR)\n"
+                    "Instead of using the BLUE HEX Number to determine the Collateral Damage, use the GREEN SQUARE Number.\n");
+    positive.append("+ Event (CORRUPTION)\n"
+                    "Don't decimate any gold in this event.\n");
+    positive.append("+ Event (UPRISING)\n"
+                    "Decrease the amount of City AV to be reduced by 1.\n");
     advances.insert(AdvanceModel::LAW,
                     new AdvanceModel(AdvanceModel::LAW,
                                      "Law",
@@ -1188,11 +1190,11 @@ void BoardModel::initializeCards()
     prequisites.clear();
     positive.clear();
     negative.clear();
-    positive.append("+ Event (ANARCHY)"
-                    "    Reduce Tribes by 5 instead of 3.");
-    positive.append("+ Event (CORRUPTION)"
-                    "    Before applying it, divide the Corruption by 2 (Round Down)."
-                    "    Do this after applying Government.");
+    positive.append("+ Event (ANARCHY)\n"
+                    "Reduce Tribes by 5 instead of 3.\n");
+    positive.append("+ Event (CORRUPTION)\n"
+                    "Before applying it, divide the Corruption by 2 (Round Down).\n"
+                    "Do this after applying Government.\n");
     advances.insert(AdvanceModel::LITERACY,
                     new AdvanceModel(AdvanceModel::LITERACY,
                                      "Literacy",
@@ -1207,15 +1209,15 @@ void BoardModel::initializeCards()
     prequisites.append(QList<AdvanceModel::Advance>());
     prequisites[0].append(AdvanceModel::ENGINEERING);
     prequisites[0].append(AdvanceModel::METAL_WORKING);
-    positive.append("+ Aquire Advances"
-                    "    A Mountain/Volcano can now create wood instead of stone and a Forest may create stone instead of wood.");
-    positive.append("+ Upkeep (Advance City AV)"
-                    "    Increasing the City AV costs 1 less tribe.");
-    negative.append("- Event (ANARCHY)"
-                    "    Reduce 2 additional City AV in a City of your choice."
-                    "    Law cancels this effect.");
-    negative.append("- Event (UPRISING)"
-                    "    Increase the amount of City AV to be reduced by 1.");
+    positive.append("+ Aquire Advances\n"
+                    "A Mountain/Volcano can now create wood instead of stone and a Forest may create stone instead of wood.\n");
+    positive.append("+ Upkeep (Advance City AV)\n"
+                    "Increasing the City AV costs 1 less tribe.\n");
+    negative.append("- Event (ANARCHY)\n"
+                    "Reduce 2 additional City AV in a City of your choice.\n"
+                    "Law cancels this effect.\n");
+    negative.append("- Event (UPRISING)\n"
+                    "Increase the amount of City AV to be reduced by 1.\n");
     advances.insert(AdvanceModel::MACHINING,
                     new AdvanceModel(AdvanceModel::MACHINING,
                                      "Machining",
@@ -1227,9 +1229,9 @@ void BoardModel::initializeCards()
     prequisites.clear();
     positive.clear();
     negative.clear();
-    positive.append("+ Upkeep (Advance City AV)"
-                    "       Increase the AV of one City this turn, without decimating Tribes."
-                    "       This stacks with Civil Service and Slave Labor.");
+    positive.append("+ Upkeep (Advance City AV)\n"
+                    "Increase the AV of one City this turn, without decimating Tribes.\n"
+                    "This stacks with Civil Service and Slave Labor.\n");
     advances.insert(AdvanceModel::MASONRY,
                     new AdvanceModel(AdvanceModel::MASONRY,
                                      "Masonry",
@@ -1243,10 +1245,10 @@ void BoardModel::initializeCards()
     negative.clear();
     prequisites.append(QList<AdvanceModel::Advance>());
     prequisites[0].append(AdvanceModel::METAL_WORKING);
-    positive.append("+ Population Growth and Movement"
-                    "    Don't Reduce Tribe Group by 1 Tribe, when moving across the sea with Fishing or Navigation.");
-    positive.append("+ Expedition"
-                    "    Divide the BLUE HEX (or GREEN HEX, if using Navigation for sea Expeditions) Number by 2 (Round Up).");
+    positive.append("+ Population Growth and Movement\n"
+                    "Don't Reduce Tribe Group by 1 Tribe, when moving across the sea with Fishing or Navigation.\n");
+    positive.append("+ Expedition\n"
+                    "Divide the BLUE HEX (or GREEN HEX, if using Navigation for sea Expeditions) Number by 2 (Round Up).\n");
     advances.insert(AdvanceModel::MAGNETICS,
                     new AdvanceModel(AdvanceModel::MAGNETICS,
                                      "Magnetics",
@@ -1258,16 +1260,16 @@ void BoardModel::initializeCards()
     prequisites.clear();
     positive.clear();
     negative.clear();
-    positive.append("+ Event (CIVIL WAR)"
-                    "    After applying all the Colleteral Damage, add 1 Tribe to every affected Region.");
-    positive.append("+ Event (EARTHQUAKE)"
-                    "    After the Event is over, create 2 Tribes in each affected Region that had at least 1 Tribe decimated.");
-    positive.append("+ Event (EPIDEMIC)"
-                    "    Before applying the Population Loss, divide it by 2 (Round down).");
-    positive.append("+ Event (VOLCANO)"
-                    "   After the Event is over, place 1 Tribe in each Region affected by this Event.");
-    positive.append("+ Event (TSUNAMI)"
-                    "    Add 2 Tribes in every Region affected by this event.");
+    positive.append("+ Event (CIVIL WAR)\n"
+                    "After applying all the Colleteral Damage, add 1 Tribe to every affected Region.\n");
+    positive.append("+ Event (EARTHQUAKE)\n"
+                    "After the Event is over, create 2 Tribes in each affected Region that had at least 1 Tribe decimated.\n");
+    positive.append("+ Event (EPIDEMIC)\n"
+                    "Before applying the Population Loss, divide it by 2 (Round down).\n");
+    positive.append("+ Event (VOLCANO)\n"
+                    "After the Event is over, place 1 Tribe in each Region affected by this Event.\n");
+    positive.append("+ Event (TSUNAMI)\n"
+                    "Add 2 Tribes in every Region affected by this event.\n");
     prequisites.append(QList<AdvanceModel::Advance>());
     prequisites[0].append(AdvanceModel::LITERACY);
     advances.insert(AdvanceModel::MEDICINE,
@@ -1283,10 +1285,10 @@ void BoardModel::initializeCards()
     negative.clear();
     prequisites.append(QList<AdvanceModel::Advance>());
     prequisites[0].append(AdvanceModel::MYTHOLOGY);
-    positive.append("+ Event (CIVIL WAR)"
-                    "    Before applying the Colleteral Damage, divide it by 2 (Round up). Apply this after Arts and Theater.");
-    positive.append("+ Event (SUPERSTITION)"
-                    "    You may end the event, if the Event Deck has only 1 Card left, while discarding the Event Cards.");
+    positive.append("+ Event (CIVIL WAR)\n"
+                    "Before applying the Colleteral Damage, divide it by 2 (Round up). Apply this after Arts and Theater.\n");
+    positive.append("+ Event (SUPERSTITION)\n"
+                    "You may end the event, if the Event Deck has only 1 Card left, while discarding the Event Cards.\n");
     advances.insert(AdvanceModel::MEDITATION,
                     new AdvanceModel(AdvanceModel::MEDITATION,
                                      "Meditation",
@@ -1299,10 +1301,10 @@ void BoardModel::initializeCards()
     negative.clear();
     prequisites.append(QList<AdvanceModel::Advance>());
     prequisites[0].append(AdvanceModel::MINING);
-    positive.append("+ Upkeep (Advance City AV)"
-                    "    Maximum City AV is 3.");
-    positive.append("+ Event (ATTACK)"
-                    "    When reducing Tribes and Attacking Forces, reduce 1 additional Attacking Force for every Tribe reduced.");
+    positive.append("+ Upkeep (Advance City AV)\n"
+                    "Maximum City AV is 3.\n");
+    positive.append("+ Event (ATTACK)\n"
+                    "When reducing Tribes and Attacking Forces, reduce 1 additional Attacking Force for every Tribe reduced.\n");
     advances.insert(AdvanceModel::METAL_WORKING,
                     new AdvanceModel(AdvanceModel::METAL_WORKING,
                                      "Metal Working",
@@ -1316,18 +1318,18 @@ void BoardModel::initializeCards()
     negative.clear();
     prequisites.append(QList<AdvanceModel::Advance>());
     prequisites[0].append(AdvanceModel::GOVERNMENT);
-    positive.append("+ Event Follow Up (ATTACK)"
-                    "    When reducing Tribes and Attacking Forces, reduce 1 additional Attacking Force for every Tribe reduced.");
-    negative.append("- Event (CIVIL WAR)"
-                    "    Instead of reducing the City AV from the Active Region and the bordering Regions by 2, you reduce them by 3.");
-    negative.append("- Event (UPRISING)"
-                    "    After the Event ends, this happens:"
-                    "    1. Select a bordering Region with a City."
-                    "       If there is none, the Event is over."
-                    "    2. Reduce the Region's City AV by 1 in the selected bordering Region. If the City AV is 0, decimate the City."
-                    "    3. Decimate all Tribes in the selected bordering Region."
-                    "       Organized Religion also applies here: "
-                    "       Instead of decimating all Tribes, reduce the Tribes by 2.");
+    positive.append("+ Event Follow Up (ATTACK)\n"
+                    "When reducing Tribes and Attacking Forces, reduce 1 additional Attacking Force for every Tribe reduced.\n");
+    negative.append("- Event (CIVIL WAR)\n"
+                    "Instead of reducing the City AV from the Active Region and the bordering Regions by 2, you reduce them by 3.\n");
+    negative.append("- Event (UPRISING)\n"
+                    "After the Event ends, this happens:\n"
+                    "1. Select a bordering Region with a City.\n"
+                    "If there is none, the Event is over.\n"
+                    "2. Reduce the Region's City AV by 1 in the selected bordering Region. If the City AV is 0, decimate the City.\n"
+                    "3. Decimate all Tribes in the selected bordering Region.\n"
+                    "Organized Religion also applies here:\n"
+                    "Instead of decimating all Tribes, reduce the Tribes by 2.\n");
     advances.insert(AdvanceModel::MILITARY,
                     new AdvanceModel(AdvanceModel::MILITARY,
                                      "Military",
@@ -1339,14 +1341,14 @@ void BoardModel::initializeCards()
     prequisites.clear();
     positive.clear();
     negative.clear();
-    positive.append("+ New Main Action (Mining)"
-                    "    Mine for Gold."
-                    "    1. Decimate 3 Tribes on a Region with a Mountain or Volcano."
-                    "       At least 1 Tribe has to remain."
-                    "    2. Draw Event Card."
-                    "    3. If there are Gold Nuggets on the Event Card, add that amount your Mine Cart."
-                    "       Otherwise, the Mine Cart and all the gold it contained is lost and the action ends."
-                    "    4. You can now either collect all the Gold from the Mine Cart or go to 2. to try to mine more gold.");
+    positive.append("+ New Main Action (Mining)\n"
+                    "Mine for Gold.\n"
+                    "1. Decimate 3 Tribes on a Region with a Mountain or Volcano.\n"
+                    "At least 1 Tribe has to remain.\n"
+                    "2. Draw Event Card.\n"
+                    "3. If there are Gold Nuggets on the Event Card, add that amount your Mine Cart.\n"
+                    "Otherwise, the Mine Cart and all the gold it contained is lost and the action ends.\n"
+                    "4. You can now either collect all the Gold from the Mine Cart or go to 2. to try to mine more gold.\n");
     advances.insert(AdvanceModel::MINING,
                     new AdvanceModel(AdvanceModel::MINING,
                                      "Mining",
@@ -1360,10 +1362,10 @@ void BoardModel::initializeCards()
     negative.clear();
     prequisites.append(QList<AdvanceModel::Advance>());
     prequisites[0].append(AdvanceModel::ORGANIZED_RELIGION);
-    positive.append("+ Event (ATTACK)"
-                    "    Before starting the ATTACK:"
-                    "    1. Draw Event Card."
-                    "    2. Reduce the Attacking Force by the GREEN SQUARE Number and gain as much gold as Attacking Forces actually reduced this way.");
+    positive.append("+ Event (ATTACK)\n"
+                    "Before starting the ATTACK:\n"
+                    "1. Draw Event Card.\n"
+                    "2. Reduce the Attacking Force by the GREEN SQUARE Number and gain as much gold as Attacking Forces actually reduced this way.\n");
     advances.insert(AdvanceModel::MINISTRY,
                     new AdvanceModel(AdvanceModel::MINISTRY,
                                      "Ministry",
@@ -1375,8 +1377,8 @@ void BoardModel::initializeCards()
     prequisites.clear();
     positive.clear();
     negative.clear();
-    positive.append("+ Event (TRIBAL WAR)"
-                    "    Instead of selecting 2 bordering Regions and reducing Tribes by 3 in the Active Region, select 1 bordering Region and reduce Tribes by 2 in the Active Region.");
+    positive.append("+ Event (TRIBAL WAR)\n"
+                    "Instead of selecting 2 bordering Regions and reducing Tribes by 3 in the Active Region, select 1 bordering Region and reduce Tribes by 2 in the Active Region.\n");
     advances.insert(AdvanceModel::MUSIC,
                     new AdvanceModel(AdvanceModel::MUSIC,
                                      "Music",
@@ -1388,8 +1390,8 @@ void BoardModel::initializeCards()
     prequisites.clear();
     positive.clear();
     negative.clear();
-    negative.append("- Event (CIVIL WAR)"
-                    "    Instead of reducing the City AV from the Active Region and the bordering Regions by 2, you reduce them by 3.");
+    negative.append("- Event (CIVIL WAR)\n"
+                    "Instead of reducing the City AV from the Active Region and the bordering Regions by 2, you reduce them by 3.\n");
     advances.insert(AdvanceModel::MYTHOLOGY,
                     new AdvanceModel(AdvanceModel::MYTHOLOGY,
                                      "Mythology",
@@ -1401,10 +1403,10 @@ void BoardModel::initializeCards()
     prequisites.clear();
     positive.clear();
     negative.clear();
-    positive.append("+ Expedition"
-                    "    Instead of sending Tribes into the Frontier, you may send them to Sea and the BLUE HEX Number replaces GREEN HEX Number to determine how much gold you receive.");
-    positive.append("+ Population Growth and Movement"
-                    "    Move any amount of tribes from one region to another bordering on the same sea. Reduce the group of moved tribes by 1.");
+    positive.append("+ Expedition\n"
+                    "Instead of sending Tribes into the Frontier, you may send them to Sea and the BLUE HEX Number replaces GREEN HEX Number to determine how much gold you receive.\n");
+    positive.append("+ Population Growth and Movement\n"
+                    "Move any amount of tribes from one region to another bordering on the same sea. Reduce the group of moved tribes by 1.\n");
     advances.insert(AdvanceModel::NAVIGATION,
                     new AdvanceModel(AdvanceModel::NAVIGATION,
                                      "Navigation",
@@ -1418,10 +1420,10 @@ void BoardModel::initializeCards()
     negative.clear();
     prequisites.append(QList<AdvanceModel::Advance>());
     prequisites[0].append(AdvanceModel::MYTHOLOGY);
-    positive.append("+ Event (ANARCHY)"
-                    "    Instead of all Regions with Cities, choose 4 Regions with or without cities and apply the event only to the chosen Regions with cities.");
-    positive.append("+ Event (UPRISING)"
-                    "    Instead of decimating all the Tribes, reduce Tribes by 2.");
+    positive.append("+ Event (ANARCHY)\n"
+                    "Instead of all Regions with Cities, choose 4 Regions with or without cities and apply the event only to the chosen Regions with cities.\n");
+    positive.append("+ Event (UPRISING)\n"
+                    "Instead of decimating all the Tribes, reduce Tribes by 2.\n");
     advances.insert(AdvanceModel::ORGANIZED_RELIGION,
                     new AdvanceModel(AdvanceModel::ORGANIZED_RELIGION,
                                      "Organized Religion",
@@ -1436,8 +1438,8 @@ void BoardModel::initializeCards()
     prequisites.append(QList<AdvanceModel::Advance>());
     prequisites[0].append(AdvanceModel::ARTS);
     prequisites[0].append(AdvanceModel::THEATER);
-    positive.append("+ Upkeep (After Advance City and Banking)"
-                    "    For any city gain gold equal to City AV minus 4. If the gold gained is 0 or less, you gain no gold.");
+    positive.append("+ Upkeep (After Advance City and Banking)\n"
+                    "For any city gain gold equal to City AV minus 4. If the gold gained is 0 or less, you gain no gold.\n");
     advances.insert(AdvanceModel::PATRONAGE,
                     new AdvanceModel(AdvanceModel::PATRONAGE,
                                      "Patronage",
@@ -1451,8 +1453,8 @@ void BoardModel::initializeCards()
     negative.clear();
     prequisites.append(QList<AdvanceModel::Advance>());
     prequisites[0].append(AdvanceModel::MEDITATION);
-    positive.append("+ Event (VISITATION)"
-                    "    You may draw a second Event Card to attempt to get a Handshake.");
+    positive.append("+ Event (VISITATION)\n"
+                    "You may draw a second Event Card to attempt to get a Handshake.\n");
     advances.insert(AdvanceModel::PHILOSOPHY,
                     new AdvanceModel(AdvanceModel::PHILOSOPHY,
                                      "Philosophy",
@@ -1466,13 +1468,13 @@ void BoardModel::initializeCards()
     negative.clear();
     prequisites.append(QList<AdvanceModel::Advance>());
     prequisites[0].append(AdvanceModel::CARTAGE);
-    positive.append("+ Population Growth and Movement"
-                    "    Repeat moving tribes once.");
-    positive.append("+ Expedition"
-                    "    Send additional Tribes from bordering Regions into the same Expedition.");
-    negative.append("- Event (EPIDEMIC)"
-                    "    The Epidemic moves directly to any Region with tribes, instead of only moving to bordering regions with tribes."
-                    "    Additionally, if all tribes are decimated in a region as a result of this event, reduce the City AV by 2 in that region. If the City AV becomes 0, decimate the City.");
+    positive.append("+ Population Growth and Movement\n"
+                    "Repeat moving tribes once.\n");
+    positive.append("+ Expedition\n"
+                    "Send additional Tribes from bordering Regions into the same Expedition.\n");
+    negative.append("- Event (EPIDEMIC)\n"
+                    "The Epidemic moves directly to any Region with tribes, instead of only moving to bordering regions with tribes.\n"
+                    "Additionally, if all tribes are decimated in a region as a result of this event, reduce the City AV by 2 in that region. If the City AV becomes 0, decimate the City.\n");
     advances.insert(AdvanceModel::ROADBUILDING,
                     new AdvanceModel(AdvanceModel::ROADBUILDING,
                                      "Road-\nbuilding",
@@ -1487,8 +1489,8 @@ void BoardModel::initializeCards()
     prequisites.append(QList<AdvanceModel::Advance>());
     prequisites[0].append(AdvanceModel::NAVIGATION);
     prequisites[0].append(AdvanceModel::ASTRONOMY);
-    positive.append("+ Expedition"
-                    "    Every tribe sent to an Expedition on sea, counts as two tribes.");
+    positive.append("+ Expedition\n"
+                    "Every tribe sent to an Expedition on sea, counts as two tribes.\n");
     advances.insert(AdvanceModel::SAILS_AND_RIGGINGS,
                     new AdvanceModel(AdvanceModel::SAILS_AND_RIGGINGS,
                                      "Sails and Riggings",
@@ -1502,8 +1504,8 @@ void BoardModel::initializeCards()
     negative.clear();
     prequisites.append(QList<AdvanceModel::Advance>());
     prequisites[0].append(AdvanceModel::EQUESTRIAN);
-    positive.append("+ Event (TRIBAL WAR)"
-                    "    Instead of multiplying the Warring Tribes by 2, don't do that.");
+    positive.append("+ Event (TRIBAL WAR)\n"
+                    "Instead of multiplying the Warring Tribes by 2, don't do that.\n");
     advances.insert(AdvanceModel::SENSE_OF_COMMUNITY,
                     new AdvanceModel(AdvanceModel::SENSE_OF_COMMUNITY,
                                      "Sense of Community",
@@ -1519,8 +1521,8 @@ void BoardModel::initializeCards()
     prequisites[0].append(AdvanceModel::NAVIGATION);
     prequisites.append(QList<AdvanceModel::Advance>());
     prequisites[1].append(AdvanceModel::FISHING);
-    positive.append("+ Event (TRADE)"
-                    "    If the Card you drew for the Gold you receive also has a Handshake on it, draw another Event Card and increase the amount of Gold you receive by the GREEN SQUARE Number on that card.");
+    positive.append("+ Event (TRADE)\n"
+                    "If the Card you drew had Gold Nuggets on it AND a Handshake, draw another Event Card and increase the amount of Gold you receive by the GREEN SQUARE Number on that card.\n");
     advances.insert(AdvanceModel::SHIPPING,
                     new AdvanceModel(AdvanceModel::SHIPPING,
                                      "Shipping",
@@ -1532,8 +1534,8 @@ void BoardModel::initializeCards()
     prequisites.clear();
     positive.clear();
     negative.clear();
-    positive.append("+ Upkeep (Advance City AV)"
-                    "    Increasing the City AV costs one less tribe.");
+    positive.append("+ Upkeep (Advance City AV)\n"
+                    "Increasing the City AV costs one less tribe.\n");
     advances.insert(AdvanceModel::SIMPLE_TOOLS,
                     new AdvanceModel(AdvanceModel::SIMPLE_TOOLS,
                                      "Simple\nTools",
@@ -1545,17 +1547,17 @@ void BoardModel::initializeCards()
     prequisites.clear();
     positive.clear();
     negative.clear();
-    positive.append("+ Upkeep (Advance City AV)"
-                    "    Increase the AV of one City this turn, without decimating Tribes."
-                    "    This stacks with Civil Service and Masonry.");
-    negative.append("- Event (ANARCHY)"
-                    "    After applying the effects of ANARCHY, do this:"
-                    "    1. Draw Event Card."
-                    "    2. Reduce Tribes in the Empire according to the amount of the RED CIRCLE Number. The amount can be distributed however you want in the EMPIRE.");
-    negative.append("- Event (BANDITS)"
-                    "    After determening the Attacking Force, add to it the BLUE HEX Number of the BANDITS event card.");
-    negative.append("- Event (UPRISING)"
-                    "    Additionally, decimate the Farm in all Regions that have no Cities.");
+    positive.append("+ Upkeep (Advance City AV)\n"
+                    "Increase the AV of one City this turn, without decimating Tribes.\n"
+                    "This stacks with Civil Service and Masonry.\n");
+    negative.append("- Event (ANARCHY)\n"
+                    "After applying the effects of ANARCHY, do this:\n"
+                    "1. Draw Event Card.\n"
+                    "2. Reduce Tribes in the Empire according to the amount of the RED CIRCLE Number. The amount can be distributed however you want in the EMPIRE.\n");
+    negative.append("- Event (BANDITS)\n"
+                    "After determening the Attacking Force, add to it the BLUE HEX Number of the BANDITS event card.\n");
+    negative.append("- Event (UPRISING)\n"
+                    "Additionally, decimate the Farm in all Regions that have no Cities.\n");
     advances.insert(AdvanceModel::SLAVE_LABOR,
                     new AdvanceModel(AdvanceModel::SLAVE_LABOR,
                                      "Slave Labor",
@@ -1567,8 +1569,8 @@ void BoardModel::initializeCards()
     prequisites.clear();
     positive.clear();
     negative.clear();
-    positive.append("+ Aquire Advances"
-                    "    Pay one less Tribe when Aquiring: Mythology, Music, Literacy, Philosophy, Arts, Theater, Organized Religion or Law.");
+    positive.append("+ Aquire Advances\n"
+                    "Pay one less Tribe when Aquiring: Mythology, Music, Literacy, Philosophy, Arts, Theater, Organized Religion or Law.\n");
     advances.insert(AdvanceModel::STORY_TELLING,
                     new AdvanceModel(AdvanceModel::STORY_TELLING,
                                      "Story\nTelling",
@@ -1582,8 +1584,8 @@ void BoardModel::initializeCards()
     negative.clear();
     prequisites.append(QList<AdvanceModel::Advance>());
     prequisites[0].append(AdvanceModel::MINING);
-    positive.append("+ Mining"
-                    "    If the mine cart is lost with any gold in it, gain 1 gold anyway.");
+    positive.append("+ Mining\n"
+                    "If the mine cart is lost with any gold in it, gain 1 gold anyway.\n");
     advances.insert(AdvanceModel::SURVEYING,
                     new AdvanceModel(AdvanceModel::SURVEYING,
                                      "Surveying",
@@ -1599,9 +1601,9 @@ void BoardModel::initializeCards()
     prequisites[0].append(AdvanceModel::LITERACY);
     prequisites.append(QList<AdvanceModel::Advance>());
     prequisites[1].append(AdvanceModel::MUSIC);
-    positive.append("+ Event (CIVIL WAR)"
-                    "    Before applying the Colleteral Damage, substract 2 from it."
-                    "    This is applied before Meditation.");
+    positive.append("+ Event (CIVIL WAR)\n"
+                    "Before applying the Colleteral Damage, substract 2 from it.\n"
+                    "This is applied before Meditation.\n");
     advances.insert(AdvanceModel::THEATER,
                     new AdvanceModel(AdvanceModel::THEATER,
                                      "Theater",
@@ -1615,8 +1617,8 @@ void BoardModel::initializeCards()
     negative.clear();
     prequisites.append(QList<AdvanceModel::Advance>());
     prequisites[0].append(AdvanceModel::LITERACY);
-    positive.append("+ End of Era"
-                    "    When determening the Glory, chose 4 more advances than there are tribes in the Empire.");
+    positive.append("+ End of Era\n"
+                    "When determening the Glory, chose 4 more advances than there are tribes in the Empire.\n");
     advances.insert(AdvanceModel::WRITTEN_RECORD,
                     new AdvanceModel(AdvanceModel::WRITTEN_RECORD,
                                      "Written Record",

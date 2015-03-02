@@ -19,6 +19,8 @@ class OverviewDialog : public QDialog
     QPushButton *   showAdvances;
     QPushButton *   showGlory;
 
+    AdvancesDialog *advancesDialog;
+
 public:
     OverviewDialog(BoardModel *boardModel, QWidget *parent = 0);
     ~OverviewDialog();

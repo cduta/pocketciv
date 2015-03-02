@@ -32,6 +32,7 @@ private:
     QGraphicsScene *    graphicsScene;
 
     QMap<AdvanceModel::Advance, AdvanceItem *>  advanceItemMap;
+    QGraphicsPixmapItem *                       advanceBackground;
     QGraphicsPixmapItem *                       advanceTitle;
 
 public:

@@ -1,6 +1,7 @@
 #include "AdvanceItem.hpp"
 
 #include <QPainter>
+#include <QScrollBar>
 
 AdvanceItem::AdvanceItem(qreal xPos,
                          qreal yPos,
@@ -14,7 +15,67 @@ AdvanceItem::AdvanceItem(qreal xPos,
 {
     this->setPos(xPos, yPos);
     this->setShapeMode(AdvanceItem::MaskShape);
+
+    this->layout = new QGridLayout(&this->descriptionDialog);
+    this->descriptionDialog.setLayout(this->layout);
+
+    this->description = new QPlainTextEdit(&this->descriptionDialog);
+    QFont font("monospace");
+    this->description->setFont(font);
+    this->description->setReadOnly(true);
+    this->layout->addWidget(this->description, 0,0);
+    this->descriptionDialog.resize(400,400);
+
     this->updateAdvanceItem();
+}
+
+void AdvanceItem::updateDesription()
+{
+    const AdvanceModel *advanceModel = this->boardModel->refAdvanceModel(this->advance);
+    this->descriptionDialog.setWindowTitle(QString("%1 (%2 VP)").arg(advanceModel->getName()).arg(QString::number(advanceModel->getVictoryPoints())));
+
+    QString wood;
+
+    if(advanceModel->getRequiresWood())
+    {
+        wood = "Yes";
+    }
+    else
+    {
+        wood = "No";
+    }
+
+    QString stone;
+
+    if(advanceModel->getRequiresStone())
+    {
+        stone = "Yes";
+    }
+    else
+    {
+        stone = "No";
+    }
+
+    QString food;
+
+    if(advanceModel->getRequiresFood())
+    {
+        food = "Yes";
+    }
+    else
+    {
+        food = "No";
+    }
+
+    this->description->clear();
+    this->description->insertPlainText(QString("Tribes Cost                       : %1\n").arg(QString::number(advanceModel->getTribesCost())));
+    this->description->insertPlainText(QString("Gold Cost                         : %1\n").arg(QString::number(advanceModel->getGoldCost())));
+    this->description->insertPlainText(QString("Wood (Forest) required            : %1\n").arg(wood));
+    this->description->insertPlainText(QString("Stone (Mountain/Volcano) required : %1\n").arg(stone));
+    this->description->insertPlainText(QString("Food (Farm) required              : %1\n\n").arg(food));
+    this->description->insertPlainText(QString("Effects\n%1").arg(advanceModel->getEffects()));
+
+    return;
 }
 
 void AdvanceItem::updateAdvanceItem()
@@ -70,6 +131,8 @@ void AdvanceItem::updateAdvanceItem()
     }
 
     this->setPixmap(result);
+
+    this->updateDesription();
     return;
 }
 
@@ -88,5 +151,18 @@ void AdvanceItem::setSelected(bool selected)
 bool AdvanceItem::isSelected() const
 {
     return this->selected;
+}
+
+void AdvanceItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
+{
+    if(event->button() == Qt::LeftButton)
+    {
+    }
+    else if(event->button() == Qt::RightButton)
+    {
+        this->descriptionDialog.show();
+        this->description->verticalScrollBar()->setValue(0);
+    }
+    return;
 }
 
