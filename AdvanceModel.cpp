@@ -8,6 +8,7 @@ AdvanceModel::AdvanceModel(Advance advance,
                            bool requiresWood,
                            bool requiresStone,
                            bool requiresFood,
+                           const QList<QList<Advance> > &prequisites,
                            const QList<QString> &positiveEffects,
                            const QList<QString> &negativeEffects,
                            QObject *parent)
@@ -20,6 +21,7 @@ AdvanceModel::AdvanceModel(Advance advance,
       requiresWood(requiresWood),
       requiresStone(requiresStone),
       requiresFood(requiresFood),
+      prequisites(prequisites),
       positiveEffects(positiveEffects),
       negativeEffects(negativeEffects)
 {}
@@ -62,6 +64,11 @@ bool AdvanceModel::getRequiresStone() const
 bool AdvanceModel::getRequiresFood() const
 {
     return this->requiresFood;
+}
+
+QList<QList<AdvanceModel::Advance> > AdvanceModel::getPrequisites() const
+{
+    return this->prequisites;
 }
 
 QList<QString> AdvanceModel::getPositiveEffects() const

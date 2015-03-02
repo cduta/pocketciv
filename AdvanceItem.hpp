@@ -10,6 +10,7 @@ class AdvanceItem : public QGraphicsPixmapItem
 {
     AdvanceModel::Advance advance;
     BoardModel *boardModel;
+    bool selected;
 
 public:
     AdvanceItem(qreal xPos,
@@ -20,6 +21,15 @@ public:
 
 private:
     void updateAdvanceItem();
+
+public:
+    void toggleSelected();
+
+    // Set-Methods
+    void setSelected(bool selected);
+
+    // Get-Methods
+    bool isSelected() const;
 };
 
 #endif // ADVANCEITEM_H

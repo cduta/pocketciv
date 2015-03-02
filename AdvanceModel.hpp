@@ -35,7 +35,7 @@ public:
         MACHINING,
         MAGNETICS,
         MASONRY,
-        MADICINE,
+        MEDICINE,
         MEDITATION,
         METAL_WORKING,
         MILITARY,
@@ -59,6 +59,8 @@ public:
         WRITTEN_RECORD
     };
 
+    enum PrequisiteType{NONE = 0, SINGLE, OR, AND};
+
 private:
     Advance advance;
     QString name;
@@ -68,6 +70,7 @@ private:
     bool requiresWood;
     bool requiresStone;
     bool requiresFood;
+    QList<QList<Advance> > prequisites; // I.e.: A list [[A,B],[A,C]] means this advance needs (A AND B) OR (A AND C).
     QList<QString> positiveEffects;
     QList<QString> negativeEffects;
 
@@ -80,6 +83,7 @@ public:
                  bool requiresWood,
                  bool requiresStone,
                  bool requiresFood,
+                 const QList<QList<Advance> > &prequisites,
                  const QList<QString> &positiveEffects,
                  const QList<QString> &negativeEffects,
                  QObject *parent = 0);
@@ -93,6 +97,7 @@ public:
     bool getRequiresWood() const;
     bool getRequiresStone() const;
     bool getRequiresFood() const;
+    QList<QList<Advance> > getPrequisites() const;
     QList<QString> getPositiveEffects() const;
     QList<QString> getNegativeEffects() const;
 };

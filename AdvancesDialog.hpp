@@ -7,6 +7,7 @@
 #include <QGraphicsScene>
 
 #include "BoardModel.hpp"
+#include "AdvanceItem.hpp"
 
 class AdvancesDialog : public QDialog
 {
@@ -18,26 +19,35 @@ public:
 signals:
     void advanceIDLeftClicked(int id);
     void advanceIDRightClicked(int id);
+    void selectionLimitReached(int lastSelectedID);
 
 private:
     BoardModel *        boardModel;
     int                 activeRegion;
     AdvanceDialogType   dialogType;
+    int                 selectionLimit;
 
     QGridLayout *       layout;
     QGraphicsView *     graphicsView;
     QGraphicsScene *    graphicsScene;
+
+    QMap<AdvanceModel::Advance, AdvanceItem *>  advanceItemMap;
+    QGraphicsPixmapItem *                       advanceTitle;
 
 public:
     // Constructor for the other types of advance dialog. Cannot be AQUIRE_ADVANCE since it needs an active region specified.
     AdvancesDialog(BoardModel *boardModel, AdvanceDialogType dialogType = OVERVIEW, QWidget *parent = 0);
     // Constructor to aquire advances.
     AdvancesDialog(BoardModel *boardModel, int activeRegion, QWidget *parent = 0);
+    ~AdvancesDialog();
 
 private:
     void init();
 
 public:
+    // Set-Methods
+    void setSelectionLimit(int selectionLimit);
+
     // Get-Methods
     AdvanceDialogType getAdvanceDialogType() const;
 

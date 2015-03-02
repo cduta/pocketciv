@@ -26,5 +26,11 @@
         <file alias="rep_upper_right">res/rep_upper_right_border.png</file>
         <file alias="rep_upper_center">res/rep_upper_center_border.png</file>
         <file alias="advance_base">res/advance_base.png</file>
+        <file alias="advance_food">res/advance_food.png</file>
+        <file alias="advance_stone">res/advance_rock.png</file>
+        <file alias="advance_wood">res/advance_wood.png</file>
+        <file alias="advance_negative">res/advance_negative.png</file>
+        <file alias="advance_positive">res/advance_positive.png</file>
+        <file alias="advance_title">res/advance_title.png</file>
     </qresource>
 </RCC>
