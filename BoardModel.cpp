@@ -2040,7 +2040,13 @@ const AdvanceModel *BoardModel::refAdvanceModel(AdvanceModel::Advance advance) c
 
 void BoardModel::aquireAdvance(AdvanceModel::Advance advance)
 {
+    assert(this->refActiveRegion());
+
     this->advancesAquired.insert(advance);
+
+    this->refActiveRegion()->decimateTribes(this->advances[advance]->getTribesCost());
+    this->gold -= this->advances[advance]->getGoldCost();
+
     emit this->boardUpdated();
     return;
 }
