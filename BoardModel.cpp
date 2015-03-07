@@ -417,6 +417,20 @@ void BoardModel::decimateZeroAVCities()
     return;
 }
 
+void BoardModel::selectAdvanceableRegions()
+{
+    foreach(RegionModel *regionModel, this->regions.values())
+    {
+        if(regionModel->hasCity() && !regionModel->hasAdvanceAquired())
+        {
+            this->setSelectRegion(regionModel->getRegion(), true);
+        }
+    }
+
+    emit this->boardUpdated();
+    return;
+}
+
 const EventCard *BoardModel::drawCard(bool tell)
 {
     const EventCard *card = this->eventCardsLeft.takeAt(Common::random() % this->eventCardsLeft.size());
@@ -466,6 +480,7 @@ void BoardModel::unselectAllRegions()
         this->setSelectRegion(region, false);
     }
 
+    emit this->boardUpdated();
     return;
 }
 
@@ -483,9 +498,9 @@ void BoardModel::disableButtons()
     return;
 }
 
-void BoardModel::enableDoneButton()
+void BoardModel::setDoneButton(bool enabled)
 {
-    this->doneEnabled = true;
+    this->doneEnabled = enabled;
     return;
 }
 
@@ -844,6 +859,8 @@ void BoardModel::initializeCards()
     prequisites.clear();
     positive.clear();
     negative.clear();
+    prequisites.append(QList<AdvanceModel::Advance>());
+    prequisites[0].append(AdvanceModel::COINAGE);
     positive.append("+ Upkeep (After Advance City AV)\n"
                     "If you have 3 Gold, gain 1 Gold.\n");
     advances.insert(AdvanceModel::BANKING,
@@ -858,7 +875,7 @@ void BoardModel::initializeCards()
     positive.clear();
     negative.clear();
     positive.append("+ Upkeep (Advance City AV)\n"
-                    "Reduce the decimation of Tribes by 1, when increasing the AV of a City.\n");
+                    "Increasing the City AV costs one less tribe.\n");
     advances.insert(AdvanceModel::BASIC_TOOLS,
                     new AdvanceModel(AdvanceModel::BASIC_TOOLS,
                                      "Basic Tools",
@@ -905,6 +922,8 @@ void BoardModel::initializeCards()
     prequisites.clear();
     positive.clear();
     negative.clear();
+    prequisites.append(QList<AdvanceModel::Advance>());
+    prequisites[0].append(AdvanceModel::EQUESTRIAN);
     positive.append("+ Expedition\n"
                     "Every tribe sent to an Expedition, counts as two tribes.\n");
     advances.insert(AdvanceModel::CAVALRY,
@@ -1502,8 +1521,6 @@ void BoardModel::initializeCards()
     prequisites.clear();
     positive.clear();
     negative.clear();
-    prequisites.append(QList<AdvanceModel::Advance>());
-    prequisites[0].append(AdvanceModel::EQUESTRIAN);
     positive.append("+ Event (TRIBAL WAR)\n"
                     "Instead of multiplying the Warring Tribes by 2, don't do that.\n");
     advances.insert(AdvanceModel::SENSE_OF_COMMUNITY,
@@ -1776,6 +1793,18 @@ int BoardModel::getCityCount() const
     return result;
 }
 
+int BoardModel::getCityAVCount() const
+{
+    int result = 0;
+
+    foreach(RegionModel *regionModel, this->regions.values())
+    {
+        result += regionModel->getCityAV();
+    }
+
+    return result;
+}
+
 QMap<int, RegionModel *> BoardModel::getSelectedRegions() const
 {
     QMap<int, RegionModel *> result;
@@ -1939,6 +1968,7 @@ void BoardModel::unsetActiveRegion()
     }
 
     this->activeRegion = NULL;
+    emit this->boardUpdated();
     return;
 }
 
@@ -2006,6 +2036,13 @@ const AdvanceModel *BoardModel::refAdvanceModel(AdvanceModel::Advance advance) c
 {
     assert(this->advances.contains(advance));
     return this->advances[advance];
+}
+
+void BoardModel::aquireAdvance(AdvanceModel::Advance advance)
+{
+    this->advancesAquired.insert(advance);
+    emit this->boardUpdated();
+    return;
 }
 
 void BoardModel::clearBoard()

@@ -17,7 +17,7 @@ DialogInstruction::~DialogInstruction()
 
 Instruction *DialogInstruction::getFollowingInstruction()
 {
-    this->boardModel->enableDoneButton();
+    this->boardModel->setDoneButton(true);
     this->interruptedInstruction->setKeepInstruction(false);
     return this->interruptedInstruction;
 }

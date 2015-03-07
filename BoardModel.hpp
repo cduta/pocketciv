@@ -96,6 +96,8 @@ public:
     void checkCitySupport();
     void decimateZeroAVCities();
 
+    void selectAdvanceableRegions();
+
     const EventCard *drawCard(bool tell = true);
     const EventCard *drawOriginalCard(bool tell = true);
     void discardDrawnCards();
@@ -103,14 +105,11 @@ public:
     void setSelectRegion(int region, bool select);
     void unselectAllRegions();
     void disableButtons();
-    void enableDoneButton();
     void enableMainPhaseButtons();
     void decimateAllSelectedTribes();
     void unselectAllSelectedTribes();
     void addGold(int gold);
     void removeGold(int gold);
-
-
 
 private:
     void newBoard(int width, int height);
@@ -133,6 +132,7 @@ public:
     int getDesertCount() const;
     int getTribeCount() const;
     int getCityCount() const;
+    int getCityAVCount() const;
     QMap<int, RegionModel *> getSelectedRegions() const;
     bool canBuildCity() const;
     bool hasCity() const;
@@ -161,6 +161,7 @@ public:
     void setGold(int gold);
     void setGloryScore(int gloryScore);
     void setAdvanceAquired(AdvanceModel::Advance advance);
+    void setDoneButton(bool enabled);
 
 // Ref-Methods
     HexModel *refHexModel(int x, int y);
@@ -169,6 +170,9 @@ public:
     RegionModel *refActiveRegion() const;
     const EventCard *refOriginalCard() const;
     const AdvanceModel *refAdvanceModel(AdvanceModel::Advance advance) const;
+
+public slots:
+     void aquireAdvance(AdvanceModel::Advance advance);
 
 private slots:
      void clearBoard();

@@ -16,7 +16,7 @@ void BuildFarmInstruction::initInstruction()
     this->boardModel->sendMessage("When you are done, press Done.");
     this->boardModel->sendMessage(" ");
     this->boardModel->disableButtons();
-    this->boardModel->enableDoneButton();
+    this->boardModel->setDoneButton(true);
     return;
 }
 
@@ -31,7 +31,7 @@ Instruction *BuildFarmInstruction::triggerHex(Qt::MouseButton button, int x, int
 
     if(button == Qt::LeftButton)
     {
-        if(!regionModel->hasFarm() && regionModel->getTribes() >= 2+1 && regionModel->hasForest())
+        if(!regionModel->hasFarm() && regionModel->getAvailableTribes() >= 2 && regionModel->hasForest())
         {
             regionModel->setTribes(regionModel->getTribes() - 2);
             regionModel->setForest(false);

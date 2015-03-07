@@ -26,6 +26,33 @@ AdvanceModel::AdvanceModel(Advance advance,
       negativeEffects(negativeEffects)
 {}
 
+bool AdvanceModel::advanceRequirementsMet(const QSet<Advance> &advancesAquired) const
+{
+    if(this->prequisites.isEmpty())
+    {
+        return true;
+    }
+
+    bool result = true;
+
+    foreach(QList<Advance> andPart, this->prequisites)
+    {
+        foreach(Advance advancePrequisite, andPart)
+        {
+            result = result && advancesAquired.contains(advancePrequisite);
+        }
+
+        if(result)
+        {
+            return true;
+        }
+
+        result = true;
+    }
+
+    return false;
+}
+
 AdvanceModel::Advance AdvanceModel::getAdvance() const
 {
     return this->advance;

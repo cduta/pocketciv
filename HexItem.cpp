@@ -72,6 +72,11 @@ void HexItem::drawHexBase()
             painter.drawPixmap(0,0,QPixmap(":/desert"));
         }
 
+        if(regionModel->hasFaultLine())
+        {
+            painter.drawPixmap(0,0,QPixmap(":/fault_line"));
+        }
+
         if(tribeCount+tribesMovedCount > 0)
         {
             painter.drawPixmap(0,0,QPixmap(":/tribe"));

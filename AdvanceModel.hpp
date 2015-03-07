@@ -2,6 +2,7 @@
 #define ADVANCEMODEL_H
 
 #include <QObject>
+#include <QSet>
 
 class AdvanceModel : public QObject
 {
@@ -59,8 +60,6 @@ public:
         WRITTEN_RECORD
     };
 
-    enum PrequisiteType{NONE = 0, SINGLE, OR, AND};
-
 private:
     Advance advance;
     QString name;
@@ -87,6 +86,8 @@ public:
                  const QList<QString> &positiveEffects,
                  const QList<QString> &negativeEffects,
                  QObject *parent = 0);
+
+    bool advanceRequirementsMet(const QSet<Advance> &advancesAquired) const;
 
     // Get-Methods
     Advance getAdvance() const;

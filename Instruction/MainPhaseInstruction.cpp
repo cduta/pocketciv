@@ -36,7 +36,7 @@ Instruction *MainPhaseInstruction::triggerDone()
     }
 
     this->boardModel->disableButtons();
-    this->boardModel->enableDoneButton();
+    this->boardModel->setDoneButton(true);
     Instruction *next = new UpkeepInstruction(this->boardModel);
     next->initInstruction();
     return next;
@@ -44,6 +44,8 @@ Instruction *MainPhaseInstruction::triggerDone()
 
 Instruction *MainPhaseInstruction::triggerSaveGame()
 {
+    // TODO: Autosave everytime this phase starts.
+    // TODO: Do not crash when canceled.
     QString saveFile =
     QFileDialog::getSaveFileName(NULL,
                                  "Save game",

@@ -21,6 +21,7 @@ class RegionModel : public QObject
     bool selected;
     bool city;
     int cityAV;
+    bool advanceAquired;
 
 public:
     RegionModel(int region = -1, QObject *parent = 0);
@@ -47,6 +48,7 @@ public:
     // Get-Methods
     int getRegion() const;
     int getTribes() const;
+    int getAvailableTribes() const;
     bool hasTribes() const;
     int getMovedTribes() const;
     int getSelectedTribes() const;
@@ -59,6 +61,7 @@ public:
     bool isSelected() const;
     bool hasCity() const;
     int getCityAV() const;
+    bool hasAdvanceAquired() const;
 
     // Set-Methods
     void setTribes(int tribes);
@@ -72,6 +75,7 @@ public:
     void setDesert(bool desert);
     void setFaultLine(bool faultLine);
     void setSelected(bool selected);
+    void setAdvanceAquired(bool advanceAquired);
 
 public:
      // Serialization

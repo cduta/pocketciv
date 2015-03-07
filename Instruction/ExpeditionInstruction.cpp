@@ -19,7 +19,7 @@ void ExpeditionInstruction::initInstruction()
     this->boardModel->sendMessage("When you are done, press Done.");
     this->boardModel->sendMessage(" ");
     this->boardModel->disableButtons();
-    this->boardModel->enableDoneButton();
+    this->boardModel->setDoneButton(true);
     return;
 }
 
@@ -34,7 +34,7 @@ Instruction *ExpeditionInstruction::triggerHex(Qt::MouseButton button, int x, in
 
     if(button == Qt::LeftButton)
     {
-        if(regionModel->getSelectedTribes() < regionModel->getTribes() - 1)
+        if(regionModel->getSelectedTribes() < regionModel->getAvailableTribes())
         {
             if(this->boardModel->refActiveRegion() == NULL &&
                this->boardModel->bordersOnFrontier(regionModel->getRegion()))
@@ -58,7 +58,7 @@ Instruction *ExpeditionInstruction::triggerHex(Qt::MouseButton button, int x, in
         {
             if(regionModel->getSelectedTribes() > 0)
             {
-                regionModel->setSelectedTribes(regionModel->getSelectedTribes() - 1);
+                regionModel->setSelectedTribes(regionModel->getAvailableTribes());
                 if(regionModel->getSelectedTribes() == 0)
                 {
                     this->boardModel->unsetActiveRegion();

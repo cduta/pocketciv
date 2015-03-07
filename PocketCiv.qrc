@@ -33,5 +33,6 @@
         <file alias="advance_positive">res/advance_positive.png</file>
         <file alias="advance_title">res/advance_title.png</file>
         <file alias="advance_background">res/advance_background.png</file>
+        <file alias="fault_line">res/fault_line.png</file>
     </qresource>
 </RCC>

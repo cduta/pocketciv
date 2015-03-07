@@ -16,7 +16,7 @@ void BuildCityInstruction::initInstruction()
     this->boardModel->sendMessage("When you are done, press Done.");
     this->boardModel->sendMessage(" ");
     this->boardModel->disableButtons();
-    this->boardModel->enableDoneButton();
+    this->boardModel->setDoneButton(true);
     return;
 }
 
@@ -31,7 +31,7 @@ Instruction *BuildCityInstruction::triggerHex(Qt::MouseButton button, int x, int
 
     if(button == Qt::LeftButton)
     {
-        if(!regionModel->hasCity() && regionModel->getTribes() >= 4+1)
+        if(!regionModel->hasCity() && regionModel->getAvailableTribes() >= 4)
         {
             regionModel->setTribes(regionModel->getTribes() - 4);
             regionModel->setCityAV(1);

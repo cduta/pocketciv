@@ -75,7 +75,8 @@ SOURCES += main.cpp\
     OverviewDialog.cpp \
     AdvancesDialog.cpp \
     AdvanceItem.cpp \
-    AdvanceModel.cpp
+    AdvanceModel.cpp \
+    Instruction/AquireAdvanceInstruction.cpp
 
 HEADERS  += \
     PocketCivMain.hpp \
@@ -140,7 +141,8 @@ HEADERS  += \
     OverviewDialog.hpp \
     AdvancesDialog.hpp \
     AdvanceItem.hpp \
-    AdvanceModel.hpp
+    AdvanceModel.hpp \
+    Instruction/AquireAdvanceInstruction.hpp
 
 FORMS    +=
 

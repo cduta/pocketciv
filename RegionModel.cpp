@@ -18,7 +18,8 @@ RegionModel::RegionModel(int region, QObject *parent)
       faultLine(false),
       selected(false),
       city(false),
-      cityAV(0)
+      cityAV(0),
+      advanceAquired(false)
 {}
 
 int RegionModel::getTribeSupportCount() const
@@ -155,6 +156,16 @@ int RegionModel::getTribes() const
     return this->tribes;
 }
 
+int RegionModel::getAvailableTribes() const
+{
+    if(this->tribes == 0)
+    {
+        return 0;
+    }
+
+    return this->tribes-1;
+}
+
 bool RegionModel::hasTribes() const
 {
     return this->tribes > 0;
@@ -213,6 +224,11 @@ bool RegionModel::hasCity() const
 int RegionModel::getCityAV() const
 {
     return this->cityAV;
+}
+
+bool RegionModel::hasAdvanceAquired() const
+{
+    return this->advanceAquired;
 }
 
 void RegionModel::setTribes(int tribes)
@@ -311,6 +327,11 @@ void RegionModel::setSelected(bool selected)
     this->selected = selected;
 }
 
+void RegionModel::setAdvanceAquired(bool advanceAquired)
+{
+    this->advanceAquired = advanceAquired;
+}
+
 void RegionModel::serialize(QDataStream &writer) const
 {
     writer << this->region;
@@ -326,6 +347,7 @@ void RegionModel::serialize(QDataStream &writer) const
     writer << this->selected;
     writer << this->city;
     writer << this->cityAV;
+    writer << this->advanceAquired;
     return;
 }
 
@@ -344,5 +366,6 @@ void RegionModel::deserialize(QDataStream &reader)
     reader >> this->selected;
     reader >> this->city;
     reader >> this->cityAV;
+    reader >> this->advanceAquired;
     return;
 }

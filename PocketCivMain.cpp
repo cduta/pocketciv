@@ -19,6 +19,7 @@
 #include "Instruction/BuildCityInstruction.hpp"
 #include "Instruction/BuildFarmInstruction.hpp"
 #include "Instruction/ExpeditionInstruction.hpp"
+#include "Instruction/AquireAdvanceInstruction.hpp"
 
 PocketCivMain::PocketCivMain(QWidget *parent) :
     QMainWindow(parent),
@@ -359,15 +360,14 @@ void PocketCivMain::newGameTriggered()
 
     this->overview->setEnabled(true);
     this->boardModel->disableButtons();
-    this->boardModel->enableDoneButton();
+    this->boardModel->setDoneButton(true);
     this->done->setText("Done");
 
     this->messages->clear();
     this->addMessage("Started a new game!!");
     this->addMessage(" ");
     this->addMessage("WORLD GENERATION:");
-    this->addMessage(QString("Select two or more connected hexes on the board to form Region %1 out of %2.").
-                                 arg(1).arg(8));
+    this->addMessage(QString("Select two or more connected hexes on the board to form a Region."));
     this->addMessage("When you are done, press Done...");
 
     this->instruction = new ChooseRegionInstruction(this->boardModel, 1, 8);
@@ -401,7 +401,7 @@ void PocketCivMain::loadGameTriggered()
 
     this->overview->setEnabled(true);
     this->boardModel->disableButtons();
-    this->boardModel->enableDoneButton();
+    this->boardModel->setDoneButton(true);
     this->done->setText("Done");
 
     this->messages->clear();
@@ -423,6 +423,7 @@ void PocketCivMain::loadGameTriggered()
 void PocketCivMain::buildCityTriggered()
 {
     Instruction *buildCityInstruction = new BuildCityInstruction(this->boardModel, this->instruction);
+    buildCityInstruction->initInstruction();
     this->processInstruction(buildCityInstruction);
     return;
 }
@@ -430,6 +431,7 @@ void PocketCivMain::buildCityTriggered()
 void PocketCivMain::buildFarmTriggered()
 {
     Instruction *buildFarmInstruction = new BuildFarmInstruction(this->boardModel, this->instruction);
+    buildFarmInstruction->initInstruction();
     this->processInstruction(buildFarmInstruction);
     return;
 }
@@ -437,14 +439,16 @@ void PocketCivMain::buildFarmTriggered()
 void PocketCivMain::expeditionTriggered()
 {
     Instruction *expeditionInstruction = new ExpeditionInstruction(this->boardModel, this->instruction);
+    expeditionInstruction->initInstruction();
     this->processInstruction(expeditionInstruction);
     return;
 }
 
 void PocketCivMain::aquireAdvanceTriggered()
 {
-    // TODO: Do it.
-    //this->processInstruction(...);
+    Instruction *aquireAdvanceInstruction = new AquireAdvanceInstruction(this->boardModel, this->instruction);
+    aquireAdvanceInstruction->initInstruction();
+    this->processInstruction(aquireAdvanceInstruction);
     return;
 }
 
