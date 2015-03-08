@@ -3,6 +3,7 @@
 
 #include <QDialog>
 #include <QGridLayout>
+#include <QPushButton>
 #include <QGraphicsView>
 #include <QGraphicsScene>
 
@@ -26,6 +27,7 @@ private:
     QGridLayout *         layout;
     QGraphicsView *       graphicsView;
     QGraphicsScene *      graphicsScene;
+    QPushButton *         okButton;
 
     QMap<AdvanceModel::Advance, AdvanceItem *>  advanceItemMap;
     QGraphicsPixmapItem *                       advanceBackground;
@@ -41,14 +43,12 @@ private:
     void init();
 
 public:
-    // Set-Methods
-    void setSelectionLimit(int selectionLimit);
-
     // Get-Methods
     AdvanceItem::AdvanceItemType getAdvanceDialogType() const;
 
 public slots:
     void updateDialog();
+    void selectionDone();
 };
 
 #endif // ADVANCESDIALOG_H

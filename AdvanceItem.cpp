@@ -11,7 +11,6 @@ AdvanceItem::AdvanceItem(qreal xPos,
     : QGraphicsPixmapItem(parent),
       advance(advance),
       boardModel(boardModel),
-      selected(false),
       advanceType(advanceType)
 {
     assert(this->advanceType != AQUIRE || this->boardModel->refActiveRegion() != NULL);
@@ -165,6 +164,7 @@ void AdvanceItem::updateAdvanceItem()
     greyPen.setColor(grey);
 
     QColor backgroundBlue(0x9e,0xdc,0xf1);
+    QColor backgroundGreen(0x79,0xd9,0x75);
 
     painter.fillRect(result.rect(), QColor(255,255,255));
 
@@ -183,8 +183,10 @@ void AdvanceItem::updateAdvanceItem()
 
     if(this->advanceType == SELECTABLE)
     {
-        if(this->selected)
+        if(this->boardModel->hasAquiredAdvanceSelected(this->advance))
         {
+            painter.fillRect(result.rect(), backgroundGreen);
+
             painter.setPen(greenPen);
             QRect rect(result.rect().x(), result.rect().y(), result.rect().width()-1, result.rect().height()-1);
             painter.drawRect(rect);
@@ -203,10 +205,7 @@ void AdvanceItem::updateAdvanceItem()
             }
             else
             {
-                painter.setPen(redPen);
-                QRect rect(result.rect().x(), result.rect().y(), result.rect().width()-1, result.rect().height()-1);
-                painter.drawRect(rect);
-                painter.setPen(oldPen);
+                painter.fillRect(result.rect(), grey);
             }
         }
     }
@@ -363,30 +362,14 @@ void AdvanceItem::updateAdvanceItem()
     return;
 }
 
-void AdvanceItem::toggleSelected()
-{
-    this->selected = !this->selected;
-    return;
-}
-
-void AdvanceItem::setSelected(bool selected)
-{
-    this->selected = selected;
-    return;
-}
-
-bool AdvanceItem::isSelected() const
-{
-    return this->selected;
-}
-
 void AdvanceItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     if(event->button() == Qt::LeftButton)
     {
         if(this->advanceType == AdvanceItem::SELECTABLE)
         {
-            this->setSelected(!this->isSelected());
+            this->boardModel->toggleSelectAquiredAdvance(this->advance);
+            this->updateAdvanceItem();
         }
         else
         {

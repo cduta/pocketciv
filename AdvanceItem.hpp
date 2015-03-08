@@ -68,7 +68,6 @@ public:
 private:
     AdvanceModel::Advance advance;
     BoardModel *boardModel;
-    bool selected;
     AdvanceItemType advanceType;
     DescriptionDialog descriptionDialog;
 
@@ -85,14 +84,6 @@ private:
 
 public:
     void updateAdvanceItem();
-
-    void toggleSelected();
-
-    // Set-Methods
-    void setSelected(bool selected);
-
-    // Get-Methods
-    bool isSelected() const;
 
 protected:
     virtual void mousePressEvent(QGraphicsSceneMouseEvent *event);

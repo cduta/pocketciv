@@ -4,7 +4,7 @@
 #include "Instruction/EndGameInstruction.hpp"
 
 EndOfEraInstruction::EndOfEraInstruction(BoardModel *boardModel, Instruction *interruptedInstruction)
-    : Instruction(), boardModel(boardModel), interruptedInstruction(interruptedInstruction), endGame(false)
+    : Instruction(), boardModel(boardModel), interruptedInstruction(interruptedInstruction), endGame(false), advancesChosen(false), advancesDialog(this->boardModel, AdvanceItem::SELECTABLE)
 {
     this->interruptedInstruction->setKeepInstruction(true);
 }
@@ -19,10 +19,39 @@ void EndOfEraInstruction::initInstruction()
 
 Instruction *EndOfEraInstruction::triggerDone()
 {
-    if(this->boardModel->getEra() < this->boardModel->getLastEra() &&
-       this->boardModel->getCityCount() >= this->boardModel->getEra())
+    if(!this->advancesChosen)
     {
-       // TODO: Set this to: choose at most as many advances, as there are tribes in the empire.
+        this->advancesChosen = true;
+
+        this->boardModel->sendMessage(" ");
+        if(((this->boardModel->getEra() < this->boardModel->getLastEra() &&
+            this->boardModel->getCityCount() >= this->boardModel->getEra()) ||
+            this->boardModel->getEra() == this->boardModel->getLastEra()) &&
+            this->boardModel->getTribeCount() > 0)
+        {
+            this->boardModel->sendMessage("Choose advances up to the amount of tribes in the empire to count towards your Glory Score.");
+            this->boardModel->sendMessage(" ");
+
+            this->boardModel->setDoneButton(false);
+            connect(&this->advancesDialog, SIGNAL(finished(int)), this, SLOT(doneSelectingAdvances()));
+            this->advancesDialog.updateDialog();
+            this->advancesDialog.show();
+        }
+        else if(this->boardModel->getEra() < this->boardModel->getLastEra() &&
+                this->boardModel->getCityCount() < this->boardModel->getEra())
+        {
+            this->boardModel->sendMessage("You can't choose any advance in this end of era.");
+            this->boardModel->sendMessage("The amount of cities in the empire is less than the era about to end.");
+            this->boardModel->sendMessage(QString("Amount of Cities: %1").arg(this->boardModel->getCityCount()));
+            this->boardModel->sendMessage(QString("The current Era:  %1").arg(this->boardModel->getEra()));
+            this->boardModel->sendMessage(" ");
+        }
+        else if(this->boardModel->getTribeCount() == 0)
+        {
+            this->boardModel->sendMessage("You can't choose any advance in this end of era.");
+            this->boardModel->sendMessage("You have no tribes in the empire.");
+            this->boardModel->sendMessage(" ");
+        }
     }
 
     if(this->boardModel->getEra() == this->boardModel->getLastEra())
@@ -56,7 +85,7 @@ Instruction *EndOfEraInstruction::triggerDone()
             this->boardModel->sendMessage(" ");
             this->boardModel->sendMessage(QString("Your final Glory Score is: %1 !").arg(this->boardModel->getGloryScore()));
             this->boardModel->sendMessage(" ");
-            this->boardModel->sendMessage("The game is over.");
+            this->boardModel->sendMessage("THE GAME IS OVER.");
             this->boardModel->disableButtons();
             return new NoInstruction();
         }
@@ -78,5 +107,14 @@ Instruction *EndOfEraInstruction::triggerDone()
     this->boardModel->sendMessage(" ");
     this->interruptedInstruction->setKeepInstruction(false);
     return this->interruptedInstruction;
+}
+
+void EndOfEraInstruction::doneSelectingAdvances()
+{
+    this->boardModel->setDoneButton(true);
+    this->boardModel->sendMessage(QString("After selecting advances, your Glory Score is now %1.").arg(this->boardModel->getGloryScore()));
+    this->boardModel->sendMessage(" ");
+    this->boardModel->sendMessage("Press Done to Continue...");
+    this->boardModel->sendMessage(" ");
 }
 

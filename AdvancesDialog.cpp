@@ -1,5 +1,7 @@
 #include "AdvancesDialog.hpp"
 
+#include <QMessageBox>
+
 AdvancesDialog::AdvancesDialog(BoardModel *boardModel, AdvanceItem::AdvanceItemType advanceItemType, QWidget *parent)
     : QDialog(parent),
       boardModel(boardModel),
@@ -28,6 +30,13 @@ void AdvancesDialog::disconnetAll()
     disconnect(this->boardModel, SIGNAL(boardUpdated()), this, SLOT(updateDialog()));
     disconnect(this->boardModel, SIGNAL(goldChanged(int)), this, SLOT(updateDialog()));
     disconnect(this->boardModel, SIGNAL(advanceAquired(AdvanceModel::Advance)), this, SLOT(updateDialog()));
+    disconnect(this->boardModel, SIGNAL(changeAdvanceSelected(AdvanceModel::Advance)), this, SLOT(updateDialog()));
+
+    if(this->advanceItemType == AdvanceItem::SELECTABLE)
+    {
+        disconnect(this->okButton, SIGNAL(clicked()), this, SLOT(selectionDone()));
+    }
+
     return;
 }
 
@@ -37,17 +46,29 @@ void AdvancesDialog::init()
     {
         case AdvanceItem::OVERVIEW: this->setWindowTitle("Advances Overview"); break;
         case AdvanceItem::AQUIRE: this->setWindowTitle("Aquire Advances"); break;
-        case AdvanceItem::SELECTABLE: this->setWindowTitle("Select Advances"); break;
+        case AdvanceItem::SELECTABLE: this->setWindowTitle(QString("Select some Advances (0 of %1)")
+                                                           .arg(this->selectionLimit)); break;
     }
 
     connect(this->boardModel, SIGNAL(boardUpdated()), this, SLOT(updateDialog()));
     connect(this->boardModel, SIGNAL(goldChanged(int)), this, SLOT(updateDialog()));
     connect(this->boardModel, SIGNAL(advanceAquired(AdvanceModel::Advance)), this, SLOT(updateDialog()));
+    connect(this->boardModel, SIGNAL(changeAdvanceSelected(AdvanceModel::Advance)), this, SLOT(updateDialog()));
 
     this->graphicsScene = new QGraphicsScene(this);
     this->graphicsView = new QGraphicsView(this->graphicsScene, this);
     this->graphicsView->setAlignment(Qt::AlignLeft | Qt::AlignTop);
+
     this->layout->addWidget(this->graphicsView, 0,0);
+
+    this->okButton = NULL;
+    if(this->advanceItemType == AdvanceItem::SELECTABLE)
+    {
+        this->okButton = new QPushButton(QString("Ok"), this);
+        this->layout->addWidget(this->okButton, 1,0);
+        connect(this->okButton, SIGNAL(clicked()), this, SLOT(selectionDone()));
+    }
+
     this->setLayout(this->layout);
     this->resize(650,450);
 
@@ -174,12 +195,6 @@ void AdvancesDialog::init()
     return;
 }
 
-void AdvancesDialog::setSelectionLimit(int selectionLimit)
-{
-    this->selectionLimit = selectionLimit;
-    return;
-}
-
 AdvanceItem::AdvanceItemType AdvancesDialog::getAdvanceDialogType() const
 {
     return this->advanceItemType;
@@ -187,11 +202,36 @@ AdvanceItem::AdvanceItemType AdvancesDialog::getAdvanceDialogType() const
 
 void AdvancesDialog::updateDialog()
 {
+    if(this->advanceItemType == AdvanceItem::SELECTABLE)
+    {
+        this->setWindowTitle(QString("Select some Advances (%1 of %2)")
+                                    .arg(this->boardModel->getAdvancesSelected().size())
+                                    .arg(this->boardModel->getAdvanceSelectionLimit()));
+    }
+
     foreach(AdvanceItem *item, this->advanceItemMap.values())
     {
         item->updateAdvanceItem();
     }
 
+    return;
+}
+
+void AdvancesDialog::selectionDone()
+{
+    if(this->boardModel->getAdvancesSelected().size() < this->boardModel->getAdvanceSelectionLimit() &&
+       this->boardModel->getAdvancesSelected().size() < this->boardModel->getAdvancesAquired().size())
+    {
+        QMessageBox::StandardButton buttonPressed = QMessageBox::StandardButton(QMessageBox::question(NULL, "Select Advances...", QString("You may select more advances.\nAre you sure you want to gain Glory with only the selected advances?"), QMessageBox::Yes, QMessageBox::No));
+
+        if(buttonPressed != QMessageBox::Yes)
+        {
+            return;
+        }
+    }
+
+    this->boardModel->scoreSelectedAdvances();
+    this->accept();
     return;
 }
 

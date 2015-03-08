@@ -112,8 +112,9 @@ PocketCivMain::PocketCivMain(QWidget *parent) :
     fileMenu->addAction(this->saveGame);
     fileMenu->addAction(this->loadGame);
     this->pocketCivMenu->addMenu(fileMenu);
-    QMenu *optionsMenu = new QMenu("Options", this);
-    this->pocketCivMenu->addMenu(optionsMenu);
+    // NOTE: Options menu entry, if needed.
+    //QMenu *optionsMenu = new QMenu("Options", this);
+    //this->pocketCivMenu->addMenu(optionsMenu);
     this->setMenuBar(this->pocketCivMenu);
 
     this->generateNewBoard(new BoardModel(20,10, this));

@@ -431,6 +431,37 @@ void BoardModel::selectAdvanceableRegions()
     return;
 }
 
+void BoardModel::scoreSelectedAdvances()
+{
+    int gloryAchieved = 0;
+
+    foreach(AdvanceModel::Advance advance, this->selectedAdvances)
+    {
+        gloryAchieved += this->advances[advance]->getVictoryPoints();
+    }
+
+    this->gloryScore += gloryAchieved;
+    this->selectedAdvances.clear();
+    emit this->gloryScoreChanged(this->gloryScore);
+    return;
+}
+
+void BoardModel::toggleSelectAquiredAdvance(AdvanceModel::Advance advance)
+{
+    if(this->selectedAdvances.contains(advance))
+    {
+        this->selectedAdvances.remove(advance);
+    }
+    else
+    {
+        this->selectedAdvances.insert(advance);
+    }
+
+    emit changeAdvanceSelected(advance);
+
+    return;
+}
+
 const EventCard *BoardModel::drawCard(bool tell)
 {
     const EventCard *card = this->eventCardsLeft.takeAt(Common::random() % this->eventCardsLeft.size());
@@ -1925,6 +1956,21 @@ int BoardModel::getGold() const
 int BoardModel::getGloryScore() const
 {
     return this->gloryScore;
+}
+
+QSet<AdvanceModel::Advance> BoardModel::getAdvancesSelected() const
+{
+    return this->selectedAdvances;
+}
+
+int BoardModel::getAdvanceSelectionLimit() const
+{
+    return this->getTribeCount();
+}
+
+bool BoardModel::hasAquiredAdvanceSelected(AdvanceModel::Advance advance) const
+{
+    return this->selectedAdvances.contains(advance);
 }
 
 bool BoardModel::hasAdvanceAquired(AdvanceModel::Advance advance) const

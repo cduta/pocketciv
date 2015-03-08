@@ -31,6 +31,7 @@ signals:
     void goldChanged(int gold);
     void gloryScoreChanged(int gloryScore);
     void advanceAquired(AdvanceModel::Advance advance);
+    void changeAdvanceSelected(AdvanceModel::Advance advance);
 
 private:
     QList<QList<HexModel *> > hexModels;            // Saved, Initialize with newBoard(width,height)
@@ -45,6 +46,7 @@ private:
 
     QMap<AdvanceModel::Advance, const AdvanceModel *> advances;   // Initialized
     QSet<AdvanceModel::Advance> advancesAquired;                  // Saved
+    QSet<AdvanceModel::Advance> selectedAdvances;                 // Derived (Empty at first)
 
     // Save
     bool buildCity;
@@ -97,6 +99,9 @@ public:
     void decimateZeroAVCities();
 
     void selectAdvanceableRegions();
+
+    void scoreSelectedAdvances();
+    void toggleSelectAquiredAdvance(AdvanceModel::Advance advance);
 
     const EventCard *drawCard(bool tell = true);
     const EventCard *drawOriginalCard(bool tell = true);
@@ -151,6 +156,9 @@ public:
     int getAllSelectedTribes() const;
     int getGold() const;
     int getGloryScore() const;
+    QSet<AdvanceModel::Advance> getAdvancesSelected() const;
+    int getAdvanceSelectionLimit() const;
+    bool hasAquiredAdvanceSelected(AdvanceModel::Advance advance) const;
     bool hasAdvanceAquired(AdvanceModel::Advance advance) const;
     QSet<AdvanceModel::Advance> getAdvancesAquired() const;
 
