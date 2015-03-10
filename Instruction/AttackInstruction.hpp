@@ -11,6 +11,7 @@ class AttackInstruction : public Instruction
     QString what;
     int attackingForce;
     QSet<RegionModel *> possibleRegions;
+    int cityAVAttackReduce;
 
 public:
     AttackInstruction(BoardModel *boardModel, Instruction *nextInstruction, QString what, int attackingForce);

@@ -21,7 +21,19 @@ Instruction *SuperstitionEventInstruction::triggerDone()
     {
         this->step = 1;
 
-        this->discardsLeft = this->boardModel->drawCard()->getShapeNumberSum(this->event->getShapeNumberAmounts());
+        QMap<Event::NumberShapes, int> shapeNumberAmounts = this->event->getShapeNumberAmounts();
+        this->discardsLeft = this->boardModel->drawCard()->getShapeNumberSum(shapeNumberAmounts);
+
+        if(this->boardModel->getAdvancesAquired().contains(AdvanceModel::ASTRONOMY))
+        {
+            this->discardsLeft += 2*shapeNumberAmounts[Event::GREEN_SQUARE];
+
+            this->boardModel->sendMessage("ASTRONOMY:");
+            this->boardModel->sendMessage("For each GREEN SQUARE, add 2 to the discards.");
+            this->boardModel->sendMessage(QString("There are %1 GREEN SQUARES.").arg(shapeNumberAmounts[Event::GREEN_SQUARE]));
+            this->boardModel->sendMessage(" ");
+        }
+
         this->discardsTotal = this->discardsLeft;
 
         this->boardModel->sendMessage(QString("Superstition makes you discard %1 cards.")

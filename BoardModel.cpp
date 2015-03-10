@@ -35,6 +35,7 @@ BoardModel::BoardModel(int width, int height, QObject *parent)
       era(1),
       lastEra(8),
       gloryScore(0),
+      agricultureLeft(true),
       originalCard(NULL)
 {
     this->newBoard(width, height);
@@ -573,6 +574,14 @@ void BoardModel::addGold(int gold)
 void BoardModel::removeGold(int gold)
 {
     this->setGold(this->gold - gold);
+
+    if(this->gold < 0)
+    {
+        this->gold = 0;
+    }
+
+    emit this->goldChanged(this->gold);
+
     return;
 }
 
@@ -878,7 +887,7 @@ void BoardModel::initializeCards()
     positive.clear();
     negative.clear();
     negative.append("- Event (SUPERSTITION)\n"
-                    "When adding up the amount of Event Cards to discard, add 2 to the GREEN SQUARE Number.\n");
+                    "When adding up the amount of Event Cards to discard, add 2 for eachGREEN SQUARE from this event.\n");
     advances.insert(AdvanceModel::ASTRONOMY,
                     new AdvanceModel(AdvanceModel::ASTRONOMY,
                                      "Astronomy",
@@ -893,7 +902,7 @@ void BoardModel::initializeCards()
     prequisites.append(QList<AdvanceModel::Advance>());
     prequisites[0].append(AdvanceModel::COINAGE);
     positive.append("+ Upkeep (After Advance City AV)\n"
-                    "If you have 3 Gold, gain 1 Gold.\n");
+                    "If you have more than 3 Gold, gain 1 Gold.\n");
     advances.insert(AdvanceModel::BANKING,
                     new AdvanceModel(AdvanceModel::BANKING,
                                      "Banking",
@@ -1983,6 +1992,11 @@ QSet<AdvanceModel::Advance> BoardModel::getAdvancesAquired() const
     return this->advancesAquired;
 }
 
+bool BoardModel::hasAgricultureLeft() const
+{
+    return this->agricultureLeft;
+}
+
 void BoardModel::setActiveRegion(int region, bool isBad)
 {
     this->unsetActiveRegion();
@@ -2042,6 +2056,12 @@ void BoardModel::setAdvanceAquired(AdvanceModel::Advance advance)
 {
     this->advancesAquired.insert(advance);
     emit this->advanceAquired(advance);
+    return;
+}
+
+void BoardModel::setAgricultureLeft(bool agricultureLeft)
+{
+    this->agricultureLeft = agricultureLeft;
     return;
 }
 
@@ -2182,6 +2202,8 @@ void BoardModel::serialize(QDataStream &writer) const
 
     writer << this->gloryScore;
 
+    writer << this->agricultureLeft;
+
     return;
 }
 
@@ -2256,6 +2278,8 @@ void BoardModel::deserialize(QDataStream &reader)
     reader >> this->lastEra;
 
     reader >> this->gloryScore;
+
+    reader >> this->agricultureLeft;
 
     this->groupSeas();
     this->deriveRegionHexes();

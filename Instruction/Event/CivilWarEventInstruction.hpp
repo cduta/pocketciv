@@ -9,6 +9,7 @@ class CivilWarEventInstruction : public EventInstruction
     int colleteralDamage;
     int totalTribes;
     int step;
+    int cityAVLost;
 
     QMap<int, RegionModel *> affectedRegions;
 
@@ -19,6 +20,9 @@ public:
 
     virtual Instruction *triggerHex(Qt::MouseButton button, int x, int y);
     virtual Instruction *triggerDone();
+
+private:
+    void reduceColleteralDamageBy(int value);
 };
 
 #endif // CIVILWAREVENTINSTRUCTION_HPP

@@ -8,6 +8,8 @@ class UpkeepInstruction : public Instruction
 {
     BoardModel *boardModel;
     bool done;
+    int maximumCityAV;
+    int toBePaid;
 
 public:
     UpkeepInstruction(BoardModel *boardModel);

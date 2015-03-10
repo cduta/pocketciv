@@ -10,14 +10,26 @@ CivilWarEventInstruction::CivilWarEventInstruction(BoardModel *boardModel, Instr
     this->colleteralDamage = 0;
     this->totalTribes = 0;
     this->step = 0;
+    this->cityAVLost = 2;
 }
 
 void CivilWarEventInstruction::initInstruction()
 {
     this->boardModel->sendMessage("CIVIL WAR:");
     this->boardModel->sendMessage(" ");
-    this->boardModel->sendMessage("The city AV of the active region and bordering regions are reduced by 2.");
-    this->boardModel->sendMessage("Any regions of those with a city are thereby affected regions.");
+    if(this->boardModel->getAdvancesAquired().contains(AdvanceModel::ARCHITECTURE))
+    {
+        this->cityAVLost = 1;
+        this->boardModel->sendMessage("ARCHITECTURE:");
+        this->boardModel->sendMessage("The city AV of the active region and bordering regions are reduced by 1.");
+        this->boardModel->sendMessage("Any regions of those with a city are thereby affected regions.");
+    }
+    else
+    {
+        this->cityAVLost = 2;
+        this->boardModel->sendMessage("The city AV of the active region and bordering regions are reduced by 2.");
+        this->boardModel->sendMessage("Any regions of those with a city are thereby affected regions.");
+    }
     this->boardModel->sendMessage(" ");
     this->boardModel->sendMessage("Press done to continue.");
     this->boardModel->sendMessage(" ");
@@ -74,7 +86,7 @@ Instruction *CivilWarEventInstruction::triggerDone()
             RegionModel *regionModel = possibleRegions.value(region);
             if(regionModel->hasCity())
             {
-                regionModel->decreaseCityAV(2);
+                regionModel->decreaseCityAV(this->cityAVLost);
                 regionModel->decimateZeroAVCity();
                 this->affectedRegions.insert(region, regionModel);
             }
@@ -108,6 +120,17 @@ Instruction *CivilWarEventInstruction::triggerDone()
 
         this->boardModel->sendMessage("The affected regions have their tribes reduced.");
         this->boardModel->sendMessage(QString("The total amount of tribes to be reduced is the colleteral damage."));
+
+        // NOTE: Before MEDITATION!
+        if(this->boardModel->getAdvancesAquired().contains(AdvanceModel::ARTS))
+        {
+            this->reduceColleteralDamageBy(2);
+            this->boardModel->sendMessage(" ");
+            this->boardModel->sendMessage("ARTS:");
+            this->boardModel->sendMessage("The colleteral damage is reduced by 2.");
+        }
+
+        this->boardModel->sendMessage(" ");
         this->boardModel->sendMessage(QString("The colleteral damage is %1.").arg(this->colleteralDamage));
         this->boardModel->sendMessage(" ");
 
@@ -146,4 +169,16 @@ Instruction *CivilWarEventInstruction::triggerDone()
     }
 
     return this;
+}
+
+void CivilWarEventInstruction::reduceColleteralDamageBy(int value)
+{
+    this->colleteralDamage -= value;
+
+    if(this->colleteralDamage < 0)
+    {
+        this->colleteralDamage = 0;
+    }
+
+    return;
 }

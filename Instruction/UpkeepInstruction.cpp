@@ -5,7 +5,9 @@
 
 UpkeepInstruction::UpkeepInstruction(BoardModel *boardModel)
     : Instruction(), boardModel(boardModel), done(false)
-{}
+{
+
+}
 
 void UpkeepInstruction::initInstruction()
 {
@@ -21,22 +23,40 @@ void UpkeepInstruction::initInstruction()
     this->boardModel->setGold(0);
     this->boardModel->sendMessage(" ");
 
-    // TODO: Check for Advances that let you advance City AV.
-    if(false)
+    if(this->boardModel->hasAdvanceAquired(AdvanceModel::BASIC_TOOLS))
     {
         this->boardModel->sendMessage("Advance City AV.");
-        this->boardModel->sendMessage("To increase a city's AV, choose a city and decimate");
-        this->boardModel->sendMessage("as much tribes from anywhere in the EMPIRE until the amount");
-        this->boardModel->sendMessage("of decimated tribes is equal the chosen City AV plus 1.");
+        this->boardModel->sendMessage("To increase a city's AV, pay with tribes from anywhere in the Empire.");
         this->boardModel->sendMessage(" ");
+
+        if(this->boardModel->hasAdvanceAquired(AdvanceModel::BASIC_TOOLS))
+        {
+            this->boardModel->sendMessage("BASIC TOOLS:");
+            this->boardModel->sendMessage("The cost of tribes to advance a City AV is reduced by 1.");
+            this->boardModel->sendMessage(" ");
+        }
+
+        if(this->boardModel->getAdvancesAquired().contains(AdvanceModel::ARCHITECTURE))
+        {
+            this->maximumCityAV = 4;
+            this->boardModel->sendMessage("AGRICULTURE:");
+            this->boardModel->sendMessage("The maximum City AV is 4.");
+            this->boardModel->sendMessage(" ");
+        }
+        else
+        {
+            this->maximumCityAV = 2;
+            this->boardModel->sendMessage("The maximum City AV is 2.");
+            this->boardModel->sendMessage(" ");
+        }
+
         this->boardModel->sendMessage("When you are done, press done.");
         this->boardModel->sendMessage(" ");
     }
     else
     {
         this->endTurn();
-        this->boardModel->sendMessage(" ");
-        this->boardModel->sendMessage("Press done to end the turn.");
+        this->boardModel->sendMessage("Press done to continue with the next turn.");
         this->boardModel->sendMessage(" ");
     }
 }
@@ -58,34 +78,55 @@ Instruction *UpkeepInstruction::triggerHex(Qt::MouseButton button, int x, int y)
         {
             if(regionModel->hasCity())
             {
-                this->boardModel->setActiveRegion(regionModel->getRegion(), true);
-                this->boardModel->sendDoneText("Cancel");
+                if(regionModel->getCityAV() < this->maximumCityAV)
+                {
+                    this->toBePaid = activeRegion->getCityAV()+1;
+
+                    if(this->boardModel->hasAdvanceAquired(AdvanceModel::BASIC_TOOLS))
+                    {
+                        this->toBePaid--;
+                    }
+
+                    this->boardModel->sendMessage(QString("The tribes cost of advancing the City AV in Region %1 is %2.")
+                                                  .arg(activeRegion->getRegion())
+                                                  .arg(this->toBePaid));
+                    this->boardModel->sendMessage(" ");
+
+                    this->boardModel->setActiveRegion(regionModel->getRegion(), true);
+                    this->boardModel->sendDoneText("Cancel");
+                }
+                else
+                {
+                    this->boardModel->sendMessage(QString("You can't advance the City AV in Region %1 any further than %2.")
+                                                  .arg(regionModel->getRegion())
+                                                  .arg(this->maximumCityAV));
+                }
             }
         }
         else if(activeRegion != NULL && (regionModel->getTribes() - regionModel->getSelectedTribes()) > 0)
         {
             int selectedTribes = this->boardModel->getAllSelectedTribes();
-            int toBePaid = activeRegion->getCityAV()+1;
 
-            if(toBePaid < selectedTribes)
+            if(this->toBePaid < selectedTribes)
             {
                 regionModel->setSelectedTribes(regionModel->getSelectedTribes() + 1);
                 selectedTribes++;
             }
 
-            if(toBePaid == selectedTribes)
+            if(this->toBePaid == selectedTribes)
             {
                 this->boardModel->sendDoneText("Advance");
             }
             else
             {
-                this->boardModel->sendMessage(QString("%1/%2 tribes paid to advance the City AV in region %3.")
+                this->boardModel->sendMessage(QString("%1/%2 tribes selected.")
                                               .arg(selectedTribes)
                                               .arg(toBePaid)
                                               .arg(activeRegion->getRegion()));
             }
         }
-    }else if(button == Qt::RightButton)
+    }
+    else if(button == Qt::RightButton)
     {
         if(activeRegion != NULL)
         {
@@ -118,7 +159,7 @@ Instruction *UpkeepInstruction::triggerDone()
         int selectedTribes = this->boardModel->getAllSelectedTribes();
         int toBePaid = activeRegion->getCityAV()+1;
 
-        if(selectedTribes == toBePaid)
+        if(selectedTribes == this->toBePaid)
         {
             this->boardModel->sendMessage(QString("The City AV in region %1 has been advanced to %2.")
                                           .arg(activeRegion->getRegion())
@@ -137,7 +178,7 @@ Instruction *UpkeepInstruction::triggerDone()
     if(!this->done)
     {
         this->endTurn();
-        this->boardModel->sendMessage("Press Done to start the next turn...");
+        this->boardModel->sendMessage("Press done to continue with the next turn.");
         return this;
     }
 
@@ -147,7 +188,7 @@ Instruction *UpkeepInstruction::triggerDone()
         if(this->boardModel->getTribeCount() == 0 && !this->boardModel->hasCity())
         {
             this->boardModel->sendMessage(" ");
-            this->boardModel->sendMessage("The EMPIRE had no more tribes and cities left.");
+            this->boardModel->sendMessage("The Empire had no more tribes and cities left.");
             next = new EndGameInstruction(this->boardModel);
         }
         else
@@ -163,11 +204,20 @@ Instruction *UpkeepInstruction::triggerDone()
 
 void UpkeepInstruction::endTurn()
 {
+    if(this->boardModel->hasAdvanceAquired(AdvanceModel::BANKING))
+    {
+        if(this->boardModel->getGold() > 3)
+        {
+            this->boardModel->addGold(1);
+        }
+
+        this->boardModel->sendMessage("BANKING:");
+        this->boardModel->sendMessage("If you have more than 3 Gold, add 1 Gold.");
+    }
+
     this->boardModel->sendMessage("REDUCE CITY AV:");
     this->boardModel->sendMessage("Any city in a region without a farm has its AV reduced by 1.");
     this->boardModel->sendMessage("Any city with 0 AV will be decimated.");
-    this->boardModel->sendMessage(" ");
-    this->boardModel->sendMessage("This rounds up the Upkeep.");
     this->boardModel->sendMessage(" ");
     this->boardModel->checkCitySupport();
     this->boardModel->decimateZeroAVCities();

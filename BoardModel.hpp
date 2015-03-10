@@ -66,6 +66,8 @@ private:
 
     int gloryScore;
 
+    bool agricultureLeft;
+
     // Initialized
     const EventCard *originalCard;
 
@@ -161,6 +163,7 @@ public:
     bool hasAquiredAdvanceSelected(AdvanceModel::Advance advance) const;
     bool hasAdvanceAquired(AdvanceModel::Advance advance) const;
     QSet<AdvanceModel::Advance> getAdvancesAquired() const;
+    bool hasAgricultureLeft() const;
 
 // Set-Methods
     void setActiveRegion(int region, bool isBad = true);
@@ -169,6 +172,7 @@ public:
     void setGold(int gold);
     void setGloryScore(int gloryScore);
     void setAdvanceAquired(AdvanceModel::Advance advance);
+    void setAgricultureLeft(bool agricultureLeft);
     void setDoneButton(bool enabled);
 
 // Ref-Methods

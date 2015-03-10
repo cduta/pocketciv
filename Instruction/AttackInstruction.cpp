@@ -6,6 +6,7 @@ AttackInstruction::AttackInstruction(BoardModel *boardModel, Instruction *nextIn
     : Instruction(), boardModel(boardModel), nextInstruction(nextInstruction), what(what), attackingForce(attackingForce)
 {
     this->nextInstruction->setKeepInstruction(true);
+    this->cityAVAttackReduce = 5;
 }
 
 void AttackInstruction::initInstruction()
@@ -15,6 +16,29 @@ void AttackInstruction::initInstruction()
     this->boardModel->sendMessage(QString("The attacking force is %1 in region %2.")
                                   .arg(this->attackingForce)
                                   .arg(this->boardModel->refActiveRegion()->getRegion()));
+
+    this->boardModel->sendMessage(" ");
+    this->boardModel->sendMessage("The attacking force will pillage through the empire.");
+    this->boardModel->sendMessage("In each region they visit, City AV, tribes and gold is reduced.");
+    this->boardModel->sendMessage(" ");
+    this->boardModel->sendMessage("For each attacking force a tribe is reduced until no more tribes are left.");
+
+    if(this->boardModel->getAdvancesAquired().contains(AdvanceModel::ARCHITECTURE))
+    {
+        this->cityAVAttackReduce = 8;
+        this->boardModel->sendMessage(" ");
+        this->boardModel->sendMessage("ARCHITECTURE:");
+        this->boardModel->sendMessage("Then, for each 8 attacking force a City AV and 2 gold are reduced until City AV is 0.");
+        this->boardModel->sendMessage(" ");
+    }
+    else
+    {
+        this->cityAVAttackReduce = 5;
+        this->boardModel->sendMessage("Then, for each 5 attacking force a City AV and 2 gold are reduced until City AV is 0.");
+        this->boardModel->sendMessage(" ");
+    }
+
+    this->boardModel->sendMessage(" ");
     this->boardModel->sendMessage("Press Done to continue.");
     this->boardModel->sendMessage(" ");
     return;
@@ -57,7 +81,8 @@ Instruction *AttackInstruction::triggerDone()
 
     while(newCityAV > 0 && this->attackingForce > 0)
     {
-        this->attackingForce-= 5;
+
+        this->attackingForce-= this->cityAVAttackReduce;
 
         if(this->attackingForce >= 0)
         {

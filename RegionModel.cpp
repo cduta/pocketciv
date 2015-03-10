@@ -132,7 +132,7 @@ void RegionModel::decreaseCityAV(int cityAV)
 
 void RegionModel::decimateZeroAVCity()
 {
-    if(this->cityAV == 0)
+    if(this->cityAV <= 0)
     {
         this->city = false;
     }
