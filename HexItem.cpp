@@ -62,6 +62,11 @@ void HexItem::drawHexBase()
             painter.drawPixmap(0,0,QPixmap(":/mountain"));
         }
 
+        if(regionModel->hasVolcano())
+        {
+            painter.drawPixmap(0,0,QPixmap(":/volcano"));
+        }
+
         if(regionModel->hasForest())
         {
             painter.drawPixmap(0,0,QPixmap(":/forest"));
@@ -95,6 +100,11 @@ void HexItem::drawHexBase()
             painter.setFont(font);
             painter.drawText(QRect(21,3,14,8),QString::number(tribeCount+tribesMovedCount-tribesSelectedCount), QTextOption(Qt::AlignCenter));
             painter.setPen(HEX_BORDER_COLOR);
+        }
+
+        if(regionModel->isCapitolRegion())
+        {
+            painter.drawPixmap(0,0,QPixmap(":/capitol"));
         }
 
         if(hasCity)

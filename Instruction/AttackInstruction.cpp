@@ -27,7 +27,7 @@ void AttackInstruction::initInstruction()
     {
         this->cityAVAttackReduce = 8;
         this->boardModel->sendMessage(" ");
-        this->boardModel->sendMessage("ARCHITECTURE:");
+        this->boardModel->sendMessage("Advance (ARCHITECTURE):");
         this->boardModel->sendMessage("Then, for each 8 attacking force a City AV and 2 gold are reduced until City AV is 0.");
         this->boardModel->sendMessage(" ");
     }
@@ -145,6 +145,7 @@ Instruction *AttackInstruction::triggerDone()
             this->boardModel->setActiveRegion(current.first()->getRegion());
             this->boardModel->sendMessage(QString("The next attacked region is %1.").arg(current.first()->getRegion()));
             this->boardModel->sendMessage("Press Done to continue.");
+            this->boardModel->sendMessage(" ");
             return this;
         }
         else if(current.size() > 1)
@@ -157,6 +158,7 @@ Instruction *AttackInstruction::triggerDone()
             this->possibleRegions = current.toSet();
             this->boardModel->sendMessage(" ");
             this->boardModel->sendMessage("Choose one and press Done to continue.");
+            this->boardModel->sendMessage(" ");
             return this;
         }
 

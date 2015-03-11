@@ -34,5 +34,7 @@
         <file alias="advance_title">res/advance_title.png</file>
         <file alias="advance_background">res/advance_background.png</file>
         <file alias="fault_line">res/fault_line.png</file>
+        <file alias="volcano">res/volcano.png</file>
+        <file alias="capitol">res/capitol.png</file>
     </qresource>
 </RCC>

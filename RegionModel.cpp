@@ -18,6 +18,7 @@ RegionModel::RegionModel(int region, QObject *parent)
       faultLine(false),
       selected(false),
       city(false),
+      capitol(false),
       cityAV(0),
       advanceAquired(false)
 {}
@@ -221,6 +222,11 @@ bool RegionModel::hasCity() const
     return this->city;
 }
 
+bool RegionModel::isCapitolRegion() const
+{
+    return this->capitol;
+}
+
 int RegionModel::getCityAV() const
 {
     return this->cityAV;
@@ -249,6 +255,20 @@ void RegionModel::setCity(bool city)
     {
         this->setCityAV(0);
     }
+    return;
+}
+
+void RegionModel::setCapitolRegion(bool capitol)
+{
+    assert(this->hasCity());
+
+    this->capitol = capitol;
+    return;
+}
+
+void RegionModel::toggleCapitol()
+{
+    this->setCapitolRegion(!this->isCapitolRegion());
     return;
 }
 
@@ -346,6 +366,7 @@ void RegionModel::serialize(QDataStream &writer) const
     writer << this->faultLine;
     writer << this->selected;
     writer << this->city;
+    writer << this->capitol;
     writer << this->cityAV;
     writer << this->advanceAquired;
     return;
@@ -365,6 +386,7 @@ void RegionModel::deserialize(QDataStream &reader)
     reader >> this->faultLine;
     reader >> this->selected;
     reader >> this->city;
+    reader >> this->capitol;
     reader >> this->cityAV;
     reader >> this->advanceAquired;
     return;

@@ -16,9 +16,9 @@ void AnarchyEventInstruction::initInstruction()
 
 Instruction *AnarchyEventInstruction::triggerDone()
 {
-    this->boardModel->sendMessage("In every region with a city, 1 City AV and 3 tribes are decimated.");
+    this->boardModel->sendMessage("In every region with a city, reduce 1 City AV and decimate 3 tribes.");
     this->boardModel->sendMessage("This is repeated in every region, until the tribes are");
-    this->boardModel->sendMessage("lower than the City AV or the City AV is 1 in those regions.");
+    this->boardModel->sendMessage("lower than the City AV or the City AV is 1 in each region.");
     this->boardModel->sendMessage(" ");
 
     foreach(RegionModel *regionModel, this->boardModel->getRegions().values())

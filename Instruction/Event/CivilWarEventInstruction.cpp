@@ -20,7 +20,7 @@ void CivilWarEventInstruction::initInstruction()
     if(this->boardModel->getAdvancesAquired().contains(AdvanceModel::ARCHITECTURE))
     {
         this->cityAVLost = 1;
-        this->boardModel->sendMessage("ARCHITECTURE:");
+        this->boardModel->sendMessage("Advance (ARCHITECTURE):");
         this->boardModel->sendMessage("The city AV of the active region and bordering regions are reduced by 1.");
         this->boardModel->sendMessage("Any regions of those with a city are thereby affected regions.");
     }
@@ -126,7 +126,7 @@ Instruction *CivilWarEventInstruction::triggerDone()
         {
             this->reduceColleteralDamageBy(2);
             this->boardModel->sendMessage(" ");
-            this->boardModel->sendMessage("ARTS:");
+            this->boardModel->sendMessage("Advance (ARTS):");
             this->boardModel->sendMessage("The colleteral damage is reduced by 2.");
         }
 

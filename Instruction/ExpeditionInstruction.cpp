@@ -16,6 +16,14 @@ void ExpeditionInstruction::initInstruction()
     this->boardModel->sendMessage("Gain Gold equal to the decimated tribes minus the BLUE HEX number.");
     this->boardModel->sendMessage("At least 1 tribe has to remain in the region.");
     this->boardModel->sendMessage(" ");
+
+    if(this->boardModel->hasAdvanceAquired(AdvanceModel::CAVALRY))
+    {
+        this->boardModel->sendMessage("Advance (CAVALRY):");
+        this->boardModel->sendMessage("Each tribe sent, counts as two tribes.");
+        this->boardModel->sendMessage(" ");
+    }
+
     this->boardModel->sendMessage("When you are done, press Done.");
     this->boardModel->sendMessage(" ");
     this->boardModel->disableButtons();
@@ -92,7 +100,15 @@ Instruction *ExpeditionInstruction::triggerDone()
             this->boardModel->decimateAllSelectedTribes();
             const EventCard * card = this->boardModel->drawCard();
             int blueHexNumber = card->getShapeNumbers().value(Event::BLUE_HEXAGON, 0);
-            this->gainGold = selectedTribes - blueHexNumber;
+
+            if(this->boardModel->hasAdvanceAquired(AdvanceModel::CAVALRY))
+            {
+                this->gainGold = (selectedTribes*2) - blueHexNumber;
+            }
+            else
+            {
+                this->gainGold = selectedTribes - blueHexNumber;
+            }
 
             if(this->gainGold < 0)
             {

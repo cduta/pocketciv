@@ -49,16 +49,16 @@ Instruction *BuildFarmInstruction::triggerHex(Qt::MouseButton button, int x, int
                 QMessageBox::StandardButton result =
                         QMessageBox::StandardButton(
                         QMessageBox::question(NULL,
-                                             "AGRICULTURE",
-                                             "Do you want to use AGRICULTURE to build a farm"
+                                             "Advance (AGRICULTURE)",
+                                             "Do you want to use Advance (AGRICULTURE) to build a farm"
                                              "without decimating a Forest?\n\n"
-                                              "You can use this once per turn.",
+                                              "You can use this ONCE per turn.",
                                               QMessageBox::Yes,QMessageBox::No));
 
                 if(result == QMessageBox::Yes)
                 {
                     this->boardModel->setAgricultureLeft(false);
-                    this->boardModel->sendMessage("AGRICULTURE used for building a farm.");
+                    this->boardModel->sendMessage("Advance (AGRICULTURE) used for building a farm.");
                 }
                 else
                 {

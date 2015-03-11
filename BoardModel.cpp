@@ -409,6 +409,21 @@ void BoardModel::checkCitySupport()
     return;
 }
 
+int BoardModel::checkCartageCitySupport()
+{
+    int cityCount = this->getCityCount();
+    int farmCount = this->getFarmCount();
+
+    int result = cityCount - farmCount;
+
+    if(result < 0)
+    {
+        result = 0;
+    }
+
+    return result;
+}
+
 void BoardModel::decimateZeroAVCities()
 {
     foreach(RegionModel *regionModel, this->regions.values())
@@ -930,12 +945,13 @@ void BoardModel::initializeCards()
     positive.append("+ New Main Action (Collect Taxes)\n"
                     "Try to collect taxes.\n"
                     "1. Draw Event Card.\n"
-                    "2. Add amount of Gold Nuggets on this Event Card.\n"
+                    "2. Add amount of Gold Nuggets on this Event Card to your Gold total.\n"
                     "3. If the Event Card has Handshake, decimate your Gold by 1 and repeat from step 1. Otherwise, end the action. If you can't decimate 1 Gold, start an Anarchy Event.\n");
     positive.append("+ Aquire Advances\n"
                     "If you aquire the Black Market, you get 5 Gold one time only.\n");
     negative.append("- Upkeep (Decimate Gold)\n"
-                    "When decimating all Coins, you must decimate at least 1 Gold or an ANARCHY Event starts.\n");
+                    "If you could not decimate 1 Gold, an Anarchy Event starts.\n"
+                    "If you have Coinage, instead of decimating no gold, you decimate 1 Gold.\n");
     prequisites.append(QList<AdvanceModel::Advance>());
     prequisites[0].append(AdvanceModel::CULTURE_OF_THIEVES);
     advances.insert(AdvanceModel::BLACK_MARKET,
@@ -979,14 +995,13 @@ void BoardModel::initializeCards()
     negative.clear();
     prequisites.append(QList<AdvanceModel::Advance>());
     prequisites[0].append(AdvanceModel::MILITARY);
-    positive.append("When aquiring this Advance, denote any City as the Capitol.\n"
-                    "If this city is decimated, choose another City as your Capitol.\n"
-                    "+ Upkeep (Advance City AV)\n"
+    positive.append("+ After Upkeep (Decimate Gold)\n"
+                    "If this step starts, and no City is assigned to be the Capitol, assign a City to be the Capitol.\n");
+    positive.append("+ Upkeep (Advance City AV)\n"
                     "A Capitol can have its AV increased to 10 AV.\n"
-                    "Only Tribes in the Region of the Capitol can be decimated to pay for the advance of the Capitol.\n"
-                    "Any increase higher than 4 AV additionally decimates a Forest, Mountain or Farm in the Region of the Capitol.\n"
+                    "Any increase higher than 4 AV has to be done using only Tribes from the same region as the Capitol. Aditionally, a Forest, Mountain or Farm has to be decimated anywhere in the Empire to increaste the the City AV higher than 4.\n"
                     "A Capitol can only be advanced once per Upkeep.\n"
-                    "Basic Tools, Simple Tools and Machining don't apply for the Capitol.\n");
+                    "Basic Tools, Simple Tools and Machining don't apply here.\n");
     advances.insert(AdvanceModel::CENTRALIZED_GOVERNMENT,
                     new AdvanceModel(AdvanceModel::CENTRALIZED_GOVERNMENT,
                                      "Centralized Government",
@@ -1498,7 +1513,8 @@ void BoardModel::initializeCards()
     prequisites[0].append(AdvanceModel::ARTS);
     prequisites[0].append(AdvanceModel::THEATER);
     positive.append("+ Upkeep (After Advance City and Banking)\n"
-                    "For any city gain gold equal to City AV minus 4. If the gold gained is 0 or less, you gain no gold.\n");
+                    "Gain gold equal to the total amount of Cities in your empire minus 4.\n"
+                    "If the gold gained is 0 or less, you gain no gold.\n");
     advances.insert(AdvanceModel::PATRONAGE,
                     new AdvanceModel(AdvanceModel::PATRONAGE,
                                      "Patronage",
@@ -1791,6 +1807,21 @@ int BoardModel::getForestCount() const
     return result;
 }
 
+int BoardModel::getFarmCount() const
+{
+    int result = 0;
+
+    foreach(RegionModel *regionModel, this->regions.values())
+    {
+        if(regionModel->hasFarm())
+        {
+            result++;
+        }
+    }
+
+    return result;
+}
+
 int BoardModel::getDesertCount() const
 {
     int result = 0;
@@ -1870,6 +1901,19 @@ bool BoardModel::hasCity() const
     foreach(RegionModel *regionModel, this->regions.values())
     {
         if(regionModel->hasCity())
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+bool BoardModel::hasCapitolAssigned() const
+{
+    foreach(RegionModel *regionModel, this->regions.values())
+    {
+        if(regionModel->isCapitolRegion())
         {
             return true;
         }
@@ -2055,6 +2099,17 @@ void BoardModel::setGloryScore(int gloryScore)
 void BoardModel::setAdvanceAquired(AdvanceModel::Advance advance)
 {
     this->advancesAquired.insert(advance);
+
+    switch(advance)
+    {
+        case AdvanceModel::BLACK_MARKET:
+            this->addGold(5);
+            this->sendMessage("Through aquiring the black market advance, you also gain 5 Gold once.");
+            this->sendMessage(" ");
+            break;
+        default: break;
+    }
+
     emit this->advanceAquired(advance);
     return;
 }
@@ -2091,6 +2146,19 @@ RegionModel *BoardModel::refRegionModel(int region) const
 RegionModel *BoardModel::refActiveRegion() const
 {
     return this->activeRegion;
+}
+
+RegionModel *BoardModel::refCapitolRegion() const
+{
+    foreach(RegionModel *regionModel, this->regions.values())
+    {
+        if(regionModel->isCapitolRegion())
+        {
+            return regionModel;
+        }
+    }
+
+    return NULL;
 }
 
 const EventCard *BoardModel::refOriginalCard() const

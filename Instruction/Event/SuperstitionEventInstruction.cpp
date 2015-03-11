@@ -28,7 +28,7 @@ Instruction *SuperstitionEventInstruction::triggerDone()
         {
             this->discardsLeft += 2*shapeNumberAmounts[Event::GREEN_SQUARE];
 
-            this->boardModel->sendMessage("ASTRONOMY:");
+            this->boardModel->sendMessage("Advance (ASTRONOMY):");
             this->boardModel->sendMessage("For each GREEN SQUARE, add 2 to the discards.");
             this->boardModel->sendMessage(QString("There are %1 GREEN SQUARES.").arg(shapeNumberAmounts[Event::GREEN_SQUARE]));
             this->boardModel->sendMessage(" ");

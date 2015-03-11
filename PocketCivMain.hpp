@@ -97,6 +97,7 @@ private slots:
     void expeditionTriggered();
     void aquireAdvanceTriggered();
     void buildWonderTriggered();
+    void collectTaxesTriggered();
 
     void overviewTriggered();
     void doneTriggered();

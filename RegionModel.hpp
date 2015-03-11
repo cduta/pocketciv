@@ -20,6 +20,7 @@ class RegionModel : public QObject
     bool faultLine;
     bool selected;
     bool city;
+    bool capitol;
     int cityAV;
     bool advanceAquired;
 
@@ -60,12 +61,15 @@ public:
     bool hasFaultLine() const;
     bool isSelected() const;
     bool hasCity() const;
+    bool isCapitolRegion() const;
     int getCityAV() const;
     bool hasAdvanceAquired() const;
 
     // Set-Methods
     void setTribes(int tribes);
     void setCity(bool city);
+    void setCapitolRegion(bool capitol);
+    void toggleCapitol();
     void setCityAV(int cityAV);
     void setSelectedTribes(int selectedTribes);
     void setMountain(bool mountain);

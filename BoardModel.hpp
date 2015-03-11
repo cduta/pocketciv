@@ -98,6 +98,7 @@ public:
     void decimateUnsupportedTribes();
     void decimateGold();
     void checkCitySupport();
+    int checkCartageCitySupport();
     void decimateZeroAVCities();
 
     void selectAdvanceableRegions();
@@ -136,6 +137,7 @@ public:
     QMap<int, RegionModel *> getForestRegions() const;
     int getMountainCount() const;
     int getForestCount() const;
+    int getFarmCount() const;
     int getDesertCount() const;
     int getTribeCount() const;
     int getCityCount() const;
@@ -143,6 +145,7 @@ public:
     QMap<int, RegionModel *> getSelectedRegions() const;
     bool canBuildCity() const;
     bool hasCity() const;
+    bool hasCapitolAssigned() const;
     bool canBuildFarm() const;
     bool canDoExpedition() const;
     bool canAquireAdvance() const;
@@ -180,6 +183,7 @@ public:
     RegionModel *refRegionModel(int x, int y);
     RegionModel *refRegionModel(int region) const;
     RegionModel *refActiveRegion() const;
+    RegionModel *refCapitolRegion() const;
     const EventCard *refOriginalCard() const;
     const AdvanceModel *refAdvanceModel(AdvanceModel::Advance advance) const;
 

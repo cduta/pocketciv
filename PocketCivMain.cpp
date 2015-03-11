@@ -20,6 +20,7 @@
 #include "Instruction/BuildFarmInstruction.hpp"
 #include "Instruction/ExpeditionInstruction.hpp"
 #include "Instruction/AquireAdvanceInstruction.hpp"
+#include "Instruction/CollectTaxesInstruction.hpp"
 
 PocketCivMain::PocketCivMain(QWidget *parent) :
     QMainWindow(parent),
@@ -64,6 +65,7 @@ PocketCivMain::PocketCivMain(QWidget *parent) :
 
     this->collectTaxes =    new QPushButton("Collect Taxes", &this->dockWidget);
     this->collectTaxes->setEnabled(false);
+    connect(this->collectTaxes, SIGNAL(clicked()), this, SLOT(collectTaxesTriggered()));
     this->forestation =     new QPushButton("Forestation", &this->dockWidget);
     this->forestation->setEnabled(false);
     this->mining =          new QPushButton("Mining", &this->dockWidget);
@@ -457,6 +459,14 @@ void PocketCivMain::buildWonderTriggered()
 {
     // TODO: Do it.
     //this->processInstruction(...);
+    return;
+}
+
+void PocketCivMain::collectTaxesTriggered()
+{
+    Instruction *aquireAdvanceInstruction = new CollectTaxesInstruction(this->boardModel, this->instruction);
+    aquireAdvanceInstruction->initInstruction();
+    this->processInstruction(aquireAdvanceInstruction);
     return;
 }
 

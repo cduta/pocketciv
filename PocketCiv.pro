@@ -76,7 +76,12 @@ SOURCES += main.cpp\
     AdvancesDialog.cpp \
     AdvanceItem.cpp \
     AdvanceModel.cpp \
-    Instruction/AquireAdvanceInstruction.cpp
+    Instruction/AquireAdvanceInstruction.cpp \
+    Instruction/CollectTaxesInstruction.cpp \
+    Instruction/DecimateGoldInstruction.cpp \
+    Instruction/AdvanceCityAVInstruction.cpp \
+    Instruction/ReduceCityAVInstruction.cpp \
+    Instruction/AssignCapitolInstruction.cpp
 
 HEADERS  += \
     PocketCivMain.hpp \
@@ -142,7 +147,12 @@ HEADERS  += \
     AdvancesDialog.hpp \
     AdvanceItem.hpp \
     AdvanceModel.hpp \
-    Instruction/AquireAdvanceInstruction.hpp
+    Instruction/AquireAdvanceInstruction.hpp \
+    Instruction/CollectTaxesInstruction.hpp \
+    Instruction/DecimateGoldInstruction.hpp \
+    Instruction/AdvanceCityAVInstruction.hpp \
+    Instruction/ReduceCityAVInstruction.hpp \
+    Instruction/AssignCapitolInstruction.hpp
 
 FORMS    +=
 
