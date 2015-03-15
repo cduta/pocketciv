@@ -49,7 +49,6 @@ public:
     // Get-Methods
     int getRegion() const;
     int getTribes() const;
-    int getAvailableTribes() const;
     bool hasTribes() const;
     int getMovedTribes() const;
     int getSelectedTribes() const;

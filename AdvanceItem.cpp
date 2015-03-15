@@ -19,6 +19,7 @@ AdvanceItem::AdvanceItem(qreal xPos,
     this->setShapeMode(AdvanceItem::MaskShape);
 
     this->descriptionDialog.advance = this->advance;
+    this->descriptionDialog.boardModel = this->boardModel;
 
     QFont font("monospace");
     this->descriptionDialog.description->setFont(font);
@@ -227,12 +228,14 @@ void AdvanceItem::updateAdvanceItem()
         }
         else
         {
-            if(advanceModel->advanceRequirementsMet(this->boardModel->getAdvancesAquired()))
+            if(advanceModel->advanceRequirementsMet(this->boardModel->getAdvancesAquired()) &&
+               !activeRegion->hasAdvanceAquired())
             {
                 bool isAvailable = true;
 
                 QRect r(85,3,29,14);
-                if(advanceModel->getTribesCost() <= activeRegion->getAvailableTribes())
+                if(advanceModel->getTribesCost() <= activeRegion->getTribes() &&
+                   advanceModel->getTribesCost() < this->boardModel->getTribeCount())
                 {
                     painter.fillRect(r, green);
                 }

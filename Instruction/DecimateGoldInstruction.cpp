@@ -89,6 +89,9 @@ Instruction *DecimateGoldInstruction::triggerDone()
             this->boardModel->hasAdvanceAquired(AdvanceModel::MASONRY) ||
             this->boardModel->hasAdvanceAquired(AdvanceModel::SLAVE_LABOR))
     {
+        this->boardModel->sendMessage("To Advance City AV, you need at least one of the following advances:");
+        this->boardModel->sendMessage("CIVIL SERVICE, MASONRY or SLAVE LABOR.");
+        this->boardModel->sendMessage(" ");
         next = new AdvanceCityAVInstruction(this->boardModel);
     }
     else

@@ -21,6 +21,7 @@ signals:
     void advanceAquired(AdvanceModel::Advance advance);
 
 public:
+    BoardModel *boardModel;
     AdvanceModel::Advance advance;
     QDialog dialog;
     QGridLayout *layout;
@@ -55,6 +56,7 @@ private slots:
     void aquireAdvanceClicked()
     {
         emit this->advanceAquired(this->advance);
+        this->boardModel->refActiveRegion()->setAdvanceAquired(true);
         return;
     }
 };

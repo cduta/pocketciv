@@ -98,6 +98,9 @@ Instruction *ReduceCityAVInstruction::triggerDone()
         {
             this->boardModel->sendMessage("The NEXT TURN begins...");
             this->boardModel->sendMessage(" ");
+
+            this->boardModel->unsetAdvancesAquired();
+
             next = new PopulationGrowthInstruction(this->boardModel);
         }
 

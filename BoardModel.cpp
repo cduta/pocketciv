@@ -478,6 +478,16 @@ void BoardModel::toggleSelectAquiredAdvance(AdvanceModel::Advance advance)
     return;
 }
 
+void BoardModel::unsetAdvancesAquired()
+{
+    foreach(RegionModel *regionModel, this->regions.values())
+    {
+        regionModel->setAdvanceAquired(false);
+    }
+
+    return;
+}
+
 const EventCard *BoardModel::drawCard(bool tell)
 {
     const EventCard *card = this->eventCardsLeft.takeAt(Common::random() % this->eventCardsLeft.size());
@@ -559,6 +569,22 @@ void BoardModel::enableMainPhaseButtons()
     this->expedition = true;
     this->aquireAdvances = true;
     this->buildWonder = true;
+
+    if(this->hasAdvanceAquired(AdvanceModel::BLACK_MARKET))
+    {
+        this->collectTaxes = true;
+    }
+
+    if(this->hasAdvanceAquired(AdvanceModel::MINING))
+    {
+        this->mining = true;
+    }
+
+    if(this->hasAdvanceAquired(AdvanceModel::HORTICULTURE))
+    {
+        this->forestation = true;
+    }
+
     return;
 }
 
@@ -999,7 +1025,9 @@ void BoardModel::initializeCards()
                     "If this step starts, and no City is assigned to be the Capitol, assign a City to be the Capitol.\n");
     positive.append("+ Upkeep (Advance City AV)\n"
                     "A Capitol can have its AV increased to 10 AV.\n"
-                    "Any increase higher than 4 AV has to be done using only Tribes from the same region as the Capitol. Aditionally, a Forest, Mountain or Farm has to be decimated anywhere in the Empire to increaste the the City AV higher than 4.\n"
+                    "Any increase higher than 4 AV has to be done using only Tribes from"
+                    "the same region as the Capitol and decimating a FOREST,"
+                    "MOUNTAIN or Farm from anywhere in the Empire.\n"
                     "A Capitol can only be advanced once per Upkeep.\n"
                     "Basic Tools, Simple Tools and Machining don't apply here.\n");
     advances.insert(AdvanceModel::CENTRALIZED_GOVERNMENT,
@@ -1016,7 +1044,7 @@ void BoardModel::initializeCards()
     prequisites.append(QList<AdvanceModel::Advance>());
     prequisites[0].append(AdvanceModel::DEMOCRACY);
     positive.append("+ Upkeep (Advance City AV)\n"
-                    "Increase the AV of one City this turn, without decimating Tribes.\n"
+                    "Increase the AV of one City this turn.\n"
                     "This stacks with Masonry and Slave Labor.\n");
     positive.append("+ Event (CIVIL WAR)\n"
                     "When reducing City AV, a City AV can't be reduced below 1.\n");
@@ -1206,7 +1234,7 @@ void BoardModel::initializeCards()
     negative.clear();
     positive.append("+ New Main Action (Forestation)\n"
                     "Grow a Forest in a Region.\n"
-                    "Decimate 4 Tribes in a Region to create a Forest there. The amount of tribes left after Forestation have to be at least 1.\n");
+                    "Decimate 4 Tribes in a Region to create a Forest there.\n");
     advances.insert(AdvanceModel::HORTICULTURE,
                     new AdvanceModel(AdvanceModel::HORTICULTURE,
                                      "Horticulture",
@@ -1304,7 +1332,7 @@ void BoardModel::initializeCards()
     positive.clear();
     negative.clear();
     positive.append("+ Upkeep (Advance City AV)\n"
-                    "Increase the AV of one City this turn, without decimating Tribes.\n"
+                    "Increase the AV of one City this turn.\n"
                     "This stacks with Civil Service and Slave Labor.\n");
     advances.insert(AdvanceModel::MASONRY,
                     new AdvanceModel(AdvanceModel::MASONRY,
@@ -1621,7 +1649,7 @@ void BoardModel::initializeCards()
     positive.clear();
     negative.clear();
     positive.append("+ Upkeep (Advance City AV)\n"
-                    "Increase the AV of one City this turn, without decimating Tribes.\n"
+                    "Increase the AV of one City this turn.\n"
                     "This stacks with Civil Service and Masonry.\n");
     negative.append("- Event (ANARCHY)\n"
                     "After applying the effects of ANARCHY, do this:\n"

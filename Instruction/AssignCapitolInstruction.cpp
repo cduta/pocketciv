@@ -68,6 +68,9 @@ Instruction *AssignCapitolInstruction::triggerDone()
     }
     else
     {
+        this->boardModel->sendMessage("To Advance City AV, you need at least one of the following advances:");
+        this->boardModel->sendMessage("CIVIL SERVICE, MASONRY or SLAVE LABOR.");
+        this->boardModel->sendMessage(" ");
         next = new ReduceCityAVInstruction(this->boardModel);
     }
 

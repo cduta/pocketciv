@@ -105,6 +105,7 @@ public:
 
     void scoreSelectedAdvances();
     void toggleSelectAquiredAdvance(AdvanceModel::Advance advance);
+    void unsetAdvancesAquired();
 
     const EventCard *drawCard(bool tell = true);
     const EventCard *drawOriginalCard(bool tell = true);

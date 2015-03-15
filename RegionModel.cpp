@@ -157,16 +157,6 @@ int RegionModel::getTribes() const
     return this->tribes;
 }
 
-int RegionModel::getAvailableTribes() const
-{
-    if(this->tribes == 0)
-    {
-        return 0;
-    }
-
-    return this->tribes-1;
-}
-
 bool RegionModel::hasTribes() const
 {
     return this->tribes > 0;

@@ -14,7 +14,7 @@ void ExpeditionInstruction::initInstruction()
     this->boardModel->sendMessage("Choose a region bordering on the frontier.");
     this->boardModel->sendMessage("Decimate any amount of tribes, then draw a card.");
     this->boardModel->sendMessage("Gain Gold equal to the decimated tribes minus the BLUE HEX number.");
-    this->boardModel->sendMessage("At least 1 tribe has to remain in the region.");
+    this->boardModel->sendMessage("Remember: At least 1 tribe has to remain anywhere in the Empire, when decimating Tribes!");
     this->boardModel->sendMessage(" ");
 
     if(this->boardModel->hasAdvanceAquired(AdvanceModel::CAVALRY))
@@ -42,7 +42,8 @@ Instruction *ExpeditionInstruction::triggerHex(Qt::MouseButton button, int x, in
 
     if(button == Qt::LeftButton)
     {
-        if(regionModel->getSelectedTribes() < regionModel->getAvailableTribes())
+        if(regionModel->getTribes() > regionModel->getSelectedTribes() &&
+           this->boardModel->getTribeCount() > regionModel->getSelectedTribes()+1)
         {
             if(this->boardModel->refActiveRegion() == NULL &&
                this->boardModel->bordersOnFrontier(regionModel->getRegion()))
@@ -66,7 +67,7 @@ Instruction *ExpeditionInstruction::triggerHex(Qt::MouseButton button, int x, in
         {
             if(regionModel->getSelectedTribes() > 0)
             {
-                regionModel->setSelectedTribes(regionModel->getAvailableTribes());
+                regionModel->setSelectedTribes(regionModel->getSelectedTribes()-1);
                 if(regionModel->getSelectedTribes() == 0)
                 {
                     this->boardModel->unsetActiveRegion();
@@ -74,7 +75,7 @@ Instruction *ExpeditionInstruction::triggerHex(Qt::MouseButton button, int x, in
                 }
                 else
                 {
-                    this->boardModel->sendMessage(QString("Selected %1 out of %2 tribes in region %2 for the expedition.")
+                    this->boardModel->sendMessage(QString("Selected %1 out of %2 tribes in region %3 for the expedition.")
                                                   .arg(regionModel->getSelectedTribes())
                                                   .arg(regionModel->getTribes())
                                                   .arg(regionModel->getRegion()));

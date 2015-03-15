@@ -13,16 +13,16 @@ void BuildFarmInstruction::initInstruction()
     this->boardModel->sendMessage("BUILD FARM:");
     this->boardModel->sendMessage("Choose a region without a farm and with a forest.");
     this->boardModel->sendMessage("Decimate 2 tribes and the forest to build a farm.");
-    this->boardModel->sendMessage("At least 1 tribe has to remain in the region.");
+    this->boardModel->sendMessage("Remember: At least 1 tribe has to remain anywhere in the Empire, when decimating Tribes!");
+    this->boardModel->sendMessage(" ");
 
     if(this->boardModel->hasAdvanceAquired(AdvanceModel::AGRICULTURE) && this->boardModel->hasAgricultureLeft())
     {
-        this->boardModel->sendMessage(" ");
         this->boardModel->sendMessage("AGRICULTURE: ");
         this->boardModel->sendMessage("Once per round, don't decimate a Forest to create a Farm.");
+        this->boardModel->sendMessage(" ");
     }
 
-    this->boardModel->sendMessage(" ");
     this->boardModel->sendMessage("When you are done, press Done.");
     this->boardModel->sendMessage(" ");
     this->boardModel->disableButtons();
@@ -41,7 +41,7 @@ Instruction *BuildFarmInstruction::triggerHex(Qt::MouseButton button, int x, int
 
     if(button == Qt::LeftButton)
     {
-        if(!regionModel->hasFarm() && regionModel->getAvailableTribes() >= 2 && regionModel->hasForest())
+        if(!regionModel->hasFarm() && regionModel->getTribes() >= 2 && this->boardModel->getTribeCount() > 2 && regionModel->hasForest())
         {
             regionModel->setTribes(regionModel->getTribes() - 2);
             if(this->boardModel->hasAdvanceAquired(AdvanceModel::AGRICULTURE) && this->boardModel->hasAgricultureLeft())

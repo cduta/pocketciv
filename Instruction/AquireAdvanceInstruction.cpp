@@ -18,6 +18,7 @@ void AquireAdvanceInstruction::initInstruction()
         this->boardModel->sendMessage("Choose a region with a city to aquire an advance");
         this->boardModel->sendMessage("using the ressources of that region.");
         this->boardModel->sendMessage("You can aquire one advance per region per turn.");
+        this->boardModel->sendMessage("Remember: At least 1 tribe has to remain anywhere in the Empire, when decimating Tribes!");
         this->boardModel->sendMessage(" ");
         this->boardModel->sendMessage("When you are done, press Done.");
         this->boardModel->sendMessage(" ");
