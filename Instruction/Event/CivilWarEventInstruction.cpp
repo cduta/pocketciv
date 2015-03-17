@@ -86,11 +86,20 @@ Instruction *CivilWarEventInstruction::triggerDone()
             RegionModel *regionModel = possibleRegions.value(region);
             if(regionModel->hasCity())
             {
-                regionModel->decreaseCityAV(this->cityAVLost);
-                regionModel->decimateZeroAVCity();
-                this->affectedRegions.insert(region, regionModel);
+                if(this->boardModel->hasAdvanceAquired(AdvanceModel::CIVIL_SERVICE) && regionModel->getCityAV() == 1)
+                {
+                    this->boardModel->sendMessage("Advance (CIVIL SERVICE):");
+                    this->boardModel->sendMessage("The City AV can't be reduced below 1.");
+                }
+                else
+                {
+                    regionModel->decreaseCityAV(this->cityAVLost);
+                    regionModel->decimateZeroAVCity();
+                    this->affectedRegions.insert(region, regionModel);
+                }
             }
         }
+        this->boardModel->sendMessage(" ");
 
         if(this->affectedRegions.isEmpty())
         {
@@ -102,8 +111,8 @@ Instruction *CivilWarEventInstruction::triggerDone()
         {
             this->boardModel->sendMessage(QString("The affected regions are %1.")
                                           .arg(Common::listUpRegions(this->affectedRegions.values())));
-            this->boardModel->sendMessage(" ");
         }
+        this->boardModel->sendMessage(" ");
 
         POCKET_CIV_END_OF_ERA_CHECK
     }

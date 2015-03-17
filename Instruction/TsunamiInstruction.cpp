@@ -4,7 +4,7 @@
 #include "Common.hpp"
 
 TsunamiInstruction::TsunamiInstruction(BoardModel *boardModel, RegionModel *activeRegion, Instruction *nextInstruction, const Event *firstEvent)
-    : Instruction(), firstEvent(firstEvent)
+    : Instruction(), firstEvent(firstEvent), damagePerTribe(1), cityDamage(2), wonderDamage(3)
 {
     this->step = 0;
     this->tsunamiDamage = 0;
@@ -48,8 +48,23 @@ Instruction *TsunamiInstruction::triggerDone()
     {
         this->step = 1;
         this->tsunamiDamage = this->boardModel->drawCard()->getShapeNumberSum(this->firstEvent->getShapeNumberAmounts());
-        this->boardModel->sendMessage(QString("The damage in each region caused by the tsunami is %1.")
+        this->boardModel->sendMessage(" ");
+        this->boardModel->sendMessage(QString("The damage in each affected region caused by the tsunami is %1.")
                                       .arg(this->tsunamiDamage));
+
+        if(this->boardModel->hasAdvanceAquired(AdvanceModel::CIVIL_SERVICE))
+        {
+            this->boardModel->sendMessage("Advance (CIVIL SERVICE):");
+            this->damagePerTribe = 3;
+            this->damagePerCityAV = 5;
+        }
+
+        this->boardModel->sendMessage(QString("For every %1 damage, one tribe will decimated.")
+                                      .arg(this->damagePerTribe));
+        this->boardModel->sendMessage(QString("With no tribes left, for every %1 damage, one City AV will be reduced.")
+                                      .arg(this->cityDamage));
+        this->boardModel->sendMessage(QString("With the city destroyed, for every %1 damage, one Wonder will be decimated.")
+                                      .arg(this->wonderDamage));
         this->boardModel->sendMessage(" ");
 
         POCKET_CIV_END_OF_ERA_CHECK
@@ -59,21 +74,28 @@ Instruction *TsunamiInstruction::triggerDone()
     {
         RegionModel *affectedRegion = this->affectedRegions.takeFirst();
         int currentDamage = this->tsunamiDamage;
-        int tribeDamage = 0;
-        int cityDamage = 0;
+        int totalTribeDamage = 0;
+        int totalCityDamage = 0;
         //TODO: Add Wonder decimation for 3 damage.
 
         while(currentDamage > 0)
         {
             if(affectedRegion->hasTribes())
             {
-                affectedRegion->decimateTribes(1);
-                tribeDamage++;
-                currentDamage -= 1;
+                if(currentDamage < this->damagePerTribe)
+                {
+                    currentDamage = 0;
+                }
+                else
+                {
+                    affectedRegion->decimateTribes(1);
+                    totalTribeDamage++;
+                    currentDamage -= this->damagePerTribe;
+                }
             }
             else if(affectedRegion->hasCity())
             {
-                if(currentDamage < 2)
+                if(currentDamage < this->cityDamage)
                 {
                     currentDamage = 0;
                 }
@@ -82,8 +104,8 @@ Instruction *TsunamiInstruction::triggerDone()
                     if(affectedRegion->getCityAV() > 0)
                     {
                         affectedRegion->decreaseCityAV(1);
-                        cityDamage++;
-                        currentDamage -= 2;
+                        totalCityDamage++;
+                        currentDamage -= this->cityDamage;
                     }
                     affectedRegion->decimateZeroAVCity();
                 }
@@ -97,9 +119,9 @@ Instruction *TsunamiInstruction::triggerDone()
         this->boardModel->sendMessage(QString("In region %1, the tsunami results in the following losses.")
                                       .arg(affectedRegion->getRegion()));
         this->boardModel->sendMessage(QString("Tribes: %1")
-                                      .arg(tribeDamage));
+                                      .arg(totalTribeDamage));
         this->boardModel->sendMessage(QString("CityAV: %1")
-                                      .arg(cityDamage));
+                                      .arg(totalCityDamage));
 
         this->boardModel->sendMessage(" ");
         this->boardModel->sendMessage(QString("Affected regions left: %1.")
