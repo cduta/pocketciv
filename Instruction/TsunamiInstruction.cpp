@@ -4,7 +4,7 @@
 #include "Common.hpp"
 
 TsunamiInstruction::TsunamiInstruction(BoardModel *boardModel, RegionModel *activeRegion, Instruction *nextInstruction, const Event *firstEvent)
-    : Instruction(), firstEvent(firstEvent), damagePerTribe(1), cityDamage(2), wonderDamage(3)
+    : Instruction(), firstEvent(firstEvent), damagePerTribe(1), damagePerCityAV(2), damagePerWonder(3)
 {
     this->step = 0;
     this->tsunamiDamage = 0;
@@ -62,9 +62,9 @@ Instruction *TsunamiInstruction::triggerDone()
         this->boardModel->sendMessage(QString("For every %1 damage, one tribe will decimated.")
                                       .arg(this->damagePerTribe));
         this->boardModel->sendMessage(QString("With no tribes left, for every %1 damage, one City AV will be reduced.")
-                                      .arg(this->cityDamage));
+                                      .arg(this->damagePerCityAV));
         this->boardModel->sendMessage(QString("With the city destroyed, for every %1 damage, one Wonder will be decimated.")
-                                      .arg(this->wonderDamage));
+                                      .arg(this->damagePerWonder));
         this->boardModel->sendMessage(" ");
 
         POCKET_CIV_END_OF_ERA_CHECK
@@ -95,7 +95,7 @@ Instruction *TsunamiInstruction::triggerDone()
             }
             else if(affectedRegion->hasCity())
             {
-                if(currentDamage < this->cityDamage)
+                if(currentDamage < this->damagePerCityAV)
                 {
                     currentDamage = 0;
                 }
@@ -105,7 +105,7 @@ Instruction *TsunamiInstruction::triggerDone()
                     {
                         affectedRegion->decreaseCityAV(1);
                         totalCityDamage++;
-                        currentDamage -= this->cityDamage;
+                        currentDamage -= this->damagePerCityAV;
                     }
                     affectedRegion->decimateZeroAVCity();
                 }

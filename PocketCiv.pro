@@ -81,7 +81,8 @@ SOURCES += main.cpp\
     Instruction/DecimateGoldInstruction.cpp \
     Instruction/AdvanceCityAVInstruction.cpp \
     Instruction/ReduceCityAVInstruction.cpp \
-    Instruction/AssignCapitolInstruction.cpp
+    Instruction/AssignCapitolInstruction.cpp \
+    Instruction/StealingInstruction.cpp
 
 HEADERS  += \
     PocketCivMain.hpp \
@@ -152,7 +153,8 @@ HEADERS  += \
     Instruction/DecimateGoldInstruction.hpp \
     Instruction/AdvanceCityAVInstruction.hpp \
     Instruction/ReduceCityAVInstruction.hpp \
-    Instruction/AssignCapitolInstruction.hpp
+    Instruction/AssignCapitolInstruction.hpp \
+    Instruction/StealingInstruction.hpp
 
 FORMS    +=
 

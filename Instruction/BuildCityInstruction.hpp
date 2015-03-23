@@ -9,6 +9,8 @@ class BuildCityInstruction : public Instruction
     BoardModel *boardModel;
     Instruction *nextInstruction;
 
+    int tribesCost;
+
 public:
     BuildCityInstruction(BoardModel *boardModel, Instruction *nextInstruction);
 

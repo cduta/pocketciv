@@ -1,12 +1,12 @@
 #include "DecimateGoldInstruction.hpp"
 
-#include "Instruction/Event/AnarchyEventInstruction.hpp"
 #include "Instruction/AdvanceCityAVInstruction.hpp"
 #include "Instruction/ReduceCityAVInstruction.hpp"
 #include "Instruction/AssignCapitolInstruction.hpp"
+#include "Instruction/EndOfEraInstruction.hpp"
 
 DecimateGoldInstruction::DecimateGoldInstruction(BoardModel *boardModel)
-    : boardModel(boardModel), anarchy(false)
+    : boardModel(boardModel), step(0)
 {}
 
 void DecimateGoldInstruction::initInstruction()
@@ -25,16 +25,6 @@ void DecimateGoldInstruction::initInstruction()
             this->boardModel->sendMessage(" ");
             this->boardModel->sendMessage("Advance (BLACK MARKET):");
             this->boardModel->sendMessage("If you cannot decimate any gold, an ANARCHY Event occurs.");
-
-            if(this->boardModel->getGold() == 0)
-            {
-                this->boardModel->sendMessage(" ");
-                this->boardModel->sendMessage("No Gold decimated! An ANARCHY Event occurs.");
-                this->boardModel->sendMessage("Press Done to Continue...");
-                this->boardModel->sendMessage(" ");
-                this->anarchy = true;
-                return;
-            }
         }
         else
         {
@@ -48,23 +38,6 @@ void DecimateGoldInstruction::initInstruction()
     {
         this->boardModel->sendMessage("Decimate all Gold.");
         decimateGold = this->boardModel->getGold();
-
-        if(this->boardModel->hasAdvanceAquired(AdvanceModel::BLACK_MARKET))
-        {
-            this->boardModel->sendMessage("Advance (BLACK MARKET):");
-            this->boardModel->sendMessage("If you cannot decimate any gold, an ANARCHY Event occurs.");
-            this->boardModel->sendMessage(" ");
-
-            if(this->boardModel->getGold() == 0)
-            {
-                this->boardModel->sendMessage(" ");
-                this->boardModel->sendMessage("No Gold decimated! An ANARCHY Event occurs.");
-                this->boardModel->sendMessage("Press Done to Continue...");
-                this->boardModel->sendMessage(" ");
-                this->anarchy = true;
-                return;
-            }
-        }
     }
 
     this->boardModel->removeGold(decimateGold);
@@ -79,6 +52,48 @@ void DecimateGoldInstruction::initInstruction()
 Instruction *DecimateGoldInstruction::triggerDone()
 {
     Instruction *next;
+
+    if(this->boardModel->hasAdvanceAquired(AdvanceModel::CULTURE_OF_THIEVES) && this->step == 0)
+    {
+        this->step = 1;
+
+        this->boardModel->sendMessage("Advance (CULTURE OF THIEVES):");
+        this->boardModel->setActiveRegion(this->boardModel->drawCard()->getShapeNumbers().value(Event::RED_CIRCLE, 0), true);
+        this->boardModel->sendMessage(QString("The active region is %1.").arg(this->boardModel->refActiveRegion()->getRegion()));
+        this->boardModel->sendMessage(" ");
+        this->boardModel->sendMessage("If the active region has at least 1 Tribe, decimate 1 tribe and draw another Event card.\n"
+                                      "Gain gold equal to the amount of Gold Nuggets on the Event Card.\n\n");
+
+        POCKET_CIV_END_OF_ERA_CHECK
+    }
+
+    if(this->boardModel->hasAdvanceAquired(AdvanceModel::CULTURE_OF_THIEVES) && this->step == 1)
+    {
+        this->step = 2;
+
+        RegionModel *activeRegion = this->boardModel->refActiveRegion();
+
+        if(activeRegion->getTribes() > 0)
+        {
+            this->thieveryCard = this->boardModel->drawCard();
+            POCKET_CIV_END_OF_ERA_CHECK
+        }
+        else
+        {
+            this->step = -1;
+            this->boardModel->sendMessage("The active region had no tribes to be decimated and therefore nothing happens.\n\n");
+        }
+    }
+
+    if(this->boardModel->hasAdvanceAquired(AdvanceModel::CULTURE_OF_THIEVES) && this->step == 2)
+    {
+        this->step = -1;
+        this->boardModel->refActiveRegion()->decimateTribes(1);
+        int goldGained = this->thieveryCard->getGoldNuggets();
+        this->boardModel->gainGold(goldGained);
+        this->boardModel->sendMessage(QString("After decimating a tribe in the active region, you gain %1 gold.\n\n")
+                                      .arg(goldGained));
+    }
 
     if(this->boardModel->hasAdvanceAquired(AdvanceModel::CENTRALIZED_GOVERNMENT) &&
        !this->boardModel->hasCapitolAssigned())
@@ -97,11 +112,6 @@ Instruction *DecimateGoldInstruction::triggerDone()
     else
     {
         next = new ReduceCityAVInstruction(this->boardModel);
-    }
-
-    if(this->anarchy)
-    {
-        next = new AnarchyEventInstruction(this->boardModel, next, NULL);
     }
 
     next->initInstruction();

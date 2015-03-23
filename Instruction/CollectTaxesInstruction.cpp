@@ -68,7 +68,7 @@ Instruction *CollectTaxesInstruction::triggerDone()
         }
 
         this->totalGoldGained += this->nuggets;
-        this->boardModel->addGold(this->nuggets);
+        this->boardModel->gainGold(this->nuggets);
 
         if(this->handshake)
         {

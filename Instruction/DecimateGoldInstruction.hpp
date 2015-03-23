@@ -7,7 +7,8 @@
 class DecimateGoldInstruction : public Instruction
 {
     BoardModel *boardModel;
-    bool anarchy;
+    int step;
+    const EventCard *thieveryCard;
 
 public:
     DecimateGoldInstruction(BoardModel *boardModel);

@@ -606,7 +606,7 @@ void BoardModel::unselectAllSelectedTribes()
     return;
 }
 
-void BoardModel::addGold(int gold)
+void BoardModel::gainGold(int gold)
 {
     this->setGold(this->gold + gold);
     return;
@@ -976,7 +976,6 @@ void BoardModel::initializeCards()
     positive.append("+ Aquire Advances\n"
                     "If you aquire the Black Market, you get 5 Gold one time only.\n");
     negative.append("- Upkeep (Decimate Gold)\n"
-                    "If you could not decimate 1 Gold, an Anarchy Event starts.\n"
                     "If you have Coinage, instead of decimating no gold, you decimate 1 Gold.\n");
     prequisites.append(QList<AdvanceModel::Advance>());
     prequisites[0].append(AdvanceModel::CULTURE_OF_THIEVES);
@@ -1089,13 +1088,13 @@ void BoardModel::initializeCards()
     prequisites.clear();
     positive.clear();
     negative.clear();
-    positive.append("+ Upkeep (After Decimate Gold)\n"
+    negative.append("- Upkeep (After Decimate Gold)\n"
                     "1. Draw Event Card.\n"
                     "2. The RED CIRCLE Number is the Active Region.\n"
-                    "3. If the Active Region has at least 1 Tribe, decimate 1 Tribe. "
-                    "4. Draw an Event Card "
-                    "5. Gain the amount of Gold Nuggets on this Event Card in gold.\n"
-                    "Otherwise, nothing happens.\n");
+                    "3. If the Active Region has at least 1 Tribe, "
+                    "decimate 1 Tribe, draw an Event Card and "
+                    "gain gold equal to the amount of gold nuggets on the event card.\n"
+                    "   Otherwise, nothing happens.\n");
     positive.append("+ Event (TRADE)\n"
                     "After the trading is done, you may decide to steal from the visiting Empire.\n"
                     "1. Draw Event Card.\n"
@@ -2131,7 +2130,7 @@ void BoardModel::setAdvanceAquired(AdvanceModel::Advance advance)
     switch(advance)
     {
         case AdvanceModel::BLACK_MARKET:
-            this->addGold(5);
+            this->gainGold(5);
             this->sendMessage("Through aquiring the black market advance, you also gain 5 Gold once.");
             this->sendMessage(" ");
             break;

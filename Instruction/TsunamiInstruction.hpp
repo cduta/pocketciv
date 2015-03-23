@@ -15,6 +15,10 @@ class TsunamiInstruction : public Instruction
     const Event *firstEvent;
     QList<RegionModel *> affectedRegions;
 
+    int damagePerTribe;
+    int damagePerCityAV;
+    int damagePerWonder;
+
 public:
     TsunamiInstruction(BoardModel *boardModel, RegionModel *activeRegion, Instruction *nextInstruction, const Event *firstEvent);
 

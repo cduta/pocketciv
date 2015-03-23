@@ -13,7 +13,7 @@ void ReduceCityAVInstruction::initInstruction()
     {
         if(this->boardModel->getGold() > 3)
         {
-            this->boardModel->addGold(1);
+            this->boardModel->gainGold(1);
         }
 
         this->boardModel->sendMessage("Advance (BANKING):");

@@ -117,7 +117,7 @@ public:
     void enableMainPhaseButtons();
     void decimateAllSelectedTribes();
     void unselectAllSelectedTribes();
-    void addGold(int gold);
+    void gainGold(int gold);
     void removeGold(int gold);
 
 private:
