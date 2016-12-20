@@ -11,16 +11,16 @@ UpkeepInstruction::UpkeepInstruction(BoardModel *boardModel)
 
 void UpkeepInstruction::initInstruction()
 {
-    this->boardModel->sendMessage(" ");
-    this->boardModel->sendMessage("UPKEEP:");
-    this->boardModel->sendMessage(" ");
-    this->boardModel->sendMessage("Decimate unsupported tribes.");
-    this->boardModel->sendMessage("A region can support as much tribes as there are Mountains,");
-    this->boardModel->sendMessage("Volcanoes, Farms, Forests and City AV in that region added up.");
+    this->boardModel->printMessage(" ");
+    this->boardModel->printMessage("UPKEEP:");
+    this->boardModel->printMessage(" ");
+    this->boardModel->printMessage("Decimate unsupported tribes.");
+    this->boardModel->printMessage("A region can support as much tribes as there are Mountains,");
+    this->boardModel->printMessage("Volcanoes, Farms, Forests and City AV in that region added up.");
     this->boardModel->decimateUnsupportedTribes();
-    this->boardModel->sendMessage(" ");
-    this->boardModel->sendMessage("Press Done to continue...");
-    this->boardModel->sendMessage(" ");
+    this->boardModel->printMessage(" ");
+    this->boardModel->printMessage("Press Done to continue...");
+    this->boardModel->printMessage(" ");
 }
 
 Instruction *UpkeepInstruction::triggerDone()

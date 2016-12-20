@@ -9,10 +9,10 @@ FloodEventInstruction::FloodEventInstruction(BoardModel *boardModel, Instruction
 
 void FloodEventInstruction::initInstruction()
 {
-    this->boardModel->sendMessage("FLOOD:");
-    this->boardModel->sendMessage(" ");
-    this->boardModel->sendMessage("Press done to continue.");
-    this->boardModel->sendMessage(" ");
+    this->boardModel->printMessage("FLOOD:");
+    this->boardModel->printMessage(" ");
+    this->boardModel->printMessage("Press done to continue.");
+    this->boardModel->printMessage(" ");
 
     return;
 }
@@ -31,9 +31,9 @@ Instruction *FloodEventInstruction::triggerDone()
 
     if(this->boardModel->bordersOnSea(activeRegion->getRegion()))
     {
-        this->boardModel->sendMessage("The active region borders on the sea.");
-        this->boardModel->sendMessage("Therefore, the flood escalated into a tsunami.");
-        this->boardModel->sendMessage(" ");
+        this->boardModel->printMessage("The active region borders on the sea.");
+        this->boardModel->printMessage("Therefore, the flood escalated into a tsunami.");
+        this->boardModel->printMessage(" ");
 
         Instruction *instruction = new TsunamiInstruction(this->boardModel, activeRegion, this->nextInstruction, this->event);
         instruction->initInstruction();
@@ -45,15 +45,15 @@ Instruction *FloodEventInstruction::triggerDone()
         activeRegion->setFarm(false);
         activeRegion->decreaseCityAV(1);
 
-        this->boardModel->sendMessage("The flood decimates 2 tribes, the farm and");
-        this->boardModel->sendMessage("reduces the City AV by 1 in the active region.");
-        this->boardModel->sendMessage(" ");
+        this->boardModel->printMessage("The flood decimates 2 tribes, the farm and");
+        this->boardModel->printMessage("reduces the City AV by 1 in the active region.");
+        this->boardModel->printMessage(" ");
 
         if(!activeRegion->hasForest())
         {
             activeRegion->setForest(true);
-            this->boardModel->sendMessage("After the flood subsides, a forest grows in the active region.");
-            this->boardModel->sendMessage(" ");
+            this->boardModel->printMessage("After the flood subsides, a forest grows in the active region.");
+            this->boardModel->printMessage(" ");
         }
     }
 

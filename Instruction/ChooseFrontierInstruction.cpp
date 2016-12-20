@@ -8,11 +8,11 @@ ChooseFrontierInstruction::ChooseFrontierInstruction(BoardModel *boardModel)
 
 void ChooseFrontierInstruction::initInstruction()
 {
-    this->boardModel->sendMessage(" ");
-    this->boardModel->sendMessage("Choose the frontier hexes.");
-    this->boardModel->sendMessage("The other hexes are considered sea hexes.");
-    this->boardModel->sendMessage("Seas seperated by regions or frontier are considered seperate seas.");
-    this->boardModel->sendMessage("When you are done, press Done...");
+    this->boardModel->printMessage(" ");
+    this->boardModel->printMessage("Choose the frontier hexes.");
+    this->boardModel->printMessage("The other hexes are considered sea hexes.");
+    this->boardModel->printMessage("Seas seperated by regions or frontier are considered seperate seas.");
+    this->boardModel->printMessage("When you are done, press Done...");
     this->boardModel->initialRegionModels();
     this->boardModel->enableAllHexes();
 }

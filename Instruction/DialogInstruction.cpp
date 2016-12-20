@@ -10,11 +10,6 @@ DialogInstruction::DialogInstruction(BoardModel *boardModel, Instruction *interr
     this->boardModel->disableButtons();
 }
 
-DialogInstruction::~DialogInstruction()
-{
-    this->instructionDialog->deleteLater();
-}
-
 Instruction *DialogInstruction::getFollowingInstruction()
 {
     this->boardModel->setDoneButton(true);
@@ -24,7 +19,7 @@ Instruction *DialogInstruction::getFollowingInstruction()
 
 void DialogInstruction::closeDialog()
 {
-    this->boardModel->sendDialogClosed();
+    this->boardModel->emitDialogClosed();
     return;
 }
 

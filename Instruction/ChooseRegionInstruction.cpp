@@ -9,7 +9,7 @@ ChooseRegionInstruction::ChooseRegionInstruction(BoardModel *boardModel, int cur
 
 void ChooseRegionInstruction::initInstruction()
 {
-    this->boardModel->sendMessage(QString("Region %1 out of %2.").
+    this->boardModel->printMessage(QString("Region %1 out of %2.").
                                  arg(currentRegion).arg(maxRegions));
 }
 
@@ -49,7 +49,7 @@ Instruction *ChooseRegionInstruction::triggerDone()
     }
     else
     {
-        this->boardModel->sendMessage("The current region you created is not 2 or more hexes in size.");
+        this->boardModel->printMessage("The current region you created is not 2 or more hexes in size.");
     }
 
     return this;

@@ -48,6 +48,8 @@ private:
     QSet<AdvanceModel::Advance> advancesAquired;                  // Saved
     QSet<AdvanceModel::Advance> selectedAdvances;                 // Derived (Empty at first)
 
+    QSet<Empire> tradingPartners;                   // Saved
+
     // Save
     bool buildCity;
     bool buildFarm;
@@ -74,6 +76,10 @@ private:
 public:
     BoardModel(int width = 20, int height = 10, QObject *parent = 0);
     ~BoardModel();
+
+    void printMessage(const QString &text);
+    void emitDialogClosed();
+    void setDoneText(const QString &text);
 
     bool toggleHexToRegion(int region, int x, int y);
     void enableAllHexes();
@@ -134,6 +140,7 @@ public:
     QMap<int, QSet<HexModel *> > getRegionHexes() const;
     QMap<int, RegionModel *> getRegions() const;
     QMap<int, RegionModel *> getAdjacentRegions(int fromRegion) const;
+    QMap<int, RegionModel *> getContinentRegions(int fromRegion) const;
     QMap<int, RegionModel *> getMountainRegions() const;
     QMap<int, RegionModel *> getForestRegions() const;
     int getMountainCount() const;
@@ -168,6 +175,7 @@ public:
     bool hasAdvanceAquired(AdvanceModel::Advance advance) const;
     QSet<AdvanceModel::Advance> getAdvancesAquired() const;
     bool hasAgricultureLeft() const;
+    bool isTradingPartner(Empire empire) const;
 
 // Set-Methods
     void setActiveRegion(int region, bool isBad = true);
@@ -178,6 +186,7 @@ public:
     void setAdvanceAquired(AdvanceModel::Advance advance);
     void setAgricultureLeft(bool agricultureLeft);
     void setDoneButton(bool enabled);
+    void setTradingPartner(Empire empire);
 
 // Ref-Methods
     HexModel *refHexModel(int x, int y);

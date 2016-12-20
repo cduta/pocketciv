@@ -16,36 +16,36 @@ void ReduceCityAVInstruction::initInstruction()
             this->boardModel->gainGold(1);
         }
 
-        this->boardModel->sendMessage("Advance (BANKING):");
-        this->boardModel->sendMessage("If you have more than 3 Gold, add 1 Gold.");
+        this->boardModel->printMessage("Advance (BANKING):");
+        this->boardModel->printMessage("If you have more than 3 Gold, add 1 Gold.");
     }
 
-    this->boardModel->sendMessage("REDUCE CITY AV:");
-    this->boardModel->sendMessage("Any city in a region without a farm to support it has its City AV reduced by 1.");
-    this->boardModel->sendMessage("Any city with 0 AV will be decimated.");
-    this->boardModel->sendMessage(" ");
+    this->boardModel->printMessage("REDUCE CITY AV:");
+    this->boardModel->printMessage("Any city in a region without a farm to support it has its City AV reduced by 1.");
+    this->boardModel->printMessage("Any city with 0 AV will be decimated.");
+    this->boardModel->printMessage(" ");
 
     if(this->boardModel->hasAdvanceAquired(AdvanceModel::CARTAGE))
     {
-        this->boardModel->sendMessage("Advance (CARTAGE):");
-        this->boardModel->sendMessage("A farm can support a single City anywhere in the Empire.");
-        this->boardModel->sendMessage(" ");
+        this->boardModel->printMessage("Advance (CARTAGE):");
+        this->boardModel->printMessage("A farm can support a single City anywhere in the Empire.");
+        this->boardModel->printMessage(" ");
         this->unsupportedCities = this->boardModel->checkCartageCitySupport();
 
         if(this->unsupportedCities > 0)
         {
-            this->boardModel->sendMessage("The Empire has %1 cities not supported by farms.");
-            this->boardModel->sendMessage("Choose which one have their City AV reduced by 1.");
-            this->boardModel->sendMessage("After that, press Done to Continue...");
-            this->boardModel->sendMessage(" ");
+            this->boardModel->printMessage("The Empire has %1 cities not supported by farms.");
+            this->boardModel->printMessage("Choose which one have their City AV reduced by 1.");
+            this->boardModel->printMessage("After that, press Done to Continue...");
+            this->boardModel->printMessage(" ");
         }
     }
     else
     {
         this->boardModel->checkCitySupport();
         this->boardModel->decimateZeroAVCities();
-        this->boardModel->sendMessage("Press Done to Continue...");
-        this->boardModel->sendMessage(" ");
+        this->boardModel->printMessage("Press Done to Continue...");
+        this->boardModel->printMessage(" ");
     }
 }
 
@@ -78,10 +78,10 @@ Instruction *ReduceCityAVInstruction::triggerDone()
 {
     if(this->unsupportedCities > 0)
     {
-        this->boardModel->sendMessage("There are still %1 unsupported cities left.");
-        this->boardModel->sendMessage("Choose which one have their City AV reduced by 1.");
-        this->boardModel->sendMessage("After that, press Done to Continue...");
-        this->boardModel->sendMessage(" ");
+        this->boardModel->printMessage("There are still %1 unsupported cities left.");
+        this->boardModel->printMessage("Choose which one have their City AV reduced by 1.");
+        this->boardModel->printMessage("After that, press Done to Continue...");
+        this->boardModel->printMessage(" ");
     }
     else
     {
@@ -90,14 +90,14 @@ Instruction *ReduceCityAVInstruction::triggerDone()
         Instruction *next;
         if(this->boardModel->getTribeCount() == 0 && !this->boardModel->hasCity())
         {
-            this->boardModel->sendMessage(" ");
-            this->boardModel->sendMessage("The Empire had no more tribes and cities left.");
+            this->boardModel->printMessage(" ");
+            this->boardModel->printMessage("The Empire had no more tribes and cities left.");
             next = new EndGameInstruction(this->boardModel);
         }
         else
         {
-            this->boardModel->sendMessage("The NEXT TURN begins...");
-            this->boardModel->sendMessage(" ");
+            this->boardModel->printMessage("The NEXT TURN begins...");
+            this->boardModel->printMessage(" ");
 
             this->boardModel->unsetAdvancesAquired();
 

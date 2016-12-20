@@ -10,9 +10,9 @@ EpidemicEventInstruction::EpidemicEventInstruction(BoardModel *boardModel, Instr
 
 void EpidemicEventInstruction::initInstruction()
 {
-    this->boardModel->sendMessage("EPIDEMIC:");
-    this->boardModel->sendMessage(" ");
-    this->boardModel->sendMessage("Press done to continue.");
+    this->boardModel->printMessage("EPIDEMIC:");
+    this->boardModel->printMessage(" ");
+    this->boardModel->printMessage("Press done to continue.");
     return;
 }
 
@@ -99,13 +99,13 @@ Instruction *EpidemicEventInstruction::triggerDone()
         {
             this->boardModel->setActiveRegion(selectedRegions.values().first()->getRegion());
             this->boardModel->unselectAllRegions();
-            this->boardModel->sendMessage(QString("The EPIDEMIC moved to region %1.").arg(this->boardModel->refActiveRegion()->getRegion()));
-            this->boardModel->sendMessage(QString("This is the new active region."));
+            this->boardModel->printMessage(QString("The EPIDEMIC moved to region %1.").arg(this->boardModel->refActiveRegion()->getRegion()));
+            this->boardModel->printMessage(QString("This is the new active region."));
             return this->continueEpidemic();
         }
         else
         {
-            this->boardModel->sendMessage("No region selected.");
+            this->boardModel->printMessage("No region selected.");
         }
     }
 
@@ -127,8 +127,8 @@ Instruction *EpidemicEventInstruction::checkActiveRegion()
     this->step = 2;
     if(this->boardModel->refActiveRegion()->getTribes() == 0)
     {
-        this->boardModel->sendMessage("But the active region has no tribes.");
-        this->boardModel->sendMessage("The EPIDEMIC will not spread.");
+        this->boardModel->printMessage("But the active region has no tribes.");
+        this->boardModel->printMessage("The EPIDEMIC will not spread.");
         this->boardModel->unsetActiveRegion();
         return this->endEvent();
     }
@@ -140,7 +140,7 @@ Instruction *EpidemicEventInstruction::initializePopulationLoss()
 {
     this->step = 3;
     this->populationLoss = this->boardModel->drawCard()->getShapeNumberSum(this->event->getShapeNumberAmounts());
-    this->boardModel->sendMessage(QString("The population loss total of this EPIDEMIC is %1.").arg(this->populationLoss));
+    this->boardModel->printMessage(QString("The population loss total of this EPIDEMIC is %1.").arg(this->populationLoss));
 
     return NULL;
 }
@@ -159,22 +159,22 @@ Instruction *EpidemicEventInstruction::continueEpidemic()
     this->boardModel->refActiveRegion()->setTribes(newTribes);
     int overallTribes = this->boardModel->getTribeCount();
 
-    this->boardModel->sendMessage(QString("The tribes decimated in the active region are %1.").arg(this->oldTribes - newTribes));
+    this->boardModel->printMessage(QString("The tribes decimated in the active region are %1.").arg(this->oldTribes - newTribes));
     this->populationLoss = this->populationLoss - this->oldTribes;
 
     if(this->populationLoss <= 0)
     {
-        this->boardModel->sendMessage(QString("The Population loss is 0."));
+        this->boardModel->printMessage(QString("The Population loss is 0."));
         this->boardModel->unsetActiveRegion();
         return this->endEvent();
     }
 
-    this->boardModel->sendMessage(QString("Population Loss left: %1").arg(this->populationLoss));
+    this->boardModel->printMessage(QString("Population Loss left: %1").arg(this->populationLoss));
 
     if(overallTribes <= 2)
     {
-        this->boardModel->sendMessage(" ");
-        this->boardModel->sendMessage(QString("The EPIDEMIC cannot spread further with 2 or less tribes left in the EMPIRE."));
+        this->boardModel->printMessage(" ");
+        this->boardModel->printMessage(QString("The EPIDEMIC cannot spread further with 2 or less tribes left in the EMPIRE."));
         this->boardModel->unsetActiveRegion();
         return this->endEvent();
     }
@@ -192,15 +192,15 @@ Instruction *EpidemicEventInstruction::continueEpidemic()
 
     if(adjacentRegionsWithTribes.size() == 0)
     {
-        this->boardModel->sendMessage(QString("No adjacent regions has any tribes and the EPIDEMIC is stopped."));
+        this->boardModel->printMessage(QString("No adjacent regions has any tribes and the EPIDEMIC is stopped."));
         this->boardModel->unsetActiveRegion();
         return this->endEvent();
     }
     else
     {
-        this->boardModel->sendMessage("Choose the region with tribes into which the EPIDEMIC will spread.");
-        this->boardModel->sendMessage("When you chose a region, press Done...");
-        this->boardModel->sendMessage(" ");
+        this->boardModel->printMessage("Choose the region with tribes into which the EPIDEMIC will spread.");
+        this->boardModel->printMessage("When you chose a region, press Done...");
+        this->boardModel->printMessage(" ");
         return this;
     }
 }

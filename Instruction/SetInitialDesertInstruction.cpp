@@ -8,10 +8,10 @@ SetInitialDesertInstruction::SetInitialDesertInstruction(BoardModel *boardModel)
 
 void SetInitialDesertInstruction::initInstruction()
 {
-    this->boardModel->sendMessage(" ");
-    this->boardModel->sendMessage("No regions without mountain and/or forest found to place a desert.");
-    this->boardModel->sendMessage("Place ONE desert into one region without a forest.");
-    this->boardModel->sendMessage("When you are done, press Done...");
+    this->boardModel->printMessage(" ");
+    this->boardModel->printMessage("No regions without mountain and/or forest found to place a desert.");
+    this->boardModel->printMessage("Place ONE desert into one region without a forest.");
+    this->boardModel->printMessage("When you are done, press Done...");
 }
 
 Instruction *SetInitialDesertInstruction::triggerHex(Qt::MouseButton button, int x, int y)
@@ -47,7 +47,7 @@ Instruction *SetInitialDesertInstruction::triggerDone()
     }
     else
     {
-        this->boardModel->sendMessage("No desert set.");
+        this->boardModel->printMessage("No desert set.");
     }
 
     return this;

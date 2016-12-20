@@ -10,22 +10,22 @@ ExpeditionInstruction::ExpeditionInstruction(BoardModel *boardModel, Instruction
 
 void ExpeditionInstruction::initInstruction()
 {
-    this->boardModel->sendMessage("EXPEDITION:");
-    this->boardModel->sendMessage("Choose a region bordering on the frontier.");
-    this->boardModel->sendMessage("Decimate any amount of tribes, then draw a card.");
-    this->boardModel->sendMessage("Gain Gold equal to the decimated tribes minus the BLUE HEX number.");
-    this->boardModel->sendMessage("Remember: At least 1 tribe has to remain anywhere in the Empire, when decimating Tribes!");
-    this->boardModel->sendMessage(" ");
+    this->boardModel->printMessage("EXPEDITION:");
+    this->boardModel->printMessage("Choose a region bordering on the frontier.");
+    this->boardModel->printMessage("Decimate any amount of tribes, then draw a card.");
+    this->boardModel->printMessage("Gain Gold equal to the decimated tribes minus the BLUE HEX number.");
+    this->boardModel->printMessage("Remember: At least 1 tribe has to remain anywhere in the Empire, when decimating Tribes!");
+    this->boardModel->printMessage(" ");
 
     if(this->boardModel->hasAdvanceAquired(AdvanceModel::CAVALRY))
     {
-        this->boardModel->sendMessage("Advance (CAVALRY):");
-        this->boardModel->sendMessage("Each tribe sent, counts as two tribes.");
-        this->boardModel->sendMessage(" ");
+        this->boardModel->printMessage("Advance (CAVALRY):");
+        this->boardModel->printMessage("Each tribe sent, counts as two tribes.");
+        this->boardModel->printMessage(" ");
     }
 
-    this->boardModel->sendMessage("When you are done, press Done.");
-    this->boardModel->sendMessage(" ");
+    this->boardModel->printMessage("When you are done, press Done.");
+    this->boardModel->printMessage(" ");
     this->boardModel->disableButtons();
     this->boardModel->setDoneButton(true);
     return;
@@ -54,7 +54,7 @@ Instruction *ExpeditionInstruction::triggerHex(Qt::MouseButton button, int x, in
             if(this->boardModel->refActiveRegion() == regionModel)
             {
                 regionModel->setSelectedTribes(regionModel->getSelectedTribes() + 1);
-                this->boardModel->sendMessage(QString("Selected %1 out of %2 tribes in region %2 for the expedition.")
+                this->boardModel->printMessage(QString("Selected %1 out of %2 tribes in region %2 for the expedition.")
                                               .arg(regionModel->getSelectedTribes())
                                               .arg(regionModel->getTribes())
                                               .arg(regionModel->getRegion()));
@@ -71,11 +71,11 @@ Instruction *ExpeditionInstruction::triggerHex(Qt::MouseButton button, int x, in
                 if(regionModel->getSelectedTribes() == 0)
                 {
                     this->boardModel->unsetActiveRegion();
-                    this->boardModel->sendMessage("Active Region unselected.");
+                    this->boardModel->printMessage("Active Region unselected.");
                 }
                 else
                 {
-                    this->boardModel->sendMessage(QString("Selected %1 out of %2 tribes in region %3 for the expedition.")
+                    this->boardModel->printMessage(QString("Selected %1 out of %2 tribes in region %3 for the expedition.")
                                                   .arg(regionModel->getSelectedTribes())
                                                   .arg(regionModel->getTribes())
                                                   .arg(regionModel->getRegion()));
@@ -96,8 +96,8 @@ Instruction *ExpeditionInstruction::triggerDone()
         if(!this->expeditionCardDrawn && selectedTribes > 0)
         {
             this->expeditionCardDrawn = true;
-            this->boardModel->sendMessage(QString("Sending %1 tribes on an expedition into the frontier...").arg(selectedTribes));
-            this->boardModel->sendMessage(" ");
+            this->boardModel->printMessage(QString("Sending %1 tribes on an expedition into the frontier...").arg(selectedTribes));
+            this->boardModel->printMessage(" ");
             this->boardModel->decimateAllSelectedTribes();
             const EventCard * card = this->boardModel->drawCard();
             int blueHexNumber = card->getShapeNumbers().value(Event::BLUE_HEXAGON, 0);
@@ -116,9 +116,9 @@ Instruction *ExpeditionInstruction::triggerDone()
                 this->gainGold = 0;
             }
 
-            this->boardModel->sendMessage(" ");
-            this->boardModel->sendMessage(QString("You gain gold equal to the sent Tribes minus %1 (At least 0).").arg(blueHexNumber));
-            this->boardModel->sendMessage(" ");
+            this->boardModel->printMessage(" ");
+            this->boardModel->printMessage(QString("You gain gold equal to the sent Tribes minus %1 (At least 0).").arg(blueHexNumber));
+            this->boardModel->printMessage(" ");
 
             this->boardModel->unsetActiveRegion();
             POCKET_CIV_END_OF_ERA_CHECK
@@ -126,14 +126,14 @@ Instruction *ExpeditionInstruction::triggerDone()
 
         if(this->gainGold == 0)
         {
-            this->boardModel->sendMessage(QString("The expedition was a failure and you gain no gold."));
+            this->boardModel->printMessage(QString("The expedition was a failure and you gain no gold."));
         }
         else
         {
-            this->boardModel->sendMessage(QString("The expedition was a success and you gain %1 gold.").arg(this->gainGold));
+            this->boardModel->printMessage(QString("The expedition was a success and you gain %1 gold.").arg(this->gainGold));
         }
 
-        this->boardModel->sendMessage(" ");
+        this->boardModel->printMessage(" ");
         this->boardModel->setGold(this->boardModel->getGold() + this->gainGold);
         this->boardModel->disableButtons();
         this->boardModel->enableMainPhaseButtons();

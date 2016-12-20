@@ -6,21 +6,21 @@ EndGameInstruction::EndGameInstruction(BoardModel *boardModel)
 
 void EndGameInstruction::initInstruction()
 {
-    this->boardModel->sendMessage("This is the End of the Game...");
-    this->boardModel->sendMessage(" ");
-    this->boardModel->sendMessage("To start choosing, press Done.");
+    this->boardModel->printMessage("This is the End of the Game...");
+    this->boardModel->printMessage(" ");
+    this->boardModel->printMessage("To start choosing, press Done.");
     return;
 }
 
 Instruction *EndGameInstruction::triggerDone()
 {
-    this->boardModel->sendMessage(" ");
-    this->boardModel->sendMessage("Adding all VPs of the Wonders to the final Glory Score.");
+    this->boardModel->printMessage(" ");
+    this->boardModel->printMessage("Adding all VPs of the Wonders to the final Glory Score.");
     // TODO: Add the Wonders to the final glory score.
-    this->boardModel->sendMessage(" ");
-    this->boardModel->sendMessage(QString("Your final Glory Score is: %1 !").arg(this->boardModel->getGloryScore()));
-    this->boardModel->sendMessage(" ");
-    this->boardModel->sendMessage("THE GAME IS OVER.");
+    this->boardModel->printMessage(" ");
+    this->boardModel->printMessage(QString("Your final Glory Score is: %1 !").arg(this->boardModel->getGloryScore()));
+    this->boardModel->printMessage(" ");
+    this->boardModel->printMessage("THE GAME IS OVER.");
     this->boardModel->disableButtons();
     return new NoInstruction();
 }

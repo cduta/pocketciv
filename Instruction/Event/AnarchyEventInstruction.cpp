@@ -8,18 +8,18 @@ AnarchyEventInstruction::AnarchyEventInstruction(BoardModel *boardModel, Instruc
 
 void AnarchyEventInstruction::initInstruction()
 {
-    this->boardModel->sendMessage("ANARCHY:");
-    this->boardModel->sendMessage("Press done to continue.");
-    this->boardModel->sendMessage(" ");
+    this->boardModel->printMessage("ANARCHY:");
+    this->boardModel->printMessage("Press done to continue.");
+    this->boardModel->printMessage(" ");
     return;
 }
 
 Instruction *AnarchyEventInstruction::triggerDone()
 {
-    this->boardModel->sendMessage("In every region with a city, reduce 1 City AV and decimate 3 tribes.");
-    this->boardModel->sendMessage("This is repeated in every region, until the tribes are");
-    this->boardModel->sendMessage("lower than the City AV or the City AV is 1 in each region.");
-    this->boardModel->sendMessage(" ");
+    this->boardModel->printMessage("In every region with a city, reduce 1 City AV and decimate 3 tribes.");
+    this->boardModel->printMessage("This is repeated in every region, until the tribes are");
+    this->boardModel->printMessage("lower than the City AV or the City AV is 1 in each region.");
+    this->boardModel->printMessage(" ");
 
     foreach(RegionModel *regionModel, this->boardModel->getRegions().values())
     {
@@ -37,7 +37,7 @@ Instruction *AnarchyEventInstruction::triggerDone()
                   regionModel->getCityAV() <= regionModel->getTribes());
 
 
-            this->boardModel->sendMessage(QString("Region %1: %2 city AV and %3 tribes have been decimated.")
+            this->boardModel->printMessage(QString("Region %1: %2 city AV and %3 tribes have been decimated.")
                                           .arg(regionModel->getRegion())
                                           .arg(cityAV-regionModel->getCityAV())
                                           .arg(tribes-regionModel->getTribes()));

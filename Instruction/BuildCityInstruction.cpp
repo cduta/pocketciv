@@ -8,19 +8,19 @@ BuildCityInstruction::BuildCityInstruction(BoardModel *boardModel, Instruction *
 
 void BuildCityInstruction::initInstruction()
 {
-    this->boardModel->sendMessage("BUILD CITY:");
-    this->boardModel->sendMessage("Choose a region without a city.");
+    this->boardModel->printMessage("BUILD CITY:");
+    this->boardModel->printMessage("Choose a region without a city.");
     if(this->boardModel->hasAdvanceAquired(AdvanceModel::COMMON_TONGUE))
     {
         this->tribesCost = 2;
-        this->boardModel->sendMessage("Advance (COMMON TONGUE):");
+        this->boardModel->printMessage("Advance (COMMON TONGUE):");
     }
-    this->boardModel->sendMessage(QString("Decimate %1 tribes on it to build a city with 1 AV.")
+    this->boardModel->printMessage(QString("Decimate %1 tribes on it to build a city with 1 AV.")
                                   .arg(this->tribesCost));
-    this->boardModel->sendMessage("Remember: At least 1 tribe has to remain anywhere in the Empire, when decimating Tribes!");
-    this->boardModel->sendMessage(" ");
-    this->boardModel->sendMessage("When you are done, press Done.");
-    this->boardModel->sendMessage(" ");
+    this->boardModel->printMessage("Remember: At least 1 tribe has to remain anywhere in the Empire, when decimating Tribes!");
+    this->boardModel->printMessage(" ");
+    this->boardModel->printMessage("When you are done, press Done.");
+    this->boardModel->printMessage(" ");
     this->boardModel->disableButtons();
     this->boardModel->setDoneButton(true);
     return;

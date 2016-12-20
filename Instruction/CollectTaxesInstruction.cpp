@@ -14,13 +14,13 @@ CollectTaxesInstruction::CollectTaxesInstruction(BoardModel *boardModel, Instruc
 
 void CollectTaxesInstruction::initInstruction()
 {
-    this->boardModel->sendMessage("COLLECT TAXES:");
-    this->boardModel->sendMessage("Try collecting taxes.");
-    this->boardModel->sendMessage("Draw an Event Card, add the amount of Goldnuggets to your Gold.");
-    this->boardModel->sendMessage("If it shows a Handshake, draw again and decimate 1 Gold.\n"
+    this->boardModel->printMessage("COLLECT TAXES:");
+    this->boardModel->printMessage("Try collecting taxes.");
+    this->boardModel->printMessage("Draw an Event Card, add the amount of Goldnuggets to your Gold.");
+    this->boardModel->printMessage("If it shows a Handshake, draw again and decimate 1 Gold.\n"
                                   "If you are unable to decimate 1 Gold, this action ends and an ANARCHY Event starts.");
-    this->boardModel->sendMessage("If it does not show a Handshake, this action ends.");
-    this->boardModel->sendMessage(" ");
+    this->boardModel->printMessage("If it does not show a Handshake, this action ends.");
+    this->boardModel->printMessage(" ");
 
     this->done = QMessageBox::Yes !=
             QMessageBox::StandardButton(
@@ -29,11 +29,11 @@ void CollectTaxesInstruction::initInstruction()
 
     if(this->done)
     {
-        this->boardModel->sendMessage("Collect Taxes cancelled.");
-        this->boardModel->sendMessage(" ");
+        this->boardModel->printMessage("Collect Taxes cancelled.");
+        this->boardModel->printMessage(" ");
     }
 
-    this->boardModel->sendMessage("Press Done to continue...");
+    this->boardModel->printMessage("Press Done to continue...");
 
     return;
 }
@@ -50,19 +50,19 @@ Instruction *CollectTaxesInstruction::triggerDone()
             this->nuggets = this->card->getGoldNuggets();
             this->handshake = this->card->hasHandshake();
 
-            this->boardModel->sendMessage(QString("You collected %1 Gold nuggets.").arg(this->nuggets));
+            this->boardModel->printMessage(QString("You collected %1 Gold nuggets.").arg(this->nuggets));
 
             if(this->handshake)
             {
-                this->boardModel->sendMessage("There was a handshake, therefore draw another card and remove 1 Gold.");
-                this->boardModel->sendMessage(" ");
-                this->boardModel->sendMessage("Press Done to continue...");
+                this->boardModel->printMessage("There was a handshake, therefore draw another card and remove 1 Gold.");
+                this->boardModel->printMessage(" ");
+                this->boardModel->printMessage("Press Done to continue...");
             }
             else
             {
-                this->boardModel->sendMessage("There was no handshake.");
+                this->boardModel->printMessage("There was no handshake.");
             }
-            this->boardModel->sendMessage(" ");
+            this->boardModel->printMessage(" ");
 
             POCKET_CIV_END_OF_ERA_CHECK
         }
@@ -80,9 +80,9 @@ Instruction *CollectTaxesInstruction::triggerDone()
             }
             else
             {
-                this->boardModel->sendMessage("Could not remove 1 Gold, because there is no Gold left.");
-                this->boardModel->sendMessage("Anarchy reigns...");
-                this->boardModel->sendMessage(" ");
+                this->boardModel->printMessage("Could not remove 1 Gold, because there is no Gold left.");
+                this->boardModel->printMessage("Anarchy reigns...");
+                this->boardModel->printMessage(" ");
 
                 EventInstruction *instruction = new AnarchyEventInstruction(this->boardModel, this->nextInstruction, NULL);
                 instruction->initInstruction();
@@ -91,8 +91,8 @@ Instruction *CollectTaxesInstruction::triggerDone()
         }
     }
 
-    this->boardModel->sendMessage("Collecting Taxes is done.");
-    this->boardModel->sendMessage(" ");
+    this->boardModel->printMessage("Collecting Taxes is done.");
+    this->boardModel->printMessage(" ");
 
     this->nextInstruction->setKeepInstruction(false);
     return this->nextInstruction;

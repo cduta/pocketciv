@@ -8,10 +8,10 @@ SuperstitionEventInstruction::SuperstitionEventInstruction(BoardModel *boardMode
 
 void SuperstitionEventInstruction::initInstruction()
 {
-    this->boardModel->sendMessage("SUPERSTITION:");
-    this->boardModel->sendMessage(" ");
-    this->boardModel->sendMessage("Press Done to continue.");
-    this->boardModel->sendMessage(" ");
+    this->boardModel->printMessage("SUPERSTITION:");
+    this->boardModel->printMessage(" ");
+    this->boardModel->printMessage("Press Done to continue.");
+    this->boardModel->printMessage(" ");
     return;
 }
 
@@ -28,18 +28,18 @@ Instruction *SuperstitionEventInstruction::triggerDone()
         {
             this->discardsLeft += 2*shapeNumberAmounts[Event::GREEN_SQUARE];
 
-            this->boardModel->sendMessage("Advance (ASTRONOMY):");
-            this->boardModel->sendMessage("For each GREEN SQUARE, add 2 to the discards.");
-            this->boardModel->sendMessage(QString("There are %1 GREEN SQUARES.").arg(shapeNumberAmounts[Event::GREEN_SQUARE]));
-            this->boardModel->sendMessage(" ");
+            this->boardModel->printMessage("Advance (ASTRONOMY):");
+            this->boardModel->printMessage("For each GREEN SQUARE, add 2 to the discards.");
+            this->boardModel->printMessage(QString("There are %1 GREEN SQUARES.").arg(shapeNumberAmounts[Event::GREEN_SQUARE]));
+            this->boardModel->printMessage(" ");
         }
 
         this->discardsTotal = this->discardsLeft;
 
-        this->boardModel->sendMessage(QString("Superstition makes you discard %1 cards.")
+        this->boardModel->printMessage(QString("Superstition makes you discard %1 cards.")
                                       .arg(this->discardsTotal));
-        this->boardModel->sendMessage("The end of era event still applies.");
-        this->boardModel->sendMessage(" ");
+        this->boardModel->printMessage("The end of era event still applies.");
+        this->boardModel->printMessage(" ");
 
         POCKET_CIV_END_OF_ERA_CHECK
     }
@@ -55,16 +55,16 @@ Instruction *SuperstitionEventInstruction::triggerDone()
             {
                 if(this->discardsLeft > 0)
                 {
-                    this->boardModel->sendMessage(QString("Cards discarded so far: %1 out of %2")
+                    this->boardModel->printMessage(QString("Cards discarded so far: %1 out of %2")
                                                   .arg(this->discardsTotal-this->discardsLeft)
                                                   .arg(this->discardsTotal));
-                    this->boardModel->sendMessage(" ");
+                    this->boardModel->printMessage(" ");
                 }
                 else
                 {
                     this->step = -1;
-                    this->boardModel->sendMessage(QString("Done discarding %1 cards.").arg(this->discardsTotal));
-                    this->boardModel->sendMessage(" ");
+                    this->boardModel->printMessage(QString("Done discarding %1 cards.").arg(this->discardsTotal));
+                    this->boardModel->printMessage(" ");
                 }
 
                 Instruction *next = new EndOfEraInstruction(this->boardModel, this);
@@ -73,8 +73,8 @@ Instruction *SuperstitionEventInstruction::triggerDone()
             }
         }
 
-        this->boardModel->sendMessage(QString("Done discarding %1 cards.").arg(this->discardsTotal));
-        this->boardModel->sendMessage(" ");
+        this->boardModel->printMessage(QString("Done discarding %1 cards.").arg(this->discardsTotal));
+        this->boardModel->printMessage(" ");
     }
 
     return this->endEvent();

@@ -10,7 +10,7 @@ class EpidemicEventInstruction : public EventInstruction
     int populationLoss;
     int oldTribes;
 
-    const EventCard *first;
+    //const EventCard *first;
 
 public:
     EpidemicEventInstruction(BoardModel *boardModel, Instruction *nextInstruction, const Event *event);

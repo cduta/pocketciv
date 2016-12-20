@@ -15,7 +15,6 @@ private:
 
 public:
     DialogInstruction(BoardModel *boardModel, Instruction *interruptedInstruction, QDialog *instructionDialog, QObject *parent = 0);
-    ~DialogInstruction();
 
     virtual Instruction *getFollowingInstruction();
 

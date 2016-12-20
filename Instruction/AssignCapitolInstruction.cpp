@@ -9,21 +9,21 @@ AssignCapitolInstruction::AssignCapitolInstruction(BoardModel *boardModel)
 
 void AssignCapitolInstruction::initInstruction()
 {
-    this->boardModel->sendMessage("Advance (CENTRALIZED GOVERNMENT):");
+    this->boardModel->printMessage("Advance (CENTRALIZED GOVERNMENT):");
 
     if(this->boardModel->hasCity())
     {
-        this->boardModel->sendMessage("You MAY assign a City in the Empire to become the Capitol.");
+        this->boardModel->printMessage("You MAY assign a City in the Empire to become the Capitol.");
     }
     else
     {
-        this->boardModel->sendMessage("The Empire has no cities.");
-        this->boardModel->sendMessage("Therefore, no Capital can be assigned.");
+        this->boardModel->printMessage("The Empire has no cities.");
+        this->boardModel->printMessage("Therefore, no Capital can be assigned.");
     }
 
-    this->boardModel->sendMessage(" ");
-    this->boardModel->sendMessage("Press Done to Continue...");
-    this->boardModel->sendMessage(" ");
+    this->boardModel->printMessage(" ");
+    this->boardModel->printMessage("Press Done to Continue...");
+    this->boardModel->printMessage(" ");
     return;
 }
 
@@ -68,24 +68,24 @@ Instruction *AssignCapitolInstruction::triggerDone()
     }
     else
     {
-        this->boardModel->sendMessage("To Advance City AV, you need at least one of the following advances:");
-        this->boardModel->sendMessage("CIVIL SERVICE, MASONRY or SLAVE LABOR.");
-        this->boardModel->sendMessage(" ");
+        this->boardModel->printMessage("To Advance City AV, you need at least one of the following advances:");
+        this->boardModel->printMessage("CIVIL SERVICE, MASONRY or SLAVE LABOR.");
+        this->boardModel->printMessage(" ");
         next = new ReduceCityAVInstruction(this->boardModel);
     }
 
     if(this->boardModel->hasCity() && !this->boardModel->hasCapitolAssigned())
     {
-        this->boardModel->sendMessage("No City chosen...");
+        this->boardModel->printMessage("No City chosen...");
     }
     else
     {
-        this->boardModel->sendMessage(QString("The City in Region %1 has become the Capitol.")
+        this->boardModel->printMessage(QString("The City in Region %1 has become the Capitol.")
                                       .arg(this->boardModel->refCapitolRegion()->getRegion()));
-        this->boardModel->sendMessage("Any City AV beyond 4 AV can only be reache with Tribes from that Region and by decimating a Forest, Mountain or Farm anywhere in the Empire.");
+        this->boardModel->printMessage("Any City AV beyond 4 AV can only be reache with Tribes from that Region and by decimating a Forest, Mountain or Farm anywhere in the Empire.");
     }
 
-    this->boardModel->sendMessage(" ");
+    this->boardModel->printMessage(" ");
     next->initInstruction();
     return next;
 }

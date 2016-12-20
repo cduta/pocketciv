@@ -10,21 +10,21 @@ BuildFarmInstruction::BuildFarmInstruction(BoardModel *boardModel, Instruction *
 
 void BuildFarmInstruction::initInstruction()
 {
-    this->boardModel->sendMessage("BUILD FARM:");
-    this->boardModel->sendMessage("Choose a region without a farm and with a forest.");
-    this->boardModel->sendMessage("Decimate 2 tribes and the forest to build a farm.");
-    this->boardModel->sendMessage("Remember: At least 1 tribe has to remain anywhere in the Empire, when decimating Tribes!");
-    this->boardModel->sendMessage(" ");
+    this->boardModel->printMessage("BUILD FARM:");
+    this->boardModel->printMessage("Choose a region without a farm and with a forest.");
+    this->boardModel->printMessage("Decimate 2 tribes and the forest to build a farm.");
+    this->boardModel->printMessage("Remember: At least 1 tribe has to remain anywhere in the Empire, when decimating Tribes!");
+    this->boardModel->printMessage(" ");
 
     if(this->boardModel->hasAdvanceAquired(AdvanceModel::AGRICULTURE) && this->boardModel->hasAgricultureLeft())
     {
-        this->boardModel->sendMessage("AGRICULTURE: ");
-        this->boardModel->sendMessage("Once per round, don't decimate a Forest to create a Farm.");
-        this->boardModel->sendMessage(" ");
+        this->boardModel->printMessage("AGRICULTURE: ");
+        this->boardModel->printMessage("Once per round, don't decimate a Forest to create a Farm.");
+        this->boardModel->printMessage(" ");
     }
 
-    this->boardModel->sendMessage("When you are done, press Done.");
-    this->boardModel->sendMessage(" ");
+    this->boardModel->printMessage("When you are done, press Done.");
+    this->boardModel->printMessage(" ");
     this->boardModel->disableButtons();
     this->boardModel->setDoneButton(true);
     return;
@@ -58,7 +58,7 @@ Instruction *BuildFarmInstruction::triggerHex(Qt::MouseButton button, int x, int
                 if(result == QMessageBox::Yes)
                 {
                     this->boardModel->setAgricultureLeft(false);
-                    this->boardModel->sendMessage("Advance (AGRICULTURE) used for building a farm.");
+                    this->boardModel->printMessage("Advance (AGRICULTURE) used for building a farm.");
                 }
                 else
                 {

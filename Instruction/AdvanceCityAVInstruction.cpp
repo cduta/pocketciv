@@ -25,34 +25,34 @@ void AdvanceCityAVInstruction::initInstruction()
         this->availableAdvancements++;
     }
 
-    this->boardModel->sendMessage("ADVANCE CITY AV:");
-    this->boardModel->sendMessage("To increase a city's AV, pay with tribes from anywhere in the Empire.");
-    this->boardModel->sendMessage("Remember: At least 1 tribe has to remain anywhere in the Empire, when decimating Tribes!");
-    this->boardModel->sendMessage(QString("You may advance %1 city AVs this turn.")
+    this->boardModel->printMessage("ADVANCE CITY AV:");
+    this->boardModel->printMessage("To increase a city's AV, pay with tribes from anywhere in the Empire.");
+    this->boardModel->printMessage("Remember: At least 1 tribe has to remain anywhere in the Empire, when decimating Tribes!");
+    this->boardModel->printMessage(QString("You may advance %1 city AVs this turn.")
                                   .arg(this->availableAdvancements));
-    this->boardModel->sendMessage(" ");
+    this->boardModel->printMessage(" ");
     if(this->boardModel->hasAdvanceAquired(AdvanceModel::BASIC_TOOLS))
     {
-        this->boardModel->sendMessage("Advance (BASIC TOOLS):");
-        this->boardModel->sendMessage("The cost of tribes to advance a City AV is reduced by 1.");
-        this->boardModel->sendMessage(" ");
+        this->boardModel->printMessage("Advance (BASIC TOOLS):");
+        this->boardModel->printMessage("The cost of tribes to advance a City AV is reduced by 1.");
+        this->boardModel->printMessage(" ");
     }
 
     if(this->boardModel->getAdvancesAquired().contains(AdvanceModel::ARCHITECTURE))
     {
         this->maximumCityAV = 4;
-        this->boardModel->sendMessage("Advance (AGRICULTURE):");
-        this->boardModel->sendMessage("The maximum City AV is 4.");
-        this->boardModel->sendMessage(" ");
+        this->boardModel->printMessage("Advance (AGRICULTURE):");
+        this->boardModel->printMessage("The maximum City AV is 4.");
+        this->boardModel->printMessage(" ");
     }
     else
     {
         this->maximumCityAV = 2;
-        this->boardModel->sendMessage("The maximum City AV is 2.");
-        this->boardModel->sendMessage(" ");
+        this->boardModel->printMessage("The maximum City AV is 2.");
+        this->boardModel->printMessage(" ");
     }
 
-    this->boardModel->sendMessage("Press Done to Continue...");
+    this->boardModel->printMessage("Press Done to Continue...");
 }
 
 Instruction *AdvanceCityAVInstruction::triggerHex(Qt::MouseButton button, int x, int y)
@@ -76,11 +76,11 @@ Instruction *AdvanceCityAVInstruction::triggerHex(Qt::MouseButton button, int x,
 
                 if(this->boardModel->getTribeCount() <= this->toBePaid)
                 {
-                    this->boardModel->sendMessage(QString("The amount of Tribes in the Empire is not enough to advance the City AV in Region %1.")
+                    this->boardModel->printMessage(QString("The amount of Tribes in the Empire is not enough to advance the City AV in Region %1.")
                                                   .arg(regionModel->getRegion()));
-                    this->boardModel->sendMessage(QString("To advance the City AV you'll have to pay %1 Tribes and still have at least 1 Tribe left anywhere in the Empire.")
+                    this->boardModel->printMessage(QString("To advance the City AV you'll have to pay %1 Tribes and still have at least 1 Tribe left anywhere in the Empire.")
                                                   .arg(this->toBePaid));
-                    this->boardModel->sendMessage(" ");
+                    this->boardModel->printMessage(" ");
                     return this;
                 }
 
@@ -88,46 +88,46 @@ Instruction *AdvanceCityAVInstruction::triggerHex(Qt::MouseButton button, int x,
                 {
                     if(this->capitolAdvanced)
                     {
-                        this->boardModel->sendMessage("You already advanced the capital beyond a City AV of 4 once this turn.");
-                        this->boardModel->sendMessage(" ");
+                        this->boardModel->printMessage("You already advanced the capital beyond a City AV of 4 once this turn.");
+                        this->boardModel->printMessage(" ");
                         return this;
                     }
 
                     if(regionModel->getCityAV() < 10)
                     {
-                        this->boardModel->sendMessage(QString("You are trying to advance the Capitol City in Region %1 beyond a City AV of 4.")
+                        this->boardModel->printMessage(QString("You are trying to advance the Capitol City in Region %1 beyond a City AV of 4.")
                                                       .arg(regionModel->getRegion()));
-                        this->boardModel->sendMessage("(BASIC TOOLS, SIMPLE TOOLS and MACHINING do NOT apply here to reduce the cost.)");
-                        this->boardModel->sendMessage(" ");
+                        this->boardModel->printMessage("(BASIC TOOLS, SIMPLE TOOLS and MACHINING do NOT apply here to reduce the cost.)");
+                        this->boardModel->printMessage(" ");
 
                         if(activeRegion->getTribes() >= this->toBePaid)
                         {
-                            this->boardModel->sendMessage(QString("To advance the Capitol City you'll have to decimate %1 Tribes from the City Region and\n"
+                            this->boardModel->printMessage(QString("To advance the Capitol City you'll have to decimate %1 Tribes from the City Region and\n"
                                                                   "a Forest, Mountain or Farm from anywhere in the Empire.")
                                                           .arg(this->toBePaid));
-                            this->boardModel->sendMessage(" ");
-                            this->boardModel->sendMessage("Select a region in which to decimate the Forest, Mountain or Farm to Advance the City AV.");
-                            this->boardModel->sendMessage(" ");
+                            this->boardModel->printMessage(" ");
+                            this->boardModel->printMessage("Select a region in which to decimate the Forest, Mountain or Farm to Advance the City AV.");
+                            this->boardModel->printMessage(" ");
 
                             this->capitolBeyondFour = true;
 
                             this->boardModel->setActiveRegion(regionModel->getRegion(), true);
-                            this->boardModel->sendDoneText("Cancel");
+                            this->boardModel->setDoneText("Cancel");
                         }
                         else
                         {
-                            this->boardModel->sendMessage(QString("But, it is not possible to advance the Capitol City, because there are not enough Tribes in Region %1 to pay %2 Tribes.")
+                            this->boardModel->printMessage(QString("But, it is not possible to advance the Capitol City, because there are not enough Tribes in Region %1 to pay %2 Tribes.")
                                                           .arg(regionModel->getRegion()));
                         }
 
-                        this->boardModel->sendMessage(" ");
+                        this->boardModel->printMessage(" ");
                     }
                     else
                     {
-                        this->boardModel->sendMessage(QString("You can't advance the City AV of the Capitol in Region %1 any further than %2.")
+                        this->boardModel->printMessage(QString("You can't advance the City AV of the Capitol in Region %1 any further than %2.")
                                                       .arg(regionModel->getRegion())
                                                       .arg(10));
-                        this->boardModel->sendMessage(" ");
+                        this->boardModel->printMessage(" ");
                     }
                 }
                 else
@@ -144,28 +144,28 @@ Instruction *AdvanceCityAVInstruction::triggerHex(Qt::MouseButton button, int x,
                             this->toBePaid = 0;
                         }
 
-                        this->boardModel->sendMessage(QString("The cost of advancing the City AV in Region %1 is %2 Tribes from anywhere in the Empire.")
+                        this->boardModel->printMessage(QString("The cost of advancing the City AV in Region %1 is %2 Tribes from anywhere in the Empire.")
                                                       .arg(regionModel->getRegion())
                                                       .arg(this->toBePaid));
-                        this->boardModel->sendMessage(" ");
+                        this->boardModel->printMessage(" ");
 
                         this->boardModel->setActiveRegion(regionModel->getRegion(), true);
-                        this->boardModel->sendDoneText("Cancel");
+                        this->boardModel->setDoneText("Cancel");
                     }
                     else
                     {
-                        this->boardModel->sendMessage(QString("You can't advance the City AV in Region %1 any further than %2.")
+                        this->boardModel->printMessage(QString("You can't advance the City AV in Region %1 any further than %2.")
                                                       .arg(regionModel->getRegion())
                                                       .arg(this->maximumCityAV));
-                        this->boardModel->sendMessage(" ");
+                        this->boardModel->printMessage(" ");
                     }
                 }
             }
             else
             {
-                this->boardModel->sendMessage(QString("There is no City in Region %1.")
+                this->boardModel->printMessage(QString("There is no City in Region %1.")
                                               .arg(regionModel->getRegion()));
-                this->boardModel->sendMessage(" ");
+                this->boardModel->printMessage(" ");
             }
         }
         else if(activeRegion != NULL)
@@ -174,7 +174,7 @@ Instruction *AdvanceCityAVInstruction::triggerHex(Qt::MouseButton button, int x,
             {
                 if(!regionModel->hasForest() && !regionModel->hasMountain() && !regionModel->hasFarm())
                 {
-                    this->boardModel->sendMessage("This Region has none of the needed Ressources to be decimated to advance the City AV of the Capitol.");
+                    this->boardModel->printMessage("This Region has none of the needed Ressources to be decimated to advance the City AV of the Capitol.");
                     return this;
                 }
 
@@ -217,14 +217,14 @@ Instruction *AdvanceCityAVInstruction::triggerHex(Qt::MouseButton button, int x,
 
                     if(this->toBePaid == selectedTribes)
                     {
-                        this->boardModel->sendMessage(QString("The City AV in Region %1 can now be advanced to %2.\n")
+                        this->boardModel->printMessage(QString("The City AV in Region %1 can now be advanced to %2.\n")
                                                       .arg(activeRegion->getRegion())
                                                       .arg(activeRegion->getCityAV()+1));
-                        this->boardModel->sendDoneText("Advance");
+                        this->boardModel->setDoneText("Advance");
                     }
                     else
                     {
-                        this->boardModel->sendMessage(QString("%1/%2 tribes selected.\n")
+                        this->boardModel->printMessage(QString("%1/%2 tribes selected.\n")
                                                       .arg(selectedTribes)
                                                       .arg(toBePaid)
                                                       .arg(activeRegion->getRegion()));
@@ -245,7 +245,7 @@ Instruction *AdvanceCityAVInstruction::triggerHex(Qt::MouseButton button, int x,
                 regionModel->setSelectedTribes(regionModel->getSelectedTribes() - 1);
                 selectedTribes--;
 
-                this->boardModel->sendMessage(QString("%1/%2 tribes paid to advance the City AV in region %3.\n")
+                this->boardModel->printMessage(QString("%1/%2 tribes paid to advance the City AV in region %3.\n")
                                               .arg(selectedTribes)
                                               .arg(toBePaid)
                                               .arg(activeRegion->getRegion()));
@@ -266,7 +266,7 @@ Instruction *AdvanceCityAVInstruction::triggerDone()
         if(selectedTribes == this->toBePaid && !this->capitolBeyondFour)
         {
             activeRegion->increaseCityAV(1);
-            this->boardModel->sendMessage(QString("The City AV in region %1 has been advanced to %2.\n")
+            this->boardModel->printMessage(QString("The City AV in region %1 has been advanced to %2.\n")
                                           .arg(activeRegion->getRegion())
                                           .arg(activeRegion->getCityAV()));
             this->boardModel->decimateAllSelectedTribes();
@@ -274,26 +274,26 @@ Instruction *AdvanceCityAVInstruction::triggerDone()
 
             if(this->availableAdvancements == 0)
             {
-                this->boardModel->sendMessage("You can't increase any City AV anymore this turn.");
-                this->boardModel->sendMessage("Press Done to Continue...");
-                this->boardModel->sendMessage("");
+                this->boardModel->printMessage("You can't increase any City AV anymore this turn.");
+                this->boardModel->printMessage("Press Done to Continue...");
+                this->boardModel->printMessage("");
             }
             else
             {
-                this->boardModel->sendMessage(" ");
-                this->boardModel->sendMessage(QString("You may still increase the City AV of %1 cities.")
+                this->boardModel->printMessage(" ");
+                this->boardModel->printMessage(QString("You may still increase the City AV of %1 cities.")
                                               .arg(this->availableAdvancements));
-                this->boardModel->sendMessage("Choose another City to advance or press Done to Continue...");
-                this->boardModel->sendMessage(" ");
+                this->boardModel->printMessage("Choose another City to advance or press Done to Continue...");
+                this->boardModel->printMessage(" ");
                 this->boardModel->unsetActiveRegion();
             }
         }
         else
         {
-            this->boardModel->sendMessage("Advancing City AV cancelled.");
-            this->boardModel->sendMessage(" ");
+            this->boardModel->printMessage("Advancing City AV cancelled.");
+            this->boardModel->printMessage(" ");
             this->boardModel->unselectAllSelectedTribes();
-            this->boardModel->sendDoneText("Done");
+            this->boardModel->setDoneText("Done");
         }
 
         return this;
@@ -309,7 +309,7 @@ void AdvanceCityAVInstruction::ressourceChosen(QAbstractButton *button)
     QString ressourceDecimated;
 
     this->boardModel->setDoneButton(true);
-    this->boardModel->sendDoneText("Done");
+    this->boardModel->setDoneText("Done");
 
     QMessageBox::ButtonRole buttonRole =  this->chooseRessource->buttonRole(button);
 
@@ -336,7 +336,7 @@ void AdvanceCityAVInstruction::ressourceChosen(QAbstractButton *button)
     this->boardModel->refRegionModel(this->region)->decimateTribes(this->toBePaid);
     this->boardModel->refActiveRegion()->increaseCityAV(1);
 
-    this->boardModel->sendMessage(QString("You decimated %1 Tribes in Region %2 and the %3 in Region %4 to increase the Capitol's City AV to %5.")
+    this->boardModel->printMessage(QString("You decimated %1 Tribes in Region %2 and the %3 in Region %4 to increase the Capitol's City AV to %5.")
                                   .arg(this->toBePaid)
                                   .arg(this->boardModel->refActiveRegion()->getRegion())
                                   .arg(ressourceDecimated)

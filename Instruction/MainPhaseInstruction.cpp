@@ -13,13 +13,13 @@ MainPhaseInstruction::MainPhaseInstruction(BoardModel *boardModel)
 
 void MainPhaseInstruction::initInstruction()
 {
-    this->boardModel->sendMessage("MAIN PHASE:");
-    this->boardModel->sendMessage(" ");
-    this->boardModel->sendMessage("You can do any amount of actions by clicking on any of the buttons.");
-    this->boardModel->sendMessage("After applying any actions to a region, at least 1 tribe has to remain.");
-    this->boardModel->sendMessage(" ");
-    this->boardModel->sendMessage("When you are Done, press Done.");
-    this->boardModel->sendMessage(" ");
+    this->boardModel->printMessage("MAIN PHASE:");
+    this->boardModel->printMessage(" ");
+    this->boardModel->printMessage("You can do any amount of actions by clicking on any of the buttons.");
+    this->boardModel->printMessage("After applying any actions to a region, at least 1 tribe has to remain.");
+    this->boardModel->printMessage(" ");
+    this->boardModel->printMessage("When you are Done, press Done.");
+    this->boardModel->printMessage(" ");
     this->boardModel->disableButtons();
     this->boardModel->enableMainPhaseButtons();
     return;
@@ -45,7 +45,6 @@ Instruction *MainPhaseInstruction::triggerDone()
 Instruction *MainPhaseInstruction::triggerSaveGame()
 {
     // TODO: Autosave everytime this phase starts.
-    // TODO: Do not crash when canceled.
     QString saveFile =
     QFileDialog::getSaveFileName(NULL,
                                  "Save game",

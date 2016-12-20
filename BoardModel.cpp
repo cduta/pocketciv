@@ -47,6 +47,24 @@ BoardModel::~BoardModel()
     this->clearBoard();
 }
 
+void BoardModel::printMessage(const QString &text)
+{
+    emit this->sendMessage(text);
+    return;
+}
+
+void BoardModel::emitDialogClosed()
+{
+    emit this->sendDialogClosed();
+    return;
+}
+
+void BoardModel::setDoneText(const QString &text)
+{
+    emit this->sendDoneText(text);
+    return;
+}
+
 bool BoardModel::toggleHexToRegion(int region, int x, int y)
 {
     HexModel *hex = this->hexModels[x][y];
@@ -278,8 +296,17 @@ void BoardModel::initialRegionModels()
 
 bool BoardModel::canMoveTribes(int fromRegion, int toRegion)
 {
-    // Is Adjacent region?
-    QMap<int, RegionModel *> adjacentRegions = this->getAdjacentRegions(fromRegion);
+    QMap<int, RegionModel *> adjacentRegions;
+    if(this->hasAdvanceAquired(AdvanceModel::EQUESTRIAN))
+    {
+        // Is region not seperated by a SEA or REGION?
+        adjacentRegions = this->getContinentRegions(fromRegion);
+    }
+    else
+    {
+        // Is Adjacent region?
+        adjacentRegions = this->getAdjacentRegions(fromRegion);
+    }
 
     foreach(int adjacentRegion, adjacentRegions.keys())
     {
@@ -496,8 +523,8 @@ const EventCard *BoardModel::drawCard(bool tell)
 
     if(tell)
     {
-        this->sendMessage("Drawing a card...");
-        this->sendMessage(" ");
+        this->printMessage("Drawing a card...");
+        this->printMessage(" ");
     }
 
     return card;
@@ -558,6 +585,12 @@ void BoardModel::disableButtons()
 void BoardModel::setDoneButton(bool enabled)
 {
     this->doneEnabled = enabled;
+    return;
+}
+
+void BoardModel::setTradingPartner(BoardModel::Empire empire)
+{
+    this->tradingPartners.insert(empire);
     return;
 }
 
@@ -723,13 +756,29 @@ void BoardModel::deriveRegionHexes()
 void BoardModel::initializeCards()
 {
     QMap<int, Event *> events1;
+    QMap<int, Event *> events2;
+    QMap<int, Event *> events3;
+    QMap<int, Event *> events4;
+    QMap<int, Event *> events5;
+    QMap<int, Event *> events6;
+    QMap<int, Event *> events7;
+    QMap<int, Event *> events8;
+    QMap<int, Event *> events9;
+    QMap<int, Event *> events10;
+    QMap<int, Event *> events11;
+    QMap<int, Event *> events12;
+    QMap<int, Event *> events13;
+    QMap<int, Event *> events14;
+    QMap<int, Event *> events15;
+    QMap<int, Event *> events16;
+
     events1.insert(1, new TribalWarEvent(this));
     events1.insert(2, new EpidemicEvent(0,0,1,this));
     events1.insert(3, new FamineEvent(this));
     events1.insert(4, new UprisingEvent(this));
     events1.insert(6, new VisitationEvent(0,0,2,BoardModel::FLOREN, this));
     events1.insert(8, new CorruptionEvent(0,0,1,this));
-    QMap<int, Event *> events2;
+
     events2.insert(1, new VolcanoEvent(this));
     events2.insert(2, new TribalWarEvent(this));
     events2.insert(3, new CorruptionEvent(1,0,0,this));
@@ -737,97 +786,97 @@ void BoardModel::initializeCards()
     events2.insert(6, new VisitationEvent(1,1,1,BoardModel::GILDA, this));
     events2.insert(7, new EarthquakeEvent(2,1,0, this));
     events2.insert(8, new VisitationEvent(0,0,3,BoardModel::ATLANTEA, this));
-    QMap<int, Event *> events3;
+
     events3.insert(2, new BanditsEvent(0,1,1,this));
     events3.insert(4, new EpidemicEvent(1,1,1,this));
     events3.insert(5, new VisitationEvent(0,3,0,BoardModel::ATLANTEA, this));
     events3.insert(7, new VisitationEvent(1,1,1,BoardModel::GILDA, this));
     events3.insert(8, new CivilWarEvent(0,0,1,this));
-    QMap<int, Event *> events4;
+
     events4.insert(1, new EarthquakeEvent(1,0,0,this));
     events4.insert(3, new VisitationEvent(0,0,2,BoardModel::FLOREN, this));
     events4.insert(4, new SuperstitionEvent(1,0,0,this));
     events4.insert(6, new FamineEvent(this));
     events4.insert(7, new UprisingEvent(this));
     events4.insert(8, new VisitationEvent(0,1,2,BoardModel::NORDIG, this));
-    QMap<int, Event *> events5;
+
     events5.insert(3, new EpidemicEvent(0,0,1,this));
     events5.insert(4, new VisitationEvent(0,0,2,BoardModel::GILDA, this));
     events5.insert(5, new CorruptionEvent(0,1,0,this));
     events5.insert(6, new TribalWarEvent(this));
     events5.insert(7, new CorruptionEvent(0,1,0,this));
     events5.insert(8, new FloodEvent(0,2,0,this));
-    QMap<int, Event *> events6;
+
     events6.insert(1, new FloodEvent(1,0,0,this));
     events6.insert(3, new VisitationEvent(0,0,2,BoardModel::ATLANTEA, this));
     events6.insert(4, new CivilWarEvent(0,0,1,this));
     events6.insert(5, new SandstormEvent(this));
     events6.insert(6, new EpidemicEvent(1,0,1,this));
     events6.insert(8, new EarthquakeEvent(0,3,0,this));
-    QMap<int, Event *> events7;
+
     events7.insert(2, new VisitationEvent(0,1,1,BoardModel::NORDIG, this));
     events7.insert(3, new AnarchyEvent(this));
     events7.insert(4, new VisitationEvent(0,0,2,BoardModel::FLOREN, this));
     events7.insert(5, new UprisingEvent(this));
     events7.insert(6, new AnarchyEvent(this));
     events7.insert(7, new BanditsEvent(0,0,2,this));
-    QMap<int, Event *> events8;
+
     events8.insert(1, new SandstormEvent(this));
     events8.insert(2, new TribalWarEvent(this));
     events8.insert(3, new VisitationEvent(0,0,2,BoardModel::FLOREN, this));
     events8.insert(4, new FloodEvent(1,1,0,this));
     events8.insert(7, new VisitationEvent(0,1,2,BoardModel::ATLANTEA, this));
     events8.insert(8, new UprisingEvent(this));
-    QMap<int, Event *> events9;
+
     events9.insert(2, new VolcanoEvent(this));
     events9.insert(4, new VisitationEvent(0,3,0,BoardModel::GILDA, this));
     events9.insert(5, new VolcanoEvent(this));
     events9.insert(6, new CorruptionEvent(0,1,0,this));
     events9.insert(7, new SuperstitionEvent(0,0,1,this));
     events9.insert(8, new SuperstitionEvent(0,0,1,this));
-    QMap<int, Event *> events10;
+
     events10.insert(1, new FamineEvent(this));
     events10.insert(2, new FamineEvent(this));
     events10.insert(3, new SandstormEvent(this));
     events10.insert(5, new VisitationEvent(0,3,0,BoardModel::ATLANTEA, this));
     events10.insert(6, new UprisingEvent(this));
     events10.insert(8, new BanditsEvent(1,1,1,this));
-    QMap<int, Event *> events11;
+
     events11.insert(2, new VisitationEvent(0,1,1,BoardModel::NORDIG, this));
     events11.insert(4, new BanditsEvent(0,0,2,this));
     events11.insert(5, new EarthquakeEvent(1,0,1,this));
     events11.insert(6, new BanditsEvent(0,1,2,this));
     events11.insert(7, new CivilWarEvent(0,0,1,this));
     events11.insert(8, new CorruptionEvent(0,1,0,this));
-    QMap<int, Event *> events12;
+
     events12.insert(1, new VisitationEvent(0,0,1,BoardModel::GILDA, this));
     events12.insert(3, new VolcanoEvent(this));
     events12.insert(4, new AnarchyEvent(this));
     events12.insert(5, new FloodEvent(1,2,0,this));
     events12.insert(6, new VisitationEvent(0,1,2,BoardModel::ATLANTEA, this));
     events12.insert(7, new VolcanoEvent(this));
-    QMap<int, Event *> events13;
+
     events13.insert(2, new EarthquakeEvent(2,0,0,this));
     events13.insert(3, new TribalWarEvent(this));
     events13.insert(5, new BanditsEvent(0,0,2,this));
     events13.insert(6, new CivilWarEvent(0,0,1,this));
     events13.insert(6, new VisitationEvent(0,1,2,BoardModel::NORDIG, this));
     events13.insert(8, new SuperstitionEvent(0,1,0,this));
-    QMap<int, Event *> events14;
+
     events14.insert(1, new VisitationEvent(0,0,1,BoardModel::NORDIG, this));
     events14.insert(2, new EarthquakeEvent(0,2,0,this));
     events14.insert(4, new VisitationEvent(0,0,2,BoardModel::FLOREN, this));
     events14.insert(6, new VolcanoEvent(this));
     events14.insert(7, new FamineEvent(this));
     events14.insert(8, new AnarchyEvent(this));
-    QMap<int, Event *> events15;
+
     events15.insert(2, new SandstormEvent(this));
     events15.insert(3, new FloodEvent(0,2,0,this));
     events15.insert(4, new SandstormEvent(this));
     events15.insert(5, new AnarchyEvent(this));
     events15.insert(6, new VisitationEvent(1,1,1,BoardModel::GILDA, this));
     events15.insert(7, new VisitationEvent(1,1,1,BoardModel::FLOREN, this));
-    QMap<int, Event *> events16;
+
     events16.insert(1, new EpidemicEvent(0,1,0,this));
     events16.insert(2, new FloodEvent(0,1,0,this));
     events16.insert(4, new SuperstitionEvent(1,0,0,this));
@@ -836,22 +885,22 @@ void BoardModel::initializeCards()
     events16.insert(8, new VisitationEvent(0,1,2,BoardModel::ATLANTEA, this));
 
     // NOTE: Is only testing.
-//    events1.insert(1, new CorruptionEvent(0,0,1,this));
-//    events2.insert(1, new CorruptionEvent(0,0,1,this));
-//    events3.insert(1, new CorruptionEvent(0,0,1,this));
-//    events4.insert(1, new CorruptionEvent(0,0,1,this));
-//    events5.insert(1, new CorruptionEvent(0,0,1,this));
-//    events6.insert(1, new CorruptionEvent(0,0,1,this));
-//    events7.insert(1, new CorruptionEvent(0,0,1,this));
-//    events8.insert(1, new CorruptionEvent(0,0,1,this));
-//    events9.insert(1, new CorruptionEvent(0,0,1,this));
-//    events10.insert(1, new CorruptionEvent(0,0,1,this));
-//    events11.insert(1, new CorruptionEvent(0,0,1,this));
-//    events12.insert(1, new CorruptionEvent(0,0,1,this));
-//    events13.insert(1, new CorruptionEvent(0,0,1,this));
-//    events14.insert(1, new CorruptionEvent(0,0,1,this));
-//    events15.insert(1, new CorruptionEvent(0,0,1,this));
-//    events16.insert(1, new CorruptionEvent(0,0,1,this));
+//    events1.insert (1, new VisitationEvent(0,0,1,BoardModel::ATLANTEA, this));
+//    events2.insert (1, new VisitationEvent(0,0,1,BoardModel::ATLANTEA, this));
+//    events3.insert (1, new VisitationEvent(0,0,1,BoardModel::ATLANTEA, this));
+//    events4.insert (1, new VisitationEvent(0,0,1,BoardModel::ATLANTEA, this));
+//    events5.insert (1, new VisitationEvent(0,0,1,BoardModel::ATLANTEA, this));
+//    events6.insert (1, new VisitationEvent(0,0,1,BoardModel::ATLANTEA, this));
+//    events7.insert (1, new VisitationEvent(0,0,1,BoardModel::ATLANTEA, this));
+//    events8.insert (1, new VisitationEvent(0,0,1,BoardModel::ATLANTEA, this));
+//    events9.insert (1, new VisitationEvent(0,0,1,BoardModel::ATLANTEA, this));
+//    events10.insert(1, new VisitationEvent(0,0,1,BoardModel::ATLANTEA, this));
+//    events11.insert(1, new VisitationEvent(0,0,1,BoardModel::ATLANTEA, this));
+//    events12.insert(1, new VisitationEvent(0,0,1,BoardModel::ATLANTEA, this));
+//    events13.insert(1, new VisitationEvent(0,0,1,BoardModel::ATLANTEA, this));
+//    events14.insert(1, new VisitationEvent(0,0,1,BoardModel::ATLANTEA, this));
+//    events15.insert(1, new VisitationEvent(0,0,1,BoardModel::ATLANTEA, this));
+//    events16.insert(1, new VisitationEvent(0,0,1,BoardModel::ATLANTEA, this));
 
     this->eventCards.append(new EventCard(1,7,6, true , 0, events1, this));
     this->eventCards.append(new EventCard(2,4,7, false, 2, events2, this));
@@ -1142,7 +1191,7 @@ void BoardModel::initializeCards()
                     "1. Decimate any amount of Tribes and Gold. The total decimated amount is the Diplomatic Offer.\n"
                     "2. Draw Event Card.\n"
                     "3. If Diplomatic Offer >= RED CIRCLE Number, you are Trading Partners with the Visiting Empire. This is permanent for the rest of the game.\n"
-                    "4. If this empire has become your trading partner, follow up every VISITATION of this empire with TRADE (including now).\n"
+                    "4. If this empire has become your trading partner, this and every following VISITATION is a TRADE instead.\n"
                     "Otherwise, continue VISITATION normally.\n");
     advances.insert(AdvanceModel::DIPLOMACY,
                     new AdvanceModel(AdvanceModel::DIPLOMACY,
@@ -1764,9 +1813,40 @@ QMap<int, RegionModel *> BoardModel::getAdjacentRegions(int fromRegion) const
         foreach(HexModel *adjacent, hex->getAdjacentHexes().values())
         {
             int region = adjacent->getRegion();
-            if(region >= 0 && !result.contains(region) && fromRegion != region)
+            if(region >= 0 && fromRegion != region && !result.contains(region))
             {
                 result.insert(region, this->refRegionModel(region));
+            }
+        }
+    }
+
+    return result;
+}
+
+QMap<int, RegionModel *> BoardModel::getContinentRegions(int fromRegion) const
+{
+    QMap<int, RegionModel *> result;
+
+    HexModel *hex = this->regionHexes[fromRegion].values().at(0);
+
+    QList<HexModel *> nextHexes;
+    nextHexes.append(hex);
+    QSet<HexModel *> alreadyVisited;
+
+    while(!nextHexes.isEmpty())
+    {
+        HexModel *current = nextHexes.takeFirst();
+        alreadyVisited.insert(current);
+        foreach(HexModel *hex, current->getAdjacentHexes().values())
+        {
+            if(!hex->isSea() && !hex->isFrontier() && !alreadyVisited.contains(hex))
+            {
+                int region = hex->getRegion();
+                nextHexes.append(hex);
+                if(region >= 0 && fromRegion != region && !result.contains(region))
+                {
+                    result.insert(region, this->refRegionModel(region));
+                }
             }
         }
     }
@@ -2068,6 +2148,11 @@ bool BoardModel::hasAgricultureLeft() const
     return this->agricultureLeft;
 }
 
+bool BoardModel::isTradingPartner(BoardModel::Empire empire) const
+{
+    return this->tradingPartners.contains(empire);
+}
+
 void BoardModel::setActiveRegion(int region, bool isBad)
 {
     this->unsetActiveRegion();
@@ -2131,8 +2216,8 @@ void BoardModel::setAdvanceAquired(AdvanceModel::Advance advance)
     {
         case AdvanceModel::BLACK_MARKET:
             this->gainGold(5);
-            this->sendMessage("Through aquiring the black market advance, you also gain 5 Gold once.");
-            this->sendMessage(" ");
+            this->printMessage("Through aquiring the black market advance, you also gain 5 Gold once.");
+            this->printMessage(" ");
             break;
         default: break;
     }
@@ -2280,6 +2365,16 @@ void BoardModel::serialize(QDataStream &writer) const
         writer << (int) advanceList[i];
     }
 
+    int tradingPartnersCount = this->tradingPartners.size();
+    writer << tradingPartnersCount;
+
+    QList<Empire> tradingPartners = this->tradingPartners.toList();
+
+    for(int i = 0; i < tradingPartnersCount; ++i)
+    {
+        writer << (int) tradingPartners[i];
+    }
+
     writer << this->buildCity;
     writer << this->buildFarm;
     writer << this->expedition;
@@ -2355,6 +2450,18 @@ void BoardModel::deserialize(QDataStream &reader)
     {
         reader >> advanceID;
         this->advancesAquired.insert(AdvanceModel::Advance(advanceID));
+    }
+
+    int tradingPartnersCount;
+    reader >> tradingPartnersCount;
+
+    int tradingPartner;
+    this->tradingPartners.clear();
+
+    for(int i = 0; i < tradingPartnersCount; ++i)
+    {
+        reader >> tradingPartner;
+        this->tradingPartners.insert(Empire(tradingPartner));
     }
 
     reader >> this->buildCity;

@@ -9,9 +9,9 @@ InitialForestInstruction::InitialForestInstruction(BoardModel *boardModel)
 
 void InitialForestInstruction::initInstruction()
 {
-    this->boardModel->sendMessage(" ");
-    this->boardModel->sendMessage("Place 5 forests on 5 different regions.");
-    this->boardModel->sendMessage("When you are done, press Done...");
+    this->boardModel->printMessage(" ");
+    this->boardModel->printMessage("Place 5 forests on 5 different regions.");
+    this->boardModel->printMessage("When you are done, press Done...");
 }
 
 Instruction *InitialForestInstruction::triggerHex(Qt::MouseButton button, int x, int y)
@@ -41,7 +41,7 @@ Instruction *InitialForestInstruction::triggerDone()
 {
     if(this->boardModel->getForestCount() == 5)
     {
-        this->boardModel->sendMessage(" ");
+        this->boardModel->printMessage(" ");
         QMap<int, RegionModel *> regions = this->boardModel->getRegions();
         QMap<int, RegionModel *> mRegions = this->boardModel->getMountainRegions();
         QMap<int, RegionModel *> fRegions = this->boardModel->getForestRegions();
@@ -64,7 +64,7 @@ Instruction *InitialForestInstruction::triggerDone()
         }
         else
         {
-            this->boardModel->sendMessage("Placing deserts into regions where there are no Mountain and no Forest...");
+            this->boardModel->printMessage("Placing deserts into regions where there are no Mountain and no Forest...");
             foreach(RegionModel *regionModel, regions)
             {
                 regionModel->setDesert(true);
@@ -79,7 +79,7 @@ Instruction *InitialForestInstruction::triggerDone()
     }
     else
     {
-        this->boardModel->sendMessage("Not enough forest placed.");
+        this->boardModel->printMessage("Not enough forest placed.");
     }
 
     return this;

@@ -12,9 +12,9 @@ void InitialMountainInstruction::initInstruction()
     this->boardModel->groupSeas();
     this->boardModel->setChoosingHexesDone();
     this->boardModel->enableRegionSelectableHexes();
-    this->boardModel->sendMessage(" ");
-    this->boardModel->sendMessage("Place 5 mountains on 5 different regions.");
-    this->boardModel->sendMessage("When you are done, press Done...");
+    this->boardModel->printMessage(" ");
+    this->boardModel->printMessage("Place 5 mountains on 5 different regions.");
+    this->boardModel->printMessage("When you are done, press Done...");
 }
 
 Instruction *InitialMountainInstruction::triggerHex(Qt::MouseButton button, int x, int y)
@@ -50,7 +50,7 @@ Instruction *InitialMountainInstruction::triggerDone()
     }
     else
     {
-        this->boardModel->sendMessage("Not enough mountains placed.");
+        this->boardModel->printMessage("Not enough mountains placed.");
     }
 
     return this;

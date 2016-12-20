@@ -3,13 +3,16 @@
 
 #include "Instruction/Instruction.hpp"
 #include "BoardModel.hpp"
+#include "HowManyDialog.hpp"
 
 class MoveTribesInstruction : public Instruction
 {
     BoardModel *boardModel;
+    MoveTribeDialog *moveTribeDialog;
 
 public:
     MoveTribesInstruction(BoardModel *boardModel);
+    ~MoveTribesInstruction();
 
     virtual void initInstruction();
 

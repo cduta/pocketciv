@@ -9,10 +9,10 @@ TribalWarEventInstruction::TribalWarEventInstruction(BoardModel *boardModel, Ins
 
 void TribalWarEventInstruction::initInstruction()
 {
-    this->boardModel->sendMessage("TRIBAL WAR:");
-    this->boardModel->sendMessage(" ");
-    this->boardModel->sendMessage("Press Done to continue.");
-    this->boardModel->sendMessage(" ");
+    this->boardModel->printMessage("TRIBAL WAR:");
+    this->boardModel->printMessage(" ");
+    this->boardModel->printMessage("Press Done to continue.");
+    this->boardModel->printMessage(" ");
     return;
 }
 
@@ -29,15 +29,15 @@ Instruction *TribalWarEventInstruction::triggerHex(Qt::MouseButton button, int x
     {
         this->borderingRegionsLeft--;
         regionModel->decimateTribes(this->warringTribes);
-        this->boardModel->sendMessage(QString("The tribes of region %1 are reduced by %2.")
+        this->boardModel->printMessage(QString("The tribes of region %1 are reduced by %2.")
                                       .arg(regionModel->getRegion())
                                       .arg(this->warringTribes));
 
         if(this->borderingRegionsLeft == 0)
         {
             this->boardModel->refActiveRegion()->decimateTribes(3);
-            this->boardModel->sendMessage(" ");
-            this->boardModel->sendMessage("Reduce 3 tribes in the active region because of the tribal war uproar.");
+            this->boardModel->printMessage(" ");
+            this->boardModel->printMessage("Reduce 3 tribes in the active region because of the tribal war uproar.");
             return this->endEvent();
         }
     }
@@ -63,14 +63,14 @@ Instruction *TribalWarEventInstruction::triggerDone()
 
         if(tribes == 0)
         {
-            this->boardModel->sendMessage("The active region has NO tribes.");
+            this->boardModel->printMessage("The active region has NO tribes.");
             this->boardModel->unsetActiveRegion();
             return this->endEvent();
         }
         else
         {
             this->warringTribes = tribes*2;
-            this->boardModel->sendMessage(QString("The active region has %1 warring tribes.").arg(this->warringTribes));
+            this->boardModel->printMessage(QString("The active region has %1 warring tribes.").arg(this->warringTribes));
         }
 
         QMap<int, RegionModel *> possibleRegions = this->boardModel->getAdjacentRegions(activeRegion->getRegion());
@@ -87,37 +87,37 @@ Instruction *TribalWarEventInstruction::triggerDone()
 
         this->borderingRegionsLeft = 0;
 
-        this->boardModel->sendMessage(" ");
+        this->boardModel->printMessage(" ");
 
         if(this->borderingRegions.size() == 0)
         {
-            this->boardModel->sendMessage("There are no bordering regions with tribes.");
+            this->boardModel->printMessage("There are no bordering regions with tribes.");
         }
         else if(this->borderingRegions.size() == 1)
         {
-            this->boardModel->sendMessage("There is only one bordering region with tribes.");
+            this->boardModel->printMessage("There is only one bordering region with tribes.");
             this->borderingRegions.values().at(0)->decimateTribes(this->warringTribes);
-            this->boardModel->sendMessage(QString("The tribes of region %1 are reduced by %2.")
+            this->boardModel->printMessage(QString("The tribes of region %1 are reduced by %2.")
                                           .arg(this->borderingRegions.values().at(0)->getRegion())
                                           .arg(this->warringTribes));
         }
         else if(this->borderingRegions.size() == 2)
         {
-            this->boardModel->sendMessage("There are exactly two bordering region with tribes.");
+            this->boardModel->printMessage("There are exactly two bordering region with tribes.");
             this->borderingRegions.values().at(0)->decimateTribes(this->warringTribes);
-            this->boardModel->sendMessage(QString("The tribes of region %1 are reduced by %2.")
+            this->boardModel->printMessage(QString("The tribes of region %1 are reduced by %2.")
                                           .arg(this->borderingRegions.values().at(0)->getRegion())
                                           .arg(this->warringTribes));
             this->borderingRegions.values().at(1)->decimateTribes(this->warringTribes);
-            this->boardModel->sendMessage(QString("The tribes of region %1 are reduced by %2.")
+            this->boardModel->printMessage(QString("The tribes of region %1 are reduced by %2.")
                                           .arg(this->borderingRegions.values().at(1)->getRegion())
                                           .arg(this->warringTribes));
         }
         else
         {
-            this->boardModel->sendMessage(QString("Possible regions to wage war against are regions $1.").arg(Common::listUpRegions(possibleRegions.values())));
-            this->boardModel->sendMessage("Choose two of those regions.");
-            this->boardModel->sendMessage("In those regions, the tribes are reduced by the amount of warring tribes.");
+            this->boardModel->printMessage(QString("Possible regions to wage war against are regions $1.").arg(Common::listUpRegions(possibleRegions.values())));
+            this->boardModel->printMessage("Choose two of those regions.");
+            this->boardModel->printMessage("In those regions, the tribes are reduced by the amount of warring tribes.");
             this->borderingRegionsLeft = 2;
             return this;
         }
@@ -129,8 +129,8 @@ Instruction *TribalWarEventInstruction::triggerDone()
     }
 
     this->boardModel->refActiveRegion()->decimateTribes(3);
-    this->boardModel->sendMessage(" ");
-    this->boardModel->sendMessage("Reduce 3 tribes in the active region because of the tribal war uproar.");
+    this->boardModel->printMessage(" ");
+    this->boardModel->printMessage("Reduce 3 tribes in the active region because of the tribal war uproar.");
     this->boardModel->unsetActiveRegion();
     return this->endEvent();
 }

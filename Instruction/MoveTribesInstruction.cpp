@@ -1,19 +1,39 @@
 #include "MoveTribesInstruction.hpp"
 
-#include "HowManyDialog.hpp"
 #include "Instruction/MainPhaseInstruction.hpp"
 #include "Instruction/DialogInstruction.hpp"
 #include "Instruction/EndOfEraInstruction.hpp"
 
 MoveTribesInstruction::MoveTribesInstruction(BoardModel *boardModel)
-    : Instruction(), boardModel(boardModel)
+    : Instruction(), boardModel(boardModel), moveTribeDialog(NULL)
 {}
+
+MoveTribesInstruction::~MoveTribesInstruction()
+{
+    this->moveTribeDialog->deleteLater();
+}
 
 void MoveTribesInstruction::initInstruction()
 {
-    this->boardModel->sendMessage("POPULATION MOVEMENT:");
-    this->boardModel->sendMessage("Move tribes from one to another region. Every tribe can be moved once.");
-    this->boardModel->sendMessage("When you are done, press Done...");
+    this->boardModel->printMessage("POPULATION MOVEMENT:");
+    this->boardModel->printMessage("Move tribes from one to another region.");
+    if(this->boardModel->hasAdvanceAquired(AdvanceModel::EQUESTRIAN))
+    {
+        this->boardModel->printMessage(" ");
+        this->boardModel->printMessage("Advance (EQUESTRIAN):");
+        this->boardModel->printMessage("Every tribe can be moved once into any");
+        this->boardModel->printMessage("region not seperated by a SEA or FRONTIER.");
+        this->boardModel->printMessage(" ");
+    }
+    else
+    {
+        this->boardModel->printMessage(" ");
+        this->boardModel->printMessage("Every tribe can be moved once into an adjacent region.");
+        this->boardModel->printMessage(" ");
+    }
+
+    this->boardModel->printMessage("When you are done, press Done...");
+    this->boardModel->printMessage(" ");
 }
 
 Instruction *MoveTribesInstruction::triggerHex(Qt::MouseButton button, int x, int y)
@@ -50,19 +70,20 @@ Instruction *MoveTribesInstruction::triggerHex(Qt::MouseButton button, int x, in
                 if(this->boardModel->canMoveTribes(fromRegion->getRegion(), toRegion->getRegion()))
                 {
                     this->boardModel->setSelectRegion(toRegion->getRegion(), true);
+                    this->moveTribeDialog = new MoveTribeDialog(
+                                this->boardModel,
+                                QString("of %1 Tribes from region %2 to region %3.")
+                                .arg(QString::number(fromRegion->getTribes()))
+                                .arg(fromRegion->getRegion())
+                                .arg(toRegion->getRegion()),
+                                fromRegion->getTribes(),
+                                fromRegion,
+                                toRegion);
                     return new DialogInstruction(
                                 this->boardModel,
                                 this,
-                                new MoveTribeDialog(
-                                    this->boardModel,
-                                    QString("of %1 Tribes from region %2 to region %3.")
-                                    .arg(QString::number(fromRegion->getTribes()))
-                                    .arg(fromRegion->getRegion())
-                                    .arg(toRegion->getRegion()),
-                                    fromRegion->getTribes(),
-                                    fromRegion,
-                                    toRegion)
-                                );
+                                this->moveTribeDialog);
+
                 }
             }
         }
@@ -78,15 +99,15 @@ Instruction *MoveTribesInstruction::triggerDone()
 
     if(event == NULL)
     {
-        this->boardModel->sendMessage("Nothing occured...");
-        this->boardModel->sendMessage(" ");
+        this->boardModel->printMessage("Nothing occured...");
+        this->boardModel->printMessage(" ");
         main->initInstruction();
         return main;
     }
 
     this->boardModel->mergeAllMovedTribes();
     this->boardModel->unselectAllRegions();
-    this->boardModel->sendMessage(" ");
+    this->boardModel->printMessage(" ");
     Instruction *eventInstruction = event->happen(main);
     eventInstruction->initInstruction();
     Instruction *next;

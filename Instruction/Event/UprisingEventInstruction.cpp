@@ -8,10 +8,10 @@ UprisingEventInstruction::UprisingEventInstruction(BoardModel *boardModel, Instr
 
 void UprisingEventInstruction::initInstruction()
 {
-    this->boardModel->sendMessage("UPRISING:");
-    this->boardModel->sendMessage(" ");
-    this->boardModel->sendMessage("Press Done to continue.");
-    this->boardModel->sendMessage(" ");
+    this->boardModel->printMessage("UPRISING:");
+    this->boardModel->printMessage(" ");
+    this->boardModel->printMessage("Press Done to continue.");
+    this->boardModel->printMessage(" ");
     return;
 }
 
@@ -32,9 +32,9 @@ Instruction *UprisingEventInstruction::triggerDone()
         activeRegion->decimateTribes(2);
         activeRegion->setFarm(false);
 
-        this->boardModel->sendMessage(" ");
-        this->boardModel->sendMessage("An uprising decreased the City AV by 2, decimated the tribes by 2 and");
-        this->boardModel->sendMessage("decimated the farm in the active region.");
+        this->boardModel->printMessage(" ");
+        this->boardModel->printMessage("An uprising decreased the City AV by 2, decimated the tribes by 2 and");
+        this->boardModel->printMessage("decimated the farm in the active region.");
     }
 
     this->boardModel->unsetActiveRegion();

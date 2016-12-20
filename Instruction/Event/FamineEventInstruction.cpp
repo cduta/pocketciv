@@ -8,10 +8,10 @@ FamineEventInstruction::FamineEventInstruction(BoardModel *boardModel, Instructi
 
 void FamineEventInstruction::initInstruction()
 {
-    this->boardModel->sendMessage("FAMINE:");
-    this->boardModel->sendMessage(" ");
-    this->boardModel->sendMessage("Press done to continue.");
-    this->boardModel->sendMessage(" ");
+    this->boardModel->printMessage("FAMINE:");
+    this->boardModel->printMessage(" ");
+    this->boardModel->printMessage("Press done to continue.");
+    this->boardModel->printMessage(" ");
     return;
 }
 
@@ -25,9 +25,9 @@ Instruction *FamineEventInstruction::triggerDone()
         POCKET_CIV_END_OF_ERA_CHECK
     }
 
-    this->boardModel->sendMessage("Famine decimates all tribes, the farm and");
-    this->boardModel->sendMessage("reduces the City AV by 2 in the active region.");
-    this->boardModel->sendMessage("If the city AV is 0, the city is decimated.");
+    this->boardModel->printMessage("Famine decimates all tribes, the farm and");
+    this->boardModel->printMessage("reduces the City AV by 2 in the active region.");
+    this->boardModel->printMessage("If the city AV is 0, the city is decimated.");
 
     RegionModel *activeRegion = this->boardModel->refActiveRegion();
 

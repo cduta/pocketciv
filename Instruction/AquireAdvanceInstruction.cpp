@@ -11,34 +11,34 @@ AquireAdvanceInstruction::AquireAdvanceInstruction(BoardModel *boardModel, Instr
 
 void AquireAdvanceInstruction::initInstruction()
 {
-    this->boardModel->sendMessage("AQUIRE ADVANCE:");
+    this->boardModel->printMessage("AQUIRE ADVANCE:");
 
     if(this->boardModel->getCityAVCount() > this->boardModel->getAdvancesAquired().size())
     {
-        this->boardModel->sendMessage("Choose a region with a city to aquire an advance");
-        this->boardModel->sendMessage("using the ressources of that region.");
-        this->boardModel->sendMessage("You can aquire one advance per region per turn.");
-        this->boardModel->sendMessage("Remember: At least 1 tribe has to remain anywhere in the Empire, when decimating Tribes!");
-        this->boardModel->sendMessage(" ");
-        this->boardModel->sendMessage("When you are done, press Done.");
-        this->boardModel->sendMessage(" ");
+        this->boardModel->printMessage("Choose a region with a city to aquire an advance");
+        this->boardModel->printMessage("using the ressources of that region.");
+        this->boardModel->printMessage("You can aquire one advance per region per turn.");
+        this->boardModel->printMessage("Remember: At least 1 tribe has to remain anywhere in the Empire, when decimating Tribes!");
+        this->boardModel->printMessage(" ");
+        this->boardModel->printMessage("When you are done, press Done.");
+        this->boardModel->printMessage(" ");
         this->boardModel->disableButtons();
         this->boardModel->setDoneButton(true);
         this->boardModel->selectAdvanceableRegions();
     }
     else
     {
-        this->boardModel->sendMessage("It's not possible for you to aquire an advance,");
-        this->boardModel->sendMessage("while your the amount of advances you aquired is equal or higher than");
-        this->boardModel->sendMessage("the total amount of City AV in your empire.");
-        this->boardModel->sendMessage(" ");
-        this->boardModel->sendMessage(QString("Aquired advances: %1")
+        this->boardModel->printMessage("It's not possible for you to aquire an advance,");
+        this->boardModel->printMessage("while your the amount of advances you aquired is equal or higher than");
+        this->boardModel->printMessage("the total amount of City AV in your empire.");
+        this->boardModel->printMessage(" ");
+        this->boardModel->printMessage(QString("Aquired advances: %1")
                                       .arg(this->boardModel->getAdvancesAquired().size()));
-        this->boardModel->sendMessage(QString("Total City AV: %1")
+        this->boardModel->printMessage(QString("Total City AV: %1")
                                       .arg(this->boardModel->getCityAVCount()));
-        this->boardModel->sendMessage(" ");
-        this->boardModel->sendMessage("Press Done to continue.");
-        this->boardModel->sendMessage(" ");
+        this->boardModel->printMessage(" ");
+        this->boardModel->printMessage("Press Done to continue.");
+        this->boardModel->printMessage(" ");
 
         this->boardModel->disableButtons();
         this->boardModel->setDoneButton(true);

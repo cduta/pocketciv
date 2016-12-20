@@ -8,22 +8,22 @@ PopulationGrowthInstruction::PopulationGrowthInstruction(BoardModel *boardModel)
 
 void PopulationGrowthInstruction::initInstruction()
 {
-    this->boardModel->sendMessage(" ");
-    this->boardModel->sendMessage("POPULATION GROWTH:");
-    this->boardModel->sendMessage("Added 1 tribe to any region with at least 1 Tribe on it.");
+    this->boardModel->printMessage(" ");
+    this->boardModel->printMessage("POPULATION GROWTH:");
+    this->boardModel->printMessage("Added 1 tribe to any region with at least 1 Tribe on it.");
     this->boardModel->populationGrowth();
-    this->boardModel->sendMessage(" ");
+    this->boardModel->printMessage(" ");
     if(this->boardModel->getTribeCount() < 3)
     {
-        this->boardModel->sendMessage("The EMPIRE holds less than 3 tribes.");
-        this->boardModel->sendMessage("Put as many tribes into any region until there are 3 tribes.");
-        this->boardModel->sendMessage("When you are done, press done.");
-        this->boardModel->sendMessage(" ");
+        this->boardModel->printMessage("The EMPIRE holds less than 3 tribes.");
+        this->boardModel->printMessage("Put as many tribes into any region until there are 3 tribes.");
+        this->boardModel->printMessage("When you are done, press done.");
+        this->boardModel->printMessage(" ");
     }
     else
     {
-        this->boardModel->sendMessage("Press done to continue.");
-        this->boardModel->sendMessage(" ");
+        this->boardModel->printMessage("Press done to continue.");
+        this->boardModel->printMessage(" ");
     }
     return;
 }
@@ -62,7 +62,7 @@ Instruction *PopulationGrowthInstruction::triggerDone()
 {
     if(this->boardModel->getTribeCount()+this->boardModel->getAllMovedTribes() < 3)
     {
-        this->boardModel->sendMessage("There are still less than 3 tribes in the EMPIRE.");
+        this->boardModel->printMessage("There are still less than 3 tribes in the EMPIRE.");
     }
     else
     {

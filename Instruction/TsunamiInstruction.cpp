@@ -15,8 +15,8 @@ TsunamiInstruction::TsunamiInstruction(BoardModel *boardModel, RegionModel *acti
 
 void TsunamiInstruction::initInstruction()
 {
-    this->boardModel->sendMessage(QString("TSUNAMI:"));
-    this->boardModel->sendMessage(" ");
+    this->boardModel->printMessage(QString("TSUNAMI:"));
+    this->boardModel->printMessage(" ");
 
     this->affectedRegions.append(this->activeRegion);
 
@@ -31,14 +31,14 @@ void TsunamiInstruction::initInstruction()
         }
     }
 
-    this->boardModel->sendMessage(QString("Regions affected by the tsunami is the active region (region %1) and")
+    this->boardModel->printMessage(QString("Regions affected by the tsunami is the active region (region %1) and")
                                   .arg(this->activeRegion->getRegion()));
-    this->boardModel->sendMessage(QString("regions bordering on the active region and the sea."));
-    this->boardModel->sendMessage(QString("The affected region(s): %1.")
+    this->boardModel->printMessage(QString("regions bordering on the active region and the sea."));
+    this->boardModel->printMessage(QString("The affected region(s): %1.")
                                   .arg(Common::listUpRegions(this->affectedRegions)));
-    this->boardModel->sendMessage(" ");
-    this->boardModel->sendMessage("Press Done to continue.");
-    this->boardModel->sendMessage(" ");
+    this->boardModel->printMessage(" ");
+    this->boardModel->printMessage("Press Done to continue.");
+    this->boardModel->printMessage(" ");
     return;
 }
 
@@ -48,24 +48,24 @@ Instruction *TsunamiInstruction::triggerDone()
     {
         this->step = 1;
         this->tsunamiDamage = this->boardModel->drawCard()->getShapeNumberSum(this->firstEvent->getShapeNumberAmounts());
-        this->boardModel->sendMessage(" ");
-        this->boardModel->sendMessage(QString("The damage in each affected region caused by the tsunami is %1.")
+        this->boardModel->printMessage(" ");
+        this->boardModel->printMessage(QString("The damage in each affected region caused by the tsunami is %1.")
                                       .arg(this->tsunamiDamage));
 
         if(this->boardModel->hasAdvanceAquired(AdvanceModel::CIVIL_SERVICE))
         {
-            this->boardModel->sendMessage("Advance (CIVIL SERVICE):");
+            this->boardModel->printMessage("Advance (CIVIL SERVICE):");
             this->damagePerTribe = 3;
             this->damagePerCityAV = 5;
         }
 
-        this->boardModel->sendMessage(QString("For every %1 damage, one tribe will decimated.")
+        this->boardModel->printMessage(QString("For every %1 damage, one tribe will decimated.")
                                       .arg(this->damagePerTribe));
-        this->boardModel->sendMessage(QString("With no tribes left, for every %1 damage, one City AV will be reduced.")
+        this->boardModel->printMessage(QString("With no tribes left, for every %1 damage, one City AV will be reduced.")
                                       .arg(this->damagePerCityAV));
-        this->boardModel->sendMessage(QString("With the city destroyed, for every %1 damage, one Wonder will be decimated.")
+        this->boardModel->printMessage(QString("With the city destroyed, for every %1 damage, one Wonder will be decimated.")
                                       .arg(this->damagePerWonder));
-        this->boardModel->sendMessage(" ");
+        this->boardModel->printMessage(" ");
 
         POCKET_CIV_END_OF_ERA_CHECK
     }
@@ -116,24 +116,24 @@ Instruction *TsunamiInstruction::triggerDone()
             }
         }
 
-        this->boardModel->sendMessage(QString("In region %1, the tsunami results in the following losses.")
+        this->boardModel->printMessage(QString("In region %1, the tsunami results in the following losses.")
                                       .arg(affectedRegion->getRegion()));
-        this->boardModel->sendMessage(QString("Tribes: %1")
+        this->boardModel->printMessage(QString("Tribes: %1")
                                       .arg(totalTribeDamage));
-        this->boardModel->sendMessage(QString("CityAV: %1")
+        this->boardModel->printMessage(QString("CityAV: %1")
                                       .arg(totalCityDamage));
 
-        this->boardModel->sendMessage(" ");
-        this->boardModel->sendMessage(QString("Affected regions left: %1.")
+        this->boardModel->printMessage(" ");
+        this->boardModel->printMessage(QString("Affected regions left: %1.")
                                       .arg(Common::listUpRegions(this->affectedRegions)));
-        this->boardModel->sendMessage("Press Done to continue.");
-        this->boardModel->sendMessage(" ");
+        this->boardModel->printMessage("Press Done to continue.");
+        this->boardModel->printMessage(" ");
         return this;
     }
 
     this->boardModel->unsetActiveRegion();
-    this->boardModel->sendMessage("The Tsunami has subsided and the event ends.");
-    this->boardModel->sendMessage(" ");
+    this->boardModel->printMessage("The Tsunami has subsided and the event ends.");
+    this->boardModel->printMessage(" ");
     this->nextInstruction->setKeepInstruction(false);
     this->nextInstruction->initInstruction();
     return this->nextInstruction;

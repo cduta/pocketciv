@@ -7,15 +7,15 @@ EventInstruction::EventInstruction(BoardModel *boardModel, Instruction *nextInst
 void EventInstruction::drawActiveRegion(bool isBad)
 {
     this->boardModel->setActiveRegion(this->boardModel->drawCard()->getShapeNumbers().value(Event::RED_CIRCLE, 0), isBad);
-    this->boardModel->sendMessage(QString("The active region is %1.").arg(this->boardModel->refActiveRegion()->getRegion()));
-    this->boardModel->sendMessage(" ");
+    this->boardModel->printMessage(QString("The active region is %1.").arg(this->boardModel->refActiveRegion()->getRegion()));
+    this->boardModel->printMessage(" ");
     return;
 }
 
 Instruction *EventInstruction::endEvent()
 {
-    this->boardModel->sendMessage("The event has ended...");
-    this->boardModel->sendMessage(" ");
+    this->boardModel->printMessage("The event has ended...");
+    this->boardModel->printMessage(" ");
     this->nextInstruction->setKeepInstruction(false);
     this->nextInstruction->initInstruction();
     return this->nextInstruction;

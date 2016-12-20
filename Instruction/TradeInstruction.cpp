@@ -11,10 +11,10 @@ TradeInstruction::TradeInstruction(BoardModel *boardModel, Instruction *nextInst
 
 void TradeInstruction::initInstruction()
 {
-    this->boardModel->sendMessage(QString("%1 TRADE:").arg(this->what));
-    this->boardModel->sendMessage(" ");
-    this->boardModel->sendMessage("Press Done to continue.");
-    this->boardModel->sendMessage(" ");
+    this->boardModel->printMessage(QString("%1 TRADE:").arg(this->what));
+    this->boardModel->printMessage(" ");
+    this->boardModel->printMessage("Press Done to continue.");
+    this->boardModel->printMessage(" ");
     return;
 }
 
@@ -30,17 +30,17 @@ Instruction *TradeInstruction::triggerDone()
     if(this->step == 1)
     {
         this->step = 2;
-        this->boardModel->sendMessage(QString("When trading with %1, you gained %2 gold.").arg(this->what).arg(this->goldGain));
+        this->boardModel->printMessage(QString("When trading with %1, you gained %2 gold.").arg(this->what).arg(this->goldGain));
         this->boardModel->gainGold(this->goldGain);
-        this->boardModel->sendMessage(QString("The %1 TRADE has ended.").arg(this->what));
-        this->boardModel->sendMessage(" ");
+        this->boardModel->printMessage(QString("The %1 TRADE has ended.").arg(this->what));
+        this->boardModel->printMessage(" ");
     }
 
     if(this->boardModel->hasAdvanceAquired(AdvanceModel::CULTURE_OF_THIEVES) && this->step == 2)
     {
         this->step = 3;
-        this->boardModel->sendMessage("Advance (CULTURE OF THIEVES):");
-        this->boardModel->sendMessage(QString("Do you want to try and steal gold from %1?")
+        this->boardModel->printMessage("Advance (CULTURE OF THIEVES):");
+        this->boardModel->printMessage(QString("Do you want to try and steal gold from %1?")
                                       .arg(this->what));
 
         this->boardModel->setDoneButton(false);
@@ -70,7 +70,7 @@ Instruction *TradeInstruction::triggerDone()
 void TradeInstruction::stealingDecided(QAbstractButton *button)
 {
     this->boardModel->setDoneButton(true);
-    this->boardModel->sendDoneText("Done");
+    this->boardModel->setDoneText("Done");
     this->step = -1;
 
     QMessageBox::ButtonRole buttonRole =  this->stealingDecision.buttonRole(button);
@@ -78,16 +78,16 @@ void TradeInstruction::stealingDecided(QAbstractButton *button)
     switch(buttonRole)
     {
         case QMessageBox::YesRole:
-            this->boardModel->sendMessage(QString("Begin stealing from %1...")
+            this->boardModel->printMessage(QString("Begin stealing from %1...")
                                           .arg(this->what));
             this->nextInstruction = new StealingInstruction(this->boardModel, this->what, this->nextInstruction);
             break;
         default:
-            this->boardModel->sendMessage("You decided not to steal any gold.");
+            this->boardModel->printMessage("You decided not to steal any gold.");
             break;
     }
 
-    this->boardModel->sendMessage(" ");
-    this->boardModel->sendMessage("Press Done to Continue...");
-    this->boardModel->sendMessage(" ");
+    this->boardModel->printMessage(" ");
+    this->boardModel->printMessage("Press Done to Continue...");
+    this->boardModel->printMessage(" ");
 }
