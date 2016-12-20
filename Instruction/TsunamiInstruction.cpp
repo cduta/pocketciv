@@ -52,19 +52,31 @@ Instruction *TsunamiInstruction::triggerDone()
         this->boardModel->printMessage(QString("The damage in each affected region caused by the tsunami is %1.")
                                       .arg(this->tsunamiDamage));
 
+        QString advanceInfo = "";
         if(this->boardModel->hasAdvanceAquired(AdvanceModel::CIVIL_SERVICE))
         {
-            this->boardModel->printMessage("Advance (CIVIL SERVICE):");
+            advanceInfo = " [Advance (CIVIL SERVICE)] ";
             this->damagePerTribe = 3;
             this->damagePerCityAV = 5;
         }
 
-        this->boardModel->printMessage(QString("For every %1 damage, one tribe will decimated.")
-                                      .arg(this->damagePerTribe));
-        this->boardModel->printMessage(QString("With no tribes left, for every %1 damage, one City AV will be reduced.")
-                                      .arg(this->damagePerCityAV));
-        this->boardModel->printMessage(QString("With the city destroyed, for every %1 damage, one Wonder will be decimated.")
-                                      .arg(this->damagePerWonder));
+        this->boardModel->printMessage(QString("For every %1 damage%2, one tribe will decimated.")
+                                      .arg(this->damagePerTribe)
+                                      .arg(advanceInfo));
+        this->boardModel->printMessage(QString("With no tribes left, for every %1 damage%2, one City AV will be reduced.")
+                                      .arg(this->damagePerCityAV)
+                                      .arg(advanceInfo));
+
+        advanceInfo = "";
+        if(this->boardModel->hasAdvanceAquired(AdvanceModel::ENGINEERING))
+        {
+            advanceInfo = " [Advance (ENGINEERING)] ";
+            this->damagePerWonder = 10;
+        }
+
+        this->boardModel->printMessage(QString("With the city destroyed, for every %1 damage%2, one Wonder will be decimated.")
+                                      .arg(this->damagePerWonder)
+                                      .arg(advanceInfo));
         this->boardModel->printMessage(" ");
 
         POCKET_CIV_END_OF_ERA_CHECK

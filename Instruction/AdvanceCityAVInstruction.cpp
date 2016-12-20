@@ -45,7 +45,18 @@ void AdvanceCityAVInstruction::initInstruction()
         this->boardModel->printMessage("The maximum City AV is 4.");
         this->boardModel->printMessage(" ");
     }
-    else
+
+    if(!this->boardModel->getAdvancesAquired().contains(AdvanceModel::ARCHITECTURE) &&
+       this->boardModel->getAdvancesAquired().contains(AdvanceModel::ENGINEERING))
+    {
+        this->maximumCityAV = 3;
+        this->boardModel->printMessage("Advance (ENGINEERING):");
+        this->boardModel->printMessage("The maximum City AV is 3.");
+        this->boardModel->printMessage(" ");
+    }
+
+    if(!this->boardModel->getAdvancesAquired().contains(AdvanceModel::ARCHITECTURE) &&
+       !this->boardModel->getAdvancesAquired().contains(AdvanceModel::ENGINEERING))
     {
         this->maximumCityAV = 2;
         this->boardModel->printMessage("The maximum City AV is 2.");

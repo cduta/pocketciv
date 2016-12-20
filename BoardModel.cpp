@@ -1232,9 +1232,9 @@ void BoardModel::initializeCards()
     positive.append("+ Upkeep (Advance City AV)\n"
                     "Maximum City AV is now 3.\n");
     positive.append("+ Event (EARTHQUAKE)\n"
-                    "Cities hit by the earthquake and about to be decimated, have their City AV set to 1.\n");
+                    "Cities hit by the EARTHQUAKE which then have their City AV reduced below 1, instead have their City AV set to 1.\n");
     positive.append("+ Event (VOLCANO)\n"
-                    "Cities hit by anything from this event can't be reduced below a City AV of 1 and any decimated Cities become Cities with City AV 1.\n");
+                    "Cities hit by the VOLCANO which then have their City AV reduced below 1, instead have their City AV set to 1.\n");
     positive.append("+ Event (TSUNAMI)\n"
                     "Instead of decimating 1 Wonder per 3 damage, decimate 1 Wonder per 10 damage.\n");
     advances.insert(AdvanceModel::ENGINEERING,

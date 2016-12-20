@@ -14,6 +14,10 @@ void EarthquakeEventInstruction::initInstruction()
 {
     this->boardModel->printMessage("EARTHQUAKE:");
     this->boardModel->printMessage(" ");
+    this->boardModel->printMessage("Advance (ENGINEERING):");
+    this->boardModel->printMessage("Cities hit by the EARTHQUAKE which then have their CityAV");
+    this->boardModel->printMessage("reduced below 1, instead have their City AV set to 1.");
+    this->boardModel->printMessage(" ");
     this->boardModel->printMessage("Press done to continue.");
     this->boardModel->printMessage(" ");
     return;
@@ -90,12 +94,22 @@ Instruction *EarthquakeEventInstruction::triggerDone()
             this->boardModel->printMessage("The active region has a fault line.");
 
             this->step = 2;
+            int currentCityAV = activeRegion->getCityAV();
+            int savedCityAC = 0;
+
             activeRegion->decreaseCityAV(3);
+
+            if(this->boardModel->hasAdvanceAquired(AdvanceModel::ENGINEERING) && activeRegion->getCityAV() < 1)
+            {
+                savedCityAC = 1 - (currentCityAV - 3);
+                activeRegion->setCityAV(1);
+            }
+
             activeRegion->decimateTribes(4);
             activeRegion->decimateWonders();
 
             this->boardModel->printMessage(" ");
-            this->boardModel->printMessage("The earthquake decreased 3 City AV and decimated 4 Tribes in the active region.");
+            this->boardModel->printMessage("The earthquake decreased %1 City AV and decimated 4 Tribes in the active region.").arg(3 - savedCityAC);
             this->boardModel->printMessage("It also decimated all wonders in the active region.");
 
             this->borderingRegions = this->boardModel->getAdjacentRegions(activeRegion->getRegion());
@@ -143,7 +157,7 @@ Instruction *EarthquakeEventInstruction::triggerDone()
                 else
                 {
                     this->boardModel->printMessage("But there is no region without a fault line bordering on the active region.");
-                    this->boardModel->printMessage("Therefore, nothing happens.");
+                    this->boardModel->printMessage("Therefore: no faultlines are created.");
                     this->boardModel->printMessage(" ");
                 }
 
@@ -155,12 +169,20 @@ Instruction *EarthquakeEventInstruction::triggerDone()
         {
             this->boardModel->printMessage("The active region has no fault line.");
 
+            int savedCityAV = 0;
             activeRegion->decreaseCityAV(1);
+
+            if(this->boardModel->hasAdvanceAquired(AdvanceModel::ENGINEERING) && activeRegion->getCityAV() < 1)
+            {
+                savedCityAV = 1;
+                activeRegion->setCityAV(1);
+            }
+
             activeRegion->decimateTribes(1);
             activeRegion->setFaultLine(true);
 
             this->boardModel->printMessage(" ");
-            this->boardModel->printMessage("The earthquake decreased 1 City AV and decimated 1 Tribe in the active region.");
+            this->boardModel->printMessage("The earthquake decreased %1 City AV and decimated 1 Tribe in the active region.").arg(1 - savedCityAV);
             this->boardModel->printMessage("It also created a fault line in the active region.");
             this->boardModel->printMessage(" ");
 

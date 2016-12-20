@@ -7,6 +7,7 @@ AttackInstruction::AttackInstruction(BoardModel *boardModel, Instruction *nextIn
 {
     this->nextInstruction->setKeepInstruction(true);
     this->cityAVAttackReduce = 5;
+    this->firstAttack = true;
 }
 
 void AttackInstruction::initInstruction()
@@ -73,6 +74,17 @@ Instruction *AttackInstruction::triggerDone()
     int newCityAV = cityAV;
     int goldLost = 0;
 
+    if(!this->firstAttack &&
+       tribes > 0 &&
+       this->boardModel->hasAdvanceAquired(AdvanceModel::EQUESTRIAN))
+    {
+        this->attackingForce -= 2;
+        this->boardModel->printMessage("Advance (EQUESTRIAN):");
+        this->boardModel->printMessage("Because the attacking forces move into a region with tribes,");
+        this->boardModel->printMessage("the attacking force is reduced by 2.");
+        this->boardModel->printMessage(" ");
+    }
+
     while(newTribes > 0 && this->attackingForce > 0)
     {
         this->attackingForce--;
@@ -114,6 +126,8 @@ Instruction *AttackInstruction::triggerDone()
                                   .arg(goldLost));
     this->boardModel->printMessage(QString("There is %1 attacking force left.")
                                   .arg(this->attackingForce));
+
+    this->firstAttack = false;
 
     if(this->attackingForce > 0)
     {
@@ -161,8 +175,10 @@ Instruction *AttackInstruction::triggerDone()
             this->boardModel->printMessage(" ");
             return this;
         }
-
-        this->boardModel->printMessage("There is no region left for the attacking force to move into.");
+        else
+        {
+            this->boardModel->printMessage("There is no region left for the attacking force to move into.");
+        }
     }
     else
     {

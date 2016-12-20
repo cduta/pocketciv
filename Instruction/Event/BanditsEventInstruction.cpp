@@ -41,7 +41,18 @@ Instruction *BanditsEventInstruction::triggerDone()
                 this->boardModel->printMessage("Advance (DEMOCRACY):");
                 this->boardModel->printMessage(QString("The attacking force is substracted by %1, the number of the BLUE HEXAGON of the ORIGINAL event card.")
                                               .arg(democracy));
+                this->boardModel->printMessage(" ");
                 this->attackingForce -= democracy;
+            }
+
+            if(this->boardModel->hasAdvanceAquired(AdvanceModel::EQUESTRIAN))
+            {
+                int democracy = this->boardModel->refOriginalCard()->getShapeNumbers().value(Event::BLUE_HEXAGON, 0);
+                this->boardModel->printMessage("Advance (EQUESTRIAN):");
+                this->boardModel->printMessage(QString("The attacking force is increased by %1, the number of the BLUE HEXAGON of the ORIGINAL event card.")
+                                              .arg(democracy));
+                this->boardModel->printMessage(" ");
+                this->attackingForce += democracy;
             }
 
             this->boardModel->printMessage(QString("The attacking force of the bandits is %1.").arg(this->attackingForce));

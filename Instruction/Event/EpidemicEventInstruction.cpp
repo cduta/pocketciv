@@ -179,7 +179,22 @@ Instruction *EpidemicEventInstruction::continueEpidemic()
         return this->endEvent();
     }
 
-    QMap<int, RegionModel *> adjacentRegions = this->boardModel->getAdjacentRegions(this->boardModel->refActiveRegion()->getRegion());
+    QMap<int, RegionModel *> adjacentRegions;
+
+    if(this->boardModel->hasAdvanceAquired(AdvanceModel::EQUESTRIAN))
+    {
+        this->boardModel->printMessage(" ");
+        this->boardModel->printMessage("Advance (EQUESTRIAN):");
+        this->boardModel->printMessage("The EPIDEMIC moves is able to spread into any");
+        this->boardModel->printMessage("region not seperated by a SEA or FRONTIER.");
+        this->boardModel->printMessage(" ");
+        adjacentRegions = this->boardModel->getContinentRegions(this->boardModel->refActiveRegion()->getRegion());
+    }
+    else
+    {
+        adjacentRegions = this->boardModel->getAdjacentRegions(this->boardModel->refActiveRegion()->getRegion());
+    }
+
     QMap<int, RegionModel *> adjacentRegionsWithTribes;
 
     foreach(int region, adjacentRegions.keys())
@@ -192,13 +207,25 @@ Instruction *EpidemicEventInstruction::continueEpidemic()
 
     if(adjacentRegionsWithTribes.size() == 0)
     {
-        this->boardModel->printMessage(QString("No adjacent regions has any tribes and the EPIDEMIC is stopped."));
+        QString adjacentString = " adjacent ";
+        if(this->boardModel->hasAdvanceAquired(AdvanceModel::EQUESTRIAN))
+        {
+            adjacentString = " ";
+        }
+
+        this->boardModel->printMessage(QString("No%1regions have any tribes and the EPIDEMIC is stopped.").arg(adjacentString));
         this->boardModel->unsetActiveRegion();
         return this->endEvent();
     }
     else
     {
-        this->boardModel->printMessage("Choose the region with tribes into which the EPIDEMIC will spread.");
+        QString adjacentString = " an adjacent ";
+        if(this->boardModel->hasAdvanceAquired(AdvanceModel::EQUESTRIAN))
+        {
+            adjacentString = " a ";
+        }
+
+        this->boardModel->printMessage(QString("Choose%1region with tribes into which the EPIDEMIC will spread."));
         this->boardModel->printMessage("When you chose a region, press Done...");
         this->boardModel->printMessage(" ");
         return this;
