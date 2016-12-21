@@ -317,7 +317,7 @@ BoardModel::MoveTribesType BoardModel::getMoveTribesType(int fromRegion, int toR
     }
 
     QMap<int, RegionModel *> seaAdjacentRegions;
-    if(true || this->hasAdvanceAquired(AdvanceModel::FISHING))
+    if(this->hasAdvanceAquired(AdvanceModel::FISHING))
     {
         // Is reachable by SEA?
         seaAdjacentRegions = this->getRegionsReachableBySea(fromRegion);
@@ -455,7 +455,8 @@ void BoardModel::checkCitySupport()
 {
     foreach(RegionModel *regionModel, this->regions.values())
     {
-        if(regionModel->hasCity() && !regionModel->hasFarm())
+        if(regionModel->hasCity() && regionModel->getCityAV() > 0 && !regionModel->hasFarm() &&
+           !(this->hasAdvanceAquired(AdvanceModel::FISHING) && this->bordersOnSea(regionModel->getRegion())))
         {
             regionModel->decreaseCityAV(1);
         }
@@ -465,10 +466,20 @@ void BoardModel::checkCitySupport()
 
 int BoardModel::checkCartageCitySupport()
 {
-    int cityCount = this->getCityCount();
+    int cityCountNeedingFarmSupport = 0;
+
+    foreach(RegionModel *regionModel, this->regions.values())
+    {
+        if(regionModel->hasCity() && regionModel->getCityAV() > 0 &&
+           !(this->hasAdvanceAquired(AdvanceModel::FISHING) && this->bordersOnSea(regionModel->getRegion())))
+        {
+            cityCountNeedingFarmSupport++;
+        }
+    }
+
     int farmCount = this->getFarmCount();
 
-    int result = cityCount - farmCount;
+    int result = cityCountNeedingFarmSupport - farmCount;
 
     if(result < 0)
     {

@@ -88,7 +88,7 @@ Instruction *MoveTribesInstruction::triggerHex(Qt::MouseButton button, int x, in
                     QString by = "by land";
                     if(movementType == BoardModel::OVERSEAS)
                     {
-                        by = "overseas,\nlosing one tribe on their way";
+                        by = "overseas,\nlosing one tribe on their way [Advance (FISHING)]";
                     }
 
                     this->boardModel->setSelectRegion(toRegion->getRegion(), true);

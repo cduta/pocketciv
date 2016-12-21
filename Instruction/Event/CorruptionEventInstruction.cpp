@@ -69,7 +69,18 @@ Instruction *CorruptionEventInstruction::triggerDone()
         this->step = 1;
 
         this->boardModel->printMessage("Distribute all the corruption in the regions with cities.");
-        this->corruption = this->boardModel->drawCard()->getShapeNumberSum(this->event->getShapeNumberAmounts());
+        this->corruption += this->boardModel->drawCard()->getShapeNumberSum(this->event->getShapeNumberAmounts());
+        this->boardModel->printMessage(" ");
+
+        if(this->boardModel->hasAdvanceAquired(AdvanceModel::GOVERNMENT))
+        {
+            this->boardModel->printMessage("Advance (GOVERNMENT):");
+            this->boardModel->printMessage("Add an additonal 3 corruption.");
+            this->boardModel->printMessage(" ");
+        }
+
+        // TODO: Literacy goes here.
+
         this->boardModel->printMessage(QString("The corruption is %1.").arg(this->corruption));
 
         POCKET_CIV_END_OF_ERA_CHECK

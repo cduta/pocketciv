@@ -24,6 +24,12 @@ void ReduceCityAVInstruction::initInstruction()
     this->boardModel->printMessage("Any city in a region without a farm to support it has its City AV reduced by 1.");
     this->boardModel->printMessage("Any city with 0 AV will be decimated.");
     this->boardModel->printMessage(" ");
+    if(this->boardModel->hasAdvanceAquired(AdvanceModel::FISHING))
+    {
+        this->boardModel->printMessage("Advance (FISHING):");
+        this->boardModel->printMessage("Cities in Regions bordering on SEA don't need Farms to support them.");
+        this->boardModel->printMessage(" ");
+    }
 
     if(this->boardModel->hasAdvanceAquired(AdvanceModel::CARTAGE))
     {

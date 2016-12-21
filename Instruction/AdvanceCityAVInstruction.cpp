@@ -10,26 +10,49 @@ AdvanceCityAVInstruction::AdvanceCityAVInstruction(BoardModel *boardModel)
 
 void AdvanceCityAVInstruction::initInstruction()
 {
+    QList<QString> advances;
+
     if(this->boardModel->hasAdvanceAquired(AdvanceModel::CIVIL_SERVICE))
     {
+        advances.append("Advance (CIVIL SERVICE)");
         this->availableAdvancements++;
     }
 
     if(this->boardModel->hasAdvanceAquired(AdvanceModel::MASONRY))
     {
+        advances.append("Advance (MASONRY)");
         this->availableAdvancements++;
     }
 
     if(this->boardModel->hasAdvanceAquired(AdvanceModel::SLAVE_LABOR))
     {
+        advances.append("Advance(SLAVE LABOR)");
         this->availableAdvancements++;
+    }
+
+    QString advanceString = "";
+
+    if(advances.count() == 1)
+    {
+        advanceString = advances[0];
+    }
+
+    if(advances.count() == 2)
+    {
+        advanceString = advances[0] + " and " + advances[1];
+    }
+
+    if(advances.count() == 3)
+    {
+        advanceString = advances[0] + ", " + advances[1] + " and " + advances[2];
     }
 
     this->boardModel->printMessage("ADVANCE CITY AV:");
     this->boardModel->printMessage("To increase a city's AV, pay with tribes from anywhere in the Empire.");
     this->boardModel->printMessage("Remember: At least 1 tribe has to remain anywhere in the Empire, when decimating Tribes!");
-    this->boardModel->printMessage(QString("You may advance %1 city AVs this turn.")
+    this->boardModel->printMessage(QString("You may advance %1 city AVs this turn because you aquired")
                                   .arg(this->availableAdvancements));
+    this->boardModel->printMessage(advanceString + ".");
     this->boardModel->printMessage(" ");
     if(this->boardModel->hasAdvanceAquired(AdvanceModel::BASIC_TOOLS))
     {

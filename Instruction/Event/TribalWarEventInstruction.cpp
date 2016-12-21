@@ -11,6 +11,14 @@ void TribalWarEventInstruction::initInstruction()
 {
     this->boardModel->printMessage("TRIBAL WAR:");
     this->boardModel->printMessage(" ");
+
+    if(this->boardModel->hasAdvanceAquired(AdvanceModel::GOVERNMENT))
+    {
+        this->boardModel->printMessage("Advance (GOVERNMENT):");
+        this->boardModel->printMessage("Through this advance, this event is skipped.");
+        this->boardModel->printMessage(" ");
+    }
+
     this->boardModel->printMessage("Press Done to continue.");
     this->boardModel->printMessage(" ");
     return;
@@ -47,6 +55,11 @@ Instruction *TribalWarEventInstruction::triggerHex(Qt::MouseButton button, int x
 
 Instruction *TribalWarEventInstruction::triggerDone()
 {
+    if(this->boardModel->hasAdvanceAquired(AdvanceModel::GOVERNMENT))
+    {
+        return this->endEvent();
+    }
+
     if(this->step == 0)
     {
         this->step++;

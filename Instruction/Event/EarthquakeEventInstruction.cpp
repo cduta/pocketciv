@@ -14,10 +14,6 @@ void EarthquakeEventInstruction::initInstruction()
 {
     this->boardModel->printMessage("EARTHQUAKE:");
     this->boardModel->printMessage(" ");
-    this->boardModel->printMessage("Advance (ENGINEERING):");
-    this->boardModel->printMessage("Cities hit by the EARTHQUAKE which then have their CityAV");
-    this->boardModel->printMessage("reduced below 1, instead have their City AV set to 1.");
-    this->boardModel->printMessage(" ");
     this->boardModel->printMessage("Press done to continue.");
     this->boardModel->printMessage(" ");
     return;
@@ -111,6 +107,15 @@ Instruction *EarthquakeEventInstruction::triggerDone()
             this->boardModel->printMessage(" ");
             this->boardModel->printMessage(QString("The earthquake decreased %1 City AV and decimated 4 Tribes in the active region.").arg(3 - savedCityAC));
             this->boardModel->printMessage("It also decimated all wonders in the active region.");
+            this->boardModel->printMessage(" ");
+
+            if(this->boardModel->hasAdvanceAquired(AdvanceModel::ENGINEERING))
+            {
+                this->boardModel->printMessage("Advance (ENGINEERING):");
+                this->boardModel->printMessage("Cities hit by the EARTHQUAKE cannot have their City AV");
+                this->boardModel->printMessage("reduced below 1.");
+                this->boardModel->printMessage(" ");
+            }
 
             this->borderingRegions = this->boardModel->getAdjacentRegions(activeRegion->getRegion());
 
@@ -185,6 +190,14 @@ Instruction *EarthquakeEventInstruction::triggerDone()
             this->boardModel->printMessage(QString("The earthquake decreased %1 City AV and decimated 1 Tribe in the active region.").arg(1 - savedCityAV));
             this->boardModel->printMessage("It also created a fault line in the active region.");
             this->boardModel->printMessage(" ");
+
+            if(this->boardModel->hasAdvanceAquired(AdvanceModel::ENGINEERING))
+            {
+                this->boardModel->printMessage("Advance (ENGINEERING):");
+                this->boardModel->printMessage("Cities hit by the EARTHQUAKE cannot have their City AV");
+                this->boardModel->printMessage("reduced below 1.");
+                this->boardModel->printMessage(" ");
+            }
 
             this->step = 3;
         }
