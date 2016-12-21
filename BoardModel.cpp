@@ -294,7 +294,7 @@ void BoardModel::initialRegionModels()
     return;
 }
 
-bool BoardModel::canMoveTribes(int fromRegion, int toRegion)
+BoardModel::MoveTribesType BoardModel::getMoveTribesType(int fromRegion, int toRegion)
 {
     QMap<int, RegionModel *> adjacentRegions;
     if(this->hasAdvanceAquired(AdvanceModel::EQUESTRIAN))
@@ -312,11 +312,26 @@ bool BoardModel::canMoveTribes(int fromRegion, int toRegion)
     {
         if(adjacentRegion == toRegion)
         {
-            return true;
+            return BoardModel::NORMAL;
         }
     }
 
-    return false;
+    QMap<int, RegionModel *> seaAdjacentRegions;
+    if(true || this->hasAdvanceAquired(AdvanceModel::FISHING))
+    {
+        // Is reachable by SEA?
+        seaAdjacentRegions = this->getRegionsReachableBySea(fromRegion);
+    }
+
+    foreach(int seaAdjacentRegion, seaAdjacentRegions.keys())
+    {
+        if(seaAdjacentRegion == toRegion)
+        {
+            return BoardModel::OVERSEAS;
+        }
+    }
+
+    return BoardModel::CANT_MOVE;
 }
 
 void BoardModel::mergeAllMovedTribes()
@@ -349,10 +364,22 @@ void BoardModel::populationGrowth()
     return;
 }
 
-void BoardModel::moveTribes(int fromRegion, int toRegion, int howMany)
+void BoardModel::moveTribes(int fromRegion, int toRegion, int howMany, BoardModel::MoveTribesType moveTribesType)
 {
+    if(moveTribesType == BoardModel::CANT_MOVE)
+    {
+        return;
+    }
+
+    int tribeCost = 0;
+
+    if(moveTribesType == BoardModel::OVERSEAS)
+    {
+        tribeCost = 1;
+    }
+
     this->regions[fromRegion]->setTribes(this->regions[fromRegion]->getTribes() - howMany);
-    this->regions[toRegion]->addToMovedTribes(howMany);
+    this->regions[toRegion]->addToMovedTribes(howMany - tribeCost);
 
     return;
 }
@@ -1850,6 +1877,36 @@ QMap<int, RegionModel *> BoardModel::getContinentRegions(int fromRegion) const
             }
         }
     }
+
+    return result;
+}
+
+QMap<int, RegionModel *> BoardModel::getRegionsReachableBySea(int fromRegion) const
+{
+    QMap<int, RegionModel *> result;
+
+    foreach(QSet<HexModel *> seaHexes, this->seas)
+    {
+        QMap<int, RegionModel *> currentRegions;
+        foreach(HexModel *hex, seaHexes)
+        {
+            foreach(HexModel *adjacentHex, hex->getAdjacentHexes())
+            {
+                RegionModel *regionModel = this->refRegionModel(adjacentHex->getRegion());
+                if(regionModel != NULL)
+                {
+                    currentRegions.insert(regionModel->getRegion(), regionModel);
+                }
+            }
+        }
+
+        if(currentRegions.contains(fromRegion))
+        {
+            result = result.unite(currentRegions);
+        }
+    }
+
+    result.remove(fromRegion);
 
     return result;
 }

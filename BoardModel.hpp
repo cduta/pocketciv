@@ -18,6 +18,7 @@ class BoardModel : public QObject
 
 public:
     enum Empire {ATLANTEA = 0, FLOREN, GILDA, NORDIG};
+    enum MoveTribesType {CANT_MOVE = 0, NORMAL = 1, OVERSEAS = 2};
 
 signals:
     void boardUpdated();
@@ -89,13 +90,13 @@ public:
     void groupSeas();
     void initialRegionModels();
 
-    bool canMoveTribes(int fromRegion, int toRegion);
+    BoardModel::MoveTribesType getMoveTribesType(int fromRegion, int toRegion);
 
     void mergeAllMovedTribes();
 
     void increaseEra();
     void populationGrowth();
-    void moveTribes(int fromRegion, int toRegion, int howMany);
+    void moveTribes(int fromRegion, int toRegion, int howMany, BoardModel::MoveTribesType moveTribesType);
 
     bool bordersOnFrontier(int region);
     bool bordersOnSea(int region);
@@ -141,6 +142,7 @@ public:
     QMap<int, RegionModel *> getRegions() const;
     QMap<int, RegionModel *> getAdjacentRegions(int fromRegion) const;
     QMap<int, RegionModel *> getContinentRegions(int fromRegion) const;
+    QMap<int, RegionModel *> getRegionsReachableBySea(int fromRegion) const;
     QMap<int, RegionModel *> getMountainRegions() const;
     QMap<int, RegionModel *> getForestRegions() const;
     int getMountainCount() const;

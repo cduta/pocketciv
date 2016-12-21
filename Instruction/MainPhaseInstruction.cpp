@@ -15,8 +15,8 @@ void MainPhaseInstruction::initInstruction()
 {
     this->boardModel->printMessage("MAIN PHASE:");
     this->boardModel->printMessage(" ");
-    this->boardModel->printMessage("You can do any amount of actions by clicking on any of the buttons.");
-    this->boardModel->printMessage("After applying any actions to a region, at least 1 tribe has to remain.");
+    this->boardModel->printMessage("Use the buttons to perform actions. After applying any action,");
+    this->boardModel->printMessage("at least 1 tribe has to remain in the EMPIRE.");
     this->boardModel->printMessage(" ");
     this->boardModel->printMessage("When you are Done, press Done.");
     this->boardModel->printMessage(" ");

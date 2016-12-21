@@ -33,7 +33,7 @@ Instruction *VisitationEventInstruction::triggerHex(Qt::MouseButton button, int 
 {
     RegionModel *regionModel = this->boardModel->refRegionModel(x,y);
 
-    if(regionModel)
+    if(regionModel && this->step == 1)
     {
         if(button == Qt::LeftButton && this->boardModel->getTribeCount() - this->boardModel->getAllSelectedTribes() > 1 && regionModel->getSelectedTribes() < regionModel->getTribes())
         {

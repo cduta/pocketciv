@@ -84,11 +84,12 @@ class MoveTribeDialog : public HowManyDialog
 {
     Q_OBJECT
 
-    RegionModel *from;
-    RegionModel *to;
+    RegionModel *               from;
+    RegionModel *               to;
+    BoardModel::MoveTribesType  moveTribesType;
 
 public:
-    MoveTribeDialog(BoardModel *boardModel, const QString &suffix, int max, RegionModel *from, RegionModel *to, QWidget *parent = 0)
+    MoveTribeDialog(BoardModel *boardModel, const QString &suffix, int max, RegionModel *from, RegionModel *to, BoardModel::MoveTribesType moveTribesType, QWidget *parent = 0)
         : HowManyDialog(
               boardModel,
               "Move Tribes...",
@@ -99,7 +100,8 @@ public:
               "Cancel",
               parent),
           from(from),
-          to(to)
+          to(to),
+          moveTribesType(moveTribesType)
     {
         connect(this, SIGNAL(accepted()), this, SLOT(applyMoveTribes()));
         connect(this, SIGNAL(rejected()), this, SLOT(rejectMoveTribes()));
@@ -107,11 +109,13 @@ public:
 
 private slots:
     void applyMoveTribes()
-    {
+    {        
         this->boardModel->moveTribes(this->from->getRegion(),
                                      this->to->getRegion(),
-                                     this->howMany);
+                                     this->howMany,
+                                     this->moveTribesType);
         this->boardModel->unselectAllRegions();
+
         return;
     }
 
