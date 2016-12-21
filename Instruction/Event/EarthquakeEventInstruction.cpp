@@ -109,7 +109,7 @@ Instruction *EarthquakeEventInstruction::triggerDone()
             activeRegion->decimateWonders();
 
             this->boardModel->printMessage(" ");
-            this->boardModel->printMessage("The earthquake decreased %1 City AV and decimated 4 Tribes in the active region.").arg(3 - savedCityAC);
+            this->boardModel->printMessage(QString("The earthquake decreased %1 City AV and decimated 4 Tribes in the active region.").arg(3 - savedCityAC));
             this->boardModel->printMessage("It also decimated all wonders in the active region.");
 
             this->borderingRegions = this->boardModel->getAdjacentRegions(activeRegion->getRegion());
@@ -182,7 +182,7 @@ Instruction *EarthquakeEventInstruction::triggerDone()
             activeRegion->setFaultLine(true);
 
             this->boardModel->printMessage(" ");
-            this->boardModel->printMessage("The earthquake decreased %1 City AV and decimated 1 Tribe in the active region.").arg(1 - savedCityAV);
+            this->boardModel->printMessage(QString("The earthquake decreased %1 City AV and decimated 1 Tribe in the active region.").arg(1 - savedCityAV));
             this->boardModel->printMessage("It also created a fault line in the active region.");
             this->boardModel->printMessage(" ");
 

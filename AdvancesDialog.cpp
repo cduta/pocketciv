@@ -180,7 +180,7 @@ void AdvancesDialog::init()
     this->advanceItemMap.insert(AdvanceModel::COMMON_TONGUE,
                               new AdvanceItem(10+168*6,63+25*69,this->boardModel,AdvanceModel::COMMON_TONGUE, this->advanceItemType));
 
-    //this->graphicsView->setBackgroundBrush(QBrush(QColor(0,0,0)));
+    this->graphicsView->setBackgroundBrush(QBrush(QColor(0,0,0)));
     this->graphicsScene->addItem(this->advanceBackground);
     this->graphicsScene->addItem(this->advanceTitle);
     foreach(AdvanceItem *advanceItem, this->advanceItemMap.values())

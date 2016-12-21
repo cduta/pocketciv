@@ -55,7 +55,7 @@ Instruction *VolcanoEventInstruction::triggerDone()
             activeRegion->setFarm(false);
             activeRegion->decimateWonders();
 
-            this->boardModel->printMessage("The erruption decreased the City AV by %1,").arg(2 - savedCityAV);
+            this->boardModel->printMessage(QString("The erruption decreased the City AV by %1,").arg(2 - savedCityAV));
             this->boardModel->printMessage("decimated the tribes by 1 and decimated the");
             this->boardModel->printMessage("farm and all wonders in the active region.");
         }
@@ -79,7 +79,7 @@ Instruction *VolcanoEventInstruction::triggerDone()
             activeRegion->setDesert(true);
             activeRegion->decimateWonders();
 
-            this->boardModel->printMessage("The erruption set the City AV to %1 and decimated").arg(setCityAV);
+            this->boardModel->printMessage(QString("The erruption set the City AV to %1 and decimated").arg(setCityAV));
             this->boardModel->printMessage("all the tribes, the farm, the forest and all wonders");
             this->boardModel->printMessage("in the active region.");
             this->boardModel->printMessage("As a result, a desert formed in the active region.");
