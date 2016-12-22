@@ -120,7 +120,19 @@ Instruction *CivilWarEventInstruction::triggerDone()
     if(this->step == 1)
     {
         this->step = 2;
-        this->colleteralDamage = this->boardModel->drawCard()->getShapeNumbers().value(Event::BLUE_HEXAGON, 0);
+
+        if(this->boardModel->hasAdvanceAquired(AdvanceModel::LAW))
+        {
+            this->boardModel->printMessage("Advance (LAW):");
+            this->boardModel->printMessage("The CIVIL WAR is less severe because of this advance.");
+            this->boardModel->printMessage(" ");
+
+            this->colleteralDamage = this->boardModel->drawCard()->getShapeNumbers().value(Event::GREEN_SQUARE, 0);
+        }
+        else
+        {
+            this->colleteralDamage = this->boardModel->drawCard()->getShapeNumbers().value(Event::BLUE_HEXAGON, 0);
+        }
 
         foreach(RegionModel *regionModel, this->affectedRegions.values())
         {

@@ -128,8 +128,17 @@ Instruction *CorruptionEventInstruction::triggerDone()
 
 Instruction *CorruptionEventInstruction::endCorruptionEvent()
 {
-    this->boardModel->setGold(0);
-    this->boardModel->printMessage("Coruption decimated all gold.");
-    this->boardModel->printMessage(" ");
+    if(this->boardModel->hasAdvanceAquired(AdvanceModel::LAW))
+    {
+        this->boardModel->printMessage("Advance (LAW):");
+        this->boardModel->printMessage("No gold is decimated because of this advance.");
+        this->boardModel->printMessage(" ");
+    }
+    else
+    {
+        this->boardModel->printMessage("Coruption decimated all gold.");
+        this->boardModel->printMessage(" ");
+        this->boardModel->setGold(0);
+    }
     return this->endEvent();
 }

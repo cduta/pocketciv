@@ -41,13 +41,23 @@ Instruction *FloodEventInstruction::triggerDone()
     }
     else
     {
-        activeRegion->decimateTribes(2);
+        if(this->boardModel->hasAdvanceAquired(AdvanceModel::IRRIGATION))
+        {
+            this->boardModel->printMessage("Advance (IRRIGATION):");
+            this->boardModel->printMessage(QString("The flood decimates 2 tribes in Region %1.").arg(activeRegion->getRegion()));
+            this->boardModel->printMessage(" ");
+        }
+        else
+        {
+            this->boardModel->printMessage("The flood decimates 2 tribes, the farm and");
+            this->boardModel->printMessage(QString("reduces the City AV by 1 in Region %1.").arg(activeRegion->getRegion()));
+            this->boardModel->printMessage(" ");
+        }
+
         activeRegion->setFarm(false);
         activeRegion->decreaseCityAV(1);
 
-        this->boardModel->printMessage("The flood decimates 2 tribes, the farm and");
-        this->boardModel->printMessage("reduces the City AV by 1 in the active region.");
-        this->boardModel->printMessage(" ");
+        activeRegion->decimateTribes(2);
 
         if(!activeRegion->hasForest())
         {

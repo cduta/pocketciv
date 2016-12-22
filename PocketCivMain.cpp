@@ -19,6 +19,7 @@
 #include "Instruction/BuildCityInstruction.hpp"
 #include "Instruction/BuildFarmInstruction.hpp"
 #include "Instruction/ExpeditionInstruction.hpp"
+#include "Instruction/ForestationInstruction.hpp"
 #include "Instruction/AquireAdvanceInstruction.hpp"
 #include "Instruction/CollectTaxesInstruction.hpp"
 
@@ -68,8 +69,10 @@ PocketCivMain::PocketCivMain(QWidget *parent) :
     connect(this->collectTaxes, SIGNAL(clicked()), this, SLOT(collectTaxesTriggered()));
     this->forestation =     new QPushButton("Forestation", &this->dockWidget);
     this->forestation->setEnabled(false);
+    connect(this->forestation, SIGNAL(clicked()), this, SLOT(forestationTriggered()));
     this->mining =          new QPushButton("Mining", &this->dockWidget);
     this->mining->setEnabled(false);
+    connect(this->mining, SIGNAL(clicked()), this, SLOT(miningTriggered()));
     this->overview =        new QPushButton("Overview", &this->dockWidget);
     this->overview->setEnabled(false);
     connect(this->overview, SIGNAL(clicked()), this, SLOT(overviewTriggered()));
@@ -444,6 +447,20 @@ void PocketCivMain::expeditionTriggered()
     Instruction *expeditionInstruction = new ExpeditionInstruction(this->boardModel, this->instruction);
     expeditionInstruction->initInstruction();
     this->processInstruction(expeditionInstruction);
+    return;
+}
+
+void PocketCivMain::forestationTriggered()
+{
+    Instruction *expeditionInstruction = new ForestationInstruction(this->boardModel, this->instruction);
+    expeditionInstruction->initInstruction();
+    this->processInstruction(expeditionInstruction);
+    return;
+}
+
+void PocketCivMain::miningTriggered()
+{
+    // TODO
     return;
 }
 

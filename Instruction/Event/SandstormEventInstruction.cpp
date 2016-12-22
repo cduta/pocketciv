@@ -10,6 +10,9 @@ void SandstormEventInstruction::initInstruction()
 {
     this->boardModel->printMessage("SANDSTORM:");
     this->boardModel->printMessage(" ");
+    this->boardModel->printMessage("Advance (IRRIGATION):");
+    this->boardModel->printMessage("The sandstorm only decimates the forest instead the farm and the forest.");
+    this->boardModel->printMessage(" ");
     this->boardModel->printMessage("Press Done to continue.");
     this->boardModel->printMessage(" ");
     return;
@@ -28,13 +31,18 @@ Instruction *SandstormEventInstruction::triggerHex(Qt::MouseButton button, int x
     {
         this->desertsLeft--;
         this->boardModel->printMessage("The sandstorm spreads to region %1.");
-        this->boardModel->printMessage("The farm and forest are decimated and a desert is created.");
+        if(this->boardModel->hasAdvanceAquired(AdvanceModel::IRRIGATION))
+        {
+            this->boardModel->printMessage("The forest is decimated and a desert is created.");
+        }
+        else
+        {
+            this->boardModel->printMessage("The farm and forest are decimated and a desert is created.");
+        }
         this->boardModel->printMessage(QString("The spreads to %1 more region(s).").arg(this->desertsLeft));
         this->boardModel->printMessage(" ");
 
-        regionModel->setFarm(false);
-        regionModel->setForest(false);
-        regionModel->setDesert(true);
+        this->applySandstorm(regionModel);
 
         if(this->desertsLeft == 0)
         {
@@ -84,9 +92,16 @@ Instruction *SandstormEventInstruction::triggerDone()
             }
             else
             {
-                this->boardModel->printMessage("Choose two regions bordering on the active region where the");
+                this->boardModel->printMessage(QString("Choose two regions bordering on region %1 where the").arg(activeRegion->getRegion()));
                 this->boardModel->printMessage("sandstorm is spreading to.");
-                this->boardModel->printMessage("The spreading sandstorm decimates any farms and forest in the chosen regions");
+                if(this->boardModel->hasAdvanceAquired(AdvanceModel::IRRIGATION))
+                {
+                    this->boardModel->printMessage("The spreading sandstorm decimates any forest in the chosen regions");
+                }
+                else
+                {
+                    this->boardModel->printMessage("The spreading sandstorm decimates any farms and forest in the chosen regions");
+                }
                 this->boardModel->printMessage("as well as create a desert.");
                 this->boardModel->printMessage(" ");
                 return this;
@@ -98,22 +113,34 @@ Instruction *SandstormEventInstruction::triggerDone()
             foreach(RegionModel *regionModel, this->borderingRegions.values())
             {
                 this->boardModel->printMessage("The sandstorm spreads to region %1.");
-                this->boardModel->printMessage("The farm and forest are decimated and a desert is created.");
+
+                if(this->boardModel->hasAdvanceAquired(AdvanceModel::IRRIGATION))
+                {
+                    this->boardModel->printMessage("The forest is decimated and a desert is created.");
+                }
+                else
+                {
+                    this->boardModel->printMessage("The farm and forest are decimated and a desert is created.");
+                }
+
                 this->boardModel->printMessage(" ");
-                regionModel->setFarm(false);
-                regionModel->setForest(false);
-                regionModel->setDesert(true);
+                this->applySandstorm(activeRegion);
             }
         }
         else
         {
-            this->boardModel->printMessage("The sandstorm decimates farms and forest in the active region and");
+            if(this->boardModel->hasAdvanceAquired(AdvanceModel::IRRIGATION))
+            {
+                this->boardModel->printMessage(QString("The sandstorm decimates forest in region %1 and").arg(activeRegion->getRegion()));
+            }
+            else
+            {
+                this->boardModel->printMessage(QString("The sandstorm decimates farms and forest in region %1 and").arg(activeRegion->getRegion()));
+            }
             this->boardModel->printMessage("creates a desert in place of them.");
             this->boardModel->printMessage(" ");
             this->desertsLeft = 0;
-            activeRegion->setFarm(false);
-            activeRegion->setForest(false);
-            activeRegion->setDesert(true);
+            this->applySandstorm(activeRegion);
         }
     }
 
@@ -124,6 +151,16 @@ Instruction *SandstormEventInstruction::triggerDone()
 
     this->boardModel->unsetActiveRegion();
     return this->endEvent();
+}
+
+void SandstormEventInstruction::applySandstorm(RegionModel *region)
+{
+    if(!this->boardModel->hasAdvanceAquired(AdvanceModel::IRRIGATION))
+    {
+        region->setFarm(false);
+    }
+    region->setForest(false);
+    region->setDesert(true);
 }
 
 

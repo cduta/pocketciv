@@ -25,15 +25,31 @@ Instruction *FamineEventInstruction::triggerDone()
         POCKET_CIV_END_OF_ERA_CHECK
     }
 
-    this->boardModel->printMessage("Famine decimates all tribes, the farm and");
-    this->boardModel->printMessage("reduces the City AV by 2 in the active region.");
-    this->boardModel->printMessage("If the city AV is 0, the city is decimated.");
-
     RegionModel *activeRegion = this->boardModel->refActiveRegion();
 
+    if(this->boardModel->hasAdvanceAquired(AdvanceModel::IRRIGATION))
+    {
+        this->boardModel->printMessage("Advance (IRRIGATION):");
+        this->boardModel->printMessage("Famine decimates all tribes and reduces the City AV by 1");
+        this->boardModel->printMessage("in the active region.");
+        this->boardModel->printMessage("If the city AV is 0, the city is decimated.");
+        this->boardModel->printMessage(" ");
+
+        activeRegion->decreaseCityAV(1);
+    }
+    else
+    {
+        this->boardModel->printMessage("Famine decimates all tribes, the farm and");
+        this->boardModel->printMessage("reduces the City AV by 2 in the active region.");
+        this->boardModel->printMessage("If the city AV is 0, the city is decimated.");
+        this->boardModel->printMessage(" ");
+
+        activeRegion->setFarm(false);
+        activeRegion->decreaseCityAV(2);
+    }
+
+
     activeRegion->setTribes(0);
-    activeRegion->setFarm(false);
-    activeRegion->decreaseCityAV(2);
     activeRegion->decimateZeroAVCity();
 
     this->boardModel->unsetActiveRegion();

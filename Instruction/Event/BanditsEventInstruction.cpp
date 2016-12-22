@@ -35,14 +35,24 @@ Instruction *BanditsEventInstruction::triggerDone()
         {
             this->attackingForce = this->boardModel->refOriginalCard()->getShapeNumberSum(this->event->getShapeNumberAmounts());
 
+            if(this->boardModel->hasAdvanceAquired(AdvanceModel::LAW))
+            {
+                int blueHexagon = this->boardModel->refOriginalCard()->getShapeNumbers().value(Event::BLUE_HEXAGON, 0);
+                this->boardModel->printMessage("Advance (LAW):");
+                this->boardModel->printMessage(QString("The attacking force is substracted by %1, the number of the BLUE HEXAGON of the ORIGINAL event card.")
+                                              .arg(blueHexagon));
+                this->boardModel->printMessage(" ");
+                this->attackingForce -= blueHexagon;
+            }
+
             if(this->boardModel->hasAdvanceAquired(AdvanceModel::DEMOCRACY))
             {
-                int democracy = this->boardModel->refOriginalCard()->getShapeNumbers().value(Event::BLUE_HEXAGON, 0);
+                int blueHexagon = this->boardModel->refOriginalCard()->getShapeNumbers().value(Event::BLUE_HEXAGON, 0);
                 this->boardModel->printMessage("Advance (DEMOCRACY):");
                 this->boardModel->printMessage(QString("The attacking force is substracted by %1, the number of the BLUE HEXAGON of the ORIGINAL event card.")
-                                              .arg(democracy));
+                                              .arg(blueHexagon));
                 this->boardModel->printMessage(" ");
-                this->attackingForce -= democracy;
+                this->attackingForce -= blueHexagon;
             }
 
             if(this->boardModel->hasAdvanceAquired(AdvanceModel::EQUESTRIAN))

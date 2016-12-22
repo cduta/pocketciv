@@ -83,7 +83,8 @@ SOURCES += main.cpp\
     Instruction/ReduceCityAVInstruction.cpp \
     Instruction/AssignCapitolInstruction.cpp \
     Instruction/StealingInstruction.cpp \
-    DiplomaticOfferDialog.cpp
+    DiplomaticOfferDialog.cpp \
+    Instruction/ForestationInstruction.cpp
 
 HEADERS  += \
     PocketCivMain.hpp \
@@ -156,7 +157,8 @@ HEADERS  += \
     Instruction/ReduceCityAVInstruction.hpp \
     Instruction/AssignCapitolInstruction.hpp \
     Instruction/StealingInstruction.hpp \
-    DiplomaticOfferDialog.hpp
+    DiplomaticOfferDialog.hpp \
+    Instruction/ForestationInstruction.hpp
 
 FORMS    +=
 

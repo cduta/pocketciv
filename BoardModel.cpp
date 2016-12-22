@@ -651,7 +651,7 @@ void BoardModel::enableMainPhaseButtons()
         this->mining = true;
     }
 
-    if(this->hasAdvanceAquired(AdvanceModel::HORTICULTURE))
+    if(true || this->hasAdvanceAquired(AdvanceModel::HORTICULTURE))
     {
         this->forestation = true;
     }

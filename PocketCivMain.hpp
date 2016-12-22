@@ -95,6 +95,8 @@ private slots:
     void buildCityTriggered();
     void buildFarmTriggered();
     void expeditionTriggered();
+    void forestationTriggered();
+    void miningTriggered();
     void aquireAdvanceTriggered();
     void buildWonderTriggered();
     void collectTaxesTriggered();
