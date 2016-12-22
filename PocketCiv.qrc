@@ -36,5 +36,6 @@
         <file alias="fault_line">res/fault_line.png</file>
         <file alias="volcano">res/volcano.png</file>
         <file alias="capitol">res/capitol.png</file>
+        <file alias="forest_desert">res/forest_desert.png</file>
     </qresource>
 </RCC>

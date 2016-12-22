@@ -68,14 +68,21 @@ void HexItem::drawHexBase()
             painter.drawPixmap(0,0,QPixmap(":/volcano"));
         }
 
-        if(regionModel->hasForest())
+        if(regionModel->hasForest() && regionModel->hasDesert())
         {
-            painter.drawPixmap(0,0,QPixmap(":/forest"));
+            painter.drawPixmap(0,0,QPixmap(":/forest_desert"));
         }
-
-        if(regionModel->hasDesert())
+        else
         {
-            painter.drawPixmap(0,0,QPixmap(":/desert"));
+            if(regionModel->hasForest())
+            {
+                painter.drawPixmap(0,0,QPixmap(":/forest"));
+            }
+
+            if(regionModel->hasDesert())
+            {
+                painter.drawPixmap(0,0,QPixmap(":/desert"));
+            }
         }
 
         if(regionModel->hasFaultLine())

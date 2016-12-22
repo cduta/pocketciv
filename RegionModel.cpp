@@ -323,10 +323,6 @@ void RegionModel::setVolcano(bool volcano)
 void RegionModel::setForest(bool forest)
 {
     this->forest = forest;
-    if(this->forest)
-    {
-        this->desert = false;
-    }
     return;
 }
 
@@ -339,10 +335,6 @@ void RegionModel::setFarm(bool farm)
 void RegionModel::setDesert(bool desert)
 {
     this->desert = desert;
-    if(this->desert)
-    {
-        this->forest = false;
-    }
     return;
 }
 
