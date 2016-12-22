@@ -1677,8 +1677,6 @@ void BoardModel::initializeCards()
     prequisites[0].append(AdvanceModel::CARTAGE);
     positive.append("+ Population Growth and Movement\n"
                     "Repeat moving tribes once.\n");
-    positive.append("+ Expedition\n"
-                    "Send additional Tribes from bordering Regions into the same Expedition.\n");
     negative.append("- Event (EPIDEMIC)\n"
                     "The Epidemic moves directly to any Region with tribes, instead of only moving to bordering regions with tribes.\n"
                     "Additionally, if all tribes are decimated in a region as a result of this event, reduce the City AV by 2 in that region. If the City AV becomes 0, decimate the City.\n");
@@ -1775,7 +1773,7 @@ void BoardModel::initializeCards()
     positive.clear();
     negative.clear();
     positive.append("+ Aquire Advances\n"
-                    "Pay one less Tribe when Aquiring: Mythology, Music, Literacy, Philosophy, Arts, Theater, Organized Religion or Law.\n");
+                    "Pay one less Tribe when Aquiring: Mythology, Music, Literacy, Philosophy, Arts, Theater, Organized Religion and/or Law.\n");
     advances.insert(AdvanceModel::STORY_TELLING,
                     new AdvanceModel(AdvanceModel::STORY_TELLING,
                                      "Story\nTelling",

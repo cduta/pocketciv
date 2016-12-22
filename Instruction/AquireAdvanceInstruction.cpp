@@ -24,8 +24,9 @@ void AquireAdvanceInstruction::initInstruction()
         if(this->boardModel->hasAdvanceAquired(AdvanceModel::MACHINING))
         {
             this->boardModel->printMessage("Advance (MACHINING):");
-            this->boardModel->printMessage("Stone and wood become interchangable. A Mountain/Volcano may create");
-            this->boardModel->printMessage("wood instead of stone and a Forest may create stone instead of wood.");
+            this->boardModel->printMessage("Wood (Forest) and stone (Mountain/Volcano) become interchangable.");
+            this->boardModel->printMessage("A Mountain/Volcano may create wood instead of stone and a Forest");
+            this->boardModel->printMessage("may create stone instead of wood.");
             this->boardModel->printMessage(" ");
         }
 
