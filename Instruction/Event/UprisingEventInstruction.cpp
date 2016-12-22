@@ -28,13 +28,29 @@ Instruction *UprisingEventInstruction::triggerDone()
     {
         RegionModel *activeRegion = this->boardModel->refActiveRegion();
 
-        activeRegion->decreaseCityAV(2);
-        activeRegion->decimateTribes(2);
-        activeRegion->setFarm(false);
-
-        this->boardModel->printMessage(" ");
         this->boardModel->printMessage("An uprising decreased the City AV by 2, decimated the tribes by 2 and");
         this->boardModel->printMessage("decimated the farm in the active region.");
+        this->boardModel->printMessage(" ");
+
+        int decreaseCityAV = 2;
+
+        if(this->boardModel->hasAdvanceAquired(AdvanceModel::LAW))
+        {
+            this->boardModel->printMessage("Advance (LAW):");
+            this->boardModel->printMessage("Have one less City AV reduced.");
+            this->boardModel->printMessage(" ");
+        }
+
+        if(this->boardModel->hasAdvanceAquired(AdvanceModel::MACHINING))
+        {
+            this->boardModel->printMessage("Advance (MACHINING):");
+            this->boardModel->printMessage("Have one more City AV reduced.");
+            this->boardModel->printMessage(" ");
+        }
+
+        activeRegion->decreaseCityAV(decreaseCityAV);
+        activeRegion->decimateTribes(activeRegion->getTribes());
+        activeRegion->setFarm(false);
     }
 
     this->boardModel->unsetActiveRegion();

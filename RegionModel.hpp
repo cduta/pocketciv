@@ -22,6 +22,7 @@ class RegionModel : public QObject
     bool city;
     bool capitol;
     int cityAV;
+    int selectedCityAV;
     bool advanceAquired;
 
 public:
@@ -44,6 +45,8 @@ public:
     void decreaseCityAV(int cityAV);
     void decimateZeroAVCity();
 
+    void reduceSelectedCityAV();
+
     void decimateWonders();
 
     // Get-Methods
@@ -62,6 +65,7 @@ public:
     bool hasCity() const;
     bool isCapitolRegion() const;
     int getCityAV() const;
+    int getSelectedCityAV() const;
     bool hasAdvanceAquired() const;
 
     // Set-Methods
@@ -71,6 +75,7 @@ public:
     void toggleCapitol();
     void setCityAV(int cityAV);
     void setSelectedTribes(int selectedTribes);
+    void setSelectedCityAV(int selectedCityAV);
     void setMountain(bool mountain);
     void setVolcano(bool volcano);
     void setForest(bool forest);

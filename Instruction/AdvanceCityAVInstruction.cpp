@@ -61,6 +61,13 @@ void AdvanceCityAVInstruction::initInstruction()
         this->boardModel->printMessage(" ");
     }
 
+    if(this->boardModel->hasAdvanceAquired(AdvanceModel::MACHINING))
+    {
+        this->boardModel->printMessage("Advance (MACHINING):");
+        this->boardModel->printMessage("The cost of tribes to advance a City AV is reduced by 1.");
+        this->boardModel->printMessage(" ");
+    }
+
     if(this->boardModel->getAdvancesAquired().contains(AdvanceModel::ARCHITECTURE))
     {
         this->maximumCityAV = 4;
@@ -169,6 +176,11 @@ Instruction *AdvanceCityAVInstruction::triggerHex(Qt::MouseButton button, int x,
                     if(regionModel->getCityAV() < this->maximumCityAV || regionModel->isCapitolRegion())
                     {
                         if(this->boardModel->hasAdvanceAquired(AdvanceModel::BASIC_TOOLS))
+                        {
+                            this->toBePaid--;
+                        }
+
+                        if(this->boardModel->hasAdvanceAquired(AdvanceModel::MACHINING))
                         {
                             this->toBePaid--;
                         }

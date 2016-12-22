@@ -2,6 +2,8 @@
 
 #include "Instruction/EndOfEraInstruction.hpp"
 
+#include <QtCore/qmath.h>
+
 CorruptionEventInstruction::CorruptionEventInstruction(BoardModel *boardModel, Instruction *nextInstruction, const Event *event)
     : EventInstruction(boardModel, nextInstruction, event)
 {
@@ -77,9 +79,16 @@ Instruction *CorruptionEventInstruction::triggerDone()
             this->boardModel->printMessage("Advance (GOVERNMENT):");
             this->boardModel->printMessage("Add an additonal 3 corruption.");
             this->boardModel->printMessage(" ");
+            this->corruption += 3;
         }
 
-        // TODO: Literacy goes here.
+        if(this->boardModel->hasAdvanceAquired(AdvanceModel::LITERACY))
+        {
+            this->boardModel->printMessage("Advance (LITERACY):");
+            this->boardModel->printMessage("Divide corruption by 2 (round down).");
+            this->boardModel->printMessage(" ");
+            this->corruption =  qFloor(((double)this->corruption) / 2.0);
+        }
 
         this->boardModel->printMessage(QString("The corruption is %1.").arg(this->corruption));
 

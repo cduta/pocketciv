@@ -55,6 +55,7 @@ void HexItem::drawHexBase()
         int tribesSelectedCount = regionModel->getSelectedTribes();
         bool hasCity = regionModel->hasCity();
         int cityAV = regionModel->getCityAV();
+        int cityAVSelected = regionModel->getSelectedCityAV();
         bool hasFarm = regionModel->hasFarm();
 
         if(regionModel->hasMountain())
@@ -110,6 +111,16 @@ void HexItem::drawHexBase()
         if(hasCity)
         {
             painter.drawPixmap(0,0,QPixmap(":/city"));
+
+            if(cityAVSelected > 0)
+            {
+                painter.setPen(QColor(255,0,0));
+            }
+            else
+            {
+                painter.setPen(QColor(0,0,0));
+            }
+
             QFont font = painter.font();
             font.setFamily("Sans");
             font.setPointSize(5);

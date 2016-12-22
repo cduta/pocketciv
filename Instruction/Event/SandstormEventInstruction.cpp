@@ -124,7 +124,7 @@ Instruction *SandstormEventInstruction::triggerDone()
                 }
 
                 this->boardModel->printMessage(" ");
-                this->applySandstorm(activeRegion);
+                this->applySandstorm(regionModel);
             }
         }
         else

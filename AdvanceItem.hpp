@@ -55,8 +55,8 @@ public:
 private slots:
     void aquireAdvanceClicked()
     {
-        emit this->advanceAquired(this->advance);
         this->boardModel->refActiveRegion()->setAdvanceAquired(true);
+        emit this->advanceAquired(this->advance);
         return;
     }
 };

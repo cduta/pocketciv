@@ -20,6 +20,15 @@ void AquireAdvanceInstruction::initInstruction()
         this->boardModel->printMessage("You can aquire one advance per region per turn.");
         this->boardModel->printMessage("Remember: At least 1 tribe has to remain anywhere in the Empire, when decimating Tribes!");
         this->boardModel->printMessage(" ");
+
+        if(this->boardModel->hasAdvanceAquired(AdvanceModel::MACHINING))
+        {
+            this->boardModel->printMessage("Advance (MACHINING):");
+            this->boardModel->printMessage("Stone and wood become interchangable. A Mountain/Volcano may create");
+            this->boardModel->printMessage("wood instead of stone and a Forest may create stone instead of wood.");
+            this->boardModel->printMessage(" ");
+        }
+
         this->boardModel->printMessage("When you are done, press Done.");
         this->boardModel->printMessage(" ");
         this->boardModel->disableButtons();

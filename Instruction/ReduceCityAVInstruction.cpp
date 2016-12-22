@@ -92,6 +92,7 @@ Instruction *ReduceCityAVInstruction::triggerDone()
     else
     {
         this->boardModel->unselectAllRegions();
+        this->boardModel->decimateZeroAVCities();
 
         Instruction *next;
         if(this->boardModel->getTribeCount() == 0 && !this->boardModel->hasCity())

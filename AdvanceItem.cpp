@@ -56,7 +56,9 @@ void AdvanceItem::updateDesription()
 
         if(this->advanceType == AQUIRE)
         {
-            if(this->boardModel->refActiveRegion()->hasForest())
+            if(this->boardModel->refActiveRegion()->hasForest() ||
+               (this->boardModel->hasAdvanceAquired(AdvanceModel::MACHINING) && !advanceModel->getRequiresStone() &&
+                (this->boardModel->refActiveRegion()->hasMountain() || this->boardModel->refActiveRegion()->hasVolcano())))
             {
                 wood.append(" (OK)");
             }
@@ -79,7 +81,8 @@ void AdvanceItem::updateDesription()
 
         if(this->advanceType == AQUIRE)
         {
-            if(this->boardModel->refActiveRegion()->hasMountain() || this->boardModel->refActiveRegion()->hasVolcano())
+            if(this->boardModel->refActiveRegion()->hasMountain() || this->boardModel->refActiveRegion()->hasVolcano() ||
+               (this->boardModel->hasAdvanceAquired(AdvanceModel::MACHINING) && !advanceModel->getRequiresWood() && this->boardModel->refActiveRegion()->hasForest()))
             {
                 stone.append(" (OK)");
             }

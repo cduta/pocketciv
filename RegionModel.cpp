@@ -20,6 +20,7 @@ RegionModel::RegionModel(int region, QObject *parent)
       city(false),
       capitol(false),
       cityAV(0),
+      selectedCityAV(0),
       advanceAquired(false)
 {}
 
@@ -140,6 +141,13 @@ void RegionModel::decimateZeroAVCity()
     return;
 }
 
+void RegionModel::reduceSelectedCityAV()
+{
+    this->cityAV -= this->selectedCityAV;
+    this->selectedCityAV = 0;
+    return;
+}
+
 void RegionModel::decimateWonders()
 {
     // TODO: Decimate Wonders once they are implemented.
@@ -222,6 +230,11 @@ int RegionModel::getCityAV() const
     return this->cityAV;
 }
 
+int RegionModel::getSelectedCityAV() const
+{
+    return this->selectedCityAV;
+}
+
 bool RegionModel::hasAdvanceAquired() const
 {
     return this->advanceAquired;
@@ -277,6 +290,13 @@ void RegionModel::setSelectedTribes(int selectedTribes)
 {
     assert(selectedTribes <= this->tribes);
     this->selectedTribes = selectedTribes;
+    return;
+}
+
+void RegionModel::setSelectedCityAV(int selectedCityAV)
+{
+    assert(selectedCityAV <= this->cityAV);
+    this->selectedCityAV = selectedCityAV;
     return;
 }
 
@@ -358,6 +378,7 @@ void RegionModel::serialize(QDataStream &writer) const
     writer << this->city;
     writer << this->capitol;
     writer << this->cityAV;
+    writer << this->selectedCityAV;
     writer << this->advanceAquired;
     return;
 }
@@ -378,6 +399,7 @@ void RegionModel::deserialize(QDataStream &reader)
     reader >> this->city;
     reader >> this->capitol;
     reader >> this->cityAV;
+    reader >> this->selectedCityAV;
     reader >> this->advanceAquired;
     return;
 }

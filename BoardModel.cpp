@@ -651,7 +651,7 @@ void BoardModel::enableMainPhaseButtons()
         this->mining = true;
     }
 
-    if(true || this->hasAdvanceAquired(AdvanceModel::HORTICULTURE))
+    if(this->hasAdvanceAquired(AdvanceModel::HORTICULTURE))
     {
         this->forestation = true;
     }
@@ -673,6 +673,24 @@ void BoardModel::unselectAllSelectedTribes()
     foreach(RegionModel *regionModel, this->regions.values())
     {
         regionModel->setSelectedTribes(0);
+    }
+    return;
+}
+
+void BoardModel::reduceAllSelectedCityAV()
+{
+    foreach(RegionModel *regionModel, this->regions.values())
+    {
+        regionModel->reduceSelectedCityAV();
+    }
+    return;
+}
+
+void BoardModel::unselectAllSelectedCityAV()
+{
+    foreach(RegionModel *regionModel, this->regions.values())
+    {
+        regionModel->setSelectedCityAV(0);
     }
     return;
 }
@@ -2051,6 +2069,18 @@ int BoardModel::getCityAVCount() const
     return result;
 }
 
+int BoardModel::getAllSelectedCityAV() const
+{
+    int result = 0;
+
+    foreach(RegionModel *regionModel, this->regions.values())
+    {
+        result += regionModel->getSelectedCityAV();
+    }
+
+    return result;
+}
+
 QMap<int, RegionModel *> BoardModel::getSelectedRegions() const
 {
     QMap<int, RegionModel *> result;
@@ -2284,6 +2314,7 @@ void BoardModel::setAdvanceAquired(AdvanceModel::Advance advance)
     {
         case AdvanceModel::BLACK_MARKET:
             this->gainGold(5);
+            this->printMessage("Advance (BLACK MARKET):");
             this->printMessage("Through aquiring the black market advance, you also gain 5 Gold once.");
             this->printMessage(" ");
             break;

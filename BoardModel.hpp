@@ -124,6 +124,8 @@ public:
     void enableMainPhaseButtons();
     void decimateAllSelectedTribes();
     void unselectAllSelectedTribes();
+    void reduceAllSelectedCityAV();
+    void unselectAllSelectedCityAV();
     void gainGold(int gold);
     void removeGold(int gold);
 
@@ -152,6 +154,7 @@ public:
     int getTribeCount() const;
     int getCityCount() const;
     int getCityAVCount() const;
+    int getAllSelectedCityAV() const;
     QMap<int, RegionModel *> getSelectedRegions() const;
     bool canBuildCity() const;
     bool hasCity() const;
