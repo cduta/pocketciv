@@ -49,9 +49,8 @@ Instruction *SuperstitionEventInstruction::triggerDone()
     {
         while(this->discardsLeft > 0)
         {
-            if(this->boardModel->getEventCardCount() == 1)
+            if(this->boardModel->hasAdvanceAquired(AdvanceModel::MEDITATION) && this->boardModel->getEventCardCount() == 1)
             {
-
                 DecisionDialog decisionDialog("Stop SUPERSTITION?", "Advance (MEDITATION):\nIf only 1 event card to be drawn,\nyou can decide to stop SUPERSTITION.\n\nDo you want to stop SUPERSTITION?", "Yes", "No", true);
                 int result = decisionDialog.exec();
                 if(result == QDialog::Accepted)

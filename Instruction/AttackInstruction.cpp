@@ -6,6 +6,7 @@ AttackInstruction::AttackInstruction(BoardModel *boardModel, Instruction *nextIn
     : Instruction(), boardModel(boardModel), nextInstruction(nextInstruction), what(what), attackingForce(attackingForce)
 {
     this->nextInstruction->setKeepInstruction(true);
+    this->tribeAttackReduce = 1;
     this->cityAVAttackReduce = 5;
     this->firstAttack = true;
 }
@@ -22,22 +23,32 @@ void AttackInstruction::initInstruction()
     this->boardModel->printMessage("The attacking force will pillage through the empire.");
     this->boardModel->printMessage("In each region they visit, City AV, tribes and gold is reduced.");
     this->boardModel->printMessage(" ");
-    this->boardModel->printMessage("For each attacking force a tribe is reduced until no more tribes are left.");
 
-    if(this->boardModel->getAdvancesAquired().contains(AdvanceModel::ARCHITECTURE))
+    if(this->boardModel->hasAdvanceAquired(AdvanceModel::METAL_WORKING))
+    {
+        this->boardModel->printMessage(QString("For 2 attacking forces, one tribe is reduced until no more tribes are left."));
+        this->tribeAttackReduce = 2;
+    }
+    else
+    {
+        this->boardModel->printMessage(QString("For each attacking force a tribe is reduced until no more tribes are left."));
+    }
+
+    this->boardModel->printMessage(" ");
+
+    if(this->boardModel->hasAdvanceAquired(AdvanceModel::ARCHITECTURE))
     {
         this->cityAVAttackReduce = 8;
-        this->boardModel->printMessage(" ");
         this->boardModel->printMessage("Advance (ARCHITECTURE):");
         this->boardModel->printMessage("Then, for each 8 attacking force a City AV and 2 gold are reduced until City AV is 0.");
-        this->boardModel->printMessage(" ");
     }
     else
     {
         this->cityAVAttackReduce = 5;
         this->boardModel->printMessage("Then, for each 5 attacking force a City AV and 2 gold are reduced until City AV is 0.");
-        this->boardModel->printMessage(" ");
     }
+
+    this->boardModel->printMessage(" ");
 
     this->boardModel->printMessage(" ");
     this->boardModel->printMessage("Press Done to continue.");
@@ -87,24 +98,17 @@ Instruction *AttackInstruction::triggerDone()
 
     while(newTribes > 0 && this->attackingForce > 0)
     {
-        this->attackingForce--;
+        this->attackingForce -= this->tribeAttackReduce;
+
         newTribes--;
     }
 
     while(newCityAV > 0 && this->attackingForce > 0)
     {
-
         this->attackingForce-= this->cityAVAttackReduce;
 
-        if(this->attackingForce >= 0)
-        {
-            newCityAV--;
-            goldLost += 2;
-        }
-        else
-        {
-            this->attackingForce = 0;
-        }
+        newCityAV--;
+        goldLost += 2;
     }
 
     if(this->attackingForce < 0)

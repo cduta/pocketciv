@@ -68,7 +68,7 @@ void AdvanceCityAVInstruction::initInstruction()
         this->boardModel->printMessage(" ");
     }
 
-    if(this->boardModel->getAdvancesAquired().contains(AdvanceModel::ARCHITECTURE))
+    if(this->boardModel->hasAdvanceAquired(AdvanceModel::ARCHITECTURE))
     {
         this->maximumCityAV = 4;
         this->boardModel->printMessage("Advance (AGRICULTURE):");
@@ -76,17 +76,32 @@ void AdvanceCityAVInstruction::initInstruction()
         this->boardModel->printMessage(" ");
     }
 
-    if(!this->boardModel->getAdvancesAquired().contains(AdvanceModel::ARCHITECTURE) &&
-       this->boardModel->getAdvancesAquired().contains(AdvanceModel::ENGINEERING))
+    if(!this->boardModel->hasAdvanceAquired(AdvanceModel::ARCHITECTURE) &&
+       (this->boardModel->hasAdvanceAquired(AdvanceModel::ENGINEERING) ||
+        this->boardModel->hasAdvanceAquired(AdvanceModel::METAL_WORKING)))
     {
-        this->maximumCityAV = 3;
-        this->boardModel->printMessage("Advance (ENGINEERING):");
+        if(this->boardModel->hasAdvanceAquired(AdvanceModel::ENGINEERING) &&
+           this->boardModel->hasAdvanceAquired(AdvanceModel::METAL_WORKING))
+        {
+            this->boardModel->printMessage("Advance (ENGINEERING and Advance (METAL WORKING):");
+        }
+        else if(this->boardModel->hasAdvanceAquired(AdvanceModel::ENGINEERING))
+        {
+            this->boardModel->printMessage("Advance (ENGINEERING):");
+        }
+        else if(this->boardModel->hasAdvanceAquired(AdvanceModel::METAL_WORKING))
+        {
+            this->boardModel->printMessage("Advance (METAL WORKING):");
+        }
+
         this->boardModel->printMessage("The maximum City AV is 3.");
         this->boardModel->printMessage(" ");
+        this->maximumCityAV = 3;
     }
 
-    if(!this->boardModel->getAdvancesAquired().contains(AdvanceModel::ARCHITECTURE) &&
-       !this->boardModel->getAdvancesAquired().contains(AdvanceModel::ENGINEERING))
+    if(!this->boardModel->hasAdvanceAquired(AdvanceModel::ARCHITECTURE) &&
+       !this->boardModel->hasAdvanceAquired(AdvanceModel::ENGINEERING) &&
+       !this->boardModel->hasAdvanceAquired(AdvanceModel::METAL_WORKING))
     {
         this->maximumCityAV = 2;
         this->boardModel->printMessage("The maximum City AV is 2.");
