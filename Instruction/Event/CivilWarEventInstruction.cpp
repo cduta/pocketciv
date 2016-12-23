@@ -3,6 +3,8 @@
 #include "Instruction/EndOfEraInstruction.hpp"
 #include "Common.hpp"
 
+#include <QtCore/qmath.h>
+
 CivilWarEventInstruction::CivilWarEventInstruction(BoardModel *boardModel, Instruction *nextInstruction, const Event *event)
     : EventInstruction(boardModel, nextInstruction, event)
 {
@@ -153,13 +155,25 @@ Instruction *CivilWarEventInstruction::triggerDone()
         this->boardModel->printMessage(QString("the amount of colleteral damage which is %1.").arg(this->colleteralDamage));
         this->boardModel->printMessage(" ");
 
-        // NOTE: Before MEDITATION!
-        if(this->boardModel->getAdvancesAquired().contains(AdvanceModel::ARTS))
+        if(this->boardModel->getAdvancesAquired().contains(AdvanceModel::MEDITATION) ||
+           this->boardModel->getAdvancesAquired().contains(AdvanceModel::ARTS))
         {
-            this->reduceColleteralDamageBy(2);
-            this->boardModel->printMessage("Advance (ARTS):");
-            this->boardModel->printMessage("The colleteral damage is reduced by 2.");
-            this->boardModel->printMessage(" ");
+            if(this->boardModel->getAdvancesAquired().contains(AdvanceModel::MEDITATION))
+            {
+                this->colleteralDamage = qCeil(((double)this->colleteralDamage)/2.0);
+                this->boardModel->printMessage("Advance (MEDITATION):");
+                this->boardModel->printMessage("Divide the colleteral damage by 2.");
+                this->boardModel->printMessage(" ");
+            }
+
+            if(this->boardModel->getAdvancesAquired().contains(AdvanceModel::ARTS))
+            {
+                this->reduceColleteralDamageBy(2);
+                this->boardModel->printMessage("Advance (ARTS):");
+                this->boardModel->printMessage("The colleteral damage is reduced by 2.");
+                this->boardModel->printMessage(" ");
+            }
+
             this->boardModel->printMessage(QString("The colleteral damage is therefore %1.").arg(this->colleteralDamage));
             this->boardModel->printMessage(" ");
         }

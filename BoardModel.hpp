@@ -169,6 +169,7 @@ public:
     bool isDoneEnabled() const;
     int getEra() const;
     int getLastEra() const;
+    int getEventCardCount() const;
     bool isEndOfEra() const;
     int getAllMovedTribes() const;
     int getAllSelectedTribes() const;

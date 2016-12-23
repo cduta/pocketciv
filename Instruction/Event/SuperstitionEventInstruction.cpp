@@ -1,6 +1,7 @@
 #include "SuperstitionEventInstruction.hpp"
 
 #include "Instruction/EndOfEraInstruction.hpp"
+#include "DecisionDialog.hpp"
 
 SuperstitionEventInstruction::SuperstitionEventInstruction(BoardModel *boardModel, Instruction *nextInstruction, const Event *event)
     : EventInstruction(boardModel, nextInstruction, event), step(0), discardsLeft(0), discardsTotal(0)
@@ -48,6 +49,21 @@ Instruction *SuperstitionEventInstruction::triggerDone()
     {
         while(this->discardsLeft > 0)
         {
+            if(this->boardModel->getEventCardCount() == 1)
+            {
+
+                DecisionDialog decisionDialog("Stop SUPERSTITION?", "Advance (MEDITATION):\nIf only 1 event card to be drawn,\nyou can decide to stop SUPERSTITION.\n\nDo you want to stop SUPERSTITION?", "Yes", "No", true);
+                int result = decisionDialog.exec();
+                if(result == QDialog::Accepted)
+                {
+                    this->boardModel->printMessage(QString("You stopped the event when %1 out of %2 cards were already discarded.")
+                                                   .arg(this->discardsTotal-this->discardsLeft)
+                                                   .arg(this->discardsTotal));
+                    this->boardModel->printMessage(" ");
+                    return this->endEvent();
+                }
+            }
+
             this->discardsLeft--;
             this->boardModel->drawCard(false);
 

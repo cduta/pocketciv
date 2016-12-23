@@ -2175,6 +2175,11 @@ int BoardModel::getLastEra() const
     return this->lastEra;
 }
 
+int BoardModel::getEventCardCount() const
+{
+    return this->eventCardsLeft.count();
+}
+
 bool BoardModel::isEndOfEra() const
 {
     return this->eventCardsLeft.isEmpty();
