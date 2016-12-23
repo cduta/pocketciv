@@ -2,6 +2,8 @@
 
 #include "Instruction/EndOfEraInstruction.hpp"
 
+#include <QtCore/qmath.h>
+
 ExpeditionInstruction::ExpeditionInstruction(BoardModel *boardModel, Instruction *nextInstruction)
     : Instruction(), boardModel(boardModel), nextInstruction(nextInstruction), gainGold(0), expeditionCardDrawn(false)
 {
@@ -17,10 +19,18 @@ void ExpeditionInstruction::initInstruction()
     this->boardModel->printMessage("Remember: At least 1 tribe has to remain anywhere in the Empire, when decimating Tribes!");
     this->boardModel->printMessage(" ");
 
+
+    if(this->boardModel->hasAdvanceAquired(AdvanceModel::MAGNETICS))
+    {
+        this->boardModel->printMessage("Advance (MAGNETICS):"); // Apply also to SEA Expedition.
+        this->boardModel->printMessage("Before applying the BLUE HEX number, divide it by 2 (round up).");
+        this->boardModel->printMessage(" ");
+    }
+
     if(this->boardModel->hasAdvanceAquired(AdvanceModel::CAVALRY))
     {
-        this->boardModel->printMessage("Advance (CAVALRY):");
-        this->boardModel->printMessage("Each tribe sent, counts as two tribes.");
+        this->boardModel->printMessage("Advance (CAVALRY):"); // ONLY for frontier expedtions.
+        this->boardModel->printMessage("Each tribe sent into the frontier, counts as two tribes.");
         this->boardModel->printMessage(" ");
     }
 
@@ -100,15 +110,20 @@ Instruction *ExpeditionInstruction::triggerDone()
             this->boardModel->printMessage(" ");
             this->boardModel->decimateAllSelectedTribes();
             const EventCard * card = this->boardModel->drawCard();
-            int blueHexNumber = card->getShapeNumbers().value(Event::BLUE_HEXAGON, 0);
+            int expeditionCost = card->getShapeNumbers().value(Event::BLUE_HEXAGON, 0);
+
+            if(this->boardModel->hasAdvanceAquired(AdvanceModel::MAGNETICS))
+            {
+                expeditionCost = qCeil(((double)expeditionCost)/2.0);
+            }
 
             if(this->boardModel->hasAdvanceAquired(AdvanceModel::CAVALRY))
             {
-                this->gainGold = (selectedTribes*2) - blueHexNumber;
+                this->gainGold = (selectedTribes*2) - expeditionCost;
             }
             else
             {
-                this->gainGold = selectedTribes - blueHexNumber;
+                this->gainGold = selectedTribes - expeditionCost;
             }
 
             if(this->gainGold < 0)
@@ -116,8 +131,7 @@ Instruction *ExpeditionInstruction::triggerDone()
                 this->gainGold = 0;
             }
 
-            this->boardModel->printMessage(" ");
-            this->boardModel->printMessage(QString("You gain gold equal to the sent Tribes minus %1 (At least 0).").arg(blueHexNumber));
+            this->boardModel->printMessage(QString("You gain gold equal to the sent Tribes minus %1.").arg(expeditionCost));
             this->boardModel->printMessage(" ");
 
             this->boardModel->unsetActiveRegion();

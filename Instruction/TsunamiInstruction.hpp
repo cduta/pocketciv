@@ -13,7 +13,9 @@ class TsunamiInstruction : public Instruction
     RegionModel *activeRegion;
     Instruction *nextInstruction;
     const Event *firstEvent;
-    QList<RegionModel *> affectedRegions;
+    QList<RegionModel *> possibleAffectedRegions;
+
+    QMap<int, RegionModel *> affectedRegions;
 
     int damagePerTribe;
     int damagePerCityAV;

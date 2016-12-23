@@ -6,6 +6,7 @@
 class VolcanoEventInstruction : public EventInstruction
 {
     int step;
+    QMap<int, RegionModel *> affectedRegions;
 
 public:
     VolcanoEventInstruction(BoardModel *boardModel, Instruction *nextInstruction, const Event *event);

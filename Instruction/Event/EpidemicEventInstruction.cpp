@@ -2,6 +2,8 @@
 
 #include "Instruction/EndOfEraInstruction.hpp"
 
+#include <QtCore/qmath.h>
+
 EpidemicEventInstruction::EpidemicEventInstruction(BoardModel *boardModel, Instruction *nextInstruction, const Event *event)
     : EventInstruction(boardModel, nextInstruction, event), step(0)
 {
@@ -13,6 +15,7 @@ void EpidemicEventInstruction::initInstruction()
     this->boardModel->printMessage("EPIDEMIC:");
     this->boardModel->printMessage(" ");
     this->boardModel->printMessage("Press done to continue.");
+    this->boardModel->printMessage(QString(" "));
     return;
 }
 
@@ -101,11 +104,13 @@ Instruction *EpidemicEventInstruction::triggerDone()
             this->boardModel->unselectAllRegions();
             this->boardModel->printMessage(QString("The EPIDEMIC moved to region %1.").arg(this->boardModel->refActiveRegion()->getRegion()));
             this->boardModel->printMessage(QString("This is the new active region."));
+            this->boardModel->printMessage(QString(" "));
             return this->continueEpidemic();
         }
         else
         {
             this->boardModel->printMessage("No region selected.");
+            this->boardModel->printMessage(QString(" "));
         }
     }
 
@@ -129,6 +134,7 @@ Instruction *EpidemicEventInstruction::checkActiveRegion()
     {
         this->boardModel->printMessage("But the active region has no tribes.");
         this->boardModel->printMessage("The EPIDEMIC will not spread.");
+        this->boardModel->printMessage(QString(" "));
         this->boardModel->unsetActiveRegion();
         return this->endEvent();
     }
@@ -140,7 +146,25 @@ Instruction *EpidemicEventInstruction::initializePopulationLoss()
 {
     this->step = 3;
     this->populationLoss = this->boardModel->drawCard()->getShapeNumberSum(this->event->getShapeNumberAmounts());
-    this->boardModel->printMessage(QString("The population loss total of this EPIDEMIC is %1.").arg(this->populationLoss));
+    this->boardModel->printMessage(QString("The population loss of this EPIDEMIC is %1.").arg(this->populationLoss));
+    this->boardModel->printMessage(QString(" "));
+
+    if(this->boardModel->hasAdvanceAquired(AdvanceModel::MEDICINE))
+    {
+        this->populationLoss = qFloor(((double)this->populationLoss)/2.0);
+
+        this->boardModel->printMessage(QString("Advance (MEDICINE):"));
+        this->boardModel->printMessage(QString("Divide the population loss by 2 (round down)."));
+        this->boardModel->printMessage(QString(" "));
+        this->boardModel->printMessage(QString("The population loss is now %1.").arg(this->populationLoss));
+        this->boardModel->printMessage(QString(" "));
+    }
+
+    if(this->populationLoss <= 0)
+    {
+        this->boardModel->unsetActiveRegion();
+        return this->endEvent();
+    }
 
     return NULL;
 }
@@ -159,21 +183,23 @@ Instruction *EpidemicEventInstruction::continueEpidemic()
     this->boardModel->refActiveRegion()->setTribes(newTribes);
     int overallTribes = this->boardModel->getTribeCount();
 
-    this->boardModel->printMessage(QString("The tribes decimated in the active region are %1.").arg(this->oldTribes - newTribes));
+    this->boardModel->printMessage(QString("The amount of tribes decimated in region %1 is %2.").arg(this->boardModel->refActiveRegion()->getRegion()).arg(this->oldTribes - newTribes));
+    this->boardModel->printMessage(QString(" "));
     this->populationLoss = this->populationLoss - this->oldTribes;
 
     if(this->populationLoss <= 0)
     {
         this->boardModel->printMessage(QString("The Population loss is 0."));
+        this->boardModel->printMessage(QString(" "));
         this->boardModel->unsetActiveRegion();
         return this->endEvent();
     }
 
     this->boardModel->printMessage(QString("Population Loss left: %1").arg(this->populationLoss));
+    this->boardModel->printMessage(QString(" "));
 
     if(overallTribes <= 2)
     {
-        this->boardModel->printMessage(" ");
         this->boardModel->printMessage(QString("The EPIDEMIC cannot spread further with 2 or less tribes left in the EMPIRE."));
         this->boardModel->unsetActiveRegion();
         return this->endEvent();
@@ -183,7 +209,6 @@ Instruction *EpidemicEventInstruction::continueEpidemic()
 
     if(this->boardModel->hasAdvanceAquired(AdvanceModel::EQUESTRIAN))
     {
-        this->boardModel->printMessage(" ");
         this->boardModel->printMessage("Advance (EQUESTRIAN):");
         this->boardModel->printMessage("The EPIDEMIC moves is able to spread into any");
         this->boardModel->printMessage("region not seperated by a SEA or FRONTIER.");

@@ -2,6 +2,8 @@
 
 #include "Instruction/EndOfEraInstruction.hpp"
 
+#include "Common.hpp"
+
 EarthquakeEventInstruction::EarthquakeEventInstruction(BoardModel *boardModel, Instruction *nextInstruction, const Event *event)
     : EventInstruction(boardModel, nextInstruction, event)
 {
@@ -14,6 +16,14 @@ void EarthquakeEventInstruction::initInstruction()
 {
     this->boardModel->printMessage("EARTHQUAKE:");
     this->boardModel->printMessage(" ");
+
+    if(this->boardModel->hasAdvanceAquired(AdvanceModel::MEDICINE))
+    {
+        this->boardModel->printMessage("Advance (MEDICINE):");
+        this->boardModel->printMessage("After the earthquake, every affected region has 1 tribe added to it.");
+        this->boardModel->printMessage(" ");
+    }
+
     this->boardModel->printMessage("Press done to continue.");
     this->boardModel->printMessage(" ");
     return;
@@ -40,6 +50,8 @@ Instruction *EarthquakeEventInstruction::triggerHex(Qt::MouseButton button, int 
                                           .arg(regionModel->getRegion())
                                           .arg(this->faultLinesLeft));
 
+            this->affectedRegions.insert(regionModel->getRegion(), regionModel);
+
             if(this->faultLinesLeft == 0)
             {
                 this->boardModel->printMessage(" ");
@@ -57,6 +69,8 @@ Instruction *EarthquakeEventInstruction::triggerHex(Qt::MouseButton button, int 
                                           .arg(regionModel->getRegion())
                                           .arg(this->populationLoss));
 
+            this->affectedRegions.insert(regionModel->getRegion(), regionModel);
+
             if(regionModel->getTribes() == 0)
             {
                 this->tribeLossRegionModels.remove(regionModel->getRegion());
@@ -64,7 +78,10 @@ Instruction *EarthquakeEventInstruction::triggerHex(Qt::MouseButton button, int 
 
             if(this->populationLoss == 0)
             {
-                return this->endEvent();
+                this->boardModel->printMessage(" ");
+                this->boardModel->printMessage("Press Done to continue.");
+                this->boardModel->printMessage(" ");
+                return this;
             }
         }
     }
@@ -87,34 +104,48 @@ Instruction *EarthquakeEventInstruction::triggerDone()
 
         if(activeRegion->hasFaultLine())
         {
-            this->boardModel->printMessage("The active region has a fault line.");
+            this->boardModel->printMessage(QString("Region %1 has a fault line.").arg(activeRegion->getRegion()));
 
             this->step = 2;
+
+            this->boardModel->printMessage(" ");
             int currentCityAV = activeRegion->getCityAV();
             int savedCityAC = 0;
 
             activeRegion->decreaseCityAV(3);
 
-            if(this->boardModel->hasAdvanceAquired(AdvanceModel::ENGINEERING) && activeRegion->getCityAV() < 1)
+            if(this->boardModel->hasAdvanceAquired(AdvanceModel::ENGINEERING) && activeRegion->getCityAV() < 1 && currentCityAV > 0)
             {
                 savedCityAC = 1 - (currentCityAV - 3);
                 activeRegion->setCityAV(1);
             }
 
+            bool isAffected = currentCityAV != activeRegion->getCityAV() ||
+                              activeRegion->hasTribes() || activeRegion->hasWonders();
             activeRegion->decimateTribes(4);
             activeRegion->decimateWonders();
 
-            this->boardModel->printMessage(" ");
-            this->boardModel->printMessage(QString("The earthquake decreased %1 City AV and decimated 4 Tribes in the active region.").arg(3 - savedCityAC));
-            this->boardModel->printMessage("It also decimated all wonders in the active region.");
-            this->boardModel->printMessage(" ");
-
-            if(this->boardModel->hasAdvanceAquired(AdvanceModel::ENGINEERING))
+            if(!isAffected)
             {
-                this->boardModel->printMessage("Advance (ENGINEERING):");
-                this->boardModel->printMessage("Cities hit by the EARTHQUAKE cannot have their City AV");
-                this->boardModel->printMessage("reduced below 1.");
+                this->boardModel->printMessage(QString("Region %1 is not affected by the earthquake..").arg(activeRegion->getRegion()));
                 this->boardModel->printMessage(" ");
+            }
+            else
+            {
+                this->boardModel->printMessage(QString("The earthquake reduces %1 City AV, decimated 4 Tribes in region %2.").arg(3 - savedCityAC));
+                this->boardModel->printMessage(QString("and all wonders in region %1.").arg(activeRegion->getRegion()));
+                this->boardModel->printMessage(" ");
+
+                if(this->boardModel->hasAdvanceAquired(AdvanceModel::ENGINEERING))
+                {
+                    this->boardModel->printMessage(" ");
+                    this->boardModel->printMessage("Advance (ENGINEERING):");
+                    this->boardModel->printMessage("Cities hit by the earthquake cannot have their City AV");
+                    this->boardModel->printMessage("reduced below 1.");
+                    this->boardModel->printMessage(" ");
+                }
+
+                this->affectedRegions.insert(activeRegion->getRegion(), activeRegion);
             }
 
             this->borderingRegions = this->boardModel->getAdjacentRegions(activeRegion->getRegion());
@@ -128,9 +159,8 @@ Instruction *EarthquakeEventInstruction::triggerDone()
                 }
             }
 
-            this->boardModel->printMessage(" ");
             this->boardModel->printMessage("The earthquake creates a fault line in two regions without a fault line");
-            this->boardModel->printMessage("bordering on the active region.");
+            this->boardModel->printMessage(QString("bordering on region %1.").arg(activeRegion->getRegion()));
             this->boardModel->printMessage(" ");
 
             if(this->faultLinelessRegionModels.size() > 2)
@@ -146,6 +176,7 @@ Instruction *EarthquakeEventInstruction::triggerDone()
                 {
                     this->faultLinelessRegionModels.values().at(0)->setFaultLine(true);
                     this->faultLinelessRegionModels.values().at(1)->setFaultLine(true);
+                    this->affectedRegions.unite(this->faultLinelessRegionModels);
 
                     this->boardModel->printMessage("Since there are only two bordering regions without fault lines.");
                     this->boardModel->printMessage("Both receive a fault line.");
@@ -154,6 +185,7 @@ Instruction *EarthquakeEventInstruction::triggerDone()
                 else if(this->faultLinelessRegionModels.size() == 1)
                 {
                     this->faultLinelessRegionModels.values().at(0)->setFaultLine(true);
+                    this->affectedRegions.unite(this->faultLinelessRegionModels);
 
                     this->boardModel->printMessage("Since there is only one bordering regions without a fault line.");
                     this->boardModel->printMessage("Only this region receives a fault line.");
@@ -172,7 +204,8 @@ Instruction *EarthquakeEventInstruction::triggerDone()
         }
         else
         {
-            this->boardModel->printMessage("The active region has no fault line.");
+            this->boardModel->printMessage(QString("Region %1 has no fault line.").arg(activeRegion->getRegion()));
+            this->boardModel->printMessage(" ");
 
             int savedCityAV = 0;
             activeRegion->decreaseCityAV(1);
@@ -186,7 +219,8 @@ Instruction *EarthquakeEventInstruction::triggerDone()
             activeRegion->decimateTribes(1);
             activeRegion->setFaultLine(true);
 
-            this->boardModel->printMessage(" ");
+            this->affectedRegions.insert(activeRegion->getRegion(), activeRegion);
+
             this->boardModel->printMessage(QString("The earthquake decreased %1 City AV and decimated 1 Tribe in the active region.").arg(1 - savedCityAV));
             this->boardModel->printMessage("It also created a fault line in the active region.");
             this->boardModel->printMessage(" ");
@@ -235,7 +269,11 @@ Instruction *EarthquakeEventInstruction::triggerDone()
             RegionModel *regionModel = this->borderingRegions.value(region);
 
             totalTribes += regionModel->getTribes();
-            this->tribeLossRegionModels.insert(region, regionModel);
+
+            if(regionModel->hasTribes())
+            {
+                this->tribeLossRegionModels.insert(region, regionModel);
+            }
         }
 
         if(totalTribes > this->populationLoss)
@@ -253,6 +291,8 @@ Instruction *EarthquakeEventInstruction::triggerDone()
                 regionModel->setTribes(0);
             }
 
+            this->affectedRegions.unite(this->tribeLossRegionModels);
+
             this->boardModel->printMessage("The amount of tribes in the affected regions is equal or less than the population loss.");
             this->boardModel->printMessage("Therefore, all tribes in those regions are decimated.");
         }
@@ -261,6 +301,20 @@ Instruction *EarthquakeEventInstruction::triggerDone()
     if(this->step == -1 && this->populationLoss == 0)
     {
         this->boardModel->unsetActiveRegion();
+
+        if(this->boardModel->hasAdvanceAquired(AdvanceModel::MEDICINE))
+        {
+            this->boardModel->printMessage("Advance (MEDICINE):");
+            this->boardModel->printMessage(QString("One tribe is added to every affected region (%1).")
+                                           .arg(Common::listUpRegions(this->affectedRegions.values())));
+            this->boardModel->printMessage(" ");
+
+            foreach(RegionModel *regionModel, this->affectedRegions.values())
+            {
+                regionModel->setTribes(regionModel->getTribes() + 1);
+            }
+        }
+
         return this->endEvent();
     }
 

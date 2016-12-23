@@ -373,7 +373,7 @@ void BoardModel::moveTribes(int fromRegion, int toRegion, int howMany, BoardMode
 
     int tribeCost = 0;
 
-    if(moveTribesType == BoardModel::OVERSEAS)
+    if(moveTribesType == BoardModel::OVERSEAS && !this->hasAdvanceAquired(AdvanceModel::MAGNETICS))
     {
         tribeCost = 1;
     }
@@ -988,7 +988,7 @@ void BoardModel::initializeCards()
     advances.insert(AdvanceModel::AGRICULTURE,
                     new AdvanceModel(AdvanceModel::AGRICULTURE,
                                      "Agriculture",
-                                     3,2,0,
+                                     5,4,0,
                                      false, true, false,
                                      prequisites,
                                      positive, negative));

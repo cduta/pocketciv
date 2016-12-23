@@ -240,6 +240,11 @@ bool RegionModel::hasAdvanceAquired() const
     return this->advanceAquired;
 }
 
+bool RegionModel::hasWonders() const
+{
+    return false; // TODO do it!
+}
+
 void RegionModel::setTribes(int tribes)
 {
     this->tribes = tribes;

@@ -13,6 +13,8 @@ class EarthquakeEventInstruction : public EventInstruction
     QMap<int, RegionModel *> faultLinelessRegionModels;
     QMap<int, RegionModel *> tribeLossRegionModels;
 
+    QMap<int, RegionModel *> affectedRegions;
+
 public:
     EarthquakeEventInstruction(BoardModel *boardModel, Instruction *nextInstruction, const Event *event);
 

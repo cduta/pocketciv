@@ -18,7 +18,14 @@ void TsunamiInstruction::initInstruction()
     this->boardModel->printMessage(QString("TSUNAMI:"));
     this->boardModel->printMessage(" ");
 
-    this->affectedRegions.append(this->activeRegion);
+    if(this->boardModel->hasAdvanceAquired(AdvanceModel::MEDICINE))
+    {
+        this->boardModel->printMessage("Advance (MEDICINE):");
+        this->boardModel->printMessage("After the tsunami, every affected region has 2 tribes added to it.");
+        this->boardModel->printMessage(" ");
+    }
+
+    this->possibleAffectedRegions.append(this->activeRegion);
 
     QMap<int, RegionModel *> regions = this->boardModel->getAdjacentRegions(this->activeRegion->getRegion());
 
@@ -27,15 +34,24 @@ void TsunamiInstruction::initInstruction()
         RegionModel *regionModel = regions.value(region);
         if(this->boardModel->bordersOnSea(regionModel->getRegion()))
         {
-            this->affectedRegions.append(regionModel);
+            this->possibleAffectedRegions.append(regionModel);
         }
     }
 
-    this->boardModel->printMessage(QString("Regions affected by the tsunami is the active region (region %1) and")
+    this->boardModel->printMessage(QString("Regions affected by the tsunami is region %1 and")
                                   .arg(this->activeRegion->getRegion()));
-    this->boardModel->printMessage(QString("regions bordering on the active region and the sea."));
-    this->boardModel->printMessage(QString("The affected region(s): %1.")
-                                  .arg(Common::listUpRegions(this->affectedRegions)));
+    this->boardModel->printMessage(QString("regions bordering on it and the sea."));
+
+    QString regionString = "region";
+
+    if(this->possibleAffectedRegions.count() == 1)
+    {
+        regionString = "regions";
+    }
+
+    this->boardModel->printMessage(QString("The %1 hit by the tsunami: %2.")
+                                  .arg(regionString)
+                                  .arg(Common::listUpRegions(this->possibleAffectedRegions)));
     this->boardModel->printMessage(" ");
     this->boardModel->printMessage("Press Done to continue.");
     this->boardModel->printMessage(" ");
@@ -49,50 +65,48 @@ Instruction *TsunamiInstruction::triggerDone()
         this->step = 1;
         this->tsunamiDamage = this->boardModel->drawCard()->getShapeNumberSum(this->firstEvent->getShapeNumberAmounts());
         this->boardModel->printMessage(" ");
-        this->boardModel->printMessage(QString("The damage in each affected region caused by the tsunami is %1.")
+        this->boardModel->printMessage(QString("The damage in the regions caused by the tsunami is %1.")
                                       .arg(this->tsunamiDamage));
 
-        QString advanceInfo = "";
+
+        this->boardModel->printMessage(QString("For every 1 damage, one tribe will decimated."));
+        this->boardModel->printMessage(QString("With no tribes left, for every 2 damage, one City AV will be reduced."));
+        this->boardModel->printMessage(QString("With no tribes and the city destroyed, for every 3 damage,"));
+        this->boardModel->printMessage("one Wonder of your choice will be decimated.");
+        this->boardModel->printMessage(" ");
+
         if(this->boardModel->hasAdvanceAquired(AdvanceModel::CIVIL_SERVICE))
         {
-            advanceInfo = " [Advance (CIVIL SERVICE)] ";
+            this->boardModel->printMessage(QString("Advance (CIVIL SERVICE)"));
+            this->boardModel->printMessage(QString("Because of CIVIL SERVICE, for every 3 damage, one tribe will be decimated and"));
+            this->boardModel->printMessage(QString("for every 5 damage, one City AV will be reduced."));
+            this->boardModel->printMessage(QString(" "));
+
             this->damagePerTribe = 3;
             this->damagePerCityAV = 5;
         }
 
-        this->boardModel->printMessage(QString("For every %1 damage%2, one tribe will decimated.")
-                                      .arg(this->damagePerTribe)
-                                      .arg(advanceInfo));
-        this->boardModel->printMessage(QString("With no tribes left, for every %1 damage%2, one City AV will be reduced.")
-                                      .arg(this->damagePerCityAV)
-                                      .arg(advanceInfo));
-
-        advanceInfo = "";
         if(this->boardModel->hasAdvanceAquired(AdvanceModel::ENGINEERING))
         {
-            advanceInfo = " [Advance (ENGINEERING)] ";
+            this->boardModel->printMessage(QString("Advance (ENGINEERING)"));
+            this->boardModel->printMessage(QString("Because of ENGINEERING, for every 10 damage, one wonder of your choice will be decimated."));
+            this->boardModel->printMessage(QString(" "));
             this->damagePerWonder = 10;
         }
-
-        this->boardModel->printMessage(QString("With the city destroyed, for every %1 damage%2, one Wonder will be decimated.")
-                                      .arg(this->damagePerWonder)
-                                      .arg(advanceInfo));
-        this->boardModel->printMessage(" ");
 
         POCKET_CIV_END_OF_ERA_CHECK
     }
 
-    if(!this->affectedRegions.isEmpty())
+    while(!this->possibleAffectedRegions.isEmpty())
     {
-        RegionModel *affectedRegion = this->affectedRegions.takeFirst();
+        RegionModel *possibleAffectedRegion = this->possibleAffectedRegions.takeFirst();
         int currentDamage = this->tsunamiDamage;
         int totalTribeDamage = 0;
         int totalCityDamage = 0;
-        //TODO: Add Wonder decimation for 3 damage.
 
         while(currentDamage > 0)
         {
-            if(affectedRegion->hasTribes())
+            if(possibleAffectedRegion->hasTribes())
             {
                 if(currentDamage < this->damagePerTribe)
                 {
@@ -100,12 +114,12 @@ Instruction *TsunamiInstruction::triggerDone()
                 }
                 else
                 {
-                    affectedRegion->decimateTribes(1);
+                    possibleAffectedRegion->decimateTribes(1);
                     totalTribeDamage++;
                     currentDamage -= this->damagePerTribe;
                 }
             }
-            else if(affectedRegion->hasCity())
+            else if(possibleAffectedRegion->hasCity())
             {
                 if(currentDamage < this->damagePerCityAV)
                 {
@@ -113,13 +127,25 @@ Instruction *TsunamiInstruction::triggerDone()
                 }
                 else
                 {
-                    if(affectedRegion->getCityAV() > 0)
+                    if(possibleAffectedRegion->getCityAV() > 0)
                     {
-                        affectedRegion->decreaseCityAV(1);
+                        possibleAffectedRegion->decreaseCityAV(1);
                         totalCityDamage++;
                         currentDamage -= this->damagePerCityAV;
                     }
-                    affectedRegion->decimateZeroAVCity();
+                    possibleAffectedRegion->decimateZeroAVCity();
+                }
+            }
+            else if(possibleAffectedRegion->hasWonders())
+            {
+                if(currentDamage < this->damagePerWonder)
+                {
+                    currentDamage = 0;
+                }
+                else
+                {
+                    // TODO: Select Wonder to be destroyed and remember it.
+                    currentDamage -= this->damagePerWonder;
                 }
             }
             else
@@ -128,22 +154,50 @@ Instruction *TsunamiInstruction::triggerDone()
             }
         }
 
-        this->boardModel->printMessage(QString("In region %1, the tsunami results in the following losses.")
-                                      .arg(affectedRegion->getRegion()));
-        this->boardModel->printMessage(QString("Tribes: %1")
-                                      .arg(totalTribeDamage));
-        this->boardModel->printMessage(QString("CityAV: %1")
-                                      .arg(totalCityDamage));
 
-        this->boardModel->printMessage(" ");
-        this->boardModel->printMessage(QString("Affected regions left: %1.")
-                                      .arg(Common::listUpRegions(this->affectedRegions)));
-        this->boardModel->printMessage("Press Done to continue.");
-        this->boardModel->printMessage(" ");
-        return this;
+        if(totalTribeDamage + totalCityDamage /* + total Wonder Damage */ > 0)
+        {
+            this->boardModel->printMessage(QString("In region %1, the tsunami results in the following losses.")
+                                          .arg(possibleAffectedRegion->getRegion()));
+            this->boardModel->printMessage(QString("Tribes decimated: %1")
+                                          .arg(totalTribeDamage));
+            this->boardModel->printMessage(QString("CityAV reduced: %1")
+                                          .arg(totalCityDamage));
+            this->boardModel->printMessage(" ");
+
+            QString wondersLost = "None";
+
+            if(false/*Has any wonders lost.*/)
+            {
+                // TODO: List lost wonders in string "wondersLost". (See Common::listUpRegions(...))
+            }
+
+            this->boardModel->printMessage(QString("Wonders decimated: %1").arg(wondersLost));
+            this->affectedRegions.insert(possibleAffectedRegion->getRegion(), possibleAffectedRegion);
+        }
+        else
+        {
+            this->boardModel->printMessage(QString("In region %1, the tsunami had no effect.")
+                                          .arg(possibleAffectedRegion->getRegion()));
+            this->boardModel->printMessage(" ");
+        }
     }
 
     this->boardModel->unsetActiveRegion();
+
+    if(this->boardModel->hasAdvanceAquired(AdvanceModel::MEDICINE))
+    {
+        this->boardModel->printMessage("Advance (MEDICINE):");
+        this->boardModel->printMessage(QString("Two tribes are added to every affected region (%1).")
+                                       .arg(Common::listUpRegions(this->affectedRegions.values())));
+        this->boardModel->printMessage(" ");
+
+        foreach(RegionModel *regionModel, this->affectedRegions.values())
+        {
+            regionModel->setTribes(regionModel->getTribes() + 2);
+        }
+    }
+
     this->boardModel->printMessage("The Tsunami has subsided and the event ends.");
     this->boardModel->printMessage(" ");
     this->nextInstruction->setKeepInstruction(false);

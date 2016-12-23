@@ -67,6 +67,7 @@ public:
     int getCityAV() const;
     int getSelectedCityAV() const;
     bool hasAdvanceAquired() const;
+    bool hasWonders() const;
 
     // Set-Methods
     void setTribes(int tribes);
