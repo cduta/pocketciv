@@ -12,23 +12,33 @@ CivilWarEventInstruction::CivilWarEventInstruction(BoardModel *boardModel, Instr
     this->colleteralDamage = 0;
     this->totalTribes = 0;
     this->step = 0;
-    this->cityAVLost = 2;
+    this->activeRegionCityAVLost = 2;
+    this->borderingRegionCityAVLost = 2;
 }
 
 void CivilWarEventInstruction::initInstruction()
 {
     this->boardModel->printMessage("CIVIL WAR:");
     this->boardModel->printMessage(" ");
-    this->cityAVLost = 2;
     this->boardModel->printMessage("The city AV of the active region and bordering regions are reduced by 2.");
     this->boardModel->printMessage("Any regions of those with a city are thereby affected regions.");
     this->boardModel->printMessage(" ");
+
+    if(this->boardModel->getAdvancesAquired().contains(AdvanceModel::MILITARY))
+    {
+        this->borderingRegionCityAVLost++;
+        this->boardModel->printMessage("Advance (MILITARY):");
+        this->boardModel->printMessage("Reduce one additional city AV of the bordering regions.");
+        this->boardModel->printMessage(" ");
+    }
+
     if(this->boardModel->getAdvancesAquired().contains(AdvanceModel::ARCHITECTURE))
     {
-        this->cityAVLost = 1;
+        this->activeRegionCityAVLost--;
+        this->borderingRegionCityAVLost--;
         this->boardModel->printMessage("Advance (ARCHITECTURE):");
-        this->boardModel->printMessage("The city AV of the active region and bordering regions are reduced by 1.");
-        this->boardModel->printMessage("Any regions of those with a city are thereby affected regions.");
+        this->boardModel->printMessage("Reduce one less city AV of the active and bordering regions.");
+        this->boardModel->printMessage(" ");
     }
 
     if(this->boardModel->hasAdvanceAquired(AdvanceModel::MEDICINE))
@@ -93,6 +103,17 @@ Instruction *CivilWarEventInstruction::triggerDone()
 
         foreach(int region, possibleRegions.keys())
         {
+            int loseCityAV;
+
+            if(activeRegion->getRegion() == region)
+            {
+                loseCityAV = this->activeRegionCityAVLost;
+            }
+            else
+            {
+                loseCityAV = this->borderingRegionCityAVLost;
+            }
+
             RegionModel *regionModel = possibleRegions.value(region);
             if(regionModel->hasCity())
             {
@@ -104,7 +125,7 @@ Instruction *CivilWarEventInstruction::triggerDone()
                 }
                 else
                 {
-                    regionModel->decreaseCityAV(this->cityAVLost);
+                    regionModel->decreaseCityAV(loseCityAV);
                     regionModel->decimateZeroAVCity();
                     this->affectedRegions.insert(region, regionModel);
                 }

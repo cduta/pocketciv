@@ -19,38 +19,46 @@ void AttackInstruction::initInstruction()
                                   .arg(this->attackingForce)
                                   .arg(this->boardModel->refActiveRegion()->getRegion()));
 
-    this->boardModel->printMessage(" ");
     this->boardModel->printMessage("The attacking force will pillage through the empire.");
-    this->boardModel->printMessage("In each region they visit, City AV, tribes and gold is reduced.");
+    this->boardModel->printMessage(" ");
+
+    this->boardModel->printMessage(QString("Reduce the attacking force by 1."));
+    this->boardModel->printMessage(QString("As long as at least 1 attacking force is reduced, reduce 1 Tribe."));
+    this->boardModel->printMessage(QString("Repeat until no more tribes are left."));
     this->boardModel->printMessage(" ");
 
     if(this->boardModel->hasAdvanceAquired(AdvanceModel::METAL_WORKING))
     {
-        this->boardModel->printMessage(QString("For 2 attacking forces, one tribe is reduced until no more tribes are left."));
-        this->tribeAttackReduce = 2;
-    }
-    else
-    {
-        this->boardModel->printMessage(QString("For each attacking force a tribe is reduced until no more tribes are left."));
+        this->boardModel->printMessage(QString("Advance (METAL WORKING):"));
+        this->boardModel->printMessage(QString("Reduce one additional attacking force in this step."));
+        this->boardModel->printMessage(" ");
+        this->tribeAttackReduce++;
     }
 
+    if(this->boardModel->hasAdvanceAquired(AdvanceModel::MILITARY))
+    {
+        this->boardModel->printMessage(QString("Advance (MILITARY):"));
+        this->boardModel->printMessage(QString("Reduce one additional attacking force in this step."));
+        this->boardModel->printMessage(" ");
+        this->tribeAttackReduce++;
+    }
+
+    this->boardModel->printMessage(QString("After no more tribes are left, reduce the attacking force by 5."));
+    this->boardModel->printMessage(QString("As long as at least 1 attacking force is reduced, reduce 1 City AV"));
+    this->boardModel->printMessage(QString("and remove 2 gold."));
+    this->boardModel->printMessage(QString("Repeat until no more City AV is left."));
+    this->boardModel->printMessage(" ");
+    this->boardModel->printMessage(QString("If at any point the attacking force becomes 0, the event ends."));
     this->boardModel->printMessage(" ");
 
     if(this->boardModel->hasAdvanceAquired(AdvanceModel::ARCHITECTURE))
     {
-        this->cityAVAttackReduce = 8;
+        this->cityAVAttackReduce += 3;
         this->boardModel->printMessage("Advance (ARCHITECTURE):");
-        this->boardModel->printMessage("Then, for each 8 attacking force a City AV and 2 gold are reduced until City AV is 0.");
-    }
-    else
-    {
-        this->cityAVAttackReduce = 5;
-        this->boardModel->printMessage("Then, for each 5 attacking force a City AV and 2 gold are reduced until City AV is 0.");
+        this->boardModel->printMessage("Reduce 3 additional attacking force in this step.");
+        this->boardModel->printMessage(" ");
     }
 
-    this->boardModel->printMessage(" ");
-
-    this->boardModel->printMessage(" ");
     this->boardModel->printMessage("Press Done to continue.");
     this->boardModel->printMessage(" ");
     return;

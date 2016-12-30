@@ -9,7 +9,8 @@ class CivilWarEventInstruction : public EventInstruction
     int colleteralDamage;
     int totalTribes;
     int step;
-    int cityAVLost;
+    int activeRegionCityAVLost;
+    int borderingRegionCityAVLost;
 
     QMap<int, RegionModel *> affectedRegions;
 
