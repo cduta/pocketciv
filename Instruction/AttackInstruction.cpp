@@ -2,6 +2,8 @@
 
 #include "Common.hpp"
 
+#include "Instruction/EndOfEraInstruction.hpp"
+
 AttackInstruction::AttackInstruction(BoardModel *boardModel, Instruction *nextInstruction, QString what, int attackingForce)
     : Instruction(), boardModel(boardModel), nextInstruction(nextInstruction), what(what), attackingForce(attackingForce)
 {
@@ -9,6 +11,9 @@ AttackInstruction::AttackInstruction(BoardModel *boardModel, Instruction *nextIn
     this->tribeAttackReduce = 1;
     this->cityAVAttackReduce = 5;
     this->firstAttack = true;
+    this->step = 0;
+    this->gainGold = 0;
+    this->greenSquareNumber = 0;
 }
 
 void AttackInstruction::initInstruction()
@@ -87,13 +92,50 @@ Instruction *AttackInstruction::triggerHex(Qt::MouseButton button, int x, int y)
 
 Instruction *AttackInstruction::triggerDone()
 {
+    if(this->step == 0 && this->boardModel->hasAdvanceAquired(AdvanceModel::MINISTRY))
+    {
+        this->step++;
+
+        QMap<Event::NumberShapes, int> shapes;
+        this->boardModel->printMessage("Advance (MINISTRY):");
+        this->boardModel->printMessage("Draw a card and reduce the attacking force by the GREEN SQUARE.");
+        this->boardModel->printMessage("Gain the actual reduced amount of attacking force in gold.");
+        this->boardModel->printMessage(" ");
+
+        shapes.insert(Event::GREEN_SQUARE, 1);
+        this->greenSquareNumber = this->boardModel->drawCard(true)->getShapeNumberSum(shapes);
+
+        if(this->attackingForce - this->greenSquareNumber <= 0)
+        {
+            this->gainGold = this->attackingForce;
+        }
+        else
+        {
+            this->gainGold = this->greenSquareNumber;
+        }
+
+        this->attackingForce -= this->gainGold;
+
+        POCKET_CIV_END_OF_ERA_CHECK
+    }
+
+    if(this->step == 1)
+    {
+        this->step++;
+        this->boardModel->gainGold(this->gainGold);
+        this->boardModel->printMessage(QString("The attacking force was reduced by up to %1.").arg(this->greenSquareNumber));
+        this->boardModel->printMessage(QString("You gain %1 gold and the attacking force is now %2.").arg(this->gainGold).arg(this->attackingForce));
+        this->boardModel->printMessage(" ");
+    }
+
     int tribes = this->boardModel->refActiveRegion()->getTribes();
     int newTribes = tribes;
     int cityAV = this->boardModel->refActiveRegion()->getCityAV();
     int newCityAV = cityAV;
     int goldLost = 0;
 
-    if(!this->firstAttack &&
+    if(this->attackingForce > 0 &&
+       !this->firstAttack &&
        tribes > 0 &&
        this->boardModel->hasAdvanceAquired(AdvanceModel::EQUESTRIAN))
     {

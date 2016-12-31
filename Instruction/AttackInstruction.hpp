@@ -14,6 +14,9 @@ class AttackInstruction : public Instruction
     int cityAVAttackReduce;
     int tribeAttackReduce;
     bool firstAttack;
+    int step;
+    int gainGold;
+    int greenSquareNumber;
 
 public:
     AttackInstruction(BoardModel *boardModel, Instruction *nextInstruction, QString what, int attackingForce);
