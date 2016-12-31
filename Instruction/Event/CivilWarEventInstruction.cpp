@@ -20,9 +20,17 @@ void CivilWarEventInstruction::initInstruction()
 {
     this->boardModel->printMessage("CIVIL WAR:");
     this->boardModel->printMessage(" ");
-    this->boardModel->printMessage("The city AV of the active region and bordering regions are reduced by 2.");
+    this->boardModel->printMessage("The city AV of the active region and its bordering regions are reduced by 2.");
     this->boardModel->printMessage("Any regions of those with a city are thereby affected regions.");
     this->boardModel->printMessage(" ");
+
+    if(this->boardModel->getAdvancesAquired().contains(AdvanceModel::MYTHOLOGY))
+    {
+        this->activeRegionCityAVLost++;
+        this->boardModel->printMessage("Advance (MYTHOLOGY):");
+        this->boardModel->printMessage("Reduce one additional city AV of the active region.");
+        this->boardModel->printMessage(" ");
+    }
 
     if(this->boardModel->getAdvancesAquired().contains(AdvanceModel::MILITARY))
     {
