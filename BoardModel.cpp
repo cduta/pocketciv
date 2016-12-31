@@ -1584,7 +1584,7 @@ void BoardModel::initializeCards()
     positive.clear();
     negative.clear();
     positive.append("+ Event (TRIBAL WAR)\n"
-                    "Instead of selecting 2 bordering Regions and reducing Tribes by 3 in the Active Region, select 1 bordering Region and reduce Tribes by 2 in the Active Region.\n");
+                    "Instead of selecting 2 bordering Regions and reducing Tribes by 3 in the Active Region, select one bordering Region and reduce Tribes by one in the Active Region.\n");
     advances.insert(AdvanceModel::MUSIC,
                     new AdvanceModel(AdvanceModel::MUSIC,
                                      "Music",
