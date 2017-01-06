@@ -132,7 +132,7 @@ Instruction *ExpeditionInstruction::triggerDone()
 
             if(this->boardModel->hasAdvanceAquired(AdvanceModel::NAVIGATION))
             {
-                expeditionCost = card->getShapeNumbers().value(Event::BLUE_HEXAGON, 0);
+                expeditionCost = card->getShapeNumbers().value(Event::GREEN_SQUARE, 0);
             }
 
             if(this->boardModel->hasAdvanceAquired(AdvanceModel::MAGNETICS))
