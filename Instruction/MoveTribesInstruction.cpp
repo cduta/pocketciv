@@ -17,38 +17,48 @@ void MoveTribesInstruction::initInstruction()
 {
     this->boardModel->printMessage("POPULATION MOVEMENT:");
     this->boardModel->printMessage("Move tribes from one to another region.");
+    this->boardModel->printMessage("Every tribe can be moved once into an adjacent region.");
     this->boardModel->printMessage(" ");
-    if(this->boardModel->hasAdvanceAquired(AdvanceModel::EQUESTRIAN) ||
-       this->boardModel->hasAdvanceAquired(AdvanceModel::FISHING))
-    {
-        if(this->boardModel->hasAdvanceAquired(AdvanceModel::EQUESTRIAN))
-        {
-            this->boardModel->printMessage("Advance (EQUESTRIAN):");
-            this->boardModel->printMessage("Every tribe can be moved once into any");
-            this->boardModel->printMessage("region not seperated by a SEA or FRONTIER.");
-            this->boardModel->printMessage(" ");
-        }
 
-        if(this->boardModel->hasAdvanceAquired(AdvanceModel::FISHING))
-        {
-            this->boardModel->printMessage("Advance (FISHING):");
-            this->boardModel->printMessage("Tribes on a region bordering a SEA can be moved");
-            this->boardModel->printMessage("to any other region also bordering the same SEA.");
-            this->boardModel->printMessage("But doing so, decimates 1 tribe from the moved group.");
-            this->boardModel->printMessage(" ");
-
-            if(this->boardModel->hasAdvanceAquired(AdvanceModel::MAGNETICS))
-            {
-                this->boardModel->printMessage("Advance (MAGNETICS):");
-                this->boardModel->printMessage("Moving tribes overseas does not decimate 1 tribe.");
-                this->boardModel->printMessage(" ");
-            }
-        }
-    }
-    else
+    if(this->boardModel->hasAdvanceAquired(AdvanceModel::EQUESTRIAN))
     {
-        this->boardModel->printMessage("Every tribe can be moved once into an adjacent region.");
+        this->boardModel->printMessage("Advance (EQUESTRIAN):");
+        this->boardModel->printMessage("Every tribe can be moved once into any");
+        this->boardModel->printMessage("region not seperated by a SEA or FRONTIER.");
         this->boardModel->printMessage(" ");
+    }
+
+    if(this->boardModel->hasAdvanceAquired(AdvanceModel::FISHING) ||
+       this->boardModel->hasAdvanceAquired(AdvanceModel::NAVIGATION))
+    {
+        QString advanceTitle = "";
+
+        if(this->boardModel->hasAdvanceAquired(AdvanceModel::FISHING) &&
+           this->boardModel->hasAdvanceAquired(AdvanceModel::NAVIGATION))
+        {
+            advanceTitle = "Advance (FISHING)/(NAVIGATION):";
+        }
+        else if(this->boardModel->hasAdvanceAquired(AdvanceModel::FISHING))
+        {
+            advanceTitle = "Advance (FISHING):";
+        }
+        else if(this->boardModel->hasAdvanceAquired(AdvanceModel::NAVIGATION))
+        {
+            advanceTitle = "Advance (NAVIGATION):";
+        }
+
+        this->boardModel->printMessage(advanceTitle);
+        this->boardModel->printMessage("Tribes on a region bordering a SEA can be moved");
+        this->boardModel->printMessage("to any other region also bordering the same SEA.");
+        this->boardModel->printMessage("But doing so, decimates 1 tribe from the moved group.");
+        this->boardModel->printMessage(" ");
+
+        if(this->boardModel->hasAdvanceAquired(AdvanceModel::MAGNETICS))
+        {
+            this->boardModel->printMessage("Advance (MAGNETICS):");
+            this->boardModel->printMessage("Moving tribes overseas does not decimate 1 tribe.");
+            this->boardModel->printMessage(" ");
+        }
     }
 
     this->boardModel->printMessage("When you are done, press Done...");

@@ -317,7 +317,7 @@ BoardModel::MoveTribesType BoardModel::getMoveTribesType(int fromRegion, int toR
     }
 
     QMap<int, RegionModel *> seaAdjacentRegions;
-    if(this->hasAdvanceAquired(AdvanceModel::FISHING))
+    if(this->hasAdvanceAquired(AdvanceModel::FISHING) || this->hasAdvanceAquired(AdvanceModel::NAVIGATION))
     {
         // Is reachable by SEA?
         seaAdjacentRegions = this->getRegionsReachableBySea(fromRegion);
@@ -1610,7 +1610,7 @@ void BoardModel::initializeCards()
     positive.clear();
     negative.clear();
     positive.append("+ Expedition\n"
-                    "Instead of sending Tribes into the Frontier, you may send them to Sea and the BLUE HEX Number replaces GREEN HEX Number to determine how much gold you receive.\n");
+                    "Instead of sending Tribes into the Frontier, you may send them to Sea and the BLUE HEX Number replaces GREEN SQUARE Number to determine how much gold you receive.\n");
     positive.append("+ Population Growth and Movement\n"
                     "Move any amount of tribes from one region to another bordering on the same sea. Reduce the group of moved tribes by 1.\n");
     advances.insert(AdvanceModel::NAVIGATION,

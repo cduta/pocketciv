@@ -13,17 +13,35 @@ ExpeditionInstruction::ExpeditionInstruction(BoardModel *boardModel, Instruction
 void ExpeditionInstruction::initInstruction()
 {
     this->boardModel->printMessage("EXPEDITION:");
-    this->boardModel->printMessage("Choose a region bordering on the frontier.");
+    this->boardModel->printMessage("Choose a region bordering on a frontier.");
     this->boardModel->printMessage("Decimate any amount of tribes, then draw a card.");
     this->boardModel->printMessage("Gain Gold equal to the decimated tribes minus the BLUE HEX number.");
-    this->boardModel->printMessage("Remember: At least 1 tribe has to remain anywhere in the Empire, when decimating Tribes!");
+    this->boardModel->printMessage("Remember: At least 1 tribe has to remain anywhere in the Empire,");
+    this->boardModel->printMessage("when decimating Tribes!");
     this->boardModel->printMessage(" ");
+
+    if(this->boardModel->hasAdvanceAquired(AdvanceModel::NAVIGATION))
+    {
+        this->boardModel->printMessage("Advance (NAVIGATION):");
+        this->boardModel->printMessage("You may also choose a region bordering on a sea.");
+        this->boardModel->printMessage("The SEA Expedition works like a normal Expedition, but");
+        this->boardModel->printMessage("instead of the BLUE HEX number, use the GREEN SQUARE number.");
+        this->boardModel->printMessage("If the region borders on a frontier as well, you can decide");
+        this->boardModel->printMessage("what type of expediton this is going to be.");
+        this->boardModel->printMessage(" ");
+    }
 
 
     if(this->boardModel->hasAdvanceAquired(AdvanceModel::MAGNETICS))
     {
         this->boardModel->printMessage("Advance (MAGNETICS):"); // Apply also to SEA Expedition.
         this->boardModel->printMessage("Before applying the BLUE HEX number, divide it by 2 (round up).");
+
+        if(this->boardModel->hasAdvanceAquired(AdvanceModel::NAVIGATION))
+        {
+            this->boardModel->printMessage("If you choose to do a SEA Expedition,");
+            this->boardModel->printMessage("apply this to the GREEN SQUARE number.");
+        }
         this->boardModel->printMessage(" ");
     }
 
@@ -111,6 +129,11 @@ Instruction *ExpeditionInstruction::triggerDone()
             this->boardModel->decimateAllSelectedTribes();
             const EventCard * card = this->boardModel->drawCard();
             int expeditionCost = card->getShapeNumbers().value(Event::BLUE_HEXAGON, 0);
+
+            if(this->boardModel->hasAdvanceAquired(AdvanceModel::NAVIGATION))
+            {
+                expeditionCost = card->getShapeNumbers().value(Event::BLUE_HEXAGON, 0);
+            }
 
             if(this->boardModel->hasAdvanceAquired(AdvanceModel::MAGNETICS))
             {
