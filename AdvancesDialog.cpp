@@ -47,7 +47,7 @@ void AdvancesDialog::init()
         case AdvanceItem::OVERVIEW: this->setWindowTitle("Advances Overview"); break;
         case AdvanceItem::AQUIRE: this->setWindowTitle("Aquire Advances"); break;
         case AdvanceItem::SELECTABLE:
-            this->setWindowTitle(QString("Select some Advances (0 of %1)"));
+            this->setWindowTitle(QString("Select Advances (0 of %1)"));
             this->selectionLimit = boardModel->getTribeCount();
             // TODO: WRITTEN RECORD here.
             break;
