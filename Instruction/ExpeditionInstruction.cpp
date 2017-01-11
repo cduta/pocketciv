@@ -143,7 +143,7 @@ Instruction *ExpeditionInstruction::triggerDone()
                     }
                     else if (result == 2)
                     {
-                        this->boardModel->printMessage(QString("Canceled sending an expedition from Region %1.").arg(this->boardModel->refActiveRegion()->getRegion()));
+                        this->boardModel->printMessage(QString("Canceled sending an Expedition from Region %1.").arg(this->boardModel->refActiveRegion()->getRegion()));
                         this->boardModel->printMessage(" ");
                         this->boardModel->unselectAllSelectedTribes();
                         this->boardModel->unsetActiveRegion();
