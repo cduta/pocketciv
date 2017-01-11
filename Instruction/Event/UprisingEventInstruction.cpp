@@ -29,8 +29,15 @@ Instruction *UprisingEventInstruction::triggerHex(Qt::MouseButton button, int x,
     {
         regionModel->decreaseCityAV(1);
         regionModel->decimateZeroAVCity();
-        // ORGANIZED RELIGION
-        regionModel->decimateTribes(regionModel->getTribes());
+
+        if(this->boardModel->hasAdvanceAquired(AdvanceModel::ORGANIZED_RELIGION))
+        {
+            regionModel->decimateTribes(2);
+        }
+        else
+        {
+            regionModel->decimateTribes(regionModel->getTribes());
+        }
 
         this->boardModel->printMessage(QString("You chose region %1").arg(regionModel->getRegion()));
         this->boardModel->printMessage("Press Done to continue...");
@@ -56,9 +63,16 @@ Instruction *UprisingEventInstruction::triggerDone()
         this->step++;
         RegionModel *activeRegion = this->boardModel->refActiveRegion();
 
-        this->boardModel->printMessage("An uprising decreased the City AV by 2, decimated the tribes by 2 and");
-        this->boardModel->printMessage("decimated the farm in the active region.");
+        this->boardModel->printMessage("An uprising decreases the City AV by 2, decimates all tribes and");
+        this->boardModel->printMessage(QString("decimated the farm in Region %1.").arg(activeRegion->getRegion()));
         this->boardModel->printMessage(" ");
+
+        if(this->boardModel->hasAdvanceAquired(AdvanceModel::ORGANIZED_RELIGION))
+        {
+            this->boardModel->printMessage("Advance (ORGANIZED RELIGION):");
+            this->boardModel->printMessage("Instead of all tribes, decimate 2 tribes.");
+            this->boardModel->printMessage(" ");
+        }
 
         int decreaseCityAV = 2;
 
@@ -77,8 +91,15 @@ Instruction *UprisingEventInstruction::triggerDone()
         }
 
         activeRegion->decreaseCityAV(decreaseCityAV);
-        // ORGANIZED RELIGION
-        activeRegion->decimateTribes(activeRegion->getTribes());
+
+        if(this->boardModel->hasAdvanceAquired(AdvanceModel::ORGANIZED_RELIGION))
+        {
+            activeRegion->decimateTribes(2);
+        }
+        else
+        {
+            activeRegion->decimateTribes(activeRegion->getTribes());
+        }
         activeRegion->setFarm(false);
     }
 
@@ -93,7 +114,12 @@ Instruction *UprisingEventInstruction::triggerDone()
         this->boardModel->printMessage("If the City AV is 0, decimate the City.");
         this->boardModel->printMessage(" ");
 
-        // ORGANIZED RELIGION
+        if(this->boardModel->hasAdvanceAquired(AdvanceModel::ORGANIZED_RELIGION))
+        {
+            this->boardModel->printMessage("Advance (ORGANIZED RELIGION):");
+            this->boardModel->printMessage("Instead of all tribes, decimate 2 tribes.");
+            this->boardModel->printMessage(" ");
+        }
 
         QMap<int, RegionModel *> borderingRegions = this->boardModel->getAdjacentRegions(activeRegion->getRegion());
 
@@ -113,7 +139,7 @@ Instruction *UprisingEventInstruction::triggerDone()
         }
         else
         {
-            this->boardModel->printMessage("But there was no bordering region with a city.");
+            this->boardModel->printMessage("But there is no bordering region with a city.");
             this->boardModel->printMessage(" ");
         }
     }

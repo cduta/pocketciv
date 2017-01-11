@@ -7,6 +7,8 @@
 class AnarchyEventInstruction : public EventInstruction
 {
     int step;
+    QList<RegionModel *> possibleRegions;
+    QList<RegionModel *> affectedRegions;
 
 public:
     AnarchyEventInstruction(BoardModel *boardModel, Instruction *nextInstruction, const Event *event);

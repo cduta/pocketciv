@@ -1,14 +1,28 @@
 #include "AnarchyEventInstruction.hpp"
 
+#include "Common.hpp"
+
 AnarchyEventInstruction::AnarchyEventInstruction(BoardModel *boardModel, Instruction *nextInstruction, const Event *event)
     : EventInstruction(boardModel, nextInstruction, event), step(0)
 {
     this->nextInstruction->setKeepInstruction(true);
+    this->possibleRegions = this->boardModel->getRegions().values();
 }
 
 void AnarchyEventInstruction::initInstruction()
 {
     this->boardModel->printMessage("ANARCHY:");
+    this->boardModel->printMessage("In all Regions with cities, Anarchy reigns.");
+    this->boardModel->printMessage(" ");
+
+    if(this->boardModel->hasAdvanceAquired(AdvanceModel::ORGANIZED_RELIGION))
+    {
+        this->boardModel->printMessage("Advance (ORGANIZED RELIGION):");
+        this->boardModel->printMessage("Instead of all Regions with cities,");
+        this->boardModel->printMessage("select 4 regions with OR without cities.");
+        this->boardModel->printMessage(" ");
+    }
+
     this->boardModel->printMessage("Press done to continue.");
     this->boardModel->printMessage(" ");
     return;
@@ -23,7 +37,19 @@ Instruction *AnarchyEventInstruction::triggerHex(Qt::MouseButton button, int x, 
         return this;
     }
 
-    if(regionModel && this->step == 1)
+    if(regionModel && this->step == 1 && this->boardModel->getSelectedRegions().count() < 4)
+    {
+        if(button == Qt::LeftButton && !regionModel->isSelected())
+        {
+            regionModel->setSelected(true);
+        }
+        else if(button == Qt::RightButton && regionModel->isSelected())
+        {
+            regionModel->setSelected(false);
+        }
+    }
+
+    if(regionModel && this->step == 2 && this->affectedRegions.contains(regionModel))
     {
         if(button == Qt::LeftButton &&
            this->boardModel->getCityAVCount() - this->boardModel->getAllSelectedCityAV() > 1 &&
@@ -42,7 +68,20 @@ Instruction *AnarchyEventInstruction::triggerHex(Qt::MouseButton button, int x, 
 
 Instruction *AnarchyEventInstruction::triggerDone()
 {
-    if(this->step == 0)
+    if(this->step == 0 && this->boardModel->hasAdvanceAquired(AdvanceModel::ORGANIZED_RELIGION))
+    {
+        if(this->boardModel->getSelectedRegions().count() == 4)
+        {
+            this->boardModel->printMessage(QString("Affected Regions are %1.").arg(Common::listUpRegions(this->possibleRegions)));
+            this->step++;
+        }
+        else
+        {
+            this->boardModel->printMessage(QString("You still have to select %1 regions.").arg(4 - this->possibleRegions.count()));
+        }
+    }
+
+    if(this->step == 1)
     {
         this->step++;
         if(this->boardModel->hasAdvanceAquired(AdvanceModel::LAW))
@@ -52,9 +91,7 @@ Instruction *AnarchyEventInstruction::triggerDone()
             this->boardModel->printMessage("as the City AV of that city.");
             this->boardModel->printMessage(" ");
 
-            // PUT EXTRA STEP HERE. Instead of all regions, ORGANIZED RELIGION.
-
-            foreach(RegionModel *regionModel, this->boardModel->getRegions().values())
+            foreach(RegionModel *regionModel, this->possibleRegions)
             {
                 if(regionModel->hasCity())
                 {
@@ -66,6 +103,11 @@ Instruction *AnarchyEventInstruction::triggerDone()
                     this->boardModel->printMessage(QString("In region %1 there have been %2 tribes decimated.")
                                                   .arg(regionModel->getRegion())
                                                   .arg(tribes - regionModel->getTribes()));
+
+                    if(tribes > 0)
+                    {
+                        this->affectedRegions.append(regionModel);
+                    }
                 }
             }
         }
@@ -86,9 +128,7 @@ Instruction *AnarchyEventInstruction::triggerDone()
                 this->boardModel->printMessage(" ");
             }
 
-            // PUT EXTRA STEP HERE. Instead of all regions, ORGANIZED RELIGION.
-
-            foreach(RegionModel *regionModel, this->boardModel->getRegions().values())
+            foreach(RegionModel *regionModel, this->possibleRegions)
             {
                 if(regionModel->hasCity() && regionModel->getCityAV() > 0)
                 {
@@ -119,29 +159,41 @@ Instruction *AnarchyEventInstruction::triggerDone()
                                                   .arg(decimatedTribes)
                                                   .arg(tribeString));
                     this->boardModel->printMessage(" ");
+
+                    if(cityAV > 0 || tribes > 0)
+                    {
+                        this->affectedRegions.append(regionModel);
+                    }
                 }
             }
 
             if(this->boardModel->hasAdvanceAquired(AdvanceModel::MACHINING))
             {
                 this->boardModel->printMessage("Advance (MACHINING):");
-                this->boardModel->printMessage("Reduce 2 additional City AV from cities of your choice.");
+                this->boardModel->printMessage("Reduce 2 additional City AV from cities of affected regions.");
+                this->boardModel->printMessage(QString("The affected regions are %1.").arg(Common::listUpRegions(this->affectedRegions)));
+
                 this->boardModel->printMessage(" ");
-                int cityAVCount = this->boardModel->getCityAVCount();
+                int cityAVCount = 0;
+
+                foreach(RegionModel *regionModel, this->affectedRegions)
+                {
+                    cityAVCount += regionModel->getCityAV();
+                }
 
                 if(cityAVCount == 0)
                 {
-                    this->boardModel->printMessage("There is no City AV left in the empire.");
+                    this->boardModel->printMessage("There is no City AV in the affected regions left.");
                     this->boardModel->printMessage("Therefore nothing further occurs.");
                     this->boardModel->printMessage(" ");
                 }
                 else if(cityAVCount == 1 || cityAVCount == 2)
                 {
-                    this->boardModel->printMessage(QString("There is %1 City AV left in the empire.").arg(cityAVCount));
-                    this->boardModel->printMessage("Therefore all City AV has been reduced to 0.");
+                    this->boardModel->printMessage(QString("There is %1 City AV left in the affected regions.").arg(cityAVCount));
+                    this->boardModel->printMessage("Therefore their City AV has been reduced to 0.");
                     this->boardModel->printMessage(" ");
 
-                    foreach(RegionModel *regionModel, this->boardModel->getRegions().values())
+                    foreach(RegionModel *regionModel, this->affectedRegions)
                     {
                         regionModel->setCityAV(0);
                     }
