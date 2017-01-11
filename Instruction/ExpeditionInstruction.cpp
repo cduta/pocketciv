@@ -3,6 +3,7 @@
 #include "Instruction/EndOfEraInstruction.hpp"
 
 #include <QtCore/qmath.h>
+#include <QMessageBox>
 
 ExpeditionInstruction::ExpeditionInstruction(BoardModel *boardModel, Instruction *nextInstruction)
     : Instruction(), boardModel(boardModel), nextInstruction(nextInstruction), gainGold(0), expeditionCardDrawn(false)
@@ -123,16 +124,54 @@ Instruction *ExpeditionInstruction::triggerDone()
 
         if(!this->expeditionCardDrawn && selectedTribes > 0)
         {
-            this->expeditionCardDrawn = true;
-            this->boardModel->printMessage(QString("Sending %1 tribes on an expedition into the frontier...").arg(selectedTribes));
-            this->boardModel->printMessage(" ");
-            this->boardModel->decimateAllSelectedTribes();
-            const EventCard * card = this->boardModel->drawCard();
-            int expeditionCost = card->getShapeNumbers().value(Event::BLUE_HEXAGON, 0);
+            bool seaExpedition = false;
 
-            if(this->boardModel->hasAdvanceAquired(AdvanceModel::NAVIGATION))
+            if(this->boardModel->hasAdvanceAquired(AdvanceModel::NAVIGATION) &&
+               this->boardModel->bordersOnSea(this->boardModel->refActiveRegion()->getRegion()))
             {
+                if(this->boardModel->bordersOnFrontier(this->boardModel->refActiveRegion()->getRegion()))
+                {
+                    int result = QMessageBox::question(NULL, "Sea or Frontier Expedition?", "Where do you want to send the Expedition?", "Frontier","Sea","Cancel");
+
+                    if(result == 0)
+                    {
+                        seaExpedition = false;
+                    }
+                    else if(result == 1)
+                    {
+                        seaExpedition = true;
+                    }
+                    else if (result == 2)
+                    {
+                        this->boardModel->printMessage(QString("Canceled sending an expedition from Region %1.").arg(this->boardModel->refActiveRegion()->getRegion()));
+                        this->boardModel->printMessage(" ");
+                        this->boardModel->unselectAllSelectedTribes();
+                        this->boardModel->unsetActiveRegion();
+                        return this;
+                    }
+                }
+                else
+                {
+                    seaExpedition = true;
+                }
+            }
+
+            this->expeditionCardDrawn = true;
+            this->boardModel->decimateAllSelectedTribes();
+            const EventCard *card = this->boardModel->drawCard();
+            int expeditionCost;
+
+            if(seaExpedition)
+            {
+                this->boardModel->printMessage(QString("Sending %1 tribes on an expedition into the sea...").arg(selectedTribes));
+                this->boardModel->printMessage(" ");
                 expeditionCost = card->getShapeNumbers().value(Event::GREEN_SQUARE, 0);
+            }
+            else
+            {
+                this->boardModel->printMessage(QString("Sending %1 tribes on an expedition into the frontier...").arg(selectedTribes));
+                this->boardModel->printMessage(" ");
+                expeditionCost = card->getShapeNumbers().value(Event::BLUE_HEXAGON, 0);
             }
 
             if(this->boardModel->hasAdvanceAquired(AdvanceModel::MAGNETICS))
@@ -171,7 +210,7 @@ Instruction *ExpeditionInstruction::triggerDone()
         }
 
         this->boardModel->printMessage(" ");
-        this->boardModel->setGold(this->boardModel->getGold() + this->gainGold);
+        this->boardModel->gainGold(this->gainGold);
         this->boardModel->disableButtons();
         this->boardModel->enableMainPhaseButtons();
         this->boardModel->decimateAllSelectedTribes();

@@ -52,6 +52,8 @@ Instruction *AnarchyEventInstruction::triggerDone()
             this->boardModel->printMessage("as the City AV of that city.");
             this->boardModel->printMessage(" ");
 
+            // PUT EXTRA STEP HERE. Instead of all regions, ORGANIZED RELIGION.
+
             foreach(RegionModel *regionModel, this->boardModel->getRegions().values())
             {
                 if(regionModel->hasCity())
@@ -83,6 +85,8 @@ Instruction *AnarchyEventInstruction::triggerDone()
                 this->boardModel->printMessage("Decimate an additional 2 tribes in every region affected by ANARCHY.");
                 this->boardModel->printMessage(" ");
             }
+
+            // PUT EXTRA STEP HERE. Instead of all regions, ORGANIZED RELIGION.
 
             foreach(RegionModel *regionModel, this->boardModel->getRegions().values())
             {

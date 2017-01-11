@@ -1627,7 +1627,7 @@ void BoardModel::initializeCards()
     prequisites.append(QList<AdvanceModel::Advance>());
     prequisites[0].append(AdvanceModel::MYTHOLOGY);
     positive.append("+ Event (ANARCHY)\n"
-                    "Instead of all Regions with Cities, choose 4 Regions with or without cities and apply the event only to the chosen Regions with cities.\n");
+                    "Instead of all Regions with Cities, choose 4 Regions with or without cities and apply this event to only those chosen Regions with cities.\n");
     positive.append("+ Event (UPRISING)\n"
                     "Instead of decimating all the Tribes, reduce Tribes by 2.\n");
     advances.insert(AdvanceModel::ORGANIZED_RELIGION,
