@@ -120,8 +120,13 @@ Instruction *VisitationEventInstruction::triggerDone()
 
         this->isTrading = this->boardModel->isTradingPartner(this->empire);
 
-        if(!this->isTrading)
+        if(this->isTrading)
         {
+            this->boardModel->printMessage(QString("You and the %1 empire are trading partners.").arg(Common::getEmpireName(this->empire)));
+        }
+        else
+        {
+            this->boardModel->printMessage("You try negotiating for a trade, by drawing a card with a handshake...");
             this->isTrading = this->boardModel->drawCard()->hasHandshake();
         }
 
@@ -131,13 +136,52 @@ Instruction *VisitationEventInstruction::triggerDone()
         }
         else
         {
-            this->boardModel->printMessage(QString("The %1 empire came with their military forces to visit your empire.").arg(Common::getEmpireName(this->empire)));
+            this->boardModel->printMessage(QString("But the %1 empire came with their military forces to visit your empire.").arg(Common::getEmpireName(this->empire)));
+        }
+        this->boardModel->printMessage(" ");
+
+        if(!this->boardModel->hasAdvanceAquired(AdvanceModel::PHILOSOPHY) || this->isTrading)
+        {
+            this->step++;
         }
 
         POCKET_CIV_END_OF_ERA_CHECK
     }
 
     if(this->step == 4)
+    {
+        this->step++;
+
+        this->boardModel->printMessage("Advance (PHILOSOPHY):");
+        this->boardModel->printMessage("You MAY draw a second card to try and negotiate one more time.");
+
+        int result = QMessageBox::question(NULL, "Advance (PHILOSOPHY)", "You MAY draw a second card to try and negotiate one more time.\n\nDo you want to try one more time?", "Yes","No");
+
+        if(result == 0) // YES
+        {
+            this->boardModel->printMessage("You try negotiating for a trade again...");
+            this->isTrading = this->boardModel->drawCard()->hasHandshake();
+
+            if(this->isTrading)
+            {
+                this->boardModel->printMessage(QString("The %1 empire came to trade with you.").arg(Common::getEmpireName(this->empire)));
+            }
+            else
+            {
+                this->boardModel->printMessage(QString("But they decline and their military forces draw closer.").arg(Common::getEmpireName(this->empire)));
+            }
+
+            this->boardModel->printMessage(" ");
+            POCKET_CIV_END_OF_ERA_CHECK
+        }
+        else // NO
+        {
+            this->boardModel->printMessage("You did not try to negotiate for a trade again.");
+            this->boardModel->printMessage(QString("The military forces of %1 empire draw closer.").arg(Common::getEmpireName(this->empire)));
+        }
+    }
+
+    if(this->step == 5)
     {
         this->step++;
         if(this->isTrading)
@@ -156,7 +200,7 @@ Instruction *VisitationEventInstruction::triggerDone()
         POCKET_CIV_END_OF_ERA_CHECK
     }
 
-    if(this->step == 5)
+    if(this->step == 6)
     {
         this->step++;
         if(!this->boardModel->bordersOnSea(this->boardModel->refActiveRegion()->getRegion()) &&
@@ -181,7 +225,7 @@ Instruction *VisitationEventInstruction::triggerDone()
         POCKET_CIV_END_OF_ERA_CHECK
     }
 
-    if(this->step == 6)
+    if(this->step == 7)
     {
         this->step++;
         Instruction *next =

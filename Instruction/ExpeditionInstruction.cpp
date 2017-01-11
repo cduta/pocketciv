@@ -133,15 +133,15 @@ Instruction *ExpeditionInstruction::triggerDone()
                 {
                     int result = QMessageBox::question(NULL, "Sea or Frontier Expedition?", "Where do you want to send the Expedition?", "Frontier","Sea","Cancel");
 
-                    if(result == 0)
+                    if(result == 0) // FRONTIER
                     {
                         seaExpedition = false;
                     }
-                    else if(result == 1)
+                    else if(result == 1) // SEA
                     {
                         seaExpedition = true;
                     }
-                    else if (result == 2)
+                    else // CANCEL
                     {
                         this->boardModel->printMessage(QString("Canceled sending an Expedition from Region %1.").arg(this->boardModel->refActiveRegion()->getRegion()));
                         this->boardModel->printMessage(" ");

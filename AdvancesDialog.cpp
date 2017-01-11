@@ -46,8 +46,11 @@ void AdvancesDialog::init()
     {
         case AdvanceItem::OVERVIEW: this->setWindowTitle("Advances Overview"); break;
         case AdvanceItem::AQUIRE: this->setWindowTitle("Aquire Advances"); break;
-        case AdvanceItem::SELECTABLE: this->setWindowTitle(QString("Select some Advances (0 of %1)")
-                                                           .arg(this->selectionLimit)); break;
+        case AdvanceItem::SELECTABLE:
+            this->setWindowTitle(QString("Select some Advances (0 of %1)"));
+            this->selectionLimit = boardModel->getTribeCount();
+            // TODO: WRITTEN RECORD here.
+            break;
     }
 
     connect(this->boardModel, SIGNAL(boardUpdated()), this, SLOT(updateDialog()));
@@ -204,7 +207,7 @@ void AdvancesDialog::updateDialog()
 {
     if(this->advanceItemType == AdvanceItem::SELECTABLE)
     {
-        this->setWindowTitle(QString("Select some Advances (%1 of %2)")
+        this->setWindowTitle(QString("Select Advances (%1 of %2)")
                                     .arg(this->boardModel->getAdvancesSelected().size())
                                     .arg(this->boardModel->getAdvanceSelectionLimit()));
     }
