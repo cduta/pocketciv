@@ -20,6 +20,27 @@ void ReduceCityAVInstruction::initInstruction()
         this->boardModel->printMessage("If you have more than 3 Gold, add 1 Gold.");
     }
 
+    if(this->boardModel->hasAdvanceAquired(AdvanceModel::PATRONAGE))
+    {
+        this->boardModel->printMessage("Advance (PATRONAGE):");
+        this->boardModel->printMessage("Gain one Gold for every any city in your Empire over 4.");
+
+        int cityCount = this->boardModel->getCityCount();
+        int patronage = cityCount - 4;
+
+        if(patronage > 0)
+        {
+            this->boardModel->gainGold(patronage);
+            this->boardModel->printMessage(QString("You have %1 cities, therefore you gain %2 gold.").arg(cityCount).arg(patronage));
+        }
+        else
+        {
+            this->boardModel->printMessage(QString("You have %1 cities, therefore you gain no gold.").arg(cityCount));
+        }
+
+        this->boardModel->printMessage(" ");
+    }
+
     this->boardModel->printMessage("REDUCE CITY AV:");
     this->boardModel->printMessage("Any city in a region without a farm to support it has its City AV reduced by 1.");
     this->boardModel->printMessage("Any city with 0 AV will be decimated.");
