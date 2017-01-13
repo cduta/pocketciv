@@ -17,6 +17,7 @@ void ExpeditionInstruction::initInstruction()
     this->boardModel->printMessage("Choose a region bordering on a frontier.");
     this->boardModel->printMessage("Decimate any amount of tribes, then draw a card.");
     this->boardModel->printMessage("Gain Gold equal to the decimated tribes minus the BLUE HEX number.");
+    this->boardModel->printMessage(" ");
     this->boardModel->printMessage("Remember: At least 1 tribe has to remain anywhere in the Empire,");
     this->boardModel->printMessage("when decimating Tribes!");
     this->boardModel->printMessage(" ");
@@ -27,8 +28,8 @@ void ExpeditionInstruction::initInstruction()
         this->boardModel->printMessage("You may also choose a region bordering on a sea.");
         this->boardModel->printMessage("The SEA Expedition works like a normal Expedition, but");
         this->boardModel->printMessage("instead of the BLUE HEX number, use the GREEN SQUARE number.");
-        this->boardModel->printMessage("If the region borders on a frontier as well, you can decide");
-        this->boardModel->printMessage("what type of expediton this is going to be.");
+        this->boardModel->printMessage("If the region borders on a sea and a frontier,");
+        this->boardModel->printMessage("you decide the type of expedition.");
         this->boardModel->printMessage(" ");
     }
 
@@ -48,8 +49,15 @@ void ExpeditionInstruction::initInstruction()
 
     if(this->boardModel->hasAdvanceAquired(AdvanceModel::CAVALRY))
     {
-        this->boardModel->printMessage("Advance (CAVALRY):"); // ONLY for frontier expedtions.
+        this->boardModel->printMessage("Advance (CAVALRY):");
         this->boardModel->printMessage("Each tribe sent into the frontier, counts as two tribes.");
+        this->boardModel->printMessage(" ");
+    }
+
+    if(this->boardModel->hasAdvanceAquired(AdvanceModel::SAILS_AND_RIGGINGS))
+    {
+        this->boardModel->printMessage("Advance (SAILS AND RIGGINGS):");
+        this->boardModel->printMessage("Each tribe sent into the sea, counts as two tribes.");
         this->boardModel->printMessage(" ");
     }
 
@@ -166,12 +174,26 @@ Instruction *ExpeditionInstruction::triggerDone()
                 this->boardModel->printMessage(QString("Sending %1 tribes on an expedition into the sea...").arg(selectedTribes));
                 this->boardModel->printMessage(" ");
                 expeditionCost = card->getShapeNumbers().value(Event::GREEN_SQUARE, 0);
+
+                if(this->boardModel->hasAdvanceAquired(AdvanceModel::SAILS_AND_RIGGINGS))
+                {
+                    this->boardModel->printMessage("Advance (SAILS AND RIGGINGS):");
+                    this->boardModel->printMessage("Each tribe sent into the sea, counts as two tribes.");
+                    this->boardModel->printMessage(" ");
+                }
             }
             else
             {
                 this->boardModel->printMessage(QString("Sending %1 tribes on an expedition into the frontier...").arg(selectedTribes));
                 this->boardModel->printMessage(" ");
                 expeditionCost = card->getShapeNumbers().value(Event::BLUE_HEXAGON, 0);
+
+                if(this->boardModel->hasAdvanceAquired(AdvanceModel::CAVALRY))
+                {
+                    this->boardModel->printMessage("Advance (CAVALRY):");
+                    this->boardModel->printMessage("Each tribe sent into the frontier, counts as two tribes.");
+                    this->boardModel->printMessage(" ");
+                }
             }
 
             if(this->boardModel->hasAdvanceAquired(AdvanceModel::MAGNETICS))
@@ -179,7 +201,8 @@ Instruction *ExpeditionInstruction::triggerDone()
                 expeditionCost = qCeil(((double)expeditionCost)/2.0);
             }
 
-            if(this->boardModel->hasAdvanceAquired(AdvanceModel::CAVALRY))
+            if((!seaExpedition && this->boardModel->hasAdvanceAquired(AdvanceModel::CAVALRY)) ||
+               (seaExpedition && this->boardModel->hasAdvanceAquired(AdvanceModel::SAILS_AND_RIGGINGS)))
             {
                 this->gainGold = (selectedTribes*2) - expeditionCost;
             }

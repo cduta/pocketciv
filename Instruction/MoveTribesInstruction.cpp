@@ -4,8 +4,8 @@
 #include "Instruction/DialogInstruction.hpp"
 #include "Instruction/EndOfEraInstruction.hpp"
 
-MoveTribesInstruction::MoveTribesInstruction(BoardModel *boardModel)
-    : Instruction(), boardModel(boardModel), moveTribeDialog(NULL)
+MoveTribesInstruction::MoveTribesInstruction(BoardModel *boardModel, bool firstMovement)
+    : Instruction(), boardModel(boardModel), moveTribeDialog(NULL), firstMovement(firstMovement)
 {}
 
 MoveTribesInstruction::~MoveTribesInstruction()
@@ -59,6 +59,14 @@ void MoveTribesInstruction::initInstruction()
             this->boardModel->printMessage("Moving tribes overseas does not decimate 1 tribe.");
             this->boardModel->printMessage(" ");
         }
+    }
+
+    if(this->firstMovement && this->boardModel->hasAdvanceAquired(AdvanceModel::ROADBUILDING))
+    {
+
+        this->boardModel->printMessage("Advance (ROADBUILDING):");
+        this->boardModel->printMessage("A second POPULATION MOVEMENT occurs after this one.");
+        this->boardModel->printMessage(" ");
     }
 
     this->boardModel->printMessage("When you are done, press Done...");
@@ -136,6 +144,13 @@ Instruction *MoveTribesInstruction::triggerDone()
     this->boardModel->mergeAllMovedTribes();
     this->boardModel->unselectAllRegions();
     this->boardModel->printMessage(" ");
+
+    if(this->firstMovement && this->boardModel->hasAdvanceAquired(AdvanceModel::ROADBUILDING))
+    {
+        Instruction *next = new MoveTribesInstruction(this->boardModel, false);
+        next->initInstruction();
+        return next;
+    }
 
     const Event *event = this->boardModel->drawOriginalCard()->getEvent(this->boardModel->getEra());
     Instruction *main = new MainPhaseInstruction(this->boardModel);

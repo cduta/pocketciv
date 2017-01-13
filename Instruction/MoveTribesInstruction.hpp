@@ -9,9 +9,10 @@ class MoveTribesInstruction : public Instruction
 {
     BoardModel *boardModel;
     MoveTribeDialog *moveTribeDialog;
+    const bool firstMovement;
 
 public:
-    MoveTribesInstruction(BoardModel *boardModel);
+    MoveTribesInstruction(BoardModel *boardModel, bool firstMovement = true);
     ~MoveTribesInstruction();
 
     virtual void initInstruction();

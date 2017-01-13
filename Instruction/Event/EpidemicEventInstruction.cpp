@@ -184,12 +184,29 @@ Instruction *EpidemicEventInstruction::continueEpidemic()
     int overallTribes = this->boardModel->getTribeCount();
 
     this->boardModel->printMessage(QString("The amount of tribes decimated in region %1 is %2.").arg(this->boardModel->refActiveRegion()->getRegion()).arg(this->oldTribes - newTribes));
-    this->boardModel->printMessage(QString(" "));
+    this->boardModel->printMessage(" ");
+
     this->populationLoss = this->populationLoss - this->oldTribes;
+
+    if(this->boardModel->hasAdvanceAquired(AdvanceModel::ROADBUILDING))
+    {
+        this->boardModel->printMessage("Advance (ROADBUILDING):");
+        this->boardModel->printMessage("If this region has a city and no more tribes left now,");
+        this->boardModel->printMessage("decrease the City AV by 2 and decimate the City if it has 0.");
+        this->boardModel->printMessage(" ");
+
+        if(this->oldTribes > 0 &&
+           this->boardModel->refActiveRegion()->getTribes() == 0 &&
+           this->boardModel->refActiveRegion()->hasCity())
+        {
+            this->boardModel->refActiveRegion()->decreaseCityAV(2);
+            this->boardModel->refActiveRegion()->decimateZeroAVCity();
+        }
+    }
 
     if(this->populationLoss <= 0)
     {
-        this->boardModel->printMessage(QString("The Population loss is 0."));
+        this->boardModel->printMessage(QString("The Population loss is now 0."));
         this->boardModel->printMessage(QString(" "));
         this->boardModel->unsetActiveRegion();
         return this->endEvent();
@@ -207,10 +224,25 @@ Instruction *EpidemicEventInstruction::continueEpidemic()
 
     QMap<int, RegionModel *> adjacentRegions;
 
-    if(this->boardModel->hasAdvanceAquired(AdvanceModel::EQUESTRIAN))
+    if(this->boardModel->hasAdvanceAquired(AdvanceModel::EQUESTRIAN) || this->boardModel->hasAdvanceAquired(AdvanceModel::ROADBUILDING))
     {
-        this->boardModel->printMessage("Advance (EQUESTRIAN):");
-        this->boardModel->printMessage("The EPIDEMIC moves is able to spread into any");
+        QString advanceType = "";
+
+        if(this->boardModel->hasAdvanceAquired(AdvanceModel::EQUESTRIAN) && this->boardModel->hasAdvanceAquired(AdvanceModel::ROADBUILDING))
+        {
+            advanceType = "(EQUESTRIAN)/(ROADBUILDING)";
+        }
+        else if(this->boardModel->hasAdvanceAquired(AdvanceModel::EQUESTRIAN))
+        {
+            advanceType = "(EQUESTRIAN)";
+        }
+        else if(this->boardModel->hasAdvanceAquired(AdvanceModel::ROADBUILDING))
+        {
+            advanceType = "(ROADBUILDING)";
+        }
+
+        this->boardModel->printMessage(QString("Advance %1:").arg(advanceType));
+        this->boardModel->printMessage("The EPIDEMIC is able to spread into any");
         this->boardModel->printMessage("region not seperated by a SEA or FRONTIER.");
         this->boardModel->printMessage(" ");
         adjacentRegions = this->boardModel->getContinentRegions(this->boardModel->refActiveRegion()->getRegion());
@@ -233,7 +265,7 @@ Instruction *EpidemicEventInstruction::continueEpidemic()
     if(adjacentRegionsWithTribes.size() == 0)
     {
         QString adjacentString = " adjacent ";
-        if(this->boardModel->hasAdvanceAquired(AdvanceModel::EQUESTRIAN))
+        if(this->boardModel->hasAdvanceAquired(AdvanceModel::EQUESTRIAN) || this->boardModel->hasAdvanceAquired(AdvanceModel::ROADBUILDING))
         {
             adjacentString = " ";
         }
@@ -245,7 +277,7 @@ Instruction *EpidemicEventInstruction::continueEpidemic()
     else
     {
         QString adjacentString = " an adjacent ";
-        if(this->boardModel->hasAdvanceAquired(AdvanceModel::EQUESTRIAN))
+        if(this->boardModel->hasAdvanceAquired(AdvanceModel::EQUESTRIAN)  || this->boardModel->hasAdvanceAquired(AdvanceModel::ROADBUILDING))
         {
             adjacentString = " a ";
         }

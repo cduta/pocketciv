@@ -10,7 +10,18 @@ TribalWarEventInstruction::TribalWarEventInstruction(BoardModel *boardModel, Ins
 void TribalWarEventInstruction::initInstruction()
 {
     this->boardModel->printMessage("TRIBAL WAR:");
+    this->boardModel->printMessage("The tribes in a region start a tribal war.");
+    this->boardModel->printMessage("Double the amount of tribes in that region to determine the warring tribes.");
+    this->boardModel->printMessage("Those tribes attack two bordering regions of your choice with tribes in them.");
     this->boardModel->printMessage(" ");
+
+    if(this->boardModel->hasAdvanceAquired(AdvanceModel::SENSE_OF_COMMUNITY))
+    {
+        this->boardModel->printMessage("Advance (SENSE OF COMMUNITY):");
+        this->boardModel->printMessage("Do not double the amount of tribes to determine the warring tribes.");
+        this->boardModel->printMessage(" ");
+    }
+
     this->boardModel->printMessage("Press Done to continue.");
     this->boardModel->printMessage(" ");
     return;
@@ -70,18 +81,25 @@ Instruction *TribalWarEventInstruction::triggerDone()
         RegionModel *activeRegion = this->boardModel->refActiveRegion();
         int tribes = activeRegion->getTribes();
 
-        this->boardModel->printMessage(QString("The active region is region %1.").arg(activeRegion->getRegion()));
+        this->boardModel->printMessage(QString("The TRIBAL WAR will begin in region %1.").arg(activeRegion->getRegion()));
 
         if(tribes == 0)
         {
-            this->boardModel->printMessage(QString("Region %1 has NO tribes.").arg(activeRegion->getRegion()));
+            this->boardModel->printMessage(QString("But Region %1 has NO tribes.").arg(activeRegion->getRegion()));
             this->boardModel->printMessage(" ");
             this->boardModel->unsetActiveRegion();
             return this->endEvent();
         }
         else
         {
-            this->warringTribes = tribes*2;
+            if(this->boardModel->hasAdvanceAquired(AdvanceModel::SENSE_OF_COMMUNITY))
+            {
+                this->warringTribes = tribes;
+            }
+            else
+            {
+                this->warringTribes = tribes*2;
+            }
             this->boardModel->printMessage(QString("Region %1 has %2 warring tribes.").arg(activeRegion->getRegion()).arg(this->warringTribes));
         }
 
