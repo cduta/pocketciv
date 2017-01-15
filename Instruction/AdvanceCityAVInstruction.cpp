@@ -6,7 +6,9 @@
 
 AdvanceCityAVInstruction::AdvanceCityAVInstruction(BoardModel *boardModel)
     : boardModel(boardModel), availableAdvancements(0), capitolBeyondFour(false), capitolAdvanced(false)
-{}
+{
+    this->reduceCost = 0;
+}
 
 void AdvanceCityAVInstruction::initInstruction()
 {
@@ -54,17 +56,53 @@ void AdvanceCityAVInstruction::initInstruction()
                                   .arg(this->availableAdvancements));
     this->boardModel->printMessage(advanceString + ".");
     this->boardModel->printMessage(" ");
+
+    QList<QString> advanceList;
+
     if(this->boardModel->hasAdvanceAquired(AdvanceModel::BASIC_TOOLS))
     {
-        this->boardModel->printMessage("Advance (BASIC TOOLS):");
-        this->boardModel->printMessage("The cost of tribes to advance a City AV is reduced by 1.");
-        this->boardModel->printMessage(" ");
+        advanceList.append("Advance (BASIC TOOLS)");
     }
 
     if(this->boardModel->hasAdvanceAquired(AdvanceModel::MACHINING))
     {
-        this->boardModel->printMessage("Advance (MACHINING):");
-        this->boardModel->printMessage("The cost of tribes to advance a City AV is reduced by 1.");
+        advanceList.append("Advance (MACHINING)");
+    }
+
+    if(this->boardModel->hasAdvanceAquired(AdvanceModel::SIMPLE_TOOLS))
+    {
+        advanceList.append("Advance (SIMPLE TOOLS)");
+    }
+
+    QString reduceAdvances = QString("");
+
+    if(advanceList.count() == 1)
+    {
+        reduceAdvances = advanceList.first();
+    }
+    else if(advanceList.count() > 1)
+    {
+        for(int i = 0; i < advanceList.count() - 2; ++i)
+        {
+            reduceAdvances.append(advanceList[i] + QString(", "));
+        }
+
+        reduceAdvances.append(advanceList[advanceList.count() - 2] + QString(" and ") + advanceList.last());
+    }
+
+    this->reduceCost = advanceList.count();
+
+    if(this->reduceCost > 0)
+    {
+        QString reduceCostString = "one less tribe";
+        this->boardModel->printMessage(reduceAdvances);
+
+        if(this->reduceCost > 1)
+        {
+            reduceCostString = QString("%1 less tribes").arg(this->reduceCost);
+        }
+
+        this->boardModel->printMessage(QString("Increasing the City AV costs %1.").arg(reduceCostString));
         this->boardModel->printMessage(" ");
     }
 
@@ -83,7 +121,7 @@ void AdvanceCityAVInstruction::initInstruction()
         if(this->boardModel->hasAdvanceAquired(AdvanceModel::ENGINEERING) &&
            this->boardModel->hasAdvanceAquired(AdvanceModel::METAL_WORKING))
         {
-            this->boardModel->printMessage("Advance (ENGINEERING and Advance (METAL WORKING):");
+            this->boardModel->printMessage("Advance (ENGINEERING) and (METAL WORKING):");
         }
         else if(this->boardModel->hasAdvanceAquired(AdvanceModel::ENGINEERING))
         {
@@ -190,15 +228,7 @@ Instruction *AdvanceCityAVInstruction::triggerHex(Qt::MouseButton button, int x,
                 {
                     if(regionModel->getCityAV() < this->maximumCityAV || regionModel->isCapitolRegion())
                     {
-                        if(this->boardModel->hasAdvanceAquired(AdvanceModel::BASIC_TOOLS))
-                        {
-                            this->toBePaid--;
-                        }
-
-                        if(this->boardModel->hasAdvanceAquired(AdvanceModel::MACHINING))
-                        {
-                            this->toBePaid--;
-                        }
+                        this->toBePaid =- this->reduceCost;
 
                         if(this->toBePaid < 0)
                         {

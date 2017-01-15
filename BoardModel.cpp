@@ -1418,7 +1418,7 @@ void BoardModel::initializeCards()
     positive.append("+ Aquire Advances\n"
                     "A Mountain/Volcano can now create wood instead of stone and a Forest may create stone instead of wood.\n");
     positive.append("+ Upkeep (Advance City AV)\n"
-                    "Increasing the City AV costs 1 less tribe.\n");
+                    "Increasing the City AV costs one less tribe.\n");
     negative.append("- Event (ANARCHY)\n"
                     "Reduce 2 additional City AV in a City of your choice.\n"
                     "Law cancels this effect.\n");

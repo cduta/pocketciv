@@ -15,6 +15,7 @@ class AdvanceCityAVInstruction : public Instruction
     bool capitolBeyondFour;
     bool capitolAdvanced;
     int region;
+    int reduceCost;
     QMessageBox *chooseRessource;
 
 public:
