@@ -10,6 +10,11 @@ class AnarchyEventInstruction : public EventInstruction
     QList<RegionModel *> possibleRegions;
     QList<RegionModel *> affectedRegions;
 
+    int cityAVReduceLeft;
+    int cityAVReduceTotal;
+    int tribeReduceLeft;
+    int tribeReduceTotal;
+
 public:
     AnarchyEventInstruction(BoardModel *boardModel, Instruction *nextInstruction, const Event *event);
 

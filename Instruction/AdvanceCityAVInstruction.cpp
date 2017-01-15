@@ -233,7 +233,7 @@ Instruction *AdvanceCityAVInstruction::triggerHex(Qt::MouseButton button, int x,
                 {
                     if(regionModel->getCityAV() < this->maximumCityAV || regionModel->isCapitolRegion())
                     {
-                        this->toBePaid =- this->reduceCost;
+                        this->toBePaid -= this->reduceCost;
 
                         if(this->toBePaid < 0)
                         {

@@ -65,7 +65,17 @@ Instruction *BanditsEventInstruction::triggerDone()
                 this->attackingForce += democracy;
             }
 
-            this->boardModel->printMessage(QString("The attacking force of the bandits is %1.").arg(this->attackingForce));
+            if(this->boardModel->hasAdvanceAquired(AdvanceModel::SLAVE_LABOR))
+            {
+                int slaveLabor = this->boardModel->refOriginalCard()->getShapeNumbers().value(Event::BLUE_HEXAGON, 0);
+                this->boardModel->printMessage("Advance (SLAVE LABOR):");
+                this->boardModel->printMessage(QString("The attacking force is increased by %1, the number of the BLUE HEXAGON of the ORIGINAL event card.")
+                                              .arg(slaveLabor));
+                this->boardModel->printMessage(" ");
+                this->attackingForce += slaveLabor;
+            }
+
+            this->boardModel->printMessage(QString("The final attacking force of the bandits is %1.").arg(this->attackingForce));
             this->boardModel->printMessage(" ");
 
             POCKET_CIV_END_OF_ERA_CHECK

@@ -116,10 +116,10 @@ Instruction *ReduceCityAVInstruction::triggerDone()
         this->boardModel->decimateZeroAVCities();
 
         Instruction *next;
-        if(this->boardModel->getTribeCount() == 0 && !this->boardModel->hasCity())
+        if(this->boardModel->getTribeCount() == 0)
         {
             this->boardModel->printMessage(" ");
-            this->boardModel->printMessage("The Empire had no more tribes and cities left.");
+            this->boardModel->printMessage("The Empire has no more tribes and cities left.");
             next = new EndGameInstruction(this->boardModel);
         }
         else

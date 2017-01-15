@@ -1,9 +1,11 @@
 #include "AnarchyEventInstruction.hpp"
 
+#include "Instruction/EndGameInstruction.hpp"
+#include "Instruction/EndOfEraInstruction.hpp"
 #include "Common.hpp"
 
 AnarchyEventInstruction::AnarchyEventInstruction(BoardModel *boardModel, Instruction *nextInstruction, const Event *event)
-    : EventInstruction(boardModel, nextInstruction, event), step(0)
+    : EventInstruction(boardModel, nextInstruction, event), step(0), cityAVReduceLeft(0), cityAVReduceTotal(2), tribeReduceLeft(0), tribeReduceTotal(0)
 {
     this->nextInstruction->setKeepInstruction(true);
     this->possibleRegions = this->boardModel->getRegions().values();
@@ -48,18 +50,67 @@ Instruction *AnarchyEventInstruction::triggerHex(Qt::MouseButton button, int x, 
             regionModel->setSelected(false);
         }
     }
-
-    if(regionModel && this->step == 2 && this->affectedRegions.contains(regionModel))
+    else if(regionModel && this->step == 2 && this->affectedRegions.contains(regionModel))
     {
         if(button == Qt::LeftButton &&
            this->boardModel->getCityAVCount() - this->boardModel->getAllSelectedCityAV() > 1 &&
-           regionModel->getSelectedCityAV() < regionModel->getCityAV())
+           regionModel->getSelectedCityAV() < regionModel->getCityAV() &&
+           this->cityAVReduceLeft > 0)
         {
             regionModel->setSelectedCityAV(regionModel->getSelectedCityAV() + 1);
+            this->cityAVReduceLeft--;
+            this->boardModel->printMessage(QString("Reduce City AV in Region %1 by %2. (%3/%4 left)")
+                                           .arg(regionModel->getRegion())
+                                           .arg(regionModel->getSelectedCityAV())
+                                           .arg(this->cityAVReduceLeft)
+                                           .arg(this->cityAVReduceTotal));
         }
-        else if(button == Qt::RightButton && regionModel->getSelectedCityAV() > 0)
+        else if(button == Qt::RightButton && regionModel->getSelectedCityAV() > 0 && this->cityAVReduceLeft < this->cityAVReduceTotal)
         {
             regionModel->setSelectedCityAV(regionModel->getSelectedCityAV() - 1);
+            this->cityAVReduceLeft++;
+            this->boardModel->printMessage(QString("Reduce City AV in Region %1 by %2. (%3/%4 left)")
+                                           .arg(regionModel->getRegion())
+                                           .arg(regionModel->getSelectedCityAV())
+                                           .arg(this->cityAVReduceLeft)
+                                           .arg(this->cityAVReduceTotal));
+        }
+
+        if(this->cityAVReduceLeft == 0)
+        {
+            this->boardModel->printMessage("You can now press done, to apply your choice of City AV reduction.");
+        }
+    }
+    else if(regionModel && this->step == 3 && this->boardModel->getAllSelectedTribes() < this->tribeReduceTotal)
+    {
+        if(button == Qt::LeftButton &&
+           regionModel->getSelectedTribes() < regionModel->getTribes() &&
+           this->tribeReduceLeft > 0)
+        {
+            regionModel->setSelectedTribes(regionModel->getSelectedTribes() + 1);
+            this->tribeReduceLeft--;
+            this->boardModel->printMessage(QString("Reduce Tribes in Region %1 by %2. (%3/%4 left)")
+                                           .arg(regionModel->getRegion())
+                                           .arg(regionModel->getSelectedTribes())
+                                           .arg(this->tribeReduceLeft)
+                                           .arg(this->tribeReduceTotal));
+        }
+        else if(button == Qt::RightButton &&
+                regionModel->getSelectedTribes() > 0 &&
+                this->tribeReduceLeft < this->tribeReduceTotal)
+        {
+            regionModel->setSelectedTribes(regionModel->getSelectedTribes() - 1);
+            this->tribeReduceLeft++;
+            this->boardModel->printMessage(QString("Reduce Tribes in Region %1 by %2. (%3/%4 left)")
+                                           .arg(regionModel->getRegion())
+                                           .arg(regionModel->getSelectedTribes())
+                                           .arg(this->tribeReduceLeft)
+                                           .arg(this->tribeReduceTotal));
+        }
+
+        if(this->tribeReduceLeft == 0)
+        {
+            this->boardModel->printMessage("You can now press done, to apply your choice of tribe reduction.");
         }
     }
 
@@ -170,7 +221,7 @@ Instruction *AnarchyEventInstruction::triggerDone()
             if(this->boardModel->hasAdvanceAquired(AdvanceModel::MACHINING))
             {
                 this->boardModel->printMessage("Advance (MACHINING):");
-                this->boardModel->printMessage("Reduce 2 additional City AV from cities of affected regions.");
+                this->boardModel->printMessage(QString("Reduce %1 additional City AV from any cities of the affected regions.").arg(this->cityAVReduceTotal));
                 this->boardModel->printMessage(QString("The affected regions are %1.").arg(Common::listUpRegions(this->affectedRegions)));
 
                 this->boardModel->printMessage(" ");
@@ -189,8 +240,8 @@ Instruction *AnarchyEventInstruction::triggerDone()
                 }
                 else if(cityAVCount == 1 || cityAVCount == 2)
                 {
-                    this->boardModel->printMessage(QString("There is %1 City AV left in the affected regions.").arg(cityAVCount));
-                    this->boardModel->printMessage("Therefore their City AV has been reduced to 0.");
+                    this->boardModel->printMessage(QString("There is in total %1 City AV left in the affected regions.").arg(cityAVCount));
+                    this->boardModel->printMessage("Therefore any City AV has been reduced to 0.");
                     this->boardModel->printMessage(" ");
 
                     foreach(RegionModel *regionModel, this->affectedRegions)
@@ -200,13 +251,78 @@ Instruction *AnarchyEventInstruction::triggerDone()
                 }
                 else
                 {
-                    this->boardModel->printMessage("When you are done, press Done...");
-                    this->boardModel->printMessage(" ");
+                    this->cityAVReduceLeft = this->cityAVReduceTotal;
                     return this;
                 }
             }
         }
     }
+
+    if(this->step == 2)
+    {
+        if(this->cityAVReduceLeft > 0)
+        {
+            this->boardModel->printMessage(QString("You still have to reduce %1/%2 City AV in the affected regions.").arg(this->cityAVReduceLeft).arg(this->cityAVReduceTotal));
+            return this;
+        }
+        else
+        {
+            this->step++;
+
+            if(this->boardModel->hasAdvanceAquired(AdvanceModel::SLAVE_LABOR))
+            {
+                this->boardModel->printMessage("Advance (SLAVE LABOR):");
+                this->boardModel->printMessage("Draw a card and reduce the RED CIRCLE amount of tribes in the entire empire.");
+                this->boardModel->printMessage(" ");
+
+                this->tribeReduceTotal = this->boardModel->drawCard()->getShapeNumbers().value(Event::RED_CIRCLE);
+
+                this->boardModel->printMessage(QString("Choose %1 tribes in the Empire and decimate them.").arg(this->tribeReduceTotal));
+                this->boardModel->printMessage(" ");
+
+                int tribeAmount = this->boardModel->getTribeCount();
+
+                if(tribeAmount <= this->tribeReduceTotal)
+                {
+                    this->boardModel->printMessage(QString("Because only %1 tribes are left in the entire empire,").arg(tribeAmount));
+                    this->boardModel->printMessage("you do not choos and all tribes are decimated.");
+
+                    foreach(RegionModel *regionModel, this->boardModel->getRegions().values())
+                    {
+                        regionModel->setTribes(0);
+                    }
+
+                    if(this->boardModel->getTribeCount() == 0)
+                    {
+                        Instruction *next = new EndGameInstruction(this->boardModel);
+                        next->initInstruction();
+                        return next;
+                    }
+                }
+                else
+                {
+                    this->tribeReduceLeft = this->tribeReduceTotal;
+                    return this;
+                }
+
+                POCKET_CIV_END_OF_ERA_CHECK
+            }
+        }
+    }
+
+    if(this->step == 3)
+    {
+        if(this->tribeReduceLeft > 0)
+        {
+            this->boardModel->printMessage(QString("You still have to reduce %1/%2 Tribes in the Empire.").arg(this->tribeReduceLeft).arg(this->tribeReduceTotal));
+            return this;
+        }
+        else
+        {
+            this->step++;
+        }
+    }
+
 
     return this->endEvent();
 }

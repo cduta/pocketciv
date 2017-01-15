@@ -1,6 +1,7 @@
 #include "UprisingEventInstruction.hpp"
 
 #include "Instruction/EndOfEraInstruction.hpp"
+#include "Common.hpp"
 
 UprisingEventInstruction::UprisingEventInstruction(BoardModel *boardModel, Instruction *nextInstruction, const Event *event)
     : EventInstruction(boardModel, nextInstruction, event), step(0)
@@ -101,6 +102,27 @@ Instruction *UprisingEventInstruction::triggerDone()
             activeRegion->decimateTribes(activeRegion->getTribes());
         }
         activeRegion->setFarm(false);
+
+        if(this->boardModel->hasAdvanceAquired(AdvanceModel::SLAVE_LABOR))
+        {
+            this->boardModel->printMessage("Advance (MACHINING):");
+            this->boardModel->printMessage("Decimate the Farm in all Regions which have no City.");
+            this->boardModel->printMessage(" ");
+
+            QList<RegionModel *> farmDecimatedRegions;
+
+            foreach(RegionModel *regionModel, this->boardModel->getRegions().values())
+            {
+                if(!regionModel->hasCity() && regionModel->hasFarm())
+                {
+                    regionModel->setFarm(false);
+                    farmDecimatedRegions.append(regionModel);
+                }
+            }
+
+            this->boardModel->printMessage(QString("The regions affected by this are %1.").arg(Common::listUpRegions(farmDecimatedRegions)));
+            this->boardModel->printMessage(" ");
+        }
     }
 
     if(this->step == 2 && this->boardModel->hasAdvanceAquired(AdvanceModel::MILITARY))

@@ -8,9 +8,9 @@
 #define POCKET_CIV_END_OF_ERA_CHECK \
     if(this->boardModel->isEndOfEra()) \
     { \
-        Instruction *next = new EndOfEraInstruction(this->boardModel, this); \
-        next->initInstruction(); \
-        return next; \
+        Instruction *nextMacroInstruction = new EndOfEraInstruction(this->boardModel, this); \
+        nextMacroInstruction->initInstruction(); \
+        return nextMacroInstruction; \
     }
 
 class Instruction : public QObject
