@@ -13,11 +13,25 @@ MiningInstruction::MiningInstruction(BoardModel *boardModel, Instruction *nextIn
 void MiningInstruction::initInstruction()
 {
     this->boardModel->printMessage("MINING:");
-    this->boardModel->printMessage("");
     this->boardModel->printMessage(QString("Choose a region without a mountain or volcano and decimate %1 tribes to start mining.")
                                   .arg(this->tribesCost));
+    this->boardModel->printMessage("When you start mining, draw a card. If it has gold nuggets,");
+    this->boardModel->printMessage("add that amount of gold nuggets to your mine cart. Otherwise, your mine cart is lost.");
+    this->boardModel->printMessage("Continue this process until either you stop and gain the amount of gold nuggets");
+    this->boardModel->printMessage("in your mine cart in gold or until your mine cart is lost and you gain no gold.");
+    this->boardModel->printMessage(" ");
+
+    if(this->boardModel->hasAdvanceAquired(AdvanceModel::SURVEYING))
+    {
+        this->boardModel->printMessage(" ");
+        this->boardModel->printMessage("Advance (SURVEYING):");
+        this->boardModel->printMessage("If the mine cart is lost but had any gold in it, gain one gold instead of none.");
+        this->boardModel->printMessage(" ");
+    }
+
     this->boardModel->printMessage("Remember: At least 1 tribe has to remain anywhere in the Empire, when decimating Tribes!");
     this->boardModel->printMessage(" ");
+
     this->boardModel->printMessage("When you are done, press Done.");
     this->boardModel->printMessage(" ");
     this->boardModel->disableButtons();
@@ -62,6 +76,8 @@ Instruction *MiningInstruction::triggerDone()
 
         this->mineCart += currentGoldNuggets;
 
+        int previousMineCart = this->mineCart;
+
         if(currentGoldNuggets == 0)
         {
             this->mineCart = 0;
@@ -75,6 +91,14 @@ Instruction *MiningInstruction::triggerDone()
         {
             this->boardModel->printMessage("The mine cart and all its content was lost.");
             this->boardModel->printMessage(" ");
+
+            if(this->boardModel->hasAdvanceAquired(AdvanceModel::SURVEYING) && previousMineCart > 0)
+            {
+                this->boardModel->printMessage(QString("Even though the mine cart was lost with %1 gold,").arg(previousMineCart));
+                this->boardModel->printMessage("you still receive one gold.");
+                this->boardModel->printMessage(" ");
+                this->boardModel->gainGold(1);
+            }
         }
 
         POCKET_CIV_END_OF_ERA_CHECK
