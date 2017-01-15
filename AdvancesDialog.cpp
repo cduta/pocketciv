@@ -47,9 +47,17 @@ void AdvancesDialog::init()
         case AdvanceItem::OVERVIEW: this->setWindowTitle("Advances Overview"); break;
         case AdvanceItem::AQUIRE: this->setWindowTitle("Aquire Advances"); break;
         case AdvanceItem::SELECTABLE:
-            this->setWindowTitle(QString("Select Advances (0 of %1)"));
             this->selectionLimit = boardModel->getTribeCount();
-            // TODO: WRITTEN RECORD here.
+
+            if(this->boardModel->hasAdvanceAquired(AdvanceModel::WRITTEN_RECORD))
+            {
+                this->boardModel->printMessage("Advance (WRITTEN RECORD):");
+                this->boardModel->printMessage("Choose 4 more advances than there are tribes in the Empire.");
+                this->boardModel->printMessage(" ");
+            }
+
+            this->setWindowTitle(QString("Select Advances (0 of %1)").arg(this->selectionLimit));
+
             break;
     }
 

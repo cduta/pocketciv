@@ -1773,7 +1773,7 @@ void BoardModel::initializeCards()
     positive.clear();
     negative.clear();
     positive.append("+ Aquire Advances\n"
-                    "Pay one less Tribe when Aquiring: Mythology, Music, Literacy, Philosophy, Arts, Theater, Organized Religion and/or Law.\n");
+                    "Pay one less Tribe when Aquiring: MYTHOLOGY, MUSIC, LITERACY, PHILOSOPHY, ARTS, THEATER, ORGANIZED RELIGION and/or LAW.\n");
     advances.insert(AdvanceModel::STORY_TELLING,
                     new AdvanceModel(AdvanceModel::STORY_TELLING,
                                      "Story\nTelling",

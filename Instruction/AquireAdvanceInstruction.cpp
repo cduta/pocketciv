@@ -30,6 +30,14 @@ void AquireAdvanceInstruction::initInstruction()
             this->boardModel->printMessage(" ");
         }
 
+        if(this->boardModel->hasAdvanceAquired(AdvanceModel::STORY_TELLING))
+        {
+            this->boardModel->printMessage("Advance (STORY TELLING):");
+            this->boardModel->printMessage("Pay one less Tribe when Aquiring: MYTHOLOGY, MUSIC, LITERACY,");
+            this->boardModel->printMessage("PHILOSOPHY, ARTS, THEATER, ORGANIZED RELIGION and/or LAW.");
+            this->boardModel->printMessage(" ");
+        }
+
         this->boardModel->printMessage("When you are done, press Done.");
         this->boardModel->printMessage(" ");
         this->boardModel->disableButtons();
