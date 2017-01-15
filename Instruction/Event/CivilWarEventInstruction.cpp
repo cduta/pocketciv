@@ -187,14 +187,6 @@ Instruction *CivilWarEventInstruction::triggerDone()
         if(this->boardModel->getAdvancesAquired().contains(AdvanceModel::MEDITATION) ||
            this->boardModel->getAdvancesAquired().contains(AdvanceModel::ARTS))
         {
-            if(this->boardModel->getAdvancesAquired().contains(AdvanceModel::MEDITATION))
-            {
-                this->colleteralDamage = qCeil(((double)this->colleteralDamage)/2.0);
-                this->boardModel->printMessage("Advance (MEDITATION):");
-                this->boardModel->printMessage("Divide the colleteral damage by 2.");
-                this->boardModel->printMessage(" ");
-            }
-
             if(this->boardModel->getAdvancesAquired().contains(AdvanceModel::ARTS))
             {
                 this->reduceColleteralDamageBy(2);
@@ -203,7 +195,23 @@ Instruction *CivilWarEventInstruction::triggerDone()
                 this->boardModel->printMessage(" ");
             }
 
-            this->boardModel->printMessage(QString("The colleteral damage is therefore %1.").arg(this->colleteralDamage));
+            if(this->boardModel->getAdvancesAquired().contains(AdvanceModel::THEATER))
+            {
+                this->reduceColleteralDamageBy(2);
+                this->boardModel->printMessage("Advance (THEATER):");
+                this->boardModel->printMessage("The colleteral damage is reduced by 2.");
+                this->boardModel->printMessage(" ");
+            }
+
+            if(this->boardModel->getAdvancesAquired().contains(AdvanceModel::MEDITATION))
+            {
+                this->colleteralDamage = qCeil(((double)this->colleteralDamage)/2.0);
+                this->boardModel->printMessage("Advance (MEDITATION):");
+                this->boardModel->printMessage("Divide the colleteral damage by 2.");
+                this->boardModel->printMessage(" ");
+            }
+
+            this->boardModel->printMessage(QString("The final colleteral damage is %1.").arg(this->colleteralDamage));
             this->boardModel->printMessage(" ");
         }
 
