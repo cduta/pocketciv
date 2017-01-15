@@ -49,12 +49,17 @@ void AdvanceCityAVInstruction::initInstruction()
         advanceString = advances[0] + ", " + advances[1] + " and " + advances[2];
     }
 
-    this->boardModel->printMessage("ADVANCE CITY AV:");
-    this->boardModel->printMessage("To increase a city's AV, pay with tribes from anywhere in the Empire.");
+    QString availableString = QString("one City AV");
+
+    if(this->availableAdvancements > 1)
+    {
+        availableString = QString("%1 City AVs").arg(this->availableAdvancements);
+    }
+
+    this->boardModel->printMessage(advanceString + QString(":"));
+    this->boardModel->printMessage(QString("You may advance any city's AV in the empire by up to %1").arg(availableString));
+    this->boardModel->printMessage("this turn due to the advances listed above (one for each advance).");
     this->boardModel->printMessage("Remember: At least 1 tribe has to remain anywhere in the Empire, when decimating Tribes!");
-    this->boardModel->printMessage(QString("You may advance %1 city AVs this turn because you aquired")
-                                  .arg(this->availableAdvancements));
-    this->boardModel->printMessage(advanceString + ".");
     this->boardModel->printMessage(" ");
 
     QList<QString> advanceList;
@@ -95,14 +100,14 @@ void AdvanceCityAVInstruction::initInstruction()
     if(this->reduceCost > 0)
     {
         QString reduceCostString = "one less tribe";
-        this->boardModel->printMessage(reduceAdvances);
+        this->boardModel->printMessage(reduceAdvances + QString(":"));
 
         if(this->reduceCost > 1)
         {
             reduceCostString = QString("%1 less tribes").arg(this->reduceCost);
         }
 
-        this->boardModel->printMessage(QString("Increasing the City AV costs %1.").arg(reduceCostString));
+        this->boardModel->printMessage(QString("Increasing the City AV costs %1 (one for each advance listed above).").arg(reduceCostString));
         this->boardModel->printMessage(" ");
     }
 
@@ -121,7 +126,7 @@ void AdvanceCityAVInstruction::initInstruction()
         if(this->boardModel->hasAdvanceAquired(AdvanceModel::ENGINEERING) &&
            this->boardModel->hasAdvanceAquired(AdvanceModel::METAL_WORKING))
         {
-            this->boardModel->printMessage("Advance (ENGINEERING) and (METAL WORKING):");
+            this->boardModel->printMessage("Advance (ENGINEERING) / (METAL WORKING):");
         }
         else if(this->boardModel->hasAdvanceAquired(AdvanceModel::ENGINEERING))
         {
