@@ -4,14 +4,14 @@
 #include "Instruction/StealingInstruction.hpp"
 
 TradeInstruction::TradeInstruction(BoardModel *boardModel, Instruction *nextInstruction, QString what)
-    : Instruction(), boardModel(boardModel), nextInstruction(nextInstruction), what(what), step(0), goldGain(0)
+    : Instruction(), boardModel(boardModel), nextInstruction(nextInstruction), what(what), step(0), goldGain(0), handshake(false), additionalGoldGain(0)
 {
     this->nextInstruction->setKeepInstruction(true);
 }
 
 void TradeInstruction::initInstruction()
 {
-    this->boardModel->printMessage(QString("%1 TRADE:").arg(this->what));
+    this->boardModel->printMessage(QString("TRADE with %1:").arg(this->what));
     this->boardModel->printMessage(" ");
     this->boardModel->printMessage("Press Done to continue.");
     this->boardModel->printMessage(" ");
@@ -23,22 +23,66 @@ Instruction *TradeInstruction::triggerDone()
     if(this->step == 0)
     {
         this->step = 1;
-        this->goldGain = this->boardModel->drawCard()->getGoldNuggets();
+        const EventCard *card = this->boardModel->drawCard();
+
+        this->goldGain = card->getGoldNuggets();
+        this->handshake = card->hasHandshake();
         POCKET_CIV_END_OF_ERA_CHECK
     }
 
     if(this->step == 1)
     {
         this->step = 2;
-        this->boardModel->printMessage(QString("When trading with %1, you gained %2 gold.").arg(this->what).arg(this->goldGain));
-        this->boardModel->gainGold(this->goldGain);
-        this->boardModel->printMessage(QString("The %1 TRADE has ended.").arg(this->what));
+        this->boardModel->printMessage(QString("While trading with %1, you gain %2 gold.").arg(this->what).arg(this->goldGain));
         this->boardModel->printMessage(" ");
+        this->boardModel->gainGold(this->goldGain);
     }
 
-    if(this->boardModel->hasAdvanceAquired(AdvanceModel::CULTURE_OF_THIEVES) && this->step == 2)
+    if(this->step == 2)
     {
         this->step = 3;
+
+        if(this->boardModel->hasAdvanceAquired(AdvanceModel::SHIPPING))
+        {
+            this->boardModel->printMessage("Advance (SHIPPING):");
+            this->boardModel->printMessage("If the previously drawn card has a HANDSHAKE,");
+            this->boardModel->printMessage("draw another card and add its GREEN SQUARE");
+            this->boardModel->printMessage("number to the amount of gold you gain.");
+            this->boardModel->printMessage(" ");
+
+            if(this->handshake)
+            {
+                this->additionalGoldGain = this->boardModel->drawCard()->getShapeNumbers().value(Event::GREEN_SQUARE);
+            }
+            else
+            {
+                this->boardModel->printMessage("The previously drawn card had no HANDSHAKE.");
+                this->boardModel->printMessage(" ");
+            }
+
+        }
+
+        POCKET_CIV_END_OF_ERA_CHECK
+    }
+
+    if(this->step == 3)
+    {
+        this->step = 4;
+
+        if(this->additionalGoldGain > 0)
+        {
+            this->boardModel->printMessage("Through SHIPPING, you additionally gain %1 gold.");
+            this->boardModel->printMessage(" ");
+            this->boardModel->gainGold(this->additionalGoldGain);
+        }
+    }
+
+    this->boardModel->printMessage(QString("The TRADE with %1 has ended.").arg(this->what));
+    this->boardModel->printMessage(" ");
+
+    if(this->boardModel->hasAdvanceAquired(AdvanceModel::CULTURE_OF_THIEVES) && this->step == 4)
+    {
+        this->step = 5;
         this->boardModel->printMessage("Advance (CULTURE OF THIEVES):");
         this->boardModel->printMessage(QString("Do you want to try and steal gold from %1?")
                                       .arg(this->what));

@@ -16,6 +16,8 @@ class TradeInstruction : public Instruction
 
     int step;
     int goldGain;
+    bool handshake;
+    int additionalGoldGain;
 
     QMessageBox stealingDecision;
 
