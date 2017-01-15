@@ -20,6 +20,7 @@
 #include "Instruction/BuildFarmInstruction.hpp"
 #include "Instruction/ExpeditionInstruction.hpp"
 #include "Instruction/ForestationInstruction.hpp"
+#include "Instruction/MiningInstruction.hpp"
 #include "Instruction/AquireAdvanceInstruction.hpp"
 #include "Instruction/CollectTaxesInstruction.hpp"
 
@@ -460,7 +461,9 @@ void PocketCivMain::forestationTriggered()
 
 void PocketCivMain::miningTriggered()
 {
-    // TODO
+    Instruction *expeditionInstruction = new MiningInstruction(this->boardModel, this->instruction);
+    expeditionInstruction->initInstruction();
+    this->processInstruction(expeditionInstruction);
     return;
 }
 

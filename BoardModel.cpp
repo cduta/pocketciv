@@ -940,7 +940,7 @@ void BoardModel::initializeCards()
     events16.insert(7, new AnarchyEvent(this));
     events16.insert(8, new VisitationEvent(0,1,2,BoardModel::ATLANTEA, this));
 
-    // NOTE: Is only testing.
+    // NOTE: Is only for testing.
 //    events1.insert (1, new VisitationEvent(0,0,1,BoardModel::ATLANTEA, this));
 //    events2.insert (1, new VisitationEvent(0,0,1,BoardModel::ATLANTEA, this));
 //    events3.insert (1, new VisitationEvent(0,0,1,BoardModel::ATLANTEA, this));

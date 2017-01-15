@@ -28,14 +28,16 @@ AdvanceItem::AdvanceItem(qreal xPos,
     if(this->advanceType == AQUIRE)
     {
         this->descriptionDialog.layout->addWidget(this->descriptionDialog.description, 0,0,1,2);
-        this->descriptionDialog.layout->addWidget(this->descriptionDialog.aquireAdvance, 1,0);
-        this->descriptionDialog.layout->addWidget(this->descriptionDialog.cancel, 1,1);
+        this->descriptionDialog.layout->addWidget(this->descriptionDialog.aquireAdvance, 1,0,1,2);
+        this->descriptionDialog.cancel->hide();
 
         QObject::connect(&this->descriptionDialog, SIGNAL(advanceAquired(AdvanceModel::Advance)), this->boardModel, SLOT(aquireAdvance(AdvanceModel::Advance)));
     }
     else
     {
         this->descriptionDialog.layout->addWidget(this->descriptionDialog.description, 0,0);
+        this->descriptionDialog.cancel->hide();
+        this->descriptionDialog.aquireAdvance->hide();
     }
 
     this->descriptionDialog.dialog.resize(400,400);
