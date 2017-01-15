@@ -53,6 +53,14 @@ bool AdvanceModel::advanceRequirementsMet(const QSet<Advance> &advancesAquired) 
     return false;
 }
 
+bool AdvanceModel::hasStoryTellingDiscount(AdvanceModel::Advance advance)
+{
+    return advance == Advance::MYTHOLOGY || advance == Advance::MUSIC ||
+           advance == Advance::LITERACY || advance == Advance::PHILOSOPHY ||
+           advance == Advance::ARTS || advance == Advance::THEATER ||
+           advance == Advance::ORGANIZED_RELIGION || advance == Advance::LAW;
+}
+
 AdvanceModel::Advance AdvanceModel::getAdvance() const
 {
     return this->advance;

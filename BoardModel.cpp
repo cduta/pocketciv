@@ -2392,7 +2392,14 @@ void BoardModel::aquireAdvance(AdvanceModel::Advance advance)
 
     this->advancesAquired.insert(advance);
 
-    this->refActiveRegion()->decimateTribes(this->advances[advance]->getTribesCost());
+    int tribesCost = this->advances[advance]->getTribesCost();
+
+    if(this->hasAdvanceAquired(AdvanceModel::STORY_TELLING) && AdvanceModel::hasStoryTellingDiscount(advance))
+    {
+        tribesCost--;
+    }
+
+    this->refActiveRegion()->decimateTribes(tribesCost);
     this->gold -= this->advances[advance]->getGoldCost();
 
     emit this->boardUpdated();

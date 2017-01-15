@@ -120,7 +120,14 @@ void AdvanceItem::updateDesription()
         food = "No";
     }
 
-    QString tcString = QString::number(advanceModel->getTribesCost());
+    int tribesCost = advanceModel->getTribesCost();
+
+    if(this->boardModel->hasAdvanceAquired(AdvanceModel::STORY_TELLING) && AdvanceModel::hasStoryTellingDiscount(advance))
+    {
+        tribesCost--;
+    }
+
+    QString tcString = QString::number(tribesCost);
     QString gcString = QString::number(advanceModel->getGoldCost());
 
     if(this->advanceType == AQUIRE)
@@ -237,8 +244,16 @@ void AdvanceItem::updateAdvanceItem()
                 bool isAvailable = true;
 
                 QRect r(85,3,29,14);
-                if(advanceModel->getTribesCost() <= activeRegion->getTribes() &&
-                   advanceModel->getTribesCost() < this->boardModel->getTribeCount())
+
+                int tribesCost = advanceModel->getTribesCost();
+
+                if(this->boardModel->hasAdvanceAquired(AdvanceModel::STORY_TELLING) && AdvanceModel::hasStoryTellingDiscount(advance))
+                {
+                    tribesCost--;
+                }
+
+                if(tribesCost <= activeRegion->getTribes() &&
+                   tribesCost < this->boardModel->getTribeCount())
                 {
                     painter.fillRect(r, green);
                 }
@@ -330,7 +345,15 @@ void AdvanceItem::updateAdvanceItem()
     font.setPointSize(6);
     font.setBold(false);
     painter.setFont(font);
-    painter.drawText(QRect(58,4,90,12),QString::number(advanceModel->getTribesCost()), QTextOption(Qt::AlignCenter));    
+
+    int tribesCost = advanceModel->getTribesCost();
+
+    if(this->boardModel->hasAdvanceAquired(AdvanceModel::STORY_TELLING) && AdvanceModel::hasStoryTellingDiscount(advance))
+    {
+        tribesCost--;
+    }
+
+    painter.drawText(QRect(58,4,90,12),QString::number(tribesCost), QTextOption(Qt::AlignCenter));
     painter.drawText(QRect(80,4,114,12),QString::number(advanceModel->getGoldCost()), QTextOption(Qt::AlignCenter));
 
     if(advanceModel->getRequiresWood())

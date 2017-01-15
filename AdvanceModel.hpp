@@ -89,6 +89,8 @@ public:
 
     bool advanceRequirementsMet(const QSet<Advance> &advancesAquired) const;
 
+    static bool hasStoryTellingDiscount(Advance advance);
+
     // Get-Methods
     Advance getAdvance() const;
     QString getName() const;
