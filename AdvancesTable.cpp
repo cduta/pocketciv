@@ -65,12 +65,15 @@ AdvancesTable::AdvancesTable(BoardModel *boardModel, const QMap<AdvanceModel::Ad
         if(this->boardModel->hasAdvanceAquired(advance))
         {
             aquirableItem->setText("Aquired");
-            aquirableItem->setBackgroundColor(blue);
+        }
+        else
+        {
+            aquirableItem->setText("-");
         }
 
         RegionModel *activeRegion = this->boardModel->refActiveRegion();
 
-        if(!this->boardModel->hasAdvanceAquired(advance) && activeRegion != NULL) // TODO: CHECK if board model is in state "aquiring advance".
+        if(!this->boardModel->hasAdvanceAquired(advance) && activeRegion != NULL && this->boardModel->isAquiringAdvances())
         {
             if(this->boardModel->hasAdvanceAquired(advance))
             {

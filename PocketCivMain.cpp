@@ -521,6 +521,7 @@ void PocketCivMain::updateBoard()
     this->forestation->setEnabled(this->boardModel->canDoForestation());
     this->mining->setEnabled(this->boardModel->canDoMining());
     this->done->setEnabled(this->boardModel->isDoneEnabled());
+    this->saveGame->setEnabled(!this->boardModel->isAquiringAdvances());
 
     return;
 }

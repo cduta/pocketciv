@@ -202,12 +202,15 @@ void AdvancesDialog::init()
     this->graphicsView->move(10,10);
 
     this->advancesTableDialog = new QDialog(this);
+    this->advancesTableDialog->setWindowTitle("Advances Table");
     this->advancesTableLayout = new QGridLayout(this->advancesTableDialog);
     this->advancesTable = new AdvancesTable(this->boardModel, this->advanceItemMap, this);
 
     QDesktopWidget widget;
     QRect mainScreenSize = widget.availableGeometry(widget.primaryScreen());
-    this->advancesTableDialog->resize(mainScreenSize.width() - 30, mainScreenSize.height() - 50);
+    this->advancesTableDialog->resize(mainScreenSize.width() - 100, mainScreenSize.height() - 60);
+
+    this->resize(mainScreenSize.width() - 50, mainScreenSize.height() - 30);
 
     this->advancesTableDialog->setLayout(this->advancesTableLayout);
     this->advancesTableLayout->addWidget(this->advancesTable, 0, 0);

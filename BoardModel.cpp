@@ -36,6 +36,7 @@ BoardModel::BoardModel(int width, int height, QObject *parent)
       lastEra(8),
       gloryScore(0),
       agricultureLeft(true),
+      aquiringAdvances(false),
       originalCard(NULL)
 {
     this->newBoard(width, height);
@@ -565,7 +566,7 @@ bool BoardModel::canAquireAdvance(AdvanceModel::Advance advance)
         tribesCost--;
     }
 
-    return !this->hasAdvanceAquired(advance) && activeRegion != NULL && // TODO: CHECK if board model is in state "aquiring advance".
+    return !this->hasAdvanceAquired(advance) && activeRegion != NULL && this->isAquiringAdvances() &&
            tribesCost <= activeRegion->getTribes() &&
            advanceModel->getGoldCost() <= this->getGold() &&
            (!advanceModel->getRequiresWood() || activeRegion->hasForest()) &&
@@ -651,6 +652,12 @@ void BoardModel::setDoneButton(bool enabled)
 void BoardModel::setTradingPartner(BoardModel::Empire empire)
 {
     this->tradingPartners.insert(empire);
+    return;
+}
+
+void BoardModel::setAquiringAdvances(bool aquiringAdvances)
+{
+    this->aquiringAdvances = aquiringAdvances;
     return;
 }
 
@@ -2353,6 +2360,11 @@ bool BoardModel::isTradingPartner(BoardModel::Empire empire) const
     return this->tradingPartners.contains(empire);
 }
 
+bool BoardModel::isAquiringAdvances() const
+{
+    return aquiringAdvances;
+}
+
 void BoardModel::setActiveRegion(int region, bool isBad)
 {
     this->unsetActiveRegion();
@@ -2693,6 +2705,8 @@ void BoardModel::deserialize(QDataStream &reader)
 
     this->groupSeas();
     this->deriveRegionHexes();
+
+    this->setAquiringAdvances(false);
 
     emit this->boardUpdated();
     return;

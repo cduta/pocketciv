@@ -3,8 +3,7 @@
 AquireAdvanceInstruction::AquireAdvanceInstruction(BoardModel *boardModel, Instruction *nextInstruction)
     : boardModel(boardModel),
       nextInstruction(nextInstruction),
-      advancesDialog(NULL),
-      aquireAdvances(false)
+      advancesDialog(NULL)
 {
     this->nextInstruction->setKeepInstruction(true);
 }
@@ -72,7 +71,7 @@ Instruction *AquireAdvanceInstruction::triggerHex(Qt::MouseButton button, int x,
     {
         if(button == Qt::LeftButton && regionModel->isSelected() && this->boardModel->getCityAVCount() > this->boardModel->getAdvancesAquired().size())
         {
-            this->aquireAdvances = true;
+            this->boardModel->setAquiringAdvances(true);
             this->boardModel->setDoneButton(false);
             this->boardModel->setActiveRegion(regionModel->getRegion(), false);
             this->advancesDialog = new AdvancesDialog(boardModel, AdvanceItem::AQUIRE);
@@ -86,7 +85,7 @@ Instruction *AquireAdvanceInstruction::triggerHex(Qt::MouseButton button, int x,
 
 Instruction *AquireAdvanceInstruction::triggerDone()
 {
-    if(this->aquireAdvances)
+    if(this->boardModel->isAquiringAdvances())
     {
         return this;
     }
@@ -103,8 +102,8 @@ void AquireAdvanceInstruction::doneAquiringAdvances()
     disconnect(this->advancesDialog, SIGNAL(finished(int)), this, SLOT(doneAquiringAdvances()));
     this->advancesDialog->disconnetAll();
 
+    this->boardModel->setAquiringAdvances(false);
     this->boardModel->setDoneButton(true);
-    this->aquireAdvances = false;
     this->boardModel->unsetActiveRegion();
     this->boardModel->unselectAllRegions();
     this->boardModel->selectAdvanceableRegions();

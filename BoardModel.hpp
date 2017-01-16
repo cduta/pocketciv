@@ -72,6 +72,7 @@ private:
     bool agricultureLeft;
 
     // Initialized
+    bool aquiringAdvances;
     const EventCard *originalCard;
 
 public:
@@ -184,6 +185,7 @@ public:
     QSet<AdvanceModel::Advance> getAdvancesAquired() const;
     bool hasAgricultureLeft() const;
     bool isTradingPartner(Empire empire) const;
+    bool isAquiringAdvances() const;
 
 // Set-Methods
     void setActiveRegion(int region, bool isBad = true);
@@ -195,6 +197,7 @@ public:
     void setAgricultureLeft(bool agricultureLeft);
     void setDoneButton(bool enabled);
     void setTradingPartner(Empire empire);
+    void setAquiringAdvances(bool aquiringAdvances);
 
 // Ref-Methods
     HexModel *refHexModel(int x, int y);

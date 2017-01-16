@@ -12,7 +12,6 @@ class AquireAdvanceInstruction : public Instruction
     BoardModel *boardModel;
     Instruction *nextInstruction;
     AdvancesDialog *advancesDialog;
-    bool aquireAdvances;
 
 public:
     AquireAdvanceInstruction(BoardModel *boardModel, Instruction *nextInstruction);
