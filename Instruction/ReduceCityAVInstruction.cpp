@@ -120,7 +120,7 @@ Instruction *ReduceCityAVInstruction::triggerDone()
         {
             this->boardModel->printMessage(" ");
             this->boardModel->printMessage("The Empire has no more tribes and cities left.");
-            next = new EndGameInstruction(this->boardModel);
+            next = new EndGameInstruction(this->boardModel, true);
         }
         else
         {

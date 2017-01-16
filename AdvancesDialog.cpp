@@ -1,6 +1,7 @@
 #include "AdvancesDialog.hpp"
 
 #include <QMessageBox>
+#include <QDesktopWidget>
 
 AdvancesDialog::AdvancesDialog(BoardModel *boardModel, AdvanceItem::AdvanceItemType advanceItemType, QWidget *parent)
     : QDialog(parent),
@@ -48,14 +49,6 @@ void AdvancesDialog::init()
         case AdvanceItem::AQUIRE: this->setWindowTitle("Aquire Advances"); break;
         case AdvanceItem::SELECTABLE:
             this->selectionLimit = boardModel->getTribeCount();
-
-            if(this->boardModel->hasAdvanceAquired(AdvanceModel::WRITTEN_RECORD))
-            {
-                this->boardModel->printMessage("Advance (WRITTEN RECORD):");
-                this->boardModel->printMessage("Choose 4 more advances than there are tribes in the Empire.");
-                this->boardModel->printMessage(" ");
-            }
-
             this->setWindowTitle(QString("Select Advances (0 of %1)").arg(this->selectionLimit));
 
             break;
@@ -70,7 +63,9 @@ void AdvancesDialog::init()
     this->graphicsView = new QGraphicsView(this->graphicsScene, this);
     this->graphicsView->setAlignment(Qt::AlignLeft | Qt::AlignTop);
 
-    this->layout->addWidget(this->graphicsView, 0,0);
+    this->layout->addWidget(this->graphicsView, 0,0, 1,2);
+
+    this->tableButton = new QPushButton("Table View", this);
 
     this->okButton = NULL;
     if(this->advanceItemType == AdvanceItem::SELECTABLE)
@@ -78,6 +73,11 @@ void AdvancesDialog::init()
         this->okButton = new QPushButton(QString("Ok"), this);
         this->layout->addWidget(this->okButton, 1,0);
         connect(this->okButton, SIGNAL(clicked()), this, SLOT(selectionDone()));
+        this->layout->addWidget(this->tableButton, 1,1);
+    }
+    else
+    {
+        this->layout->addWidget(this->tableButton, 1,0, 1,2);
     }
 
     this->setLayout(this->layout);
@@ -201,6 +201,21 @@ void AdvancesDialog::init()
 
     this->graphicsView->move(10,10);
 
+    this->advancesTableDialog = new QDialog(this);
+    this->advancesTableLayout = new QGridLayout(this->advancesTableDialog);
+    this->advancesTable = new AdvancesTable(this->boardModel, this->advanceItemMap, this);
+
+    QDesktopWidget widget;
+    QRect mainScreenSize = widget.availableGeometry(widget.primaryScreen());
+    this->advancesTableDialog->resize(mainScreenSize.width() - 30, mainScreenSize.height() - 50);
+
+    this->advancesTableDialog->setLayout(this->advancesTableLayout);
+    this->advancesTableLayout->addWidget(this->advancesTable, 0, 0);
+
+    connect(this->tableButton, SIGNAL(clicked()), this, SLOT(showTable()));
+
+    this->advancesTableLayout->addWidget(this->advancesTable);
+
     this->updateDialog();
 
     return;
@@ -244,5 +259,10 @@ void AdvancesDialog::selectionDone()
     this->boardModel->scoreSelectedAdvances();
     this->accept();
     return;
+}
+
+void AdvancesDialog::showTable()
+{
+    this->advancesTableDialog->show();
 }
 

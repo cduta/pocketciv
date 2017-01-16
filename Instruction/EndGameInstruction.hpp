@@ -7,9 +7,10 @@
 class EndGameInstruction : public Instruction
 {
     BoardModel *boardModel;
+    bool countAdvances;
 
 public:
-    EndGameInstruction(BoardModel *boardModel);
+    EndGameInstruction(BoardModel *boardModel, bool countAdvances = false);
 
     virtual void initInstruction();
 

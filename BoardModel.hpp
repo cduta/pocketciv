@@ -113,6 +113,7 @@ public:
     void scoreSelectedAdvances();
     void toggleSelectAquiredAdvance(AdvanceModel::Advance advance);
     void unsetAdvancesAquired();
+    bool canAquireAdvance(AdvanceModel::Advance advance);
 
     const EventCard *drawCard(bool tell = true);
     const EventCard *drawOriginalCard(bool tell = true);
@@ -128,6 +129,7 @@ public:
     void unselectAllSelectedCityAV();
     void gainGold(int gold);
     void removeGold(int gold);
+    void addAdvanceGloryScore();
 
 private:
     void newBoard(int width, int height);

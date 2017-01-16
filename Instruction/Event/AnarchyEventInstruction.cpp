@@ -294,7 +294,7 @@ Instruction *AnarchyEventInstruction::triggerDone()
 
                     if(this->boardModel->getTribeCount() == 0)
                     {
-                        Instruction *next = new EndGameInstruction(this->boardModel);
+                        Instruction *next = new EndGameInstruction(this->boardModel, true);
                         next->initInstruction();
                         return next;
                     }

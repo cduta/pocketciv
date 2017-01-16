@@ -393,6 +393,11 @@ void AdvanceItem::updateAdvanceItem()
     return;
 }
 
+void AdvanceItem::showDescriptionDialog()
+{
+    this->descriptionDialog.show();
+}
+
 void AdvanceItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     if(event->button() == Qt::LeftButton)

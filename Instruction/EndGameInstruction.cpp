@@ -1,14 +1,21 @@
 #include "EndGameInstruction.hpp"
 
-EndGameInstruction::EndGameInstruction(BoardModel *boardModel)
-    : Instruction(), boardModel(boardModel)
+EndGameInstruction::EndGameInstruction(BoardModel *boardModel, bool countAdvances)
+    : Instruction(), boardModel(boardModel), countAdvances(countAdvances)
 {}
 
 void EndGameInstruction::initInstruction()
 {
     this->boardModel->printMessage("This is the End of the Game...");
-    this->boardModel->printMessage("Add all VPs of the Wonders to the final Glory Score.");
 
+    this->boardModel->printMessage(" ");
+    if(this->countAdvances)
+    {
+        this->boardModel->addAdvanceGloryScore();
+        this->boardModel->printMessage(" ");
+    }
+
+    this->boardModel->printMessage("Now add all VPs of the Wonders to the final Glory Score.");
     int wonderVP = 0;
     // TODO: Add the Wonders to the final glory score.
 

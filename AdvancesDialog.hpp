@@ -9,6 +9,7 @@
 
 #include "BoardModel.hpp"
 #include "AdvanceItem.hpp"
+#include "AdvancesTable.hpp"
 
 class AdvancesDialog : public QDialog
 {
@@ -27,11 +28,16 @@ private:
     QGridLayout *         layout;
     QGraphicsView *       graphicsView;
     QGraphicsScene *      graphicsScene;
+    QPushButton *         tableButton;
     QPushButton *         okButton;
 
     QMap<AdvanceModel::Advance, AdvanceItem *>  advanceItemMap;
     QGraphicsPixmapItem *                       advanceBackground;
     QGraphicsPixmapItem *                       advanceTitle;
+
+    QDialog *      advancesTableDialog;
+    QGridLayout *  advancesTableLayout;
+    AdvancesTable *advancesTable;
 
 public:
     AdvancesDialog(BoardModel *boardModel, AdvanceItem::AdvanceItemType advanceItemType = AdvanceItem::OVERVIEW, QWidget *parent = 0);
@@ -49,6 +55,9 @@ public:
 public slots:
     void updateDialog();
     void selectionDone();
+
+private slots:
+    void showTable();
 };
 
 #endif // ADVANCESDIALOG_H

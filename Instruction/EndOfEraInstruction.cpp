@@ -24,18 +24,26 @@ Instruction *EndOfEraInstruction::triggerDone()
         this->advancesChosen = true;
 
         this->boardModel->printMessage(" ");
-        if(((this->boardModel->getEra() < this->boardModel->getLastEra() &&
-            this->boardModel->getCityCount() >= this->boardModel->getEra()) ||
-            this->boardModel->getEra() == this->boardModel->getLastEra()) &&
-            this->boardModel->getTribeCount() > 0)
+        if(this->boardModel->getEra() < this->boardModel->getLastEra() &&
+            this->boardModel->getCityCount() >= this->boardModel->getEra())
         {
-            this->boardModel->printMessage("Choose advances up to the amount of tribes in the empire to count towards your Glory Score.");
+            this->boardModel->printMessage("Your city count is equal or greater than the current Era.");
+            this->boardModel->printMessage("Therefore add the VP of as many advances as there are tribes");
+            this->boardModel->printMessage("in the empire to your Glory Score.");
+            this->boardModel->printMessage(QString("The Tribe count is %1.").arg(this->boardModel->getTribeCount()));
             this->boardModel->printMessage(" ");
 
-            this->boardModel->setDoneButton(false);
-            connect(&this->advancesDialog, SIGNAL(finished(int)), this, SLOT(doneSelectingAdvances()));
-            this->advancesDialog.updateDialog();
-            this->advancesDialog.show();
+            if(this->boardModel->hasAdvanceAquired(AdvanceModel::WRITTEN_RECORD))
+            {
+                this->boardModel->printMessage("Advance (WRITTEN RECORD):");
+                this->boardModel->printMessage("Add 4 additional advances to the Glory Score.");
+                this->boardModel->printMessage(" ");
+            }
+
+            this->boardModel->printMessage("We automatically choose the advances with the highes VP.");
+
+            this->boardModel->addAdvanceGloryScore();
+            this->boardModel->printMessage(" ");
         }
         else if(this->boardModel->getEra() < this->boardModel->getLastEra() &&
                 this->boardModel->getCityCount() < this->boardModel->getEra())
@@ -44,12 +52,6 @@ Instruction *EndOfEraInstruction::triggerDone()
             this->boardModel->printMessage("The amount of cities in the empire is less than the era about to end.");
             this->boardModel->printMessage(QString("Amount of Cities: %1").arg(this->boardModel->getCityCount()));
             this->boardModel->printMessage(QString("The current Era:  %1").arg(this->boardModel->getEra()));
-            this->boardModel->printMessage(" ");
-        }
-        else if(this->boardModel->getTribeCount() == 0)
-        {
-            this->boardModel->printMessage("You can't choose any advance in this end of era.");
-            this->boardModel->printMessage("You have no tribes in the empire.");
             this->boardModel->printMessage(" ");
         }
     }

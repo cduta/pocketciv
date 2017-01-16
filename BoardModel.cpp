@@ -553,6 +553,28 @@ void BoardModel::unsetAdvancesAquired()
     return;
 }
 
+bool BoardModel::canAquireAdvance(AdvanceModel::Advance advance)
+{
+    const AdvanceModel *advanceModel = this->advances[advance];
+    RegionModel *activeRegion = this->refActiveRegion();
+
+    int tribesCost = advanceModel->getTribesCost();
+
+    if(this->hasAdvanceAquired(AdvanceModel::STORY_TELLING) && AdvanceModel::hasStoryTellingDiscount(advance))
+    {
+        tribesCost--;
+    }
+
+    return !this->hasAdvanceAquired(advance) && activeRegion != NULL && // TODO: CHECK if board model is in state "aquiring advance".
+           tribesCost <= activeRegion->getTribes() &&
+           advanceModel->getGoldCost() <= this->getGold() &&
+           (!advanceModel->getRequiresWood() || activeRegion->hasForest()) &&
+           (!advanceModel->getRequiresStone() || activeRegion->hasMountain() || activeRegion->hasVolcano()) &&
+           (!advanceModel->getRequiresFood() || activeRegion->hasFarm()) &&
+           advanceModel->advanceRequirementsMet(this->advancesAquired) &&
+           this->advancesAquired.count() < this->getCityAVCount();
+}
+
 const EventCard *BoardModel::drawCard(bool tell)
 {
     const EventCard *card = this->eventCardsLeft.takeAt(Common::random() % this->eventCardsLeft.size());
@@ -712,6 +734,83 @@ void BoardModel::removeGold(int gold)
 
     emit this->goldChanged(this->gold);
 
+    return;
+}
+
+void BoardModel::addAdvanceGloryScore()
+{
+    int addedGloryScore = 0;
+    int howMany = this->getTribeCount();
+
+    QList<AdvanceModel::Advance> chosenAdvances;
+
+    if(howMany >= this->advancesAquired.count())
+    {
+        foreach(AdvanceModel::Advance advance, this->advancesAquired)
+        {
+            addedGloryScore += this->advances[advance]->getVictoryPoints();
+        }
+
+        chosenAdvances = this->advancesAquired.toList();
+    }
+    else
+    {
+        QList<AdvanceModel::Advance> availableAdvances = this->advancesAquired.toList();
+
+        while(chosenAdvances.count() < howMany)
+        {
+            int highestVP = 0;
+            AdvanceModel::Advance current;
+
+            foreach(AdvanceModel::Advance advance, availableAdvances)
+            {
+                if(this->advances[advance]->getVictoryPoints() > highestVP)
+                {
+                    current = advance;
+                }
+            }
+
+            chosenAdvances.append(availableAdvances.takeAt(availableAdvances.indexOf(current)));
+        }
+
+        foreach(AdvanceModel::Advance advance, chosenAdvances)
+        {
+            addedGloryScore += this->advances[advance]->getVictoryPoints();
+        }
+    }
+
+    this->printMessage(QString("The following advances were chosen:"));
+
+    QString chosenAdvanceOutput = QString("");
+    if(chosenAdvances.count() >= 2)
+    {
+        for(int i = 0; i < chosenAdvances.count() - 2; ++i)
+        {
+            chosenAdvanceOutput = chosenAdvanceOutput.append(this->advances[chosenAdvances[i]]->getName().toUpper() + ", ");
+        }
+
+        chosenAdvanceOutput = chosenAdvanceOutput.append(
+                    this->advances[chosenAdvances[chosenAdvances.count() - 2]]->getName().toUpper() + " and " +
+                    this->advances[chosenAdvances[chosenAdvances.count() - 1]]->getName().toUpper());
+    }
+    else if(chosenAdvances.count() == 1)
+    {
+        chosenAdvanceOutput = this->advances[chosenAdvances.first()]->getName().toUpper();
+    }
+    else
+    {
+        chosenAdvanceOutput = QString("None");
+    }
+
+    chosenAdvanceOutput = chosenAdvanceOutput.append(QString("."));
+
+    this->printMessage(" ");
+    this->printMessage(QString("This increases the Glory Score by %1.").arg(addedGloryScore));
+    this->printMessage(" ");
+
+    this->setGloryScore(this->getGloryScore() + addedGloryScore);
+
+    this->printMessage(QString("The current Glory Score is %1.").arg(this->gloryScore));
     return;
 }
 
@@ -1006,7 +1105,7 @@ void BoardModel::initializeCards()
                     "Instead of reducing 1 City AV to reduce 5 Attacking Force, reduce 1 City AV to reduce 8 Attacking Force.\n");
     advances.insert(AdvanceModel::ARCHITECTURE,
                     new AdvanceModel(AdvanceModel::ARCHITECTURE,
-                                     " Architecture",
+                                     "Architecture",
                                      6,6,6,
                                      true, true, false,
                                      prequisites,

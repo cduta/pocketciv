@@ -86,6 +86,7 @@ private:
 
 public:
     void updateAdvanceItem();
+    void showDescriptionDialog();
 
 protected:
     virtual void mousePressEvent(QGraphicsSceneMouseEvent *event);
