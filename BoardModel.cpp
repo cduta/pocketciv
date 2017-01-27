@@ -41,6 +41,7 @@ BoardModel::BoardModel(int width, int height, QObject *parent)
 {
     this->newBoard(width, height);
     this->initializeCards();
+    this->initializeWonders();
 }
 
 BoardModel::~BoardModel()
@@ -572,7 +573,7 @@ bool BoardModel::canAquireAdvance(AdvanceModel::Advance advance)
            (!advanceModel->getRequiresWood() || activeRegion->hasForest()) &&
            (!advanceModel->getRequiresStone() || activeRegion->hasMountain() || activeRegion->hasVolcano()) &&
            (!advanceModel->getRequiresFood() || activeRegion->hasFarm()) &&
-           advanceModel->advanceRequirementsMet(this->advancesAquired) &&
+           advanceModel->advancePrequisitesMet(this->advancesAquired) &&
            this->advancesAquired.count() < this->getCityAVCount();
 }
 
@@ -1934,6 +1935,153 @@ void BoardModel::initializeCards()
                                      5,2,1,
                                      true, true, false,
                                      prequisites,
+                                     positive, negative));
+
+    return;
+}
+
+void BoardModel::initializeWonders()
+{
+    QMap<WonderModel::Wonder, const WonderModel *> wonders;
+
+    QList<AdvanceModel::Advance> advanceRequisites;
+    QList<QString> otherRequirements;
+    QList<QString> positive;
+    QList<QString> negative;
+
+    advanceRequisites.clear();
+    otherRequirements.clear();
+    positive.clear();
+    negative.clear();
+    advanceRequisites.append(AdvanceModel::THEATER);
+    this->wonders.insert(WonderModel::AMPHITHEATER,
+                    new WonderModel(WonderModel::AMPHITHEATER,
+                                     "Amphiteater",
+                                     25,6,15,
+                                     false, false, false, true,
+                                     advanceRequisites, otherRequirements,
+                                     positive, negative));
+
+    advanceRequisites.clear();
+    otherRequirements.clear();
+    positive.clear();
+    negative.clear();
+    otherRequirements.append("ATLANTEA as a Trading Partner.\n");
+    otherRequirements.append("The Region has to be adjacent to a SEA.\n");
+    otherRequirements.append("The Region has a City.\n");
+    otherRequirements.append("The City is not already a CITY OF ATLANTIS.\n");
+    positive.append("+ Mark the City as the City of Atlantis.\n");
+    negative.append("- When the City is ever decimated, decimate the wonder as well.\n");
+    this->wonders.insert(WonderModel::CITY_OF_ATLANTIS,
+                    new WonderModel(WonderModel::CITY_OF_ATLANTIS,
+                                     "City of Atlantis",
+                                     50,8,25,
+                                     false, false, false, true,
+                                     advanceRequisites, otherRequirements,
+                                     positive, negative));
+
+    advanceRequisites.clear();
+    otherRequirements.clear();
+    positive.clear();
+    negative.clear();
+    advanceRequisites.append(AdvanceModel::THEATER);
+    this->wonders.insert(WonderModel::COLISEUM_OF_DUELS,
+                    new WonderModel(WonderModel::COLISEUM_OF_DUELS,
+                                     "Coliseum of Duels",
+                                     25,6,25,
+                                     false, false, false, true,
+                                     advanceRequisites, otherRequirements,
+                                     positive, negative));
+
+    advanceRequisites.clear();
+    otherRequirements.clear();
+    positive.clear();
+    negative.clear();
+    advanceRequisites.append(AdvanceModel::ARTS);
+    this->wonders.insert(WonderModel::GIANT_GILDED_STATUE,
+                    new WonderModel(WonderModel::GIANT_GILDED_STATUE,
+                                     "Giant Gilded Statue",
+                                     18,6,25,
+                                     false, false, false, false,
+                                     advanceRequisites, otherRequirements,
+                                     positive, negative));
+
+    advanceRequisites.clear();
+    otherRequirements.clear();
+    positive.clear();
+    negative.clear();
+    otherRequirements.append("The Region has to be adjacent to a REGION.\n");
+    negative.append("- Expeditions can't be sent from Regions with this Wonder.\n");
+    this->wonders.insert(WonderModel::GREAT_WALL_OF_SOLITUDE,
+                    new WonderModel(WonderModel::GREAT_WALL_OF_SOLITUDE,
+                                     "Great Wall of Solitude",
+                                     25,6,25,
+                                     false, false, false, false,
+                                     advanceRequisites, otherRequirements,
+                                     positive, negative));
+
+    advanceRequisites.clear();
+    otherRequirements.clear();
+    positive.clear();
+    negative.clear();
+    advanceRequisites.append(AdvanceModel::LAW);
+    this->wonders.insert(WonderModel::HALL_OF_JUSTICE,
+                    new WonderModel(WonderModel::HALL_OF_JUSTICE,
+                                     "Hall of Justice",
+                                     40,8,20,
+                                     false, false, false, true,
+                                     advanceRequisites, otherRequirements,
+                                     positive, negative));
+
+    advanceRequisites.clear();
+    otherRequirements.clear();
+    positive.clear();
+    negative.clear();
+    advanceRequisites.append(AdvanceModel::ARTS);
+    advanceRequisites.append(AdvanceModel::IRRIGATION);
+    this->wonders.insert(WonderModel::HANGING_GARDENS,
+                    new WonderModel(WonderModel::HANGING_GARDENS,
+                                     "Hanging Gardens",
+                                     20,4,20,
+                                     false, false, false, false,
+                                     advanceRequisites, otherRequirements,
+                                     positive, negative));
+
+    advanceRequisites.clear();
+    otherRequirements.clear();
+    positive.clear();
+    negative.clear();
+    this->wonders.insert(WonderModel::HUGE_MONOLITH,
+                    new WonderModel(WonderModel::HUGE_MONOLITH,
+                                     "Huge Monolith",
+                                     8,6,15,
+                                     false, false, false, false,
+                                     advanceRequisites, otherRequirements,
+                                     positive, negative));
+
+    advanceRequisites.clear();
+    otherRequirements.clear();
+    positive.clear();
+    negative.clear();
+    otherRequirements.append("Must be built in a Region with a Mountain or Volcano.\n");
+    this->wonders.insert(WonderModel::MOUNTAIN_CITADEL,
+                    new WonderModel(WonderModel::MOUNTAIN_CITADEL,
+                                     "Mountain Citadel",
+                                     45,12,30,
+                                     false, false, false, false,
+                                     advanceRequisites, otherRequirements,
+                                     positive, negative));
+
+    advanceRequisites.clear();
+    otherRequirements.clear();
+    positive.clear();
+    negative.clear();
+    this->wonders.insert(WonderModel::PALACE_OF_THE_SENATE,
+                    new WonderModel(WonderModel::PALACE_OF_THE_SENATE,
+                                     "Palace of the Senate",
+                                     12,6,20,
+                                     false, false, false, false,
+                                     advanceRequisites, otherRequirements,
                                      positive, negative));
 
     return;

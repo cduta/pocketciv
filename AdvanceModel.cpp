@@ -26,7 +26,7 @@ AdvanceModel::AdvanceModel(Advance advance,
       negativeEffects(negativeEffects)
 {}
 
-bool AdvanceModel::advanceRequirementsMet(const QSet<Advance> &advancesAquired) const
+bool AdvanceModel::advancePrequisitesMet(const QSet<Advance> &advancesAquired) const
 {
     if(this->prequisites.isEmpty())
     {

@@ -86,7 +86,8 @@ SOURCES += main.cpp\
     DiplomaticOfferDialog.cpp \
     Instruction/ForestationInstruction.cpp \
     Instruction/MiningInstruction.cpp \
-    AdvancesTable.cpp
+    AdvancesTable.cpp \
+    WonderModel.cpp
 
 HEADERS  += \
     PocketCivMain.hpp \
@@ -162,7 +163,8 @@ HEADERS  += \
     DiplomaticOfferDialog.hpp \
     Instruction/ForestationInstruction.hpp \
     Instruction/MiningInstruction.hpp \
-    AdvancesTable.hpp
+    AdvancesTable.hpp \
+    WonderModel.hpp
 
 FORMS    +=
 

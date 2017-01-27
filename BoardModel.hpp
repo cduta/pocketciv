@@ -9,6 +9,7 @@
 #include "RegionModel.hpp"
 #include "EventCard.hpp"
 #include "AdvanceModel.hpp"
+#include "WonderModel.hpp"
 
 #include <boost/assert.hpp>
 
@@ -48,6 +49,8 @@ private:
     QMap<AdvanceModel::Advance, const AdvanceModel *> advances;   // Initialized
     QSet<AdvanceModel::Advance> advancesAquired;                  // Saved
     QSet<AdvanceModel::Advance> selectedAdvances;                 // Derived (Empty at first)
+
+    QMap<WonderModel::Wonder, const WonderModel *> wonders; // Initialized
 
     QSet<Empire> tradingPartners;                   // Saved
 
@@ -138,6 +141,7 @@ private:
     bool checkRegionHexSet(const QSet<HexModel *> &regionHexSet);
     void deriveRegionHexes();
     void initializeCards();
+    void initializeWonders();
 
 public:
 // Get-Methods

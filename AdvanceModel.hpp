@@ -87,7 +87,7 @@ public:
                  const QList<QString> &negativeEffects,
                  QObject *parent = 0);
 
-    bool advanceRequirementsMet(const QSet<Advance> &advancesAquired) const;
+    bool advancePrequisitesMet(const QSet<Advance> &advancesAquired) const;
 
     static bool hasStoryTellingDiscount(Advance advance);
 

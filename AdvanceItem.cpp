@@ -240,7 +240,7 @@ void AdvanceItem::updateAdvanceItem()
         }
         else
         {
-            if(advanceModel->advanceRequirementsMet(this->boardModel->getAdvancesAquired()) &&
+            if(advanceModel->advancePrequisitesMet(this->boardModel->getAdvancesAquired()) &&
                !activeRegion->hasAdvanceAquired())
             {
                 bool isAvailable = true;

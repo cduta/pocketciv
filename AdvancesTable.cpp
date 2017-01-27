@@ -46,7 +46,7 @@ AdvancesTable::AdvancesTable(BoardModel *boardModel, const QMap<AdvanceModel::Ad
 
         this->advanceTableItems.insert(advance, nameItem);
 
-        if(advanceModel->advanceRequirementsMet(this->boardModel->getAdvancesAquired()))
+        if(advanceModel->advancePrequisitesMet(this->boardModel->getAdvancesAquired()))
         {
             if(advanceModel->getPrequisites().count() == 0)
             {
@@ -143,7 +143,7 @@ AdvancesTable::AdvancesTable(BoardModel *boardModel, const QMap<AdvanceModel::Ad
                 foodItem->setBackgroundColor(red);
             }
 
-            if(advanceModel->advanceRequirementsMet(this->boardModel->getAdvancesAquired()))
+            if(advanceModel->advancePrequisitesMet(this->boardModel->getAdvancesAquired()))
             {
                 advanceRequirementsItem->setBackgroundColor(green);
             }
