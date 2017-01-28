@@ -87,7 +87,9 @@ SOURCES += main.cpp\
     Instruction/ForestationInstruction.cpp \
     Instruction/MiningInstruction.cpp \
     AdvancesTable.cpp \
-    WonderModel.cpp
+    WondersTable.cpp \
+    WonderModel.cpp \
+    WonderDescription.cpp
 
 HEADERS  += \
     PocketCivMain.hpp \
@@ -164,7 +166,9 @@ HEADERS  += \
     Instruction/ForestationInstruction.hpp \
     Instruction/MiningInstruction.hpp \
     AdvancesTable.hpp \
-    WonderModel.hpp
+    WonderModel.hpp \
+    WondersTable.hpp \
+    WonderDescription.hpp
 
 FORMS    +=
 

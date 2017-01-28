@@ -7,6 +7,7 @@
 
 #include "BoardModel.hpp"
 #include "AdvancesDialog.hpp"
+#include "WondersTable.hpp"
 
 class OverviewDialog : public QDialog
 {
@@ -16,17 +17,22 @@ class OverviewDialog : public QDialog
 
     QGridLayout *   layout;
 
+    QPushButton *   showCards;
     QPushButton *   showAdvances;
+    QPushButton *   showWonders;
     QPushButton *   showGlory;
 
     AdvancesDialog *advancesDialog;
+    WondersTable * wondersTable;
 
 public:
     OverviewDialog(BoardModel *boardModel, QWidget *parent = 0);
     ~OverviewDialog();
 
 private slots:
+    void showCardsTriggered();
     void showAdvancesTriggered();
+    void showWondersTriggered();
     void showGloryTriggered();
 };
 
