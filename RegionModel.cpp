@@ -148,10 +148,38 @@ void RegionModel::reduceSelectedCityAV()
     return;
 }
 
-void RegionModel::decimateWonders()
+void RegionModel::buildWonder(WonderModel::Wonder wonder)
 {
-    // TODO: Decimate Wonders once they are implemented.
+    if(this->wonders.contains(wonder))
+    {
+        this->wonders[wonder] += 1;
+    }
+    else
+    {
+        this->wonders.insert(wonder, 1);
+    }
+    return;
+}
 
+void RegionModel::decimateWonder(WonderModel::Wonder wonder)
+{
+    if(this->wonders.contains(wonder))
+    {
+        if(this->wonders[wonder] > 1)
+        {
+            this->wonders[wonder] -= 1;
+        }
+        else
+        {
+            this->wonders.remove(wonder);
+        }
+    }
+    return;
+}
+
+void RegionModel::decimateAllWonders()
+{
+    this->wonders.clear();
     return;
 }
 
@@ -242,7 +270,25 @@ bool RegionModel::hasAdvanceAquired() const
 
 bool RegionModel::hasWonders() const
 {
-    return false; // TODO do it!
+    foreach(int wonderCount, this->wonders.values())
+    {
+        if(wonderCount > 0)
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+bool RegionModel::hasWonder(WonderModel::Wonder wonder) const
+{
+    return this->wonders.contains(wonder) && this->wonders[wonder] > 0;
+}
+
+QMap<WonderModel::Wonder, int> RegionModel::getBuiltWonders() const
+{
+    return this->wonders;
 }
 
 void RegionModel::setTribes(int tribes)
@@ -377,6 +423,14 @@ void RegionModel::serialize(QDataStream &writer) const
     writer << this->cityAV;
     writer << this->selectedCityAV;
     writer << this->advanceAquired;
+
+    writer << this->wonders.keys().count();
+    foreach(WonderModel::Wonder wonder, this->wonders.keys())
+    {
+        writer << (int) wonder;
+        writer << this->wonders[wonder];
+    }
+
     return;
 }
 
@@ -398,5 +452,19 @@ void RegionModel::deserialize(QDataStream &reader)
     reader >> this->cityAV;
     reader >> this->selectedCityAV;
     reader >> this->advanceAquired;
+
+    int wonder;
+    int wonderCount;
+    int wonderEntryCount;
+
+    reader >> wonderEntryCount;
+    this->wonders.clear();
+    for(int i = 0; i < wonderEntryCount; ++i)
+    {
+        reader >> wonder;
+        reader >> wonderCount;
+        this->wonders.insert(WonderModel::Wonder(wonder), wonderCount);
+    }
+
     return;
 }

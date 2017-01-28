@@ -17,7 +17,15 @@ void EndGameInstruction::initInstruction()
 
     this->boardModel->printMessage("Now add all VPs of the Wonders to the final Glory Score.");
     int wonderVP = 0;
-    // TODO: Add the Wonders to the final glory score.
+
+    QMap<WonderModel::Wonder, int> builtWonders = this->boardModel->getAllBuiltWonders();
+
+    foreach(int wvp, builtWonders.values())
+    {
+        wonderVP += wvp;
+    }
+
+    this->boardModel->setGloryScore(this->boardModel->getGloryScore() + wonderVP);
 
     this->boardModel->printMessage(QString("Your VPs from Wonders is %1.").arg(wonderVP));
     this->boardModel->printMessage(" ");

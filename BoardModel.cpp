@@ -1942,8 +1942,6 @@ void BoardModel::initializeCards()
 
 void BoardModel::initializeWonders()
 {
-    QMap<WonderModel::Wonder, const WonderModel *> wonders;
-
     QList<AdvanceModel::Advance> advanceRequisites;
     QList<QString> otherRequirements;
     QList<QString> positive;
@@ -1956,7 +1954,6 @@ void BoardModel::initializeWonders()
     advanceRequisites.append(AdvanceModel::THEATER);
     this->wonders.insert(WonderModel::AMPHITHEATER,
                     new WonderModel(WonderModel::AMPHITHEATER,
-                                     "Amphiteater",
                                      25,6,15,
                                      false, false, false, true,
                                      advanceRequisites, otherRequirements,
@@ -1974,7 +1971,6 @@ void BoardModel::initializeWonders()
     negative.append("- When the City is ever decimated, decimate the wonder as well.\n");
     this->wonders.insert(WonderModel::CITY_OF_ATLANTIS,
                     new WonderModel(WonderModel::CITY_OF_ATLANTIS,
-                                     "City of Atlantis",
                                      50,8,25,
                                      false, false, false, true,
                                      advanceRequisites, otherRequirements,
@@ -1987,7 +1983,6 @@ void BoardModel::initializeWonders()
     advanceRequisites.append(AdvanceModel::THEATER);
     this->wonders.insert(WonderModel::COLISEUM_OF_DUELS,
                     new WonderModel(WonderModel::COLISEUM_OF_DUELS,
-                                     "Coliseum of Duels",
                                      25,6,25,
                                      false, false, false, true,
                                      advanceRequisites, otherRequirements,
@@ -2000,7 +1995,6 @@ void BoardModel::initializeWonders()
     advanceRequisites.append(AdvanceModel::ARTS);
     this->wonders.insert(WonderModel::GIANT_GILDED_STATUE,
                     new WonderModel(WonderModel::GIANT_GILDED_STATUE,
-                                     "Giant Gilded Statue",
                                      18,6,25,
                                      false, false, false, false,
                                      advanceRequisites, otherRequirements,
@@ -2014,7 +2008,6 @@ void BoardModel::initializeWonders()
     negative.append("- Expeditions can't be sent from Regions with this Wonder.\n");
     this->wonders.insert(WonderModel::GREAT_WALL_OF_SOLITUDE,
                     new WonderModel(WonderModel::GREAT_WALL_OF_SOLITUDE,
-                                     "Great Wall of Solitude",
                                      25,6,25,
                                      false, false, false, false,
                                      advanceRequisites, otherRequirements,
@@ -2027,7 +2020,6 @@ void BoardModel::initializeWonders()
     advanceRequisites.append(AdvanceModel::LAW);
     this->wonders.insert(WonderModel::HALL_OF_JUSTICE,
                     new WonderModel(WonderModel::HALL_OF_JUSTICE,
-                                     "Hall of Justice",
                                      40,8,20,
                                      false, false, false, true,
                                      advanceRequisites, otherRequirements,
@@ -2041,7 +2033,6 @@ void BoardModel::initializeWonders()
     advanceRequisites.append(AdvanceModel::IRRIGATION);
     this->wonders.insert(WonderModel::HANGING_GARDENS,
                     new WonderModel(WonderModel::HANGING_GARDENS,
-                                     "Hanging Gardens",
                                      20,4,20,
                                      false, false, false, false,
                                      advanceRequisites, otherRequirements,
@@ -2053,7 +2044,6 @@ void BoardModel::initializeWonders()
     negative.clear();
     this->wonders.insert(WonderModel::HUGE_MONOLITH,
                     new WonderModel(WonderModel::HUGE_MONOLITH,
-                                     "Huge Monolith",
                                      8,6,15,
                                      false, false, false, false,
                                      advanceRequisites, otherRequirements,
@@ -2066,7 +2056,6 @@ void BoardModel::initializeWonders()
     otherRequirements.append("Must be built in a Region with a Mountain or Volcano.\n");
     this->wonders.insert(WonderModel::MOUNTAIN_CITADEL,
                     new WonderModel(WonderModel::MOUNTAIN_CITADEL,
-                                     "Mountain Citadel",
                                      45,12,30,
                                      false, false, false, false,
                                      advanceRequisites, otherRequirements,
@@ -2078,7 +2067,6 @@ void BoardModel::initializeWonders()
     negative.clear();
     this->wonders.insert(WonderModel::PALACE_OF_THE_SENATE,
                     new WonderModel(WonderModel::PALACE_OF_THE_SENATE,
-                                     "Palace of the Senate",
                                      12,6,20,
                                      false, false, false, false,
                                      advanceRequisites, otherRequirements,
@@ -2399,6 +2387,27 @@ bool BoardModel::canBuildWonder() const
     return this->buildWonder;
 }
 
+QMap<WonderModel::Wonder, int> BoardModel::getAllBuiltWonders() const
+{
+    QMap<WonderModel::Wonder, int> result;
+
+    foreach(WonderModel::Wonder wonder, this->wonders.keys())
+    {
+        result.insert(wonder, 0);
+    }
+
+    foreach(RegionModel *regionModel, this->regions.values())
+    {
+        QMap<WonderModel::Wonder, int> regionWonders = regionModel->getBuiltWonders();
+        foreach(WonderModel::Wonder wonder, regionWonders.keys())
+        {
+            result[wonder] += regionWonders[wonder];
+        }
+    }
+
+    return result;
+}
+
 bool BoardModel::canCollectTaxes() const
 {
     return this->collectTaxes;
@@ -2643,6 +2652,12 @@ const AdvanceModel *BoardModel::refAdvanceModel(AdvanceModel::Advance advance) c
 {
     assert(this->advances.contains(advance));
     return this->advances[advance];
+}
+
+const WonderModel *BoardModel::refWonderModel(WonderModel::Wonder wonder) const
+{
+    assert(this->wonders.contains(wonder));
+    return this->wonders[wonder];
 }
 
 void BoardModel::aquireAdvance(AdvanceModel::Advance advance)

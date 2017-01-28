@@ -103,6 +103,7 @@ Instruction *TsunamiInstruction::triggerDone()
         int currentDamage = this->tsunamiDamage;
         int totalTribeDamage = 0;
         int totalCityDamage = 0;
+        QList<WonderModel::Wonder> wonderDamage;
 
         while(currentDamage > 0)
         {
@@ -144,7 +145,7 @@ Instruction *TsunamiInstruction::triggerDone()
                 }
                 else
                 {
-                    // TODO: Select Wonder to be destroyed and remember it.
+                    // TODO: Select Wonder to be destroyed and remember which ones.
                     currentDamage -= this->damagePerWonder;
                 }
             }
@@ -155,7 +156,7 @@ Instruction *TsunamiInstruction::triggerDone()
         }
 
 
-        if(totalTribeDamage + totalCityDamage /* + total Wonder Damage */ > 0)
+        if(totalTribeDamage + totalCityDamage + wonderDamage.count() > 0)
         {
             this->boardModel->printMessage(QString("In region %1, the tsunami results in the following losses.")
                                           .arg(possibleAffectedRegion->getRegion()));
@@ -165,14 +166,7 @@ Instruction *TsunamiInstruction::triggerDone()
                                           .arg(totalCityDamage));
             this->boardModel->printMessage(" ");
 
-            QString wondersLost = "None";
-
-            if(false/*Has any wonders lost.*/)
-            {
-                // TODO: List lost wonders in string "wondersLost". (See Common::listUpRegions(...))
-            }
-
-            this->boardModel->printMessage(QString("Wonders decimated: %1").arg(wondersLost));
+            this->boardModel->printMessage(QString("Wonders decimated: %1").arg(WonderModel::listUpWonders(wonderDamage)));
             this->affectedRegions.insert(possibleAffectedRegion->getRegion(), possibleAffectedRegion);
         }
         else

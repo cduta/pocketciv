@@ -26,7 +26,6 @@ public:
 
 private:
     Wonder wonder;
-    QString name;
     int victoryPoints;
     int tribesCost;
     int goldCost;
@@ -41,7 +40,6 @@ private:
 
 public:
     WonderModel(Wonder wonder,
-                 const QString &name,
                  int victoryPoints,
                  int tribesCost,
                  int goldCost,
@@ -56,6 +54,8 @@ public:
                  QObject *parent = 0);
 
     bool advancePrequisitesMet(const QSet<AdvanceModel::Advance> &advancesAquired) const;
+    static QString listUpWonders(const QList<WonderModel::Wonder> &wonders);
+    static QString getName(WonderModel::Wonder wonder);
 
     // Get-Methods
     Wonder getWonder() const;

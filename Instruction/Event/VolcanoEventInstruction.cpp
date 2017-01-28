@@ -77,7 +77,7 @@ Instruction *VolcanoEventInstruction::triggerDone()
 
             activeRegion->decimateTribes(1);
             activeRegion->setFarm(false);
-            activeRegion->decimateWonders();
+            activeRegion->decimateAllWonders();
 
 
         }
@@ -99,7 +99,7 @@ Instruction *VolcanoEventInstruction::triggerDone()
             activeRegion->setTribes(0);
             activeRegion->setForest(false);
             activeRegion->setDesert(true);
-            activeRegion->decimateWonders();
+            activeRegion->decimateAllWonders();
 
             if(this->boardModel->hasAdvanceAquired(AdvanceModel::ENGINEERING))
             {

@@ -123,7 +123,7 @@ Instruction *EarthquakeEventInstruction::triggerDone()
             bool isAffected = currentCityAV != activeRegion->getCityAV() ||
                               activeRegion->hasTribes() || activeRegion->hasWonders();
             activeRegion->decimateTribes(4);
-            activeRegion->decimateWonders();
+            activeRegion->decimateAllWonders();
 
             if(!isAffected)
             {

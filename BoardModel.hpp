@@ -170,6 +170,7 @@ public:
     bool canDoExpedition() const;
     bool canAquireAdvance() const;
     bool canBuildWonder() const;
+    QMap<WonderModel::Wonder, int> getAllBuiltWonders() const;
     bool canCollectTaxes() const;
     bool canDoForestation() const;
     bool canDoMining() const;
@@ -211,6 +212,7 @@ public:
     RegionModel *refCapitolRegion() const;
     const EventCard *refOriginalCard() const;
     const AdvanceModel *refAdvanceModel(AdvanceModel::Advance advance) const;
+    const WonderModel *refWonderModel(WonderModel::Wonder wonder) const;
 
 public slots:
      void aquireAdvance(AdvanceModel::Advance advance);

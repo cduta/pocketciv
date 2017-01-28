@@ -2,6 +2,9 @@
 #define REGIONMODEL_HPP
 
 #include <QObject>
+#include <QMap>
+
+#include "WonderModel.hpp"
 
 class RegionModel : public QObject
 {
@@ -24,6 +27,7 @@ class RegionModel : public QObject
     int cityAV;
     int selectedCityAV;
     bool advanceAquired;
+    QMap<WonderModel::Wonder, int> wonders;
 
 public:
     RegionModel(int region = -1, QObject *parent = 0);
@@ -47,7 +51,9 @@ public:
 
     void reduceSelectedCityAV();
 
-    void decimateWonders();
+    void buildWonder(WonderModel::Wonder wonder);
+    void decimateWonder(WonderModel::Wonder wonder);
+    void decimateAllWonders();
 
     // Get-Methods
     int getRegion() const;
@@ -68,6 +74,8 @@ public:
     int getSelectedCityAV() const;
     bool hasAdvanceAquired() const;
     bool hasWonders() const;
+    bool hasWonder(WonderModel::Wonder wonder) const;
+    QMap<WonderModel::Wonder, int> getBuiltWonders() const;
 
     // Set-Methods
     void setTribes(int tribes);
