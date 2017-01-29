@@ -89,7 +89,9 @@ SOURCES += main.cpp\
     AdvancesTable.cpp \
     WondersTable.cpp \
     WonderModel.cpp \
-    WonderDescription.cpp
+    WonderDescription.cpp \
+    IntegerTableItem.cpp \
+    WonderDialog.cpp
 
 HEADERS  += \
     PocketCivMain.hpp \
@@ -168,7 +170,9 @@ HEADERS  += \
     AdvancesTable.hpp \
     WonderModel.hpp \
     WondersTable.hpp \
-    WonderDescription.hpp
+    WonderDescription.hpp \
+    IntegerTableItem.hpp \
+    WonderDialog.hpp
 
 FORMS    +=
 

@@ -6,19 +6,7 @@
 
 #include "BoardModel.hpp"
 #include "AdvanceItem.hpp"
-
-class IntegerTableItem : public QTableWidgetItem
-{
-public:
-    IntegerTableItem(int integer)
-        : QTableWidgetItem(QString::number(integer))
-    {}
-
-    bool operator< (const QTableWidgetItem &other) const
-    {
-        return text().toInt() < other.text().toInt();
-    }
-};
+#include "IntegerTableItem.hpp"
 
 class AdvancesTable : public QTableWidget
 {

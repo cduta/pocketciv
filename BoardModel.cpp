@@ -2057,7 +2057,7 @@ void BoardModel::initializeWonders()
     this->wonders.insert(WonderModel::MOUNTAIN_CITADEL,
                     new WonderModel(WonderModel::MOUNTAIN_CITADEL,
                                      45,12,30,
-                                     false, false, false, false,
+                                     false, true, false, false,
                                      advanceRequisites, otherRequirements,
                                      positive, negative));
 
@@ -2406,6 +2406,11 @@ QMap<WonderModel::Wonder, int> BoardModel::getAllBuiltWonders() const
     }
 
     return result;
+}
+
+QList<WonderModel::Wonder> BoardModel::getAllWonders() const
+{
+    return this->wonders.keys();
 }
 
 bool BoardModel::canCollectTaxes() const
