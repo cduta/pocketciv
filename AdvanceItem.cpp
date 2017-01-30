@@ -45,7 +45,7 @@ AdvanceItem::AdvanceItem(qreal xPos,
     this->updateAdvanceItem();
 }
 
-void AdvanceItem::updateDesription()
+void AdvanceItem::updateDescription()
 {
     const AdvanceModel *advanceModel = this->boardModel->refAdvanceModel(this->advance);
     this->descriptionDialog.dialog.setWindowTitle(QString("%1 (%2 VP)").arg(advanceModel->getName()).arg(QString::number(advanceModel->getVictoryPoints())));
@@ -139,6 +139,7 @@ void AdvanceItem::updateDesription()
     }
 
     this->descriptionDialog.description->clear();
+    //this->descriptionDialog.description->insertPlainText(QString("Victory Points                    : %1\n\n").arg(advanceModel->getVictoryPoints()));
     this->descriptionDialog.description->insertPlainText(QString("Tribes Cost                       : %1\n").arg(tcString));
     this->descriptionDialog.description->insertPlainText(QString("Gold Cost                         : %1\n").arg(gcString));
     this->descriptionDialog.description->insertPlainText(QString("Wood (Forest) required            : %1\n").arg(wood));
@@ -389,7 +390,7 @@ void AdvanceItem::updateAdvanceItem()
 
     this->setPixmap(result);
 
-    this->updateDesription();
+    this->updateDescription();
     return;
 }
 

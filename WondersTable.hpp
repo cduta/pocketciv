@@ -16,6 +16,7 @@ class WondersTable : public QTableWidget
     WonderDescription::WonderDescriptionType wonderDescriptionType;
 
     QMap<WonderModel::Wonder, QTableWidgetItem *> wonderTableItems;
+    QMap<WonderModel::Wonder, WonderDescription *> wonderDescriptions;
 
 public:
     WondersTable(BoardModel *boardModel,

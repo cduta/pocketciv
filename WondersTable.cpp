@@ -9,6 +9,14 @@ WondersTable::WondersTable(BoardModel *boardModel, QList<WonderModel::Wonder> wo
       wonders(wonders),
       wonderDescriptionType(wonderDescriptionType)
 {
+    foreach(WonderModel::Wonder wonder, this->wonders)
+    {
+        if(!this->wonderDescriptions.keys().contains(wonder))
+        {
+            this->wonderDescriptions.insert(wonder, new WonderDescription(this->boardModel, wonder, this->wonderDescriptionType, this));
+        }
+    }
+
     this->setEditTriggers(QAbstractItemView::NoEditTriggers);
     this->setSelectionBehavior(QAbstractItemView::SelectRows);
     this->setColumnCount(12);
@@ -35,8 +43,8 @@ WondersTable::WondersTable(BoardModel *boardModel, QList<WonderModel::Wonder> wo
         QTableWidgetItem *woodItem = new QTableWidgetItem(wonderModel->getRequiresWood() ? "Yes" : "No");
         QTableWidgetItem *stoneItem = new QTableWidgetItem(wonderModel->getRequiresStone() ? "Yes" : "No");
         QTableWidgetItem *foodItem = new QTableWidgetItem(wonderModel->getRequiresFood() ? "Yes" : "No");
-        QTableWidgetItem *advancePrequisitesItem = new QTableWidgetItem("N/A");
-        QTableWidgetItem *otherRequirementsItem = new QTableWidgetItem("N/A");
+        QTableWidgetItem *advancePrequisitesItem = new QTableWidgetItem(!wonderModel->getAdvancePrequisites().isEmpty() ? "Yes" : "No");
+        QTableWidgetItem *otherRequirementsItem = new QTableWidgetItem(!wonderModel->getOtherRequirements().isEmpty() ? "Yes" : "No");
 
         this->wonderTableItems.insert(wonder, nameItem);
 
@@ -121,7 +129,7 @@ void WondersTable::selectWonder()
 
     QTableWidgetItem *item = this->item(this->currentRow(), 1);
     WonderModel::Wonder wonder = this->wonderTableItems.key(item);
-    // TODO: Show dialog.
+    this->wonderDescriptions[wonder]->show();
 
     return;
 }

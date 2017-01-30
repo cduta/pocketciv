@@ -82,7 +82,7 @@ public:
                 QGraphicsItem *parent = 0);
 
 private:
-    void updateDesription();
+    void updateDescription();
 
 public:
     void updateAdvanceItem();

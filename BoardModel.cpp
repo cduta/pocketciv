@@ -1966,9 +1966,9 @@ void BoardModel::initializeWonders()
     otherRequirements.append("ATLANTEA as a Trading Partner.\n");
     otherRequirements.append("The Region has to be adjacent to a SEA.\n");
     otherRequirements.append("The Region has a City.\n");
-    otherRequirements.append("The City is not already a CITY OF ATLANTIS.\n");
-    positive.append("+ Mark the City as the City of Atlantis.\n");
-    negative.append("- When the City is ever decimated, decimate the wonder as well.\n");
+    otherRequirements.append("The City is not already a City of Atlantis.\n");
+    positive.append("+ Mark the City as a City of Atlantis.\n");
+    negative.append("- When the City is ever decimated, decimate this wonder as well.\n");
     this->wonders.insert(WonderModel::CITY_OF_ATLANTIS,
                     new WonderModel(WonderModel::CITY_OF_ATLANTIS,
                                      50,8,25,
