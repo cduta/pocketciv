@@ -22,6 +22,7 @@
 #include "Instruction/ForestationInstruction.hpp"
 #include "Instruction/MiningInstruction.hpp"
 #include "Instruction/AquireAdvanceInstruction.hpp"
+#include "Instruction/BuildWonderInstruction.hpp"
 #include "Instruction/CollectTaxesInstruction.hpp"
 
 PocketCivMain::PocketCivMain(QWidget *parent) :
@@ -477,8 +478,9 @@ void PocketCivMain::aquireAdvanceTriggered()
 
 void PocketCivMain::buildWonderTriggered()
 {
-    // TODO: Do it.
-    //this->processInstruction(...);
+    Instruction *buildWonderInstruction = new BuildWonderInstruction(this->boardModel, this->instruction);
+    buildWonderInstruction->initInstruction();
+    this->processInstruction(buildWonderInstruction);
     return;
 }
 
@@ -516,7 +518,7 @@ void PocketCivMain::updateBoard()
     this->buildFarm->setEnabled(this->boardModel->canBuildFarm());
     this->expedition->setEnabled(this->boardModel->canDoExpedition());
     this->aquireAdvance->setEnabled(this->boardModel->canAquireAdvance());
-    this->buildWonder->setEnabled(this->boardModel->canBuildWonder());
+    this->buildWonder->setEnabled(this->boardModel->canBuildAnyWonder());
     this->collectTaxes->setEnabled(this->boardModel->canCollectTaxes());
     this->forestation->setEnabled(this->boardModel->canDoForestation());
     this->mining->setEnabled(this->boardModel->canDoMining());

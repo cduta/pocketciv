@@ -13,7 +13,9 @@ WondersTable::WondersTable(BoardModel *boardModel, QList<WonderModel::Wonder> wo
     {
         if(!this->wonderDescriptions.keys().contains(wonder))
         {
-            this->wonderDescriptions.insert(wonder, new WonderDescription(this->boardModel, wonder, this->wonderDescriptionType, this));
+            WonderDescription *wonderDescription = new WonderDescription(this->boardModel, wonder, this->wonderDescriptionType, this);
+            this->wonderDescriptions.insert(wonder, wonderDescription);
+            connect(wonderDescription, SIGNAL(wonderBuilt(WonderModel::Wonder)), this, SLOT(triggerWonderBuilt(WonderModel::Wonder)));
         }
     }
 
@@ -36,19 +38,110 @@ WondersTable::WondersTable(BoardModel *boardModel, QList<WonderModel::Wonder> wo
     {
         WonderModel::Wonder wonder = this->wonders[i];
         const WonderModel *wonderModel = this->boardModel->refWonderModel(wonder);
-        QTableWidgetItem *aquirableItem = new IntegerTableItem(this->boardModel->getAllBuiltWonders()[wonder]);
+        QTableWidgetItem *wonderCount = new IntegerTableItem(this->boardModel->getAllBuiltWonders()[wonder]);
         QTableWidgetItem *nameItem = new QTableWidgetItem(wonderModel->getName());
         IntegerTableItem *tribeCostItem = new IntegerTableItem(wonderModel->getTribesCost());
         IntegerTableItem *goldCostItem = new IntegerTableItem(wonderModel->getGoldCost());
         QTableWidgetItem *woodItem = new QTableWidgetItem(wonderModel->getRequiresWood() ? "Yes" : "No");
         QTableWidgetItem *stoneItem = new QTableWidgetItem(wonderModel->getRequiresStone() ? "Yes" : "No");
         QTableWidgetItem *foodItem = new QTableWidgetItem(wonderModel->getRequiresFood() ? "Yes" : "No");
-        QTableWidgetItem *advancePrequisitesItem = new QTableWidgetItem(!wonderModel->getAdvancePrequisites().isEmpty() ? "Yes" : "No");
+        QTableWidgetItem *advancePrequisitesItem = new QTableWidgetItem("None");
         QTableWidgetItem *otherRequirementsItem = new QTableWidgetItem(!wonderModel->getOtherRequirements().isEmpty() ? "Yes" : "No");
 
         this->wonderTableItems.insert(wonder, nameItem);
 
-        this->setItem(i, 0, aquirableItem);
+        if(wonderModel->advancePrequisitesMet(this->boardModel->getAdvancesAquired()))
+        {
+            if(wonderModel->getAdvancePrequisites().count() == 0)
+            {
+                advancePrequisitesItem->setText("None");
+            }
+            else
+            {
+                advancePrequisitesItem->setText("Satisfied");
+            }
+        }
+        else
+        {
+            advancePrequisitesItem->setText("Incomplete");
+        }
+
+        RegionModel *activeRegion = this->boardModel->refActiveRegion();
+
+        if(this->boardModel->isBuildingWonders())
+        {
+            if(this->boardModel->canBuildWonder(wonder))
+            {
+                wonderCount->setBackgroundColor(green);
+            }
+
+            int tribesCost = wonderModel->getTribesCost();
+
+            if(tribesCost <= activeRegion->getTribes() && tribesCost < this->boardModel->getTribeCount())
+            {
+                tribeCostItem->setBackgroundColor(green);
+            }
+            else
+            {
+                tribeCostItem->setBackgroundColor(red);
+            }
+
+            if(wonderModel->getGoldCost() <= this->boardModel->getGold())
+            {
+                goldCostItem->setBackgroundColor(green);
+            }
+            else
+            {
+                goldCostItem->setBackgroundColor(red);
+            }
+
+            if(!wonderModel->getRequiresWood() || activeRegion->hasForest())
+            {
+                woodItem->setBackgroundColor(green);
+            }
+            else
+            {
+                woodItem->setBackgroundColor(red);
+            }
+
+            if(!wonderModel->getRequiresStone() || activeRegion->hasMountain() || activeRegion->hasVolcano())
+            {
+                stoneItem->setBackgroundColor(green);
+            }
+            else
+            {
+                stoneItem->setBackgroundColor(red);
+            }
+
+            if(!wonderModel->getRequiresFood() || activeRegion->hasFarm())
+            {
+                foodItem->setBackgroundColor(green);
+            }
+            else
+            {
+                foodItem->setBackgroundColor(red);
+            }
+
+            if(wonderModel->advancePrequisitesMet(this->boardModel->getAdvancesAquired()))
+            {
+                advancePrequisitesItem->setBackgroundColor(green);
+            }
+            else
+            {
+                advancePrequisitesItem->setBackgroundColor(red);
+            }
+
+            if(this->boardModel->otherWonderRequirementsMet(wonder))
+            {
+                otherRequirementsItem->setBackgroundColor(green);
+            }
+            else
+            {
+                otherRequirementsItem->setBackgroundColor(red);
+            }
+        }
+
+        this->setItem(i, 0, wonderCount);
         this->setItem(i, 1, nameItem);
         this->setItem(i, 2, new IntegerTableItem(wonderModel->getVictoryPoints()));
         this->setItem(i, 3, tribeCostItem);
@@ -132,4 +225,10 @@ void WondersTable::selectWonder()
     this->wonderDescriptions[wonder]->show();
 
     return;
+}
+
+void WondersTable::triggerWonderBuilt(WonderModel::Wonder wonder)
+{
+    this->boardModel->doBuildWonder(wonder);
+    emit this->closeTable();
 }

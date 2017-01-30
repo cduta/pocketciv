@@ -29,6 +29,7 @@ AdvanceItem::AdvanceItem(qreal xPos,
     {
         this->descriptionDialog.layout->addWidget(this->descriptionDialog.description, 0,0,1,2);
         this->descriptionDialog.layout->addWidget(this->descriptionDialog.aquireAdvance, 1,0,1,2);
+        this->descriptionDialog.aquireAdvance->setEnabled(this->boardModel->canAquireAdvance(this->advance));
         this->descriptionDialog.cancel->hide();
 
         QObject::connect(&this->descriptionDialog, SIGNAL(advanceAquired(AdvanceModel::Advance)), this->boardModel, SLOT(aquireAdvance(AdvanceModel::Advance)));

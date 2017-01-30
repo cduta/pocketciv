@@ -11,6 +11,10 @@ class WondersTable : public QTableWidget
 {
     Q_OBJECT
 
+signals:
+    void closeTable();
+
+private:
     BoardModel *boardModel;
     QList<WonderModel::Wonder> wonders;
     WonderDescription::WonderDescriptionType wonderDescriptionType;
@@ -29,6 +33,7 @@ public:
 
 private slots:
     void selectWonder();
+    void triggerWonderBuilt(WonderModel::Wonder wonder);
 };
 
 #endif // WONDERSTABLE_HPP

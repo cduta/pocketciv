@@ -23,6 +23,7 @@ WonderDescription::WonderDescription(BoardModel *boardModel, WonderModel::Wonder
     if(this->wonderDescriptionType == WonderDescription::BUILD)
     {
         this->layout->addWidget(this->buildWonder, 1,0);
+        this->buildWonder->setEnabled(this->boardModel->canBuildWonder(wonder));
     }
     else
     {
@@ -30,7 +31,7 @@ WonderDescription::WonderDescription(BoardModel *boardModel, WonderModel::Wonder
     }
 
     this->updateDescription();
-    connect(this->buildWonder, SIGNAL(clicked()), this, SLOT(aquireAdvanceClicked()));
+    connect(this->buildWonder, SIGNAL(clicked()), this, SLOT(buildWonderClicked()));
     connect(this->buildWonder, SIGNAL(clicked()), &this->dialog, SLOT(close()));
     //connect(this->cancel, SIGNAL(clicked()), &this->dialog, SLOT(close()));
 

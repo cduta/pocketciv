@@ -69,7 +69,7 @@ Instruction *AquireAdvanceInstruction::triggerHex(Qt::MouseButton button, int x,
 
     if(regionModel)
     {
-        if(button == Qt::LeftButton && regionModel->isSelected() && this->boardModel->getCityAVCount() > this->boardModel->getAdvancesAquired().size())
+        if(button == Qt::LeftButton && !this->boardModel->isAquiringAdvances() && regionModel->isSelected() && this->boardModel->getCityAVCount() > this->boardModel->getAdvancesAquired().size())
         {
             this->boardModel->setAquiringAdvances(true);
             this->boardModel->setDoneButton(false);

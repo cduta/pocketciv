@@ -76,6 +76,7 @@ private:
 
     // Initialized
     bool aquiringAdvances;
+    bool buildingWonders;
     const EventCard *originalCard;
 
 public:
@@ -102,9 +103,9 @@ public:
     void populationGrowth();
     void moveTribes(int fromRegion, int toRegion, int howMany, BoardModel::MoveTribesType moveTribesType);
 
-    bool bordersOnFrontier(int region);
-    bool bordersOnSea(int region);
-    bool bordersOnDesert(int region);
+    bool bordersOnFrontier(int region) const;
+    bool bordersOnSea(int region) const;
+    bool bordersOnDesert(int region) const;
 
     void decimateUnsupportedTribes();
     void decimateGold();
@@ -117,7 +118,9 @@ public:
     void scoreSelectedAdvances();
     void toggleSelectAquiredAdvance(AdvanceModel::Advance advance);
     void unsetAdvancesAquired();
-    bool canAquireAdvance(AdvanceModel::Advance advance);
+    bool canAquireAdvance(AdvanceModel::Advance advance) const;
+    bool canBuildWonder(WonderModel::Wonder wonder) const;
+    bool otherWonderRequirementsMet(WonderModel::Wonder wonder) const;
 
     const EventCard *drawCard(bool tell = true);
     const EventCard *drawOriginalCard(bool tell = true);
@@ -169,7 +172,7 @@ public:
     bool canBuildFarm() const;
     bool canDoExpedition() const;
     bool canAquireAdvance() const;
-    bool canBuildWonder() const;
+    bool canBuildAnyWonder() const;
     QMap<WonderModel::Wonder, int> getAllBuiltWonders() const;
     QList<WonderModel::Wonder> getAllWonders() const;
     bool canCollectTaxes() const;
@@ -192,6 +195,7 @@ public:
     bool hasAgricultureLeft() const;
     bool isTradingPartner(Empire empire) const;
     bool isAquiringAdvances() const;
+    bool isBuildingWonders() const;
 
 // Set-Methods
     void setActiveRegion(int region, bool isBad = true);
@@ -204,6 +208,7 @@ public:
     void setDoneButton(bool enabled);
     void setTradingPartner(Empire empire);
     void setAquiringAdvances(bool aquiringAdvances);
+    void setBuildingWonders(bool buildingWonders);
 
 // Ref-Methods
     HexModel *refHexModel(int x, int y);
@@ -216,7 +221,8 @@ public:
     const WonderModel *refWonderModel(WonderModel::Wonder wonder) const;
 
 public slots:
-     void aquireAdvance(AdvanceModel::Advance advance);
+     void aquireAdvance(AdvanceModel::Advance advance, bool tell = true);
+     void doBuildWonder(WonderModel::Wonder wonder, bool tell = true);
 
 private slots:
      void clearBoard();

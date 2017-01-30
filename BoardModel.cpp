@@ -37,6 +37,7 @@ BoardModel::BoardModel(int width, int height, QObject *parent)
       gloryScore(0),
       agricultureLeft(true),
       aquiringAdvances(false),
+      buildingWonders(false),
       originalCard(NULL)
 {
     this->newBoard(width, height);
@@ -386,7 +387,7 @@ void BoardModel::moveTribes(int fromRegion, int toRegion, int howMany, BoardMode
     return;
 }
 
-bool BoardModel::bordersOnFrontier(int region)
+bool BoardModel::bordersOnFrontier(int region) const
 {
     foreach(HexModel *hexModel, this->regionHexes[region])
     {
@@ -402,7 +403,7 @@ bool BoardModel::bordersOnFrontier(int region)
     return false;
 }
 
-bool BoardModel::bordersOnSea(int region)
+bool BoardModel::bordersOnSea(int region) const
 {
     foreach(HexModel *hexModel, this->regionHexes[region])
     {
@@ -418,7 +419,7 @@ bool BoardModel::bordersOnSea(int region)
     return false;
 }
 
-bool BoardModel::bordersOnDesert(int region)
+bool BoardModel::bordersOnDesert(int region) const
 {
     foreach(HexModel *hexModel, this->regionHexes[region])
     {
@@ -555,7 +556,7 @@ void BoardModel::unsetAdvancesAquired()
     return;
 }
 
-bool BoardModel::canAquireAdvance(AdvanceModel::Advance advance)
+bool BoardModel::canAquireAdvance(AdvanceModel::Advance advance) const
 {
     const AdvanceModel *advanceModel = this->advances[advance];
     RegionModel *activeRegion = this->refActiveRegion();
@@ -568,13 +569,48 @@ bool BoardModel::canAquireAdvance(AdvanceModel::Advance advance)
     }
 
     return !this->hasAdvanceAquired(advance) && activeRegion != NULL && this->isAquiringAdvances() &&
-           tribesCost <= activeRegion->getTribes() &&
+           tribesCost <= activeRegion->getTribes() && tribesCost < this->getTribeCount() &&
            advanceModel->getGoldCost() <= this->getGold() &&
            (!advanceModel->getRequiresWood() || activeRegion->hasForest()) &&
            (!advanceModel->getRequiresStone() || activeRegion->hasMountain() || activeRegion->hasVolcano()) &&
            (!advanceModel->getRequiresFood() || activeRegion->hasFarm()) &&
            advanceModel->advancePrequisitesMet(this->advancesAquired) &&
-           this->advancesAquired.count() < this->getCityAVCount();
+            this->advancesAquired.count() < this->getCityAVCount();
+}
+
+bool BoardModel::canBuildWonder(WonderModel::Wonder wonder) const
+{
+    assert(this->refActiveRegion() != NULL);
+    RegionModel *activeRegion = this->refActiveRegion();
+    const WonderModel *wonderModel = this->refWonderModel(wonder);
+
+    return this->isBuildingWonders() &&
+           wonderModel->getTribesCost() <= activeRegion->getTribes() && wonderModel->getTribesCost() < this->getTribeCount() &&
+           wonderModel->getGoldCost() <= this->getGold() &&
+           (!wonderModel->getRequiresWood() || activeRegion->hasForest()) &&
+           (!wonderModel->getRequiresStone() || activeRegion->hasMountain() || activeRegion->hasVolcano()) &&
+           (!wonderModel->getRequiresFood() || activeRegion->hasFarm()) &&
+           wonderModel->advancePrequisitesMet(this->advancesAquired) &&
+           this->otherWonderRequirementsMet(wonder);
+}
+
+bool BoardModel::otherWonderRequirementsMet(WonderModel::Wonder wonder) const
+{
+    assert(this->refActiveRegion() != NULL);
+    RegionModel *activeRegion = this->refActiveRegion();
+
+    switch(wonder)
+    {
+        case WonderModel::CITY_OF_ATLANTIS: return this->isTradingPartner(BoardModel::ATLANTEA) &&
+                                                   this->bordersOnSea(activeRegion->getRegion()) &&
+                                                   activeRegion->hasCity() &&
+                                                   !activeRegion->hasWonder(WonderModel::CITY_OF_ATLANTIS); break;
+        case WonderModel::GREAT_WALL_OF_SOLITUDE: return this->bordersOnFrontier(activeRegion->getRegion()); break;
+        case WonderModel::MOUNTAIN_CITADEL: return activeRegion->hasMountain() || activeRegion->hasVolcano(); break;
+        default: break;
+    }
+
+    return true;
 }
 
 const EventCard *BoardModel::drawCard(bool tell)
@@ -659,6 +695,12 @@ void BoardModel::setTradingPartner(BoardModel::Empire empire)
 void BoardModel::setAquiringAdvances(bool aquiringAdvances)
 {
     this->aquiringAdvances = aquiringAdvances;
+    return;
+}
+
+void BoardModel::setBuildingWonders(bool buildingWonders)
+{
+    this->buildingWonders = buildingWonders;
     return;
 }
 
@@ -2004,7 +2046,7 @@ void BoardModel::initializeWonders()
     otherRequirements.clear();
     positive.clear();
     negative.clear();
-    otherRequirements.append("The Region has to be adjacent to a REGION.\n");
+    otherRequirements.append("The Region has to be adjacent to a FRONTIER.\n");
     negative.append("- Expeditions can't be sent from Regions with this Wonder.\n");
     this->wonders.insert(WonderModel::GREAT_WALL_OF_SOLITUDE,
                     new WonderModel(WonderModel::GREAT_WALL_OF_SOLITUDE,
@@ -2382,7 +2424,7 @@ bool BoardModel::canAquireAdvance() const
     return this->aquireAdvances;
 }
 
-bool BoardModel::canBuildWonder() const
+bool BoardModel::canBuildAnyWonder() const
 {
     return this->buildWonder;
 }
@@ -2524,7 +2566,12 @@ bool BoardModel::isTradingPartner(BoardModel::Empire empire) const
 
 bool BoardModel::isAquiringAdvances() const
 {
-    return aquiringAdvances;
+    return this->aquiringAdvances;
+}
+
+bool BoardModel::isBuildingWonders() const
+{
+    return this->buildingWonders;
 }
 
 void BoardModel::setActiveRegion(int region, bool isBad)
@@ -2665,23 +2712,54 @@ const WonderModel *BoardModel::refWonderModel(WonderModel::Wonder wonder) const
     return this->wonders[wonder];
 }
 
-void BoardModel::aquireAdvance(AdvanceModel::Advance advance)
+void BoardModel::aquireAdvance(AdvanceModel::Advance advance, bool tell)
 {
     assert(this->refActiveRegion());
 
-    this->advancesAquired.insert(advance);
-
-    int tribesCost = this->advances[advance]->getTribesCost();
-
-    if(this->hasAdvanceAquired(AdvanceModel::STORY_TELLING) && AdvanceModel::hasStoryTellingDiscount(advance))
+    if(this->canAquireAdvance(advance))
     {
-        tribesCost--;
+        int tribesCost = this->advances[advance]->getTribesCost();
+
+        if(this->hasAdvanceAquired(AdvanceModel::STORY_TELLING) && AdvanceModel::hasStoryTellingDiscount(advance))
+        {
+            tribesCost--;
+        }
+
+        this->refActiveRegion()->decimateTribes(tribesCost);
+        this->gold -= this->advances[advance]->getGoldCost();
+
+        this->advancesAquired.insert(advance);
+
+        if(tell)
+        {
+            this->printMessage(QString("Advance Aquired (%1) in Region %2.").arg(this->advances[advance]->getName()).arg(activeRegion->getRegion()));
+        }
+
+        emit this->boardUpdated();
     }
+    return;
+}
 
-    this->refActiveRegion()->decimateTribes(tribesCost);
-    this->gold -= this->advances[advance]->getGoldCost();
+void BoardModel::doBuildWonder(WonderModel::Wonder wonder, bool tell)
+{
+    assert(this->refActiveRegion());
 
-    emit this->boardUpdated();
+    if(this->canBuildWonder(wonder))
+    {
+        RegionModel *activeRegion = this->refActiveRegion();
+
+        activeRegion->decimateTribes(this->wonders[wonder]->getTribesCost());
+        this->gold -= this->wonders[wonder]->getGoldCost();
+
+        activeRegion->buildWonder(wonder);
+
+        if(tell)
+        {
+            this->printMessage(QString("Wonder (%1) built in Region %2.").arg(this->wonders[wonder]->getName()).arg(activeRegion->getRegion()));
+        }
+
+        emit this->boardUpdated();
+    }
     return;
 }
 
@@ -2702,6 +2780,8 @@ void BoardModel::clearBoard()
     }
 
     this->hexModels.clear();
+    this->aquiringAdvances = false;
+    this->buildingWonders = false;
 
     emit this->boardCleared();
 }

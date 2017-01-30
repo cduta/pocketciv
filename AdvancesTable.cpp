@@ -98,7 +98,8 @@ AdvancesTable::AdvancesTable(BoardModel *boardModel, const QMap<AdvanceModel::Ad
                 tribesCost--;
             }
 
-            if(tribesCost <= activeRegion->getTribes())
+            if(tribesCost <= activeRegion->getTribes() &&
+               tribesCost < this->boardModel->getTribeCount())
             {
                 tribeCostItem->setBackgroundColor(green);
             }

@@ -199,7 +199,7 @@ Instruction *AdvanceCityAVInstruction::triggerHex(Qt::MouseButton button, int x,
                         this->boardModel->printMessage("(BASIC TOOLS, SIMPLE TOOLS and MACHINING do NOT apply here to reduce the cost.)");
                         this->boardModel->printMessage(" ");
 
-                        if(activeRegion->getTribes() >= this->toBePaid)
+                        if(this->toBePaid <= activeRegion->getTribes() && this->toBePaid < this->boardModel->getTribeCount())
                         {
                             this->boardModel->printMessage(QString("To advance the Capitol City you'll have to decimate %1 Tribes from the City Region and\n"
                                                                   "a Forest, Mountain or Farm from anywhere in the Empire.")
@@ -213,10 +213,18 @@ Instruction *AdvanceCityAVInstruction::triggerHex(Qt::MouseButton button, int x,
                             this->boardModel->setActiveRegion(regionModel->getRegion(), true);
                             this->boardModel->setDoneText("Cancel");
                         }
+                        else if(this->toBePaid <= activeRegion->getTribes() && this->toBePaid >= this->boardModel->getTribeCount())
+                        {
+                            this->boardModel->printMessage(QString("But, it is not possible to advance the Capitol City,"));
+                            this->boardModel->printMessage(QString("because there would be no Tribes left in the Empire when decimating %1 Tribes.")
+                                                          .arg(this->toBePaid));
+                        }
                         else
                         {
-                            this->boardModel->printMessage(QString("But, it is not possible to advance the Capitol City, because there are not enough Tribes in Region %1 to pay %2 Tribes.")
-                                                          .arg(regionModel->getRegion()));
+                            this->boardModel->printMessage(QString("But, it is not possible to advance the Capitol City,"));
+                            this->boardModel->printMessage(QString("because there are not enough Tribes in Region %1 to decimate %2 Tribes.")
+                                                          .arg(regionModel->getRegion())
+                                                          .arg(this->toBePaid));
                         }
 
                         this->boardModel->printMessage(" ");
