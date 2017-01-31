@@ -623,7 +623,7 @@ const EventCard *BoardModel::drawCard(bool tell)
 
     if(tell)
     {
-        this->printMessage("Drawing a card...");
+        this->printMessage(QString("Drawing card %1...").arg(this->eventCards.indexOf(card)+1));
         this->printMessage(" ");
     }
 
