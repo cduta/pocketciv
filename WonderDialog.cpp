@@ -31,7 +31,7 @@ WonderDialog::WonderDialog(BoardModel *boardModel, WonderDescription::WonderDesc
 
     QMap<WonderModel::Wonder, int> wonders;
 
-    if(wonderDescriptionType == WonderDescription::REGION_OVERVIEW)
+    if(wonderDescriptionType == WonderDescription::REGION_OVERVIEW || wonderDescriptionType == WonderDescription::SELECTION)
     {
         wonders = this->boardModel->refRegionModel(region)->getBuiltWonders();
     }
@@ -43,15 +43,32 @@ WonderDialog::WonderDialog(BoardModel *boardModel, WonderDescription::WonderDesc
     this->wondersTable = new WondersTable(this->boardModel, wonders, wonderDescriptionType, this);
     connect(this->wondersTable, SIGNAL(closeTable()), this, SLOT(accept()));
 
-    this->resizeButton = new QPushButton(this->BUTTON_TEXT_COMPACT, this);
+    if(wonderDescriptionType == WonderDescription::SELECTION)
+    {
+        connect(this->wondersTable, SIGNAL(wonderSelectionChanged(WonderModel::Wonder,int)), this, SLOT(updateWonderSelection(WonderModel::Wonder,int)));
+    }
 
+    this->resizeButton = new QPushButton(this->BUTTON_TEXT_COMPACT, this);
     connect(this->resizeButton, SIGNAL(clicked()), this, SLOT(toggleSize()));
+
+    this->submitButton = new QPushButton("Submit Selection", this);
+    connect(this->resizeButton, SIGNAL(clicked()), this, SLOT(close()));
 
     this->setCompactSize();
 
     this->setLayout(this->wonderLayout);
-    this->wonderLayout->addWidget(this->wondersTable, 0, 0);
-    this->wonderLayout->addWidget(this->resizeButton, 1, 0);
+    this->wonderLayout->addWidget(this->wondersTable, 0, 0, 1,2);
+
+    if(wonderDescriptionType == WonderDescription::SELECTION)
+    {
+        this->wonderLayout->addWidget(this->resizeButton, 1, 0);
+        this->wonderLayout->addWidget(this->submitButton, 1, 1);
+    }
+    else
+    {
+        this->wonderLayout->addWidget(this->resizeButton, 1, 0 ,1,2);
+        this->submitButton->setVisible(false);
+    }
 }
 
 void WonderDialog::setCompactSize()
@@ -78,6 +95,19 @@ void WonderDialog::setFullSize()
     return;
 }
 
+void WonderDialog::setSelectionTotal(int selectionTotal)
+{
+    this->wondersTable->setSelectionTotal(selectionTotal);
+    this->setWindowTitle(QString("Wonders (Selection 0/%1)").arg(selectionTotal));
+    this->submitButton->setEnabled(false);
+    return;
+}
+
+QMap<WonderModel::Wonder, int> WonderDialog::getSelectedWonders() const
+{
+    return this->wondersTable->getSelectedWonders();
+}
+
 void WonderDialog::toggleSize()
 {
     if(this->isCompact)
@@ -88,4 +118,19 @@ void WonderDialog::toggleSize()
     {
         this->setCompactSize();
     }
+}
+
+void WonderDialog::updateWonderSelection(WonderModel::Wonder, int)
+{
+    QMap<WonderModel::Wonder, int> selectedWonders = this->wondersTable->getSelectedWonders();
+    int wonderCountTotal = 0;
+
+    foreach(int wonderCount, selectedWonders.values())
+    {
+        wonderCountTotal += wonderCount;
+    }
+
+    this->submitButton->setEnabled(wonderCountTotal == this->wondersTable->getSelectionTotal());
+    this->setWindowTitle(QString("Wonders (Selection %1/%2)").arg(wonderCountTotal).arg(this->wondersTable->getSelectionTotal()));
+    return;
 }

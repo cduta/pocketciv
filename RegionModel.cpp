@@ -137,6 +137,11 @@ void RegionModel::decimateZeroAVCity()
     if(this->cityAV <= 0)
     {
         this->city = false;
+
+        if(this->wonders.contains(WonderModel::CITY_OF_ATLANTIS) && this->wonders[WonderModel::CITY_OF_ATLANTIS] > 0)
+        {
+            this->wonders.remove(WonderModel::CITY_OF_ATLANTIS);
+        }
     }
     return;
 }
@@ -308,7 +313,12 @@ void RegionModel::setCity(bool city)
     if(!this->city)
     {
         this->setCityAV(0);
+        if(this->wonders.contains(WonderModel::CITY_OF_ATLANTIS) && this->wonders[WonderModel::CITY_OF_ATLANTIS] > 0)
+        {
+            this->wonders.remove(WonderModel::CITY_OF_ATLANTIS);
+        }
     }
+
     return;
 }
 

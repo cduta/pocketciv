@@ -1,5 +1,7 @@
 #include "WonderModel.hpp"
 
+#include <QMap>
+
 WonderModel::WonderModel(WonderModel::Wonder wonder, int victoryPoints, int tribesCost, int goldCost, bool requiresWood, bool requiresStone, bool requiresFood, bool requiresCity, const QList<AdvanceModel::Advance> &prequisites, const QList<QString> &otherRequirements, const QList<QString> &positiveEffects, const QList<QString> &negativeEffects, QObject *parent)
     : QObject(parent),
       wonder(wonder),
@@ -30,7 +32,7 @@ bool WonderModel::advancePrequisitesMet(const QSet<AdvanceModel::Advance> &advan
     return result;
 }
 
-QString WonderModel::listUpWonders(const QList<WonderModel::Wonder> &wonders)
+QString WonderModel::listUpWonders(const QMap<WonderModel::Wonder, int> &wonders)
 {
     QString result = "None";
 
@@ -39,16 +41,18 @@ QString WonderModel::listUpWonders(const QList<WonderModel::Wonder> &wonders)
         result = "";
         for(int i = 0; i < wonders.count() - 2; ++i)
         {
-            result = result.append(QString("%1, ").arg(WonderModel::getName(wonders[i])));
+            result = result.append(QString("%1x%2, ").arg(wonders.values()[i]).arg(WonderModel::getName(wonders.keys()[i])));
         }
 
-        result = result.append(QString("%1 and %2")
-                                .arg(WonderModel::getName(wonders[wonders.count() - 2]))
-                                .arg(WonderModel::getName(wonders.last())));
+        result = result.append(QString("%1x%2 and %3x%4")
+                                .arg(wonders.values()[wonders.count() - 2])
+                                .arg(WonderModel::getName(wonders.keys()[wonders.count() - 2]))
+                                .arg(wonders.values().last())
+                                .arg(WonderModel::getName(wonders.keys().last())));
     }
     else if(wonders.count() == 1)
     {
-        result = WonderModel::getName(wonders.first());
+        result = QString("%1x%2").arg(wonders.values().first()).arg(WonderModel::getName(wonders.keys().first()));
     }
 
     return result;

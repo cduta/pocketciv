@@ -22,6 +22,7 @@ class WonderDialog : public QDialog
     QGridLayout *   wonderLayout;
     WondersTable *  wondersTable;
     QPushButton *   resizeButton;
+    QPushButton *   submitButton;
 
 public:
     WonderDialog(BoardModel *boardModel, WonderDescription::WonderDescriptionType wonderDescriptionType = WonderDescription::WonderDescriptionType::OVERVIEW, int region = -1, QWidget *parent = 0);
@@ -29,8 +30,14 @@ public:
     void setCompactSize();
     void setFullSize();
 
+    void setSelectionTotal(int selectionTotal);
+    QMap<WonderModel::Wonder, int> getSelectedWonders() const;
+
 public slots:
     void toggleSize();
+
+private slots:
+    void updateWonderSelection(WonderModel::Wonder,int);
 };
 
 #endif // WONDERDIALOG_HPP

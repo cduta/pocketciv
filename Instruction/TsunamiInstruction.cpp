@@ -2,6 +2,7 @@
 
 #include "Instruction/EndOfEraInstruction.hpp"
 #include "Common.hpp"
+#include "WonderDialog.hpp"
 
 TsunamiInstruction::TsunamiInstruction(BoardModel *boardModel, RegionModel *activeRegion, Instruction *nextInstruction, const Event *firstEvent)
     : Instruction(), firstEvent(firstEvent), damagePerTribe(1), damagePerCityAV(2), damagePerWonder(3)
@@ -103,7 +104,7 @@ Instruction *TsunamiInstruction::triggerDone()
         int currentDamage = this->tsunamiDamage;
         int totalTribeDamage = 0;
         int totalCityDamage = 0;
-        QList<WonderModel::Wonder> wonderDamage;
+        int totalWonderDamage = 0;
 
         while(currentDamage > 0)
         {
@@ -145,7 +146,7 @@ Instruction *TsunamiInstruction::triggerDone()
                 }
                 else
                 {
-                    // TODO: Select Wonder to be destroyed and remember which ones.
+                    totalWonderDamage++;
                     currentDamage -= this->damagePerWonder;
                 }
             }
@@ -156,8 +157,26 @@ Instruction *TsunamiInstruction::triggerDone()
         }
 
 
-        if(totalTribeDamage + totalCityDamage + wonderDamage.count() > 0)
+        if(totalTribeDamage + totalCityDamage + totalWonderDamage > 0)
         {
+            QMap<WonderModel::Wonder, int> wonderDamage;
+            int wonderDamageSelected = 0;
+            while(totalWonderDamage > 0 && wonderDamageSelected != totalWonderDamage)
+            {
+                WonderDialog *wonderDialog = new WonderDialog(this->boardModel, WonderDescription::SELECTION, possibleAffectedRegion->getRegion());
+                wonderDialog->setSelectionTotal(totalWonderDamage);
+                wonderDialog->exec();
+                wonderDamage = wonderDialog->getSelectedWonders();
+
+                wonderDamageSelected = 0;
+                foreach(int wonderDamageCount, wonderDamage.values())
+                {
+                    wonderDamageSelected += wonderDamageCount;
+                }
+
+                wonderDialog->deleteLater();
+            }
+
             this->boardModel->printMessage(QString("In region %1, the tsunami results in the following losses.")
                                           .arg(possibleAffectedRegion->getRegion()));
             this->boardModel->printMessage(QString("Tribes decimated: %1")

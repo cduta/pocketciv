@@ -13,9 +13,15 @@ WondersTable::WondersTable(BoardModel *boardModel, QMap<WonderModel::Wonder, int
     {
         if(!this->wonderDescriptions.keys().contains(wonder))
         {
-            WonderDescription *wonderDescription = new WonderDescription(this->boardModel, wonder, this->wonderDescriptionType, this);
+            WonderDescription *wonderDescription = new WonderDescription(this->boardModel, wonder, this->wonders[wonder], this->wonderDescriptionType, this);
             this->wonderDescriptions.insert(wonder, wonderDescription);
             connect(wonderDescription, SIGNAL(wonderBuilt(WonderModel::Wonder)), this, SLOT(triggerWonderBuilt(WonderModel::Wonder)));
+
+            if(wonderDescriptionType == WonderDescription::SELECTION)
+            {
+                this->wonderSelection.insert(wonder, 0);
+                connect(wonderDescription, SIGNAL(selectionCountChanged(WonderModel::Wonder, int)), this, SLOT(selectionCountChanged(WonderModel::Wonder, int)));
+            }
         }
     }
 
@@ -30,7 +36,7 @@ WondersTable::WondersTable(BoardModel *boardModel, QMap<WonderModel::Wonder, int
 
     this->setRowCount(this->wonders.count());
 
-    QColor blue(0x17,0x57,0xe8);
+    //QColor blue(0x17,0x57,0xe8);
     QColor red(0xea,0x1a,0x1a);
     QColor green(0x16,0xb7,0x16);
 
@@ -38,7 +44,16 @@ WondersTable::WondersTable(BoardModel *boardModel, QMap<WonderModel::Wonder, int
     {
         WonderModel::Wonder wonder = this->wonders.keys()[i];
         const WonderModel *wonderModel = this->boardModel->refWonderModel(wonder);
-        QTableWidgetItem *wonderCount = new IntegerTableItem(this->wonders[wonder]);
+        QTableWidgetItem *wonderCount;
+
+        if(this->wonderDescriptionType == WonderDescription::SELECTION)
+        {
+            wonderCount = new SelectionTableItem(0, this->wonders[wonder]);
+        }
+        else
+        {
+            wonderCount = new IntegerTableItem(this->wonders[wonder]);
+        }
         QTableWidgetItem *nameItem = new QTableWidgetItem(wonderModel->getName());
         IntegerTableItem *tribeCostItem = new IntegerTableItem(wonderModel->getTribesCost());
         IntegerTableItem *goldCostItem = new IntegerTableItem(wonderModel->getGoldCost());
@@ -48,7 +63,8 @@ WondersTable::WondersTable(BoardModel *boardModel, QMap<WonderModel::Wonder, int
         QTableWidgetItem *advancePrequisitesItem = new QTableWidgetItem("None");
         QTableWidgetItem *otherRequirementsItem = new QTableWidgetItem(!wonderModel->getOtherRequirements().isEmpty() ? "Yes" : "No");
 
-        this->wonderTableItems.insert(wonder, nameItem);
+        this->wonderTableNameItems.insert(wonder, nameItem);
+        this->wonderTableCountItems.insert(wonder, wonderCount);
 
         if(wonderModel->advancePrequisitesMet(this->boardModel->getAdvancesAquired()))
         {
@@ -194,8 +210,12 @@ void WondersTable::setCompactColumns()
 void WondersTable::setFullColumns()
 {
     QStringList headers;
-
     QString builtColumnName = "Built Total";
+
+    if(this->wonderDescriptionType == WonderDescription::SELECTION)
+    {
+        builtColumnName = "Wonders Selected";
+    }
 
     headers << builtColumnName << "Name" << "Victory Points" << "Tribes" << "Gold" << "Forest" << "Mountain/Volcano" << "Farm" << "Advance Prequisites" << "Other Requirements" << "Positives" << "Negatives";
     this->setHorizontalHeaderLabels(headers);
@@ -212,6 +232,41 @@ void WondersTable::setFullColumns()
     this->resizeColumnToContents(11);
 }
 
+QMap<WonderModel::Wonder, int> WondersTable::getWonders() const
+{
+    return this->wonders;
+}
+
+QMap<WonderModel::Wonder, int> WondersTable::getSelectedWonders() const
+{
+    return this->wonderSelection;
+}
+
+int WondersTable::getSelectionTotal() const
+{
+    return this->selectionTotal;
+}
+
+void WondersTable::setSelectionTotal(int selectionTotal)
+{
+    this->selectionTotal = selectionTotal;
+    return;
+}
+
+void WondersTable::wonderSelectionCountChanged(WonderModel::Wonder wonder, int wonderSelection)
+{
+    this->wonderSelection[wonder] = wonderSelection;
+    QTableWidgetItem *item = this->wonderTableCountItems[wonder];
+    SelectionTableItem *selectionItem = dynamic_cast<SelectionTableItem *>(item);
+
+    if(selectionItem != NULL)
+    {
+        selectionItem->setSelectedCount(wonderSelection);
+    }
+
+    emit this->wonderSelectionChanged(wonder, wonderSelection);
+}
+
 void WondersTable::selectWonder()
 {
     if(this->selectedItems().isEmpty() ||
@@ -221,7 +276,7 @@ void WondersTable::selectWonder()
     }
 
     QTableWidgetItem *item = this->item(this->currentRow(), 1);
-    WonderModel::Wonder wonder = this->wonderTableItems.key(item);
+    WonderModel::Wonder wonder = this->wonderTableNameItems.key(item);
     this->wonderDescriptions[wonder]->show();
 
     return;

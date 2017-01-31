@@ -54,7 +54,7 @@ public:
                  QObject *parent = 0);
 
     bool advancePrequisitesMet(const QSet<AdvanceModel::Advance> &advancesAquired) const;
-    static QString listUpWonders(const QList<WonderModel::Wonder> &wonders);
+    static QString listUpWonders(const QMap<WonderModel::Wonder, int> &wonders);
     static QString getName(WonderModel::Wonder wonder);
 
     // Get-Methods
