@@ -2450,9 +2450,26 @@ QMap<WonderModel::Wonder, int> BoardModel::getAllBuiltWonders() const
     return result;
 }
 
-QList<WonderModel::Wonder> BoardModel::getAllWonders() const
+QMap<WonderModel::Wonder, int> BoardModel::getAllWonders() const
 {
-    return this->wonders.keys();
+    QMap<WonderModel::Wonder, int> result;
+
+    foreach(WonderModel::Wonder wonder, this->wonders.keys())
+    {
+        result.insert(wonder, 0);
+    }
+
+    foreach(RegionModel *regionModel, this->regions)
+    {
+        QMap<WonderModel::Wonder, int> current = regionModel->getBuiltWonders();
+
+        foreach(WonderModel::Wonder wonder, current.keys())
+        {
+            result[wonder] += current[wonder];
+        }
+    }
+
+    return result;
 }
 
 bool BoardModel::canCollectTaxes() const

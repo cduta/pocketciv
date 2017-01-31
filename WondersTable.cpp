@@ -3,13 +3,13 @@
 #include <QAbstractItemView>
 #include <QHeaderView>
 
-WondersTable::WondersTable(BoardModel *boardModel, QList<WonderModel::Wonder> wonders, WonderDescription::WonderDescriptionType wonderDescriptionType, QWidget *parent)
+WondersTable::WondersTable(BoardModel *boardModel, QMap<WonderModel::Wonder, int> wonders, WonderDescription::WonderDescriptionType wonderDescriptionType, QWidget *parent)
     : QTableWidget(parent),
       boardModel(boardModel),
       wonders(wonders),
       wonderDescriptionType(wonderDescriptionType)
 {
-    foreach(WonderModel::Wonder wonder, this->wonders)
+    foreach(WonderModel::Wonder wonder, this->wonders.keys())
     {
         if(!this->wonderDescriptions.keys().contains(wonder))
         {
@@ -36,9 +36,9 @@ WondersTable::WondersTable(BoardModel *boardModel, QList<WonderModel::Wonder> wo
 
     for(int i = 0; i < this->wonders.count(); ++i)
     {
-        WonderModel::Wonder wonder = this->wonders[i];
+        WonderModel::Wonder wonder = this->wonders.keys()[i];
         const WonderModel *wonderModel = this->boardModel->refWonderModel(wonder);
-        QTableWidgetItem *wonderCount = new IntegerTableItem(this->boardModel->getAllBuiltWonders()[wonder]);
+        QTableWidgetItem *wonderCount = new IntegerTableItem(this->wonders[wonder]);
         QTableWidgetItem *nameItem = new QTableWidgetItem(wonderModel->getName());
         IntegerTableItem *tribeCostItem = new IntegerTableItem(wonderModel->getTribesCost());
         IntegerTableItem *goldCostItem = new IntegerTableItem(wonderModel->getGoldCost());

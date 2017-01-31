@@ -16,7 +16,7 @@ signals:
 
 private:
     BoardModel *boardModel;
-    QList<WonderModel::Wonder> wonders;
+    QMap<WonderModel::Wonder, int> wonders;
     WonderDescription::WonderDescriptionType wonderDescriptionType;
 
     QMap<WonderModel::Wonder, QTableWidgetItem *> wonderTableItems;
@@ -24,7 +24,7 @@ private:
 
 public:
     WondersTable(BoardModel *boardModel,
-                 QList<WonderModel::Wonder> wonders,
+                 QMap<WonderModel::Wonder, int> wonders,
                  WonderDescription::WonderDescriptionType wonderDescriptionType = WonderDescription::OVERVIEW,
                  QWidget *parent = 0);
 

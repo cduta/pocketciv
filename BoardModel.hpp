@@ -174,7 +174,7 @@ public:
     bool canAquireAdvance() const;
     bool canBuildAnyWonder() const;
     QMap<WonderModel::Wonder, int> getAllBuiltWonders() const;
-    QList<WonderModel::Wonder> getAllWonders() const;
+    QMap<WonderModel::Wonder, int> getAllWonders() const;
     bool canCollectTaxes() const;
     bool canDoForestation() const;
     bool canDoMining() const;

@@ -26,7 +26,7 @@ OverviewDialog::OverviewDialog(BoardModel *boardModel, QWidget *parent)
     connect(this->showGlory, SIGNAL(clicked()), this, SLOT(close()));
 
     this->advancesDialog = new AdvancesDialog(this->boardModel, AdvanceItem::OVERVIEW, this);
-    this->wonderDialog = new WonderDialog(this->boardModel, WonderDescription::OVERVIEW, this);
+    this->wonderDialog = new WonderDialog(this->boardModel, WonderDescription::OVERVIEW, -1, this);
 
     this->setLayout(this->layout);
 }

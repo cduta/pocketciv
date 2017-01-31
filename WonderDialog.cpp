@@ -3,7 +3,7 @@
 #include <QDesktopWidget>
 #include <QApplication>
 
-WonderDialog::WonderDialog(BoardModel *boardModel, WonderDescription::WonderDescriptionType wonderDescriptionType, QWidget *parent)
+WonderDialog::WonderDialog(BoardModel *boardModel, WonderDescription::WonderDescriptionType wonderDescriptionType, int region, QWidget *parent)
     : QDialog(parent),
       boardModel(boardModel),
       isCompact(true),
@@ -11,19 +11,36 @@ WonderDialog::WonderDialog(BoardModel *boardModel, WonderDescription::WonderDesc
       WONDERS_DIALOG_SIZE_FULL(100, 60),
       BUTTON_TEXT_COMPACT("FULL VIEW"),
       BUTTON_TEXT_FULL("COMPCAT VIEW")
-{
+{    
+    if(region == -1)
+    {
+        wonderDescriptionType = WonderDescription::OVERVIEW;
+    }
+
     QString windowTitleText = "UNKNOWN";
     switch(wonderDescriptionType)
     {
         case WonderDescription::OVERVIEW: windowTitleText = "Overview"; break;
-        case WonderDescription::REGION_OVERVIEW: windowTitleText = QString("Region %1 Overview").arg(this->boardModel->refActiveRegion()->getRegion()); break;
+        case WonderDescription::REGION_OVERVIEW: windowTitleText = QString("Region %1").arg(region); break;
         case WonderDescription::BUILD: windowTitleText = QString("Build Wonder in Region %1").arg(this->boardModel->refActiveRegion()->getRegion()); break;
         case WonderDescription::SELECTION: windowTitleText = "Selection"; break;
     }
 
     this->setWindowTitle(QString("Wonders (%1)").arg(windowTitleText));
     this->wonderLayout = new QGridLayout(this);
-    this->wondersTable = new WondersTable(this->boardModel, this->boardModel->getAllWonders(), wonderDescriptionType, this);
+
+    QMap<WonderModel::Wonder, int> wonders;
+
+    if(wonderDescriptionType == WonderDescription::REGION_OVERVIEW)
+    {
+        wonders = this->boardModel->refRegionModel(region)->getBuiltWonders();
+    }
+    else
+    {
+        wonders = this->boardModel->getAllWonders();
+    }
+
+    this->wondersTable = new WondersTable(this->boardModel, wonders, wonderDescriptionType, this);
     connect(this->wondersTable, SIGNAL(closeTable()), this, SLOT(accept()));
 
     this->resizeButton = new QPushButton(this->BUTTON_TEXT_COMPACT, this);

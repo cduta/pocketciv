@@ -24,7 +24,7 @@ class WonderDialog : public QDialog
     QPushButton *   resizeButton;
 
 public:
-    WonderDialog(BoardModel *boardModel, WonderDescription::WonderDescriptionType wonderDescriptionType = WonderDescription::WonderDescriptionType::OVERVIEW, QWidget *parent = 0);
+    WonderDialog(BoardModel *boardModel, WonderDescription::WonderDescriptionType wonderDescriptionType = WonderDescription::WonderDescriptionType::OVERVIEW, int region = -1, QWidget *parent = 0);
 
     void setCompactSize();
     void setFullSize();
