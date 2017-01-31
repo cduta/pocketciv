@@ -121,6 +121,7 @@ void BoardModel::newBoard(int width, int height)
     }
 
     this->initializeBoard();
+    this->gloryScoreByEra.clear();
 
     emit this->boardUpdated();
     return;
@@ -185,6 +186,7 @@ void BoardModel::initializeBoard()
 
                 if(x-1 >= 0 && y+1 < this->hexModels[x].size())
                 {
+                    this->gloryScoreByEra.clear();
                     adjacendHexes.insert(DRAW_LOWER_LEFT_BORDER, this->hexModels[x-1][y+1]);
                 }
 
@@ -859,6 +861,7 @@ void BoardModel::addAdvanceGloryScore()
     this->printMessage(" ");
 
     this->setGloryScore(this->getGloryScore() + addedGloryScore);
+    this->gloryScoreByEra.append(addedGloryScore);
 
     this->printMessage(QString("The current Glory Score is %1.").arg(this->gloryScore));
     return;
@@ -2546,6 +2549,21 @@ int BoardModel::getGloryScore() const
     return this->gloryScore;
 }
 
+QList<int> BoardModel::getGloryScoreByEra() const
+{
+    return this->gloryScoreByEra;
+}
+
+QList<const EventCard *> BoardModel::getDiscardedEventCards() const
+{
+    return this->eventCards.toSet().subtract(this->eventCardsLeft.toSet()).toList();
+}
+
+QList<const EventCard *> BoardModel::getEventCardsLeft() const
+{
+    return this->eventCardsLeft;
+}
+
 QSet<AdvanceModel::Advance> BoardModel::getAdvancesSelected() const
 {
     return this->selectedAdvances;
@@ -2875,6 +2893,14 @@ void BoardModel::serialize(QDataStream &writer) const
     writer << this->era;
     writer << this->lastEra;
 
+    int gloryScoreCount = this->gloryScoreByEra.count();
+    writer << gloryScoreCount;
+
+    for(int i = 0; i < gloryScoreCount; ++i)
+    {
+        writer << this->gloryScoreByEra[i];
+    }
+
     writer << this->gloryScore;
 
     writer << this->agricultureLeft;
@@ -2963,6 +2989,17 @@ void BoardModel::deserialize(QDataStream &reader)
 
     reader >> this->era;
     reader >> this->lastEra;
+
+    int gloryScoreCount;
+    reader >> gloryScoreCount;
+
+    int gloryScoreByEra;
+    this->gloryScoreByEra.clear();
+    for(int i = 0; i < gloryScoreCount; ++i)
+    {
+        reader >> gloryScoreByEra;
+        this->gloryScoreByEra.append(gloryScoreByEra);
+    }
 
     reader >> this->gloryScore;
 

@@ -92,7 +92,9 @@ SOURCES += main.cpp\
     WonderDescription.cpp \
     IntegerTableItem.cpp \
     WonderDialog.cpp \
-    Instruction/BuildWonderInstruction.cpp
+    Instruction/BuildWonderInstruction.cpp \
+    GloryDialog.cpp \
+    CardDialog.cpp
 
 HEADERS  += \
     PocketCivMain.hpp \
@@ -174,7 +176,9 @@ HEADERS  += \
     WonderDescription.hpp \
     IntegerTableItem.hpp \
     WonderDialog.hpp \
-    Instruction/BuildWonderInstruction.hpp
+    Instruction/BuildWonderInstruction.hpp \
+    GloryDialog.hpp \
+    CardDialog.hpp
 
 FORMS    +=
 

@@ -27,6 +27,7 @@ OverviewDialog::OverviewDialog(BoardModel *boardModel, QWidget *parent)
 
     this->advancesDialog = new AdvancesDialog(this->boardModel, AdvanceItem::OVERVIEW, this);
     this->wonderDialog = new WonderDialog(this->boardModel, WonderDescription::OVERVIEW, -1, this);
+    this->gloryDialog = new GloryDialog(this->boardModel, this);
 
     this->setLayout(this->layout);
 }
@@ -55,5 +56,6 @@ void OverviewDialog::showWondersTriggered()
 
 void OverviewDialog::showGloryTriggered()
 {
+    this->gloryDialog->show();
     return;
 }

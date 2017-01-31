@@ -8,6 +8,7 @@
 #include "BoardModel.hpp"
 #include "AdvancesDialog.hpp"
 #include "WonderDialog.hpp"
+#include "GloryDialog.hpp"
 
 class OverviewDialog : public QDialog
 {
@@ -24,6 +25,7 @@ class OverviewDialog : public QDialog
 
     AdvancesDialog *advancesDialog;
     WonderDialog *  wonderDialog;
+    GloryDialog *   gloryDialog;
 
 public:
     OverviewDialog(BoardModel *boardModel, QWidget *parent = 0);

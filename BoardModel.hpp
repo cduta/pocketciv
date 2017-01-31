@@ -70,6 +70,7 @@ private:
     int era;
     int lastEra;
 
+    QList<int> gloryScoreByEra;
     int gloryScore;
 
     bool agricultureLeft;
@@ -187,6 +188,9 @@ public:
     int getAllSelectedTribes() const;
     int getGold() const;
     int getGloryScore() const;
+    QList<int> getGloryScoreByEra() const;
+    QList<const EventCard *> getDiscardedEventCards() const;
+    QList<const EventCard *> getEventCardsLeft() const;
     QSet<AdvanceModel::Advance> getAdvancesSelected() const;
     int getAdvanceSelectionLimit() const;
     bool hasAquiredAdvanceSelected(AdvanceModel::Advance advance) const;
