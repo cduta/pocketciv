@@ -8,11 +8,13 @@
 #include <QPainter>
 #include <QGraphicsSceneMouseEvent>
 #include <QFileDialog>
+#include <QUuid>
 
 #include <iostream>
 
 #include <boost/assert.hpp>
 
+#include "Common.hpp"
 #include "Instruction/ChooseRegionInstruction.hpp"
 #include "Instruction/MainPhaseInstruction.hpp"
 
@@ -37,6 +39,19 @@ PocketCivMain::PocketCivMain(QWidget *parent) :
     boardModel(NULL),
     instruction(NULL)
 {
+    QString fileName = QString("Log_%1_%2.txt").arg(Common::getCurrentDateTimeString()).arg(QUuid::createUuid().toString().remove('{').remove('}'));
+    this->logFile = new QFile(fileName);
+    this->logStream = NULL;
+    if(this->logFile->open(QIODevice::WriteOnly | QIODevice::Text))
+    {
+        this->logStream = new QTextStream(this->logFile);
+    }
+    else
+    {
+        this->addMessage(QString("Could not open log file (%1.txt).").arg(this->logFile->fileName()));
+        this->addMessage("This game session will not be logged.");
+    }
+
     this->dockLayout = new QGridLayout(&this->dockWidget);
 
     this->messages = new QPlainTextEdit("To start a new game: File -> New Game",
@@ -129,6 +144,17 @@ PocketCivMain::PocketCivMain(QWidget *parent) :
 
 PocketCivMain::~PocketCivMain()
 {
+    if(this->logStream != NULL)
+    {
+        delete this->logStream;
+    }
+
+    if(this->logFile != NULL && this->logFile->isOpen())
+    {
+        this->logFile->close();
+        this->logFile->deleteLater();
+    }
+
     this->clearBoard();
 }
 
@@ -313,6 +339,10 @@ void PocketCivMain::addMessage(const QString &message)
 {
     this->messages->appendPlainText(message);
     this->messages->verticalScrollBar()->setSliderPosition(this->messages->verticalScrollBar()->maximum());
+
+    (*this->logStream) << Common::getCurrentDateTimeString()
+                       << ": " << message << endl;
+
     return;
 }
 

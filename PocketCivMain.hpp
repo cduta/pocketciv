@@ -12,6 +12,8 @@
 #include <QMenuBar>
 #include <QAction>
 #include <QLabel>
+#include <QFile>
+#include <QTextStream>
 
 #include <iostream>
 
@@ -43,8 +45,8 @@ class PocketCivMain : public QMainWindow
     QPushButton *buildCity;
     QPushButton *buildFarm;
     QPushButton *expedition;
-    QPushButton *aquireAdvance; // May also show advances.
-    QPushButton *buildWonder;   // May also show wonders.
+    QPushButton *aquireAdvance;
+    QPushButton *buildWonder;
 
     QPushButton *collectTaxes;
     QPushButton *forestation;
@@ -64,6 +66,9 @@ class PocketCivMain : public QMainWindow
 
     BoardModel *boardModel;
     Instruction *instruction;
+
+    QFile *logFile;
+    QTextStream *logStream;
 
 public:
     PocketCivMain(QWidget *parent = 0);

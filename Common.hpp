@@ -5,6 +5,7 @@
 #include <QTime>
 #include <QString>
 #include <QList>
+#include <QDateTime>
 
 #include "AdvanceModel.hpp"
 #include "BoardModel.hpp"
@@ -12,6 +13,18 @@
 
 namespace Common
 {
+
+inline QString getCurrentDateTimeString()
+{
+    QDateTime currentDateTime = QDateTime::currentDateTime();
+    return QString("%1-%2-%3 %4:%5:%6")
+        .arg(currentDateTime.date().year(), 4, 10, QChar('0'))
+        .arg(currentDateTime.date().month(), 2, 10, QChar('0'))
+        .arg(currentDateTime.date().day(), 2, 10, QChar('0'))
+        .arg(currentDateTime.time().hour(), 2, 10, QChar('0'))
+        .arg(currentDateTime.time().minute(), 2, 10, QChar('0'))
+        .arg(currentDateTime.time().second(), 2, 10, QChar('0'));
+}
 
 inline QString getEmpireName(BoardModel::Empire empire)
 {
