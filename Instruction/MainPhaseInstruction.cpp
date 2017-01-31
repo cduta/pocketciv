@@ -9,7 +9,6 @@
 MainPhaseInstruction::MainPhaseInstruction(BoardModel *boardModel)
     : Instruction(),
       boardModel(boardModel),
-      wonderDialogOpen(false),
       wonderDialog(NULL)
 {}
 
@@ -25,7 +24,6 @@ void MainPhaseInstruction::initInstruction()
     this->boardModel->printMessage(" ");
     this->boardModel->disableButtons();
     this->boardModel->enableMainPhaseButtons();
-    this->wonderDialogOpen = false;
     return;
 }
 
@@ -37,10 +35,9 @@ Instruction *MainPhaseInstruction::triggerHex(Qt::MouseButton button, int x, int
     {
         if(button == Qt::RightButton && !this->wonderDialogOpen)
         {
-            this->wonderDialogOpen = true;
             this->wonderDialog = new WonderDialog(this->boardModel, WonderDescription::REGION_OVERVIEW, regionModel->getRegion());
-            connect(this->wonderDialog, SIGNAL(finished(int)), this, SLOT(doneWonderDialogOverview()));
-            this->wonderDialog->show();
+            this->wonderDialog->exec();
+            this->wonderDialog->deleteLater();
         }
     }
 
@@ -49,11 +46,6 @@ Instruction *MainPhaseInstruction::triggerHex(Qt::MouseButton button, int x, int
 
 Instruction *MainPhaseInstruction::triggerDone()
 {
-    if(this->wonderDialogOpen)
-    {
-        return this;
-    }
-
     QMessageBox::StandardButton reply;
     reply = QMessageBox::question(NULL , "Main Phase", "Do you really want to end the Main Phase?", QMessageBox::Yes|QMessageBox::No);
 
@@ -97,11 +89,3 @@ Instruction *MainPhaseInstruction::triggerSaveGame()
     return this;
 }
 
-void MainPhaseInstruction::doneWonderDialogOverview()
-{
-    disconnect(this->wonderDialog, SIGNAL(finished(int)), this, SLOT(doneWonderDialogOverview()));
-
-    this->wonderDialogOpen = false;
-
-    this->wonderDialog->deleteLater();
-}

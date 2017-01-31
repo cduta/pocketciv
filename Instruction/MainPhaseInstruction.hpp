@@ -21,9 +21,6 @@ public:
     virtual Instruction *triggerHex(Qt::MouseButton button, int x, int y);
     virtual Instruction *triggerDone();
     virtual Instruction *triggerSaveGame();
-
-private slots:
-    void doneWonderDialogOverview();
 };
 
 #endif // MAINPHASEINSTRUCTION_HPP
