@@ -160,20 +160,12 @@ Instruction *TsunamiInstruction::triggerDone()
         if(totalTribeDamage + totalCityDamage + totalWonderDamage > 0)
         {
             QMap<WonderModel::Wonder, int> wonderDamage;
-            int wonderDamageSelected = 0;
-            while(totalWonderDamage > 0 && wonderDamageSelected != totalWonderDamage)
+            while(totalWonderDamage > 0)
             {
                 WonderDialog *wonderDialog = new WonderDialog(this->boardModel, WonderDescription::SELECTION, possibleAffectedRegion->getRegion());
                 wonderDialog->setSelectionTotal(totalWonderDamage);
                 wonderDialog->exec();
                 wonderDamage = wonderDialog->getSelectedWonders();
-
-                wonderDamageSelected = 0;
-                foreach(int wonderDamageCount, wonderDamage.values())
-                {
-                    wonderDamageSelected += wonderDamageCount;
-                }
-
                 wonderDialog->deleteLater();
             }
 

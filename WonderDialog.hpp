@@ -33,6 +33,22 @@ public:
     void setSelectionTotal(int selectionTotal);
     QMap<WonderModel::Wonder, int> getSelectedWonders() const;
 
+    virtual void closeEvent(QCloseEvent *event)
+    {
+        QMap<WonderModel::Wonder, int> selected = this->getSelectedWonders();
+
+        int wonderSelection = 0;
+        foreach(int selectedCount, selected.values())
+        {
+            wonderSelection += selectedCount;
+        }
+
+        if(wonderSelection != this->wondersTable->getSelectionTotal())
+        {
+            event->ignore();
+        }
+    }
+
 public slots:
     void toggleSize();
 
