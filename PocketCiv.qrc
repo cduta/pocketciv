@@ -37,5 +37,21 @@
         <file alias="volcano">res/volcano.png</file>
         <file alias="capitol">res/capitol.png</file>
         <file alias="forest_desert">res/forest_desert.png</file>
+        <file alias="card1">res/card1.png</file>
+        <file alias="card2">res/card2.png</file>
+        <file alias="card3">res/card3.png</file>
+        <file alias="card4">res/card4.png</file>
+        <file alias="card5">res/card5.png</file>
+        <file alias="card6">res/card6.png</file>
+        <file alias="card7">res/card7.png</file>
+        <file alias="card8">res/card8.png</file>
+        <file alias="card9">res/card9.png</file>
+        <file alias="card10">res/card10.png</file>
+        <file alias="card11">res/card11.png</file>
+        <file alias="card12">res/card12.png</file>
+        <file alias="card13">res/card13.png</file>
+        <file alias="card14">res/card14.png</file>
+        <file alias="card15">res/card15.png</file>
+        <file alias="card16">res/card16.png</file>
     </qresource>
 </RCC>

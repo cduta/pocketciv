@@ -1,5 +1,5 @@
-#ifndef WONDERSTABLE_HPP
-#define WONDERSTABLE_HPP
+#ifndef WONDERTABLE_HPP
+#define WONDERTABLE_HPP
 
 #include <QTableWidget>
 
@@ -29,7 +29,7 @@ public:
     }
 };
 
-class WondersTable : public QTableWidget
+class WonderTable : public QTableWidget
 {
     Q_OBJECT
 
@@ -50,7 +50,7 @@ private:
     int selectionTotal;
 
 public:
-    WondersTable(BoardModel *boardModel,
+    WonderTable(BoardModel *boardModel,
                  QMap<WonderModel::Wonder, int> wonders,
                  WonderDescription::WonderDescriptionType wonderDescriptionType = WonderDescription::OVERVIEW,
                  QWidget *parent = 0);
@@ -70,4 +70,4 @@ private slots:
     void triggerWonderBuilt(WonderModel::Wonder wonder);
 };
 
-#endif // WONDERSTABLE_HPP
+#endif // WONDERTABLE_HPP

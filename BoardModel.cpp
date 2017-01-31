@@ -2554,6 +2554,11 @@ QList<int> BoardModel::getGloryScoreByEra() const
     return this->gloryScoreByEra;
 }
 
+QList<const EventCard *> BoardModel::getEventCards() const
+{
+    return this->eventCards;
+}
+
 QList<const EventCard *> BoardModel::getDiscardedEventCards() const
 {
     return this->eventCards.toSet().subtract(this->eventCardsLeft.toSet()).toList();

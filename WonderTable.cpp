@@ -1,9 +1,9 @@
-#include "WondersTable.hpp"
+#include "WonderTable.hpp"
 
 #include <QAbstractItemView>
 #include <QHeaderView>
 
-WondersTable::WondersTable(BoardModel *boardModel, QMap<WonderModel::Wonder, int> wonders, WonderDescription::WonderDescriptionType wonderDescriptionType, QWidget *parent)
+WonderTable::WonderTable(BoardModel *boardModel, QMap<WonderModel::Wonder, int> wonders, WonderDescription::WonderDescriptionType wonderDescriptionType, QWidget *parent)
     : QTableWidget(parent),
       boardModel(boardModel),
       wonders(wonders),
@@ -186,7 +186,7 @@ WondersTable::WondersTable(BoardModel *boardModel, QMap<WonderModel::Wonder, int
     connect(this, SIGNAL(itemSelectionChanged()), this, SLOT(selectWonder()));
 }
 
-void WondersTable::setCompactColumns()
+void WonderTable::setCompactColumns()
 {
     QStringList headers;
 
@@ -207,7 +207,7 @@ void WondersTable::setCompactColumns()
     this->resizeColumnToContents(11);
 }
 
-void WondersTable::setFullColumns()
+void WonderTable::setFullColumns()
 {
     QStringList headers;
     QString builtColumnName = "Built Total";
@@ -232,28 +232,28 @@ void WondersTable::setFullColumns()
     this->resizeColumnToContents(11);
 }
 
-QMap<WonderModel::Wonder, int> WondersTable::getWonders() const
+QMap<WonderModel::Wonder, int> WonderTable::getWonders() const
 {
     return this->wonders;
 }
 
-QMap<WonderModel::Wonder, int> WondersTable::getSelectedWonders() const
+QMap<WonderModel::Wonder, int> WonderTable::getSelectedWonders() const
 {
     return this->wonderSelection;
 }
 
-int WondersTable::getSelectionTotal() const
+int WonderTable::getSelectionTotal() const
 {
     return this->selectionTotal;
 }
 
-void WondersTable::setSelectionTotal(int selectionTotal)
+void WonderTable::setSelectionTotal(int selectionTotal)
 {
     this->selectionTotal = selectionTotal;
     return;
 }
 
-void WondersTable::wonderSelectionCountChanged(WonderModel::Wonder wonder, int wonderSelection)
+void WonderTable::wonderSelectionCountChanged(WonderModel::Wonder wonder, int wonderSelection)
 {
     this->wonderSelection[wonder] = wonderSelection;
     QTableWidgetItem *item = this->wonderTableCountItems[wonder];
@@ -267,7 +267,7 @@ void WondersTable::wonderSelectionCountChanged(WonderModel::Wonder wonder, int w
     emit this->wonderSelectionChanged(wonder, wonderSelection);
 }
 
-void WondersTable::selectWonder()
+void WonderTable::selectWonder()
 {
     if(this->selectedItems().isEmpty() ||
        !this->item(this->currentRow(), 1))
@@ -282,7 +282,7 @@ void WondersTable::selectWonder()
     return;
 }
 
-void WondersTable::triggerWonderBuilt(WonderModel::Wonder wonder)
+void WonderTable::triggerWonderBuilt(WonderModel::Wonder wonder)
 {
     this->boardModel->doBuildWonder(wonder);
     emit this->closeTable();

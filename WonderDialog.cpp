@@ -10,7 +10,8 @@ WonderDialog::WonderDialog(BoardModel *boardModel, WonderDescription::WonderDesc
       WONDERS_DIALOG_SIZE_COMPACT(789,373),
       WONDERS_DIALOG_SIZE_FULL(100, 60),
       BUTTON_TEXT_COMPACT("FULL VIEW"),
-      BUTTON_TEXT_FULL("COMPCAT VIEW")
+      BUTTON_TEXT_FULL("COMPCAT VIEW"),
+      wonderDescriptionType(wonderDescriptionType)
 {    
     if(region == -1)
     {
@@ -40,12 +41,12 @@ WonderDialog::WonderDialog(BoardModel *boardModel, WonderDescription::WonderDesc
         wonders = this->boardModel->getAllWonders();
     }
 
-    this->wondersTable = new WondersTable(this->boardModel, wonders, wonderDescriptionType, this);
-    connect(this->wondersTable, SIGNAL(closeTable()), this, SLOT(accept()));
+    this->wonderTable = new WonderTable(this->boardModel, wonders, wonderDescriptionType, this);
+    connect(this->wonderTable, SIGNAL(closeTable()), this, SLOT(accept()));
 
     if(wonderDescriptionType == WonderDescription::SELECTION)
     {
-        connect(this->wondersTable, SIGNAL(wonderSelectionChanged(WonderModel::Wonder,int)), this, SLOT(updateWonderSelection(WonderModel::Wonder,int)));
+        connect(this->wonderTable, SIGNAL(wonderSelectionChanged(WonderModel::Wonder,int)), this, SLOT(updateWonderSelection(WonderModel::Wonder,int)));
     }
 
     this->resizeButton = new QPushButton(this->BUTTON_TEXT_COMPACT, this);
@@ -57,7 +58,7 @@ WonderDialog::WonderDialog(BoardModel *boardModel, WonderDescription::WonderDesc
     this->setCompactSize();
 
     this->setLayout(this->wonderLayout);
-    this->wonderLayout->addWidget(this->wondersTable, 0, 0, 1,2);
+    this->wonderLayout->addWidget(this->wonderTable, 0, 0, 1,2);
 
     if(wonderDescriptionType == WonderDescription::SELECTION)
     {
@@ -77,7 +78,7 @@ void WonderDialog::setCompactSize()
     QRect mainScreenSize = widget.availableGeometry(widget.primaryScreen());
     this->resizeButton->setText(this->BUTTON_TEXT_COMPACT);
     this->isCompact = true;
-    this->wondersTable->setCompactColumns();
+    this->wonderTable->setCompactColumns();
     this->setFixedSize(this->WONDERS_DIALOG_SIZE_COMPACT.width(),this->WONDERS_DIALOG_SIZE_COMPACT.height());
     this->move(mainScreenSize.center() - this->rect().center());
     return;
@@ -89,7 +90,7 @@ void WonderDialog::setFullSize()
     QRect mainScreenSize = widget.availableGeometry(widget.primaryScreen());
     this->resizeButton->setText(this->BUTTON_TEXT_FULL);
     this->isCompact = false;
-    this->wondersTable->setFullColumns();
+    this->wonderTable->setFullColumns();
     this->setFixedSize(mainScreenSize.width() - this->WONDERS_DIALOG_SIZE_FULL.width(), mainScreenSize.height() - this->WONDERS_DIALOG_SIZE_FULL.height());
     this->move(mainScreenSize.center() - this->rect().center());
     return;
@@ -97,7 +98,7 @@ void WonderDialog::setFullSize()
 
 void WonderDialog::setSelectionTotal(int selectionTotal)
 {
-    this->wondersTable->setSelectionTotal(selectionTotal);
+    this->wonderTable->setSelectionTotal(selectionTotal);
     this->setWindowTitle(QString("Wonders (Selection 0/%1)").arg(selectionTotal));
     this->submitButton->setEnabled(false);
     return;
@@ -105,7 +106,7 @@ void WonderDialog::setSelectionTotal(int selectionTotal)
 
 QMap<WonderModel::Wonder, int> WonderDialog::getSelectedWonders() const
 {
-    return this->wondersTable->getSelectedWonders();
+    return this->wonderTable->getSelectedWonders();
 }
 
 void WonderDialog::toggleSize()
@@ -122,7 +123,7 @@ void WonderDialog::toggleSize()
 
 void WonderDialog::updateWonderSelection(WonderModel::Wonder, int)
 {
-    QMap<WonderModel::Wonder, int> selectedWonders = this->wondersTable->getSelectedWonders();
+    QMap<WonderModel::Wonder, int> selectedWonders = this->wonderTable->getSelectedWonders();
     int wonderCountTotal = 0;
 
     foreach(int wonderCount, selectedWonders.values())
@@ -130,7 +131,7 @@ void WonderDialog::updateWonderSelection(WonderModel::Wonder, int)
         wonderCountTotal += wonderCount;
     }
 
-    this->submitButton->setEnabled(wonderCountTotal == this->wondersTable->getSelectionTotal());
-    this->setWindowTitle(QString("Wonders (Selection %1/%2)").arg(wonderCountTotal).arg(this->wondersTable->getSelectionTotal()));
+    this->submitButton->setEnabled(wonderCountTotal == this->wonderTable->getSelectionTotal());
+    this->setWindowTitle(QString("Wonders (Selection %1/%2)").arg(wonderCountTotal).arg(this->wonderTable->getSelectionTotal()));
     return;
 }

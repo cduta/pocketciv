@@ -6,7 +6,7 @@ OverviewDialog::OverviewDialog(BoardModel *boardModel, QWidget *parent)
     : QDialog(parent),
       boardModel(boardModel),
       layout(new QGridLayout(this)),
-      showCards(new QPushButton("Show Cards...", this)),
+      showCards(new QPushButton("Show Event Cards...", this)),
       showAdvances(new QPushButton("Show Advances...", this)),
       showWonders(new QPushButton("Show Wonders...", this)),
       showGlory(new QPushButton("Show Glory...", this))
@@ -25,6 +25,7 @@ OverviewDialog::OverviewDialog(BoardModel *boardModel, QWidget *parent)
     connect(this->showGlory, SIGNAL(clicked()), this, SLOT(showGloryTriggered()));
     connect(this->showGlory, SIGNAL(clicked()), this, SLOT(close()));
 
+    this->cardDialog = new CardDialog(this->boardModel, this);
     this->advancesDialog = new AdvancesDialog(this->boardModel, AdvanceItem::OVERVIEW, this);
     this->wonderDialog = new WonderDialog(this->boardModel, WonderDescription::OVERVIEW, -1, this);
     this->gloryDialog = new GloryDialog(this->boardModel, this);
@@ -39,6 +40,7 @@ OverviewDialog::~OverviewDialog()
 
 void OverviewDialog::showCardsTriggered()
 {
+    this->cardDialog->show();
     return;
 }
 

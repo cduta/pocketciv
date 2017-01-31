@@ -6,6 +6,7 @@
 #include <QPushButton>
 
 #include "BoardModel.hpp"
+#include "CardDialog.hpp"
 #include "AdvancesDialog.hpp"
 #include "WonderDialog.hpp"
 #include "GloryDialog.hpp"
@@ -23,6 +24,7 @@ class OverviewDialog : public QDialog
     QPushButton *   showWonders;
     QPushButton *   showGlory;
 
+    CardDialog *    cardDialog;
     AdvancesDialog *advancesDialog;
     WonderDialog *  wonderDialog;
     GloryDialog *   gloryDialog;

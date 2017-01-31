@@ -6,7 +6,7 @@
 #include <QPushButton>
 
 #include "BoardModel.hpp"
-#include "WondersTable.hpp"
+#include "WonderTable.hpp"
 
 class WonderDialog : public QDialog
 {
@@ -18,11 +18,13 @@ class WonderDialog : public QDialog
     const QSize     WONDERS_DIALOG_SIZE_FULL;
     const QString   BUTTON_TEXT_COMPACT;
     const QString   BUTTON_TEXT_FULL;
+    WonderDescription::WonderDescriptionType wonderDescriptionType;
 
     QGridLayout *   wonderLayout;
-    WondersTable *  wondersTable;
+    WonderTable *   wonderTable;
     QPushButton *   resizeButton;
     QPushButton *   submitButton;
+
 
 public:
     WonderDialog(BoardModel *boardModel, WonderDescription::WonderDescriptionType wonderDescriptionType = WonderDescription::WonderDescriptionType::OVERVIEW, int region = -1, QWidget *parent = 0);
@@ -43,7 +45,7 @@ public:
             wonderSelection += selectedCount;
         }
 
-        if(wonderSelection != this->wondersTable->getSelectionTotal())
+        if(this->wonderDescriptionType == WonderDescription::SELECTION && wonderSelection != this->wonderTable->getSelectionTotal())
         {
             event->ignore();
         }

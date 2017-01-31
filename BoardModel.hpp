@@ -189,6 +189,7 @@ public:
     int getGold() const;
     int getGloryScore() const;
     QList<int> getGloryScoreByEra() const;
+    QList<const EventCard *> getEventCards() const;
     QList<const EventCard *> getDiscardedEventCards() const;
     QList<const EventCard *> getEventCardsLeft() const;
     QSet<AdvanceModel::Advance> getAdvancesSelected() const;

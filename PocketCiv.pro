@@ -87,14 +87,14 @@ SOURCES += main.cpp\
     Instruction/ForestationInstruction.cpp \
     Instruction/MiningInstruction.cpp \
     AdvancesTable.cpp \
-    WondersTable.cpp \
     WonderModel.cpp \
     WonderDescription.cpp \
     IntegerTableItem.cpp \
     WonderDialog.cpp \
     Instruction/BuildWonderInstruction.cpp \
     GloryDialog.cpp \
-    CardDialog.cpp
+    CardDialog.cpp \
+    WonderTable.cpp
 
 HEADERS  += \
     PocketCivMain.hpp \
@@ -172,13 +172,13 @@ HEADERS  += \
     Instruction/MiningInstruction.hpp \
     AdvancesTable.hpp \
     WonderModel.hpp \
-    WondersTable.hpp \
     WonderDescription.hpp \
     IntegerTableItem.hpp \
     WonderDialog.hpp \
     Instruction/BuildWonderInstruction.hpp \
     GloryDialog.hpp \
-    CardDialog.hpp
+    CardDialog.hpp \
+    WonderTable.hpp
 
 FORMS    +=
 

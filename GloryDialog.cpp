@@ -4,6 +4,7 @@ GloryDialog::GloryDialog(BoardModel *boardModel, QWidget *parent)
     : QDialog(parent),
       boardModel(boardModel)
 {
+    this->setWindowTitle("Glory Score Overview");
     this->gridLayout = new QGridLayout(this);
     this->setLayout(this->gridLayout);
 
