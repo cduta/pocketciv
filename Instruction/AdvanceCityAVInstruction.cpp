@@ -210,7 +210,7 @@ Instruction *AdvanceCityAVInstruction::triggerHex(Qt::MouseButton button, int x,
 
                             this->capitolBeyondFour = true;
 
-                            this->boardModel->setActiveRegion(regionModel->getRegion(), true);
+                            this->boardModel->setActiveRegion(regionModel->getRegion(), false);
                             this->boardModel->setDoneText("Cancel");
                         }
                         else if(this->toBePaid <= activeRegion->getTribes() && this->toBePaid >= this->boardModel->getTribeCount())
@@ -253,7 +253,7 @@ Instruction *AdvanceCityAVInstruction::triggerHex(Qt::MouseButton button, int x,
                                                       .arg(this->toBePaid));
                         this->boardModel->printMessage(" ");
 
-                        this->boardModel->setActiveRegion(regionModel->getRegion(), true);
+                        this->boardModel->setActiveRegion(regionModel->getRegion(), false);
                         this->boardModel->setDoneText("Cancel");
                     }
                     else
@@ -278,7 +278,7 @@ Instruction *AdvanceCityAVInstruction::triggerHex(Qt::MouseButton button, int x,
             {
                 if(!regionModel->hasForest() && !regionModel->hasMountain() && !regionModel->hasFarm())
                 {
-                    this->boardModel->printMessage("This Region has none of the needed Ressources to be decimated to advance the City AV of the Capitol.");
+                    this->boardModel->printMessage("This Region has none of the needed Ressources to advance the City AV of the Capitol.");
                     return this;
                 }
 
@@ -313,7 +313,7 @@ Instruction *AdvanceCityAVInstruction::triggerHex(Qt::MouseButton button, int x,
                 {
                     int selectedTribes = this->boardModel->getAllSelectedTribes();
 
-                    if(this->toBePaid < selectedTribes)
+                    if(selectedTribes < this->toBePaid)
                     {
                         regionModel->setSelectedTribes(regionModel->getSelectedTribes() + 1);
                         selectedTribes++;
@@ -321,7 +321,7 @@ Instruction *AdvanceCityAVInstruction::triggerHex(Qt::MouseButton button, int x,
 
                     if(this->toBePaid == selectedTribes)
                     {
-                        this->boardModel->printMessage(QString("The City AV in Region %1 can now be advanced to %2.\n")
+                        this->boardModel->printMessage(QString("Press Advance to advance the City in Region %1 to a City AV of %2.\n")
                                                       .arg(activeRegion->getRegion())
                                                       .arg(activeRegion->getCityAV()+1));
                         this->boardModel->setDoneText("Advance");
@@ -339,20 +339,20 @@ Instruction *AdvanceCityAVInstruction::triggerHex(Qt::MouseButton button, int x,
     }
     else if(button == Qt::RightButton)
     {
-        if(activeRegion != NULL && this->capitolBeyondFour)
+        if(activeRegion != NULL)
         {
             int selectedTribes = this->boardModel->getAllSelectedTribes();
-            int toBePaid = activeRegion->getCityAV()+1;
 
-            if(selectedTribes > 0)
+            if(selectedTribes > 0 && regionModel->getSelectedTribes() > 0)
             {
                 regionModel->setSelectedTribes(regionModel->getSelectedTribes() - 1);
                 selectedTribes--;
 
-                this->boardModel->printMessage(QString("%1/%2 tribes paid to advance the City AV in region %3.\n")
+                this->boardModel->printMessage(QString("%1/%2 tribes selected.\n")
                                               .arg(selectedTribes)
                                               .arg(toBePaid)
                                               .arg(activeRegion->getRegion()));
+                this->boardModel->setDoneText("Done");
             }
         }
     }
@@ -380,7 +380,9 @@ Instruction *AdvanceCityAVInstruction::triggerDone()
             {
                 this->boardModel->printMessage("You can't increase any City AV anymore this turn.");
                 this->boardModel->printMessage("Press Done to Continue...");
-                this->boardModel->printMessage("");
+                this->boardModel->printMessage(" ");
+                this->boardModel->unsetActiveRegion();
+                this->boardModel->setDoneText("Done");
             }
             else
             {
@@ -390,6 +392,7 @@ Instruction *AdvanceCityAVInstruction::triggerDone()
                 this->boardModel->printMessage("Choose another City to advance or press Done to Continue...");
                 this->boardModel->printMessage(" ");
                 this->boardModel->unsetActiveRegion();
+                this->boardModel->setDoneText("Done");
             }
         }
         else
@@ -397,6 +400,7 @@ Instruction *AdvanceCityAVInstruction::triggerDone()
             this->boardModel->printMessage("Advancing City AV cancelled.");
             this->boardModel->printMessage(" ");
             this->boardModel->unselectAllSelectedTribes();
+            this->boardModel->unsetActiveRegion();
             this->boardModel->setDoneText("Done");
         }
 

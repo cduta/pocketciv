@@ -282,7 +282,7 @@ Instruction *EpidemicEventInstruction::continueEpidemic()
             adjacentString = " a ";
         }
 
-        this->boardModel->printMessage(QString("Choose%1region with tribes into which the EPIDEMIC will spread."));
+        this->boardModel->printMessage(QString("Choose%1region with tribes into which the EPIDEMIC will spread.").arg(adjacentString));
         this->boardModel->printMessage("When you chose a region, press Done...");
         this->boardModel->printMessage(" ");
         return this;
