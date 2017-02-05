@@ -404,6 +404,11 @@ void PocketCivMain::newGameTriggered()
     this->messages->clear();
     this->addMessage("Started a new game!!");
     this->addMessage(" ");
+    this->addMessage("Goal: Free Game. Aquire as many Victory Points as possible.");
+    this->addMessage("Game End: The Game Ends, when you reach the end of the 8th");
+    this->addMessage("Era. An Era ends and increases every time no more event cards");
+    this->addMessage("are left.");
+    this->addMessage(" ");
     this->addMessage("WORLD GENERATION:");
     this->addMessage(QString("Select two or more connected hexes on the board to form a Region."));
     this->addMessage("When you are done, press Done...");
@@ -559,6 +564,14 @@ void PocketCivMain::updateBoard()
     this->mining->setEnabled(this->boardModel->canDoMining());
     this->done->setEnabled(this->boardModel->isDoneEnabled());
     this->saveGame->setEnabled(!this->boardModel->isAquiringAdvances());
+
+    if(this->boardModel != NULL)
+    {
+        this->goldCount->setText(QString("Gold: %1").arg(this->boardModel->getGold()));
+        this->gloryCount->setText(QString("Glory: %1").arg(this->boardModel->getGloryScore()));
+        this->eraCount->setText(QString("Era: %1").arg(this->boardModel->getEra()));
+        this->eventCardsLeft->setText(QString("Event Cards left: %1").arg(this->boardModel->getEventCardsLeft().count()));
+    }
 
     return;
 }
