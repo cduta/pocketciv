@@ -39,6 +39,14 @@ PocketCivMain::PocketCivMain(QWidget *parent) :
     boardModel(NULL),
     instruction(NULL)
 {
+    this->dockLayout = new QGridLayout(&this->dockWidget);
+    this->messages = new QPlainTextEdit("To start a new game: File -> New Game",
+                                        &this->dockWidget);
+
+    QFont font("monospace");
+    this->messages->setFont(font);
+    this->messages->setReadOnly(true);
+
     QString fileName = QString("Log_%1_%2.txt").arg(Common::getCurrentDateTimeString()).arg(QUuid::createUuid().toString().remove('{').remove('}'));
     this->logFile = new QFile(fileName);
     this->logStream = NULL;
@@ -48,17 +56,10 @@ PocketCivMain::PocketCivMain(QWidget *parent) :
     }
     else
     {
-        this->addMessage(QString("Could not open log file (%1.txt).").arg(this->logFile->fileName()));
+        this->addMessage(QString("Could not open log file (%1).").arg(this->logFile->fileName()));
+        this->addMessage(QString("Message Error: ").append(this->logFile->errorString()));
         this->addMessage("This game session will not be logged.");
     }
-
-    this->dockLayout = new QGridLayout(&this->dockWidget);
-
-    this->messages = new QPlainTextEdit("To start a new game: File -> New Game",
-                                        &this->dockWidget);
-    QFont font("monospace");
-    this->messages->setFont(font);
-    this->messages->setReadOnly(true);
 
     this->goldCount =       new QLabel("Gold: 0", this);
     this->gloryCount =      new QLabel("Glory: 0", this);
@@ -340,8 +341,11 @@ void PocketCivMain::addMessage(const QString &message)
     this->messages->appendPlainText(message);
     this->messages->verticalScrollBar()->setSliderPosition(this->messages->verticalScrollBar()->maximum());
 
-    (*this->logStream) << Common::getCurrentDateTimeString()
-                       << ": " << message << endl;
+    if(this->logStream != NULL)
+    {
+        (*this->logStream) << Common::getCurrentDateTimeString()
+                           << ": " << message << endl;
+    }
 
     return;
 }

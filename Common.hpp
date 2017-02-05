@@ -17,7 +17,7 @@ namespace Common
 inline QString getCurrentDateTimeString()
 {
     QDateTime currentDateTime = QDateTime::currentDateTime();
-    return QString("%1-%2-%3 %4:%5:%6")
+    return QString("%1-%2-%3 %4-%5-%6")
         .arg(currentDateTime.date().year(), 4, 10, QChar('0'))
         .arg(currentDateTime.date().month(), 2, 10, QChar('0'))
         .arg(currentDateTime.date().day(), 2, 10, QChar('0'))

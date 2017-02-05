@@ -83,7 +83,7 @@ void AdvancesDialog::init()
     this->setLayout(this->layout);
     this->resize(650,450);
 
-    this->advanceBackground = new QGraphicsPixmapItem(QPixmap(":/advance_background"));
+    this->advanceBackground = new QGraphicsPixmapItem(QPixmap(":/res/advance_background.png"));
     this->advanceBackground->setPos(0,0);
 
     this->advanceTitle = new QGraphicsPixmapItem(QPixmap(":/advance_title"));

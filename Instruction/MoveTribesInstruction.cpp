@@ -155,6 +155,8 @@ Instruction *MoveTribesInstruction::triggerDone()
     const Event *event = this->boardModel->drawOriginalCard()->getEvent(this->boardModel->getEra());
     Instruction *main = new MainPhaseInstruction(this->boardModel);
 
+    this->boardModel->printMessage("EVENT PHASE:");
+
     if(event == NULL)
     {
         this->boardModel->printMessage("Nothing occured...");
