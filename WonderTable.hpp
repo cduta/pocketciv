@@ -64,6 +64,8 @@ public:
 
     void setSelectionTotal(int selectionTotal);
 
+    virtual void update();
+
 private slots:
     void wonderSelectionCountChanged(WonderModel::Wonder wonder, int wonderSelection);
     void selectWonder();

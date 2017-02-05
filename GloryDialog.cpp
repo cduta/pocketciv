@@ -13,8 +13,19 @@ GloryDialog::GloryDialog(BoardModel *boardModel, QWidget *parent)
     this->gloryOverview->setFont(font);
     this->gloryOverview->setReadOnly(true);
 
-    QList<int> gloryByEra = this->boardModel->getGloryScoreByEra();
+    this->gridLayout->addWidget(this->gloryOverview, 0,0);
+}
 
+void GloryDialog::show()
+{
+    this->QDialog::show();
+    this->update();
+}
+
+void GloryDialog::update()
+{
+    QList<int> gloryByEra = this->boardModel->getGloryScoreByEra();
+    this->gloryOverview->clear();
     this->gloryOverview->insertPlainText(QString("### Glory Score ###\n"));
 
     for(int i = 0; i < gloryByEra.count(); ++i)
@@ -25,5 +36,5 @@ GloryDialog::GloryDialog(BoardModel *boardModel, QWidget *parent)
     this->gloryOverview->insertPlainText("---------\n");
     this->gloryOverview->insertPlainText(QString("Total Glory Score: %1 VP\n").arg(this->boardModel->getGloryScore()));
 
-    this->gridLayout->addWidget(this->gloryOverview, 0,0);
+    this->QDialog::update();
 }

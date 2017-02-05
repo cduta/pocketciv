@@ -36,6 +36,81 @@ WonderTable::WonderTable(BoardModel *boardModel, QMap<WonderModel::Wonder, int> 
 
     this->setRowCount(this->wonders.count());
 
+    connect(this, SIGNAL(itemSelectionChanged()), this, SLOT(selectWonder()));
+}
+
+void WonderTable::setCompactColumns()
+{
+    QStringList headers;
+
+    QString builtColumnName = "#";
+
+    headers << builtColumnName << "Name" << "VP" << "T" << "G" << "F" << "M/V" << "F" << "Adv." << "Req." << "P" << "N";
+    this->setHorizontalHeaderLabels(headers);
+    this->resizeColumnToContents(0);
+    this->resizeColumnToContents(1);
+    this->resizeColumnToContents(2);
+    this->resizeColumnToContents(3);
+    this->resizeColumnToContents(5);
+    this->resizeColumnToContents(6);
+    this->resizeColumnToContents(7);
+    this->resizeColumnToContents(8);
+    this->resizeColumnToContents(9);
+    this->resizeColumnToContents(10);
+    this->resizeColumnToContents(11);
+}
+
+void WonderTable::setFullColumns()
+{
+    QStringList headers;
+    QString builtColumnName = "Built Total";
+
+    if(this->wonderDescriptionType == WonderDescription::SELECTION)
+    {
+        builtColumnName = "Wonders Selected";
+    }
+
+    headers << builtColumnName << "Name" << "Victory Points" << "Tribes" << "Gold" << "Forest" << "Mountain/Volcano" << "Farm" << "Advance Prequisites" << "Other Requirements" << "Positives" << "Negatives";
+    this->setHorizontalHeaderLabels(headers);
+    this->resizeColumnToContents(0);
+    this->resizeColumnToContents(1);
+    this->resizeColumnToContents(2);
+    this->resizeColumnToContents(3);
+    this->resizeColumnToContents(5);
+    this->resizeColumnToContents(6);
+    this->resizeColumnToContents(7);
+    this->resizeColumnToContents(8);
+    this->resizeColumnToContents(9);
+    this->resizeColumnToContents(10);
+    this->resizeColumnToContents(11);
+}
+
+
+
+QMap<WonderModel::Wonder, int> WonderTable::getWonders() const
+{
+    return this->wonders;
+}
+
+QMap<WonderModel::Wonder, int> WonderTable::getSelectedWonders() const
+{
+    return this->wonderSelection;
+}
+
+int WonderTable::getSelectionTotal() const
+{
+    return this->selectionTotal;
+}
+
+void WonderTable::setSelectionTotal(int selectionTotal)
+{
+    this->selectionTotal = selectionTotal;
+    return;
+}
+
+void WonderTable::update()
+{
+    this->clear();
     //QColor blue(0x17,0x57,0xe8);
     QColor red(0xea,0x1a,0x1a);
     QColor green(0x16,0xb7,0x16);
@@ -183,74 +258,7 @@ WonderTable::WonderTable(BoardModel *boardModel, QMap<WonderModel::Wonder, int> 
     this->resizeColumnToContents(10);
     this->resizeColumnToContents(11);
 
-    connect(this, SIGNAL(itemSelectionChanged()), this, SLOT(selectWonder()));
-}
-
-void WonderTable::setCompactColumns()
-{
-    QStringList headers;
-
-    QString builtColumnName = "#";
-
-    headers << builtColumnName << "Name" << "VP" << "T" << "G" << "F" << "M/V" << "F" << "Adv." << "Req." << "P" << "N";
-    this->setHorizontalHeaderLabels(headers);
-    this->resizeColumnToContents(0);
-    this->resizeColumnToContents(1);
-    this->resizeColumnToContents(2);
-    this->resizeColumnToContents(3);
-    this->resizeColumnToContents(5);
-    this->resizeColumnToContents(6);
-    this->resizeColumnToContents(7);
-    this->resizeColumnToContents(8);
-    this->resizeColumnToContents(9);
-    this->resizeColumnToContents(10);
-    this->resizeColumnToContents(11);
-}
-
-void WonderTable::setFullColumns()
-{
-    QStringList headers;
-    QString builtColumnName = "Built Total";
-
-    if(this->wonderDescriptionType == WonderDescription::SELECTION)
-    {
-        builtColumnName = "Wonders Selected";
-    }
-
-    headers << builtColumnName << "Name" << "Victory Points" << "Tribes" << "Gold" << "Forest" << "Mountain/Volcano" << "Farm" << "Advance Prequisites" << "Other Requirements" << "Positives" << "Negatives";
-    this->setHorizontalHeaderLabels(headers);
-    this->resizeColumnToContents(0);
-    this->resizeColumnToContents(1);
-    this->resizeColumnToContents(2);
-    this->resizeColumnToContents(3);
-    this->resizeColumnToContents(5);
-    this->resizeColumnToContents(6);
-    this->resizeColumnToContents(7);
-    this->resizeColumnToContents(8);
-    this->resizeColumnToContents(9);
-    this->resizeColumnToContents(10);
-    this->resizeColumnToContents(11);
-}
-
-QMap<WonderModel::Wonder, int> WonderTable::getWonders() const
-{
-    return this->wonders;
-}
-
-QMap<WonderModel::Wonder, int> WonderTable::getSelectedWonders() const
-{
-    return this->wonderSelection;
-}
-
-int WonderTable::getSelectionTotal() const
-{
-    return this->selectionTotal;
-}
-
-void WonderTable::setSelectionTotal(int selectionTotal)
-{
-    this->selectionTotal = selectionTotal;
-    return;
+    this->QTableWidget::update();
 }
 
 void WonderTable::wonderSelectionCountChanged(WonderModel::Wonder wonder, int wonderSelection)

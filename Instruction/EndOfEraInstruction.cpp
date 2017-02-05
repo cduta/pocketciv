@@ -62,7 +62,7 @@ Instruction *EndOfEraInstruction::triggerDone()
     }
     else
     {
-        DecisionDialog decisionDialog("End Game?", "Do you want to end the game and receive your final score?", "Yes", "No", true);
+        DecisionDialog decisionDialog(this->boardModel, "End Game?", "Do you want to end the game and receive your final score?", "Yes", "No", true);
         int result = decisionDialog.exec();
         if(result == QDialog::Accepted)
         {

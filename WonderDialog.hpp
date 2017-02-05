@@ -51,6 +51,9 @@ public:
         }
     }
 
+    virtual void show();
+    virtual int exec();
+
 public slots:
     void toggleSize();
 

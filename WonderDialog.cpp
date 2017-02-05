@@ -110,6 +110,18 @@ QMap<WonderModel::Wonder, int> WonderDialog::getSelectedWonders() const
     return this->wonderTable->getSelectedWonders();
 }
 
+void WonderDialog::show()
+{
+    this->wonderTable->update();
+    this->QDialog::show();
+}
+
+int WonderDialog::exec()
+{
+    this->wonderTable->update();
+    return this->QDialog::exec();
+}
+
 void WonderDialog::toggleSize()
 {
     if(this->isCompact)

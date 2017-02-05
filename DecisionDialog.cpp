@@ -3,7 +3,11 @@
 #include <QLabel>
 #include <QPushButton>
 
-DecisionDialog::DecisionDialog(const QString &title, const QString &text, const QString &acceptButtonText, const QString &rejectButtonText, bool showOverview)
+#include "OverviewDialog.hpp"
+
+DecisionDialog::DecisionDialog(BoardModel *boardModel, const QString &title, const QString &text, const QString &acceptButtonText, const QString &rejectButtonText, bool showOverview)
+    : QDialog(),
+      boardModel(boardModel)
 {
     QWidget *howManyWidget = new QWidget(this);
     QGridLayout *howManyLayout = new QGridLayout(howManyWidget);
@@ -46,4 +50,11 @@ DecisionDialog::DecisionDialog(const QString &title, const QString &text, const 
 
     this->setLayout(layout);
     this->setWindowTitle(title);
+}
+
+void DecisionDialog::showOverview()
+{
+    OverviewDialog *overviewDialog = new OverviewDialog(this->boardModel, this);
+    overviewDialog->show();
+    connect(overviewDialog, SIGNAL(finished(int)), overviewDialog, SLOT(deleteLater()));
 }

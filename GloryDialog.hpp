@@ -18,6 +18,9 @@ class GloryDialog : public QDialog
 
 public:
     GloryDialog(BoardModel *boardModel, QWidget *parent = 0);
+
+    virtual void show();
+    virtual void update();
 };
 
 #endif // GLORYDIALOG_HPP
