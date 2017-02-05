@@ -186,7 +186,6 @@ void BoardModel::initializeBoard()
 
                 if(x-1 >= 0 && y+1 < this->hexModels[x].size())
                 {
-                    this->gloryScoreByEra.clear();
                     adjacendHexes.insert(DRAW_LOWER_LEFT_BORDER, this->hexModels[x-1][y+1]);
                 }
 
@@ -831,8 +830,6 @@ void BoardModel::addAdvanceGloryScore()
         }
     }
 
-    this->printMessage(QString("The following advances were chosen:"));
-
     QString chosenAdvanceOutput = QString("");
     if(chosenAdvances.count() >= 2)
     {
@@ -856,9 +853,10 @@ void BoardModel::addAdvanceGloryScore()
 
     chosenAdvanceOutput = chosenAdvanceOutput.append(QString("."));
 
+    this->printMessage(QString("The following advances were chosen: %1").arg(chosenAdvanceOutput));
+
     this->printMessage(" ");
     this->printMessage(QString("This increases the Glory Score by %1.").arg(addedGloryScore));
-    this->printMessage(" ");
 
     this->setGloryScore(this->getGloryScore() + addedGloryScore);
     this->gloryScoreByEra.append(addedGloryScore);

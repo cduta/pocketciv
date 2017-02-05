@@ -10,9 +10,8 @@ void ForestationInstruction::initInstruction()
 {
     this->boardModel->printMessage("FORESTATION:");
     this->boardModel->printMessage("");
-    this->boardModel->printMessage(QString("Choose a region without a forest and decimate %1 tribes to create a forest")
+    this->boardModel->printMessage(QString("Choose a region without a forest and decimate %1 tribes to create a forest.")
                                   .arg(this->tribesCost));
-    this->boardModel->printMessage("and remove the desert, if there is one.");
     this->boardModel->printMessage("Remember: At least 1 tribe has to remain anywhere in the Empire, when decimating Tribes!");
     this->boardModel->printMessage(" ");
     this->boardModel->printMessage("When you are done, press Done.");

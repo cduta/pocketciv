@@ -32,8 +32,13 @@ Instruction *BuildWonderInstruction::triggerHex(Qt::MouseButton button, int x, i
             this->boardModel->setDoneButton(false);
             this->boardModel->setActiveRegion(regionModel->getRegion(), false);
             this->wonderDialog = new WonderDialog(this->boardModel, WonderDescription::BUILD);
-            connect(this->wonderDialog, SIGNAL(finished(int)), this, SLOT(doneBuildingWonders()));
-            this->wonderDialog->show();
+            this->wonderDialog->exec();
+            this->boardModel->setBuildingWonders(false);
+            this->boardModel->setDoneButton(true);
+            this->boardModel->unsetActiveRegion();
+            this->boardModel->unselectAllRegions();
+
+            this->wonderDialog->deleteLater();
         }
     }
 
@@ -52,17 +57,4 @@ Instruction *BuildWonderInstruction::triggerDone()
     this->boardModel->enableMainPhaseButtons();
     this->nextInstruction->setKeepInstruction(false);
     return this->nextInstruction;
-}
-
-void BuildWonderInstruction::doneBuildingWonders()
-{
-    disconnect(this->wonderDialog, SIGNAL(finished(int)), this, SLOT(doneBuildingWonders()));
-
-    this->boardModel->setBuildingWonders(false);
-    this->boardModel->setDoneButton(true);
-    this->boardModel->unsetActiveRegion();
-    this->boardModel->unselectAllRegions();
-
-    this->wonderDialog->deleteLater();
-    return;
 }

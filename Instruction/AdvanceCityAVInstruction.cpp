@@ -201,9 +201,9 @@ Instruction *AdvanceCityAVInstruction::triggerHex(Qt::MouseButton button, int x,
 
                         if(this->toBePaid <= activeRegion->getTribes() && this->toBePaid < this->boardModel->getTribeCount())
                         {
-                            this->boardModel->printMessage(QString("To advance the Capitol City you'll have to decimate %1 Tribes from the City Region and\n"
-                                                                  "a Forest, Mountain or Farm from anywhere in the Empire.")
+                            this->boardModel->printMessage(QString("To advance the Capitol City you'll have to decimate %1 Tribes from the City Region and")
                                                           .arg(this->toBePaid));
+                            this->boardModel->printMessage("a Forest, Mountain or Farm from anywhere in the Empire.");
                             this->boardModel->printMessage(" ");
                             this->boardModel->printMessage("Select a region in which to decimate the Forest, Mountain or Farm to Advance the City AV.");
                             this->boardModel->printMessage(" ");
@@ -321,14 +321,14 @@ Instruction *AdvanceCityAVInstruction::triggerHex(Qt::MouseButton button, int x,
 
                     if(this->toBePaid == selectedTribes)
                     {
-                        this->boardModel->printMessage(QString("Press Advance to advance the City in Region %1 to a City AV of %2.\n")
+                        this->boardModel->printMessage(QString("Press Advance to advance the City in Region %1 to a City AV of %2.")
                                                       .arg(activeRegion->getRegion())
                                                       .arg(activeRegion->getCityAV()+1));
                         this->boardModel->setDoneText("Advance");
                     }
                     else
                     {
-                        this->boardModel->printMessage(QString("%1/%2 tribes selected.\n")
+                        this->boardModel->printMessage(QString("%1/%2 tribes selected.")
                                                       .arg(selectedTribes)
                                                       .arg(toBePaid)
                                                       .arg(activeRegion->getRegion()));
@@ -348,7 +348,7 @@ Instruction *AdvanceCityAVInstruction::triggerHex(Qt::MouseButton button, int x,
                 regionModel->setSelectedTribes(regionModel->getSelectedTribes() - 1);
                 selectedTribes--;
 
-                this->boardModel->printMessage(QString("%1/%2 tribes selected.\n")
+                this->boardModel->printMessage(QString("%1/%2 tribes selected.")
                                               .arg(selectedTribes)
                                               .arg(toBePaid)
                                               .arg(activeRegion->getRegion()));
@@ -370,7 +370,7 @@ Instruction *AdvanceCityAVInstruction::triggerDone()
         if(selectedTribes == this->toBePaid && !this->capitolBeyondFour)
         {
             activeRegion->increaseCityAV(1);
-            this->boardModel->printMessage(QString("The City AV in region %1 has been advanced to %2.\n")
+            this->boardModel->printMessage(QString("The City AV in region %1 has been advanced to %2.")
                                           .arg(activeRegion->getRegion())
                                           .arg(activeRegion->getCityAV()));
             this->boardModel->decimateAllSelectedTribes();

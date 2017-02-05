@@ -107,6 +107,8 @@ Instruction *EndOfEraInstruction::triggerDone()
     this->boardModel->printMessage(" ");
     this->boardModel->printMessage("END OF ERA DONE");
     this->boardModel->printMessage(" ");
+    this->boardModel->printMessage(QString("ERA %1 begins...").arg(this->boardModel->getEra()));
+    this->boardModel->printMessage(" ");
     this->interruptedInstruction->setKeepInstruction(false);
     return this->interruptedInstruction;
 }

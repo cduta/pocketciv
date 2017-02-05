@@ -276,11 +276,13 @@ Instruction *EarthquakeEventInstruction::triggerDone()
             }
         }
 
+        this->boardModel->sendMessage(QString("The affected Regions are %1.").arg(Common::listUpRegions(this->tribeLossRegionModels.values())));
+        this->boardModel->printMessage(" ");
+
         if(totalTribes > this->populationLoss)
         {
             this->boardModel->printMessage("Distribute all the population loss in the affected regions with tribes.");
             this->boardModel->printMessage("Reduce a tribe for each population loss distributed in the affected regions.");
-            this->boardModel->printMessage(" ");
         }
         else
         {
@@ -290,12 +292,15 @@ Instruction *EarthquakeEventInstruction::triggerDone()
             {
                 regionModel->setTribes(0);
             }
+            this->boardModel->printMessage(" ");
 
             this->affectedRegions.unite(this->tribeLossRegionModels);
 
             this->boardModel->printMessage("The amount of tribes in the affected regions is equal or less than the population loss.");
             this->boardModel->printMessage("Therefore, all tribes in those regions are decimated.");
         }
+
+        this->boardModel->printMessage(" ");
     }
 
     if(this->step == -1 && this->populationLoss == 0)

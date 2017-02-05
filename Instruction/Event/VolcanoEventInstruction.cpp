@@ -52,7 +52,7 @@ Instruction *VolcanoEventInstruction::triggerDone()
 
             this->boardModel->printMessage(QString("The erruption reduces the City AV by %1,").arg(decimateCityAV));
             this->boardModel->printMessage("decimates the tribes by 1 and decimates the");
-            this->boardModel->printMessage("farm and all wonders in the active region.");
+            this->boardModel->printMessage("farm and all wonders in that region.");
             this->boardModel->printMessage(" ");
 
             if(this->boardModel->hasAdvanceAquired(AdvanceModel::ENGINEERING))
@@ -75,6 +75,7 @@ Instruction *VolcanoEventInstruction::triggerDone()
                 activeRegion->setCityAV(activeRegion->getCityAV() - decimateCityAV);
             }
 
+            activeRegion->decimateZeroAVCity();
             activeRegion->decimateTribes(1);
             activeRegion->setFarm(false);
             activeRegion->decimateAllWonders();

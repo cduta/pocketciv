@@ -2,6 +2,7 @@
 
 #include <QDesktopWidget>
 #include <QApplication>
+#include <QMessageBox>
 
 WonderDialog::WonderDialog(BoardModel *boardModel, WonderDescription::WonderDescriptionType wonderDescriptionType, int region, QWidget *parent)
     : QDialog(parent),
@@ -53,7 +54,7 @@ WonderDialog::WonderDialog(BoardModel *boardModel, WonderDescription::WonderDesc
     connect(this->resizeButton, SIGNAL(clicked()), this, SLOT(toggleSize()));
 
     this->submitButton = new QPushButton("Submit Selection", this);
-    connect(this->resizeButton, SIGNAL(clicked()), this, SLOT(close()));
+    connect(this->submitButton, SIGNAL(clicked()), this, SLOT(submitWonders()));
 
     this->setCompactSize();
 
@@ -134,4 +135,14 @@ void WonderDialog::updateWonderSelection(WonderModel::Wonder, int)
     this->submitButton->setEnabled(wonderCountTotal == this->wonderTable->getSelectionTotal());
     this->setWindowTitle(QString("Wonders (Selection %1/%2)").arg(wonderCountTotal).arg(this->wonderTable->getSelectionTotal()));
     return;
+}
+
+void WonderDialog::submitWonders()
+{
+    QMessageBox::StandardButton result = QMessageBox::question(this, "Submit selected Wonders?", "Do you really want to submit the selected wonders?", QMessageBox::Yes | QMessageBox::No);
+
+    if(result == QMessageBox::Yes)
+    {
+        this->close();
+    }
 }

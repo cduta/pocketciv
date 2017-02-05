@@ -56,6 +56,7 @@ public slots:
 
 private slots:
     void updateWonderSelection(WonderModel::Wonder,int);
+    void submitWonders();
 };
 
 #endif // WONDERDIALOG_HPP

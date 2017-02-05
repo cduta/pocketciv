@@ -175,9 +175,8 @@ Instruction *TsunamiInstruction::triggerDone()
                                           .arg(totalTribeDamage));
             this->boardModel->printMessage(QString("CityAV reduced: %1")
                                           .arg(totalCityDamage));
-            this->boardModel->printMessage(" ");
-
             this->boardModel->printMessage(QString("Wonders decimated: %1").arg(WonderModel::listUpWonders(wonderDamage)));
+            this->boardModel->printMessage(" ");
             this->affectedRegions.insert(possibleAffectedRegion->getRegion(), possibleAffectedRegion);
         }
         else

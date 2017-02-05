@@ -428,6 +428,11 @@ void PocketCivMain::loadGameTriggered()
                                  QDir::current().path(),
                                  "PocketCiv Saves (*.pcsave)");
 
+    if(loadFile.isEmpty())
+    {
+        return;
+    }
+
     QFile file(loadFile);
     file.open(QFile::ReadOnly);
     QDataStream reader(&file);

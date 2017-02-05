@@ -22,7 +22,7 @@ void VisitationEventInstruction::initInstruction()
         affiliationString = " (Trading Partner)";
     }
 
-    this->boardModel->printMessage(QString("VISITATION: %1%2").arg(Common::getEmpireName(this->empire)).arg(affiliationString));
+    this->boardModel->printMessage(QString("VISITATION: %1 %2").arg(Common::getEmpireName(this->empire)).arg(affiliationString));
     this->boardModel->printMessage(" ");
     this->boardModel->printMessage("Press Done to continue.");
     this->boardModel->printMessage(" ");
@@ -72,7 +72,7 @@ Instruction *VisitationEventInstruction::triggerDone()
                         &(this->diplomaticOfferDialog));
         }
 
-        this->step++;
+        this->step = 3;
     }
 
     if(this->step == 1)
@@ -106,7 +106,6 @@ Instruction *VisitationEventInstruction::triggerDone()
         }
         else
         {
-            this->boardModel->setTradingPartner(this->empire);
             this->boardModel->printMessage("Your offering was sent but they decline.");
             this->boardModel->printMessage(" ");
         }

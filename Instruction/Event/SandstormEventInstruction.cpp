@@ -10,9 +10,6 @@ void SandstormEventInstruction::initInstruction()
 {
     this->boardModel->printMessage("SANDSTORM:");
     this->boardModel->printMessage(" ");
-    this->boardModel->printMessage("Advance (IRRIGATION):");
-    this->boardModel->printMessage("The sandstorm only decimates the forest instead the farm and the forest.");
-    this->boardModel->printMessage(" ");
     this->boardModel->printMessage("Press Done to continue.");
     this->boardModel->printMessage(" ");
     return;
@@ -94,16 +91,15 @@ Instruction *SandstormEventInstruction::triggerDone()
             {
                 this->boardModel->printMessage(QString("Choose two regions bordering on region %1 where the").arg(activeRegion->getRegion()));
                 this->boardModel->printMessage("sandstorm is spreading to.");
-                if(this->boardModel->hasAdvanceAquired(AdvanceModel::IRRIGATION))
-                {
-                    this->boardModel->printMessage("The spreading sandstorm decimates any forest in the chosen regions");
-                }
-                else
-                {
-                    this->boardModel->printMessage("The spreading sandstorm decimates any farms and forest in the chosen regions");
-                }
+                this->boardModel->printMessage("The spreading sandstorm decimates any farms and forest in the chosen regions");
                 this->boardModel->printMessage("as well as create a desert.");
                 this->boardModel->printMessage(" ");
+                if(this->boardModel->hasAdvanceAquired(AdvanceModel::IRRIGATION))
+                {
+                    this->boardModel->printMessage("Advance (SANDSTORM):");
+                    this->boardModel->printMessage("Do not decimate any farms.");
+                    this->boardModel->printMessage(" ");
+                }
                 return this;
             }
 

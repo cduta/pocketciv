@@ -20,9 +20,6 @@ public:
 
     virtual Instruction *triggerHex(Qt::MouseButton button, int x, int y);
     virtual Instruction *triggerDone();
-
-private slots:
-    void doneBuildingWonders();
 };
 
 #endif // BUILDWONDERINSTRUCTION_HPP
