@@ -266,6 +266,7 @@ void AdvancesDialog::selectionDone()
 
 void AdvancesDialog::showTable()
 {
+    this->advancesTable->update();
     this->advancesTableDialog->show();
 }
 

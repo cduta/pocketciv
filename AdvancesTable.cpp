@@ -25,6 +25,12 @@ AdvancesTable::AdvancesTable(BoardModel *boardModel, const QMap<AdvanceModel::Ad
     this->resizeColumnToContents(10);
 
     this->setRowCount(this->advanceItemMap.count());
+
+    connect(this, SIGNAL(itemSelectionChanged()), this, SLOT(selectAdvance()));
+}
+
+void AdvancesTable::update()
+{
     QList<AdvanceModel::Advance> advances = this->advanceItemMap.keys();
 
     QColor blue(0x17,0x57,0xe8);
@@ -177,8 +183,6 @@ AdvancesTable::AdvancesTable(BoardModel *boardModel, const QMap<AdvanceModel::Ad
     this->resizeColumnToContents(8);
     this->resizeColumnToContents(9);
     this->resizeColumnToContents(10);
-
-    connect(this, SIGNAL(itemSelectionChanged()), this, SLOT(selectAdvance()));
 }
 
 void AdvancesTable::selectAdvance()

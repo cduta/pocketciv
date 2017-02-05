@@ -21,6 +21,8 @@ private:
 public:
     AdvancesTable(BoardModel *boardModel, const QMap<AdvanceModel::Advance, AdvanceItem *> &advanceItemMap, QWidget *parent = 0);
 
+    virtual void update();
+
 private slots:
     void selectAdvance();
 };
