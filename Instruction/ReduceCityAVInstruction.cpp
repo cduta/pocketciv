@@ -105,7 +105,7 @@ Instruction *ReduceCityAVInstruction::triggerDone()
 {
     if(this->unsupportedCities > 0)
     {
-        this->boardModel->printMessage("There are still %1 unsupported cities left.");
+        this->boardModel->printMessage(QString("There are still %1 unsupported cities left.").arg(this->unsupportedCities));
         this->boardModel->printMessage("Choose which one have their City AV reduced by 1.");
         this->boardModel->printMessage("After that, press Done to Continue...");
         this->boardModel->printMessage(" ");
